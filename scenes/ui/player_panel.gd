@@ -1,3 +1,4 @@
+#player_panel.gd
 extends Panel
 
 @onready var money_label = $MoneyLabel
@@ -29,11 +30,6 @@ func _ready():
 func setup(player_character: Character):
 	player = player_character
 	update_display()
-
-func get_skill(skill: String):
-	if not player:
-		return 0
-	return player.skills[skill]
 	
 func update_display():
 	if not player:
@@ -44,13 +40,7 @@ func update_display():
 
 	# Skills section - eventually these would come from player
 	var skill_text = "[b]SKILLS:[/b]\n"
-	var skills = {
-	"Wit": 25,
-	"Sex": 30,
-	"Cool": 20,
-	"Style": 15,
-	"Size": 100,
-	}
+	var skills = player.skills
 	for skill_name in skills:
 		skill_text += "%s: %d\n" % [skill_name, skills[skill_name]]
 

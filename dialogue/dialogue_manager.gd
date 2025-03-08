@@ -17,7 +17,7 @@ func load_dialogue():
 	var file = FileAccess.open("res://dialogue/data/test_dialogue_tree.json", FileAccess.READ)
 	var json_text = file.get_as_text()
 	dialogue_tree = json.parse_string(json_text)
-	print(dialogue_tree)
+	#print(dialogue_tree)
 
 func start_date_dialogue(partner: Character, player_char: Character):
 	active_partner = partner
@@ -98,7 +98,8 @@ func select_option(option: DialogueOption):
 		emit_signal("dialogue_ended")
 
 func check_skill(skill_check: Dictionary) -> bool:
-	return player.skills[skill_check.skill] >= skill_check.requirement
+	print("Skill check", skill_check)
+	return player.skills[skill_check.skill] >= skill_check.req
 
 func apply_effects(effects: Dictionary):
 	if effects.has("compatibility"):

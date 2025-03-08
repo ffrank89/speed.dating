@@ -3,7 +3,7 @@ class_name DialogueDataUI
 
 # Partner's response text settings
 const RESPONSE_SIZE := Vector2(800, 100)
-const RESPONSE_POSITION := Vector2(200, 50)  # Centered in upper middle
+const RESPONSE_POSITION := Vector2(460, 50)  # Centered in upper middle
 const RESPONSE_FONT_SIZE := 32
 const RESPONSE_ANIMATION_TIME := 1.5
 

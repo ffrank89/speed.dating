@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="speed dating"
-run/main_scene="res://scenes/ui/test_ui.tscn"
+run/main_scene="res://scenes/ui/dating_scene.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+PlayerManager="*res://scripts/managers/player_manager.gd"
 
 [rendering]
 
