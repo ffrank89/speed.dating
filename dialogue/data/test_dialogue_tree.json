@@ -1,0 +1,67 @@
+{
+	"START_ID": {
+		"id": "START_ID",
+		"text": "This is an example of what a Date can say. This should prompt a response",
+		"options": [
+			{
+				"hint_text": "This is an indication",
+				"next_dialogue_id": "START_ID",
+				"skill_check": {},
+				"success_effect": {"intelligence": 0.1}
+			},
+			{
+				"hint_text": "Of what you will say to your Date",
+				"next_dialogue_id": "SECOND_ID",
+				"skill_check": {},
+				"success_effect": {"intelligence": 0.1}
+			}
+		]
+	},
+		"SECOND_ID": {
+		"id": "SECOND_ID",
+		"text": "NEXT NEXT NEXT.",
+		"options": [
+			{
+				"hint_text": "This is an indication",
+				"next_dialogue_id": "SECOND_ID",
+				"skill_check": {},
+				"success_effect": {"intelligence": 0.1}
+			},
+			{
+				"hint_text": "Of what you will say to your Date",
+				"next_dialogue_id": "START_ID",
+				"skill_check": {},
+				"success_effect": {"intelligence": 0.1}
+			}
+			,
+			{
+				"hint_text": "Show Skill Checks",
+				"next_dialogue_id": "SKILL_CHECK_ID",
+				"skill_check": {},
+				"success_effect": {"intelligence": 0.1}
+			}
+		]
+	},
+	"SKILL_CHECK_ID": {
+		"id": "SECOND_ID",
+		"text": "NEXT NEXT NEXT.",
+		"options": [
+			{
+				"hint_text": "Size Check",
+				"next_dialogue_id": "SECOND_ID",
+				"skill_check": {"skill": "Size", "req": 55},
+				"success_effect": {"Sex": 22},
+				"failure_effect": {"Sex" :-20}
+			},
+			{
+				"hint_text": "Wit Check",
+				"next_dialogue_id": "SECOND_ID",
+				"skill_check": {"skill": "Wit", "req": 60},
+				"success_effect": {"Charm": 10},
+				"failure_effect": {"Charm": -10}
+			}
+		]
+	},
+	
+	
+}

@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=3 uid="uid://b5my1q26b4bn4"]
+
+[ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_cayqy"]
+[ext_resource type="Script" path="res://scenes/ui/foreground_circle.gd" id="2_3qtit"]
+[ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_4hv0i"]
+[ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="2_jowxa"]
+[ext_resource type="Script" path="res://scenes/ui/background.gd" id="4_331je"]
+[ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_e38nw"]
+[ext_resource type="Script" path="res://scenes/ui/bonus_label.gd" id="7_g2ggo"]
+[ext_resource type="Script" path="res://scenes/ui/pass.gd" id="8_62dya"]
+[ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_2rxyq"]
+[ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_v7in0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6ywy"]
+bg_color = Color(0.613776, 0.357034, 0.445239, 1)
+
+[node name="TestUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cayqy")
+
+[node name="PlayerPanel" type="Panel" parent="."]
+z_index = 10
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_4hv0i")
+
+[node name="MoneyLabel" type="Label" parent="PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="OutfitPanel" type="VBoxContainer" parent="PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StatsPanel" type="RichTextLabel" parent="PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="DatePanel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_jowxa")
+
+[node name="DialoguePanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 400.0
+offset_right = 400.0
+offset_bottom = 500.0
+
+[node name="Background" type="Panel" parent="."]
+custom_minimum_size = Vector2(10000, 10000)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f6ywy")
+script = ExtResource("4_331je")
+
+[node name="ForegroundCircle" type="Sprite2D" parent="."]
+position = Vector2(400, 300)
+centered = false
+script = ExtResource("2_3qtit")
+
+[node name="HoverShadow" type="Sprite2D" parent="ForegroundCircle"]
+modulate = Color(1, 1, 1, 0.33)
+z_index = -1
+position = Vector2(0, 5)
+scale = Vector2(100, 100)
+
+[node name="ColorRect" type="ColorRect" parent="ForegroundCircle"]
+offset_left = -1.0
+offset_top = 7.0
+offset_right = 99.0
+offset_bottom = 107.0
+color = Color(1, 1, 1, 0.503)
+
+[node name="BackgroundCircle" type="Sprite2D" parent="."]
+position = Vector2(700, 200)
+centered = false
+script = ExtResource("2_3qtit")
+
+[node name="HoverShadow" type="Sprite2D" parent="BackgroundCircle"]
+modulate = Color(1, 1, 1, 0.33)
+z_index = -1
+position = Vector2(0, 5)
+scale = Vector2(100, 100)
+
+[node name="ColorRect" type="ColorRect" parent="BackgroundCircle"]
+offset_right = 100.0
+offset_bottom = 100.0
+color = Color(1, 1, 1, 0.503)
+
+[node name="CompatibilityMeter" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+script = ExtResource("6_e38nw")
+
+[node name="BonusLabel" type="RichTextLabel" parent="CompatibilityMeter"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_g2ggo")
+
+[node name="Pass" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("8_62dya")
+
+[node name="DialogueDataUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("9_2rxyq")
+
+[node name="DialogueOptionUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("10_v7in0")
