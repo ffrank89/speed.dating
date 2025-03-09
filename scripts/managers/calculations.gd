@@ -8,7 +8,6 @@ static func character_outfit_bonus(character: Character) -> Dictionary:
 	
 static func calculate_outfit_bonus(pants: Jawn, shirt: Jawn, accessory: Jawn) -> Dictionary:
 	var bonuses = {}
-	print(pants.color.color, shirt.color.color, accessory.color.color)
 	# Color Bonuses
 	if pants.color.color == shirt.color.color and shirt.color.color == accessory.color.color:
 		match pants.color.color:

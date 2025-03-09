@@ -1,34 +1,39 @@
-[gd_scene load_steps=12 format=3 uid="uid://b5my1q26b4bn4"]
+[gd_scene load_steps=11 format=3 uid="uid://b5my1q26b4bn4"]
 
-[ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_cayqy"]
-[ext_resource type="Script" path="res://scenes/ui/foreground_circle.gd" id="2_3qtit"]
-[ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_4hv0i"]
-[ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="2_jowxa"]
-[ext_resource type="Script" path="res://scenes/ui/background.gd" id="4_331je"]
-[ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_e38nw"]
-[ext_resource type="Script" path="res://scenes/ui/bonus_label.gd" id="7_g2ggo"]
-[ext_resource type="Script" path="res://scenes/ui/pass.gd" id="8_62dya"]
-[ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_2rxyq"]
-[ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_v7in0"]
+[ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
+[ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
+[ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_wjwxt"]
+[ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="3_olm7h"]
+[ext_resource type="Script" path="res://scenes/ui/foreground_circle.gd" id="5_4k3wo"]
+[ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_uonoj"]
+[ext_resource type="Script" path="res://scenes/ui/bonus_label.gd" id="7_ginkj"]
+[ext_resource type="Script" path="res://scenes/ui/pass.gd" id="8_tilss"]
+[ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_qhuv2"]
+[ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_n4bc8"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6ywy"]
-bg_color = Color(0.613776, 0.357034, 0.445239, 1)
-
-[node name="TestUI" type="Control"]
+[node name="DatingScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_cayqy")
+script = ExtResource("1_s6dkl")
+
+[node name="BackgroundImage" parent="." instance=ExtResource("2_r4r26")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="PlayerPanel" type="Panel" parent="."]
 z_index = 10
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("2_4hv0i")
+script = ExtResource("2_wjwxt")
 
 [node name="MoneyLabel" type="Label" parent="PlayerPanel"]
 layout_mode = 0
@@ -49,7 +54,7 @@ offset_bottom = 23.0
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("2_jowxa")
+script = ExtResource("3_olm7h")
 
 [node name="DialoguePanel" type="Panel" parent="."]
 layout_mode = 0
@@ -58,21 +63,10 @@ offset_top = 400.0
 offset_right = 400.0
 offset_bottom = 500.0
 
-[node name="Background" type="Panel" parent="."]
-custom_minimum_size = Vector2(10000, 10000)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_f6ywy")
-script = ExtResource("4_331je")
-
 [node name="ForegroundCircle" type="Sprite2D" parent="."]
 position = Vector2(400, 300)
 centered = false
-script = ExtResource("2_3qtit")
+script = ExtResource("5_4k3wo")
 
 [node name="HoverShadow" type="Sprite2D" parent="ForegroundCircle"]
 modulate = Color(1, 1, 1, 0.33)
@@ -90,7 +84,7 @@ color = Color(1, 1, 1, 0.503)
 [node name="BackgroundCircle" type="Sprite2D" parent="."]
 position = Vector2(700, 200)
 centered = false
-script = ExtResource("2_3qtit")
+script = ExtResource("5_4k3wo")
 
 [node name="HoverShadow" type="Sprite2D" parent="BackgroundCircle"]
 modulate = Color(1, 1, 1, 0.33)
@@ -107,28 +101,28 @@ color = Color(1, 1, 1, 0.503)
 layout_mode = 0
 offset_right = 4.0
 offset_bottom = 27.0
-script = ExtResource("6_e38nw")
+script = ExtResource("6_uonoj")
 
 [node name="BonusLabel" type="RichTextLabel" parent="CompatibilityMeter"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("7_g2ggo")
+script = ExtResource("7_ginkj")
 
 [node name="Pass" type="Button" parent="."]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
-script = ExtResource("8_62dya")
+script = ExtResource("8_tilss")
 
 [node name="DialogueDataUI" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("9_2rxyq")
+script = ExtResource("9_qhuv2")
 
 [node name="DialogueOptionUI" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("10_v7in0")
+script = ExtResource("10_n4bc8")

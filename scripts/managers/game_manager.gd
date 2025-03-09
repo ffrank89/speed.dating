@@ -1,11 +1,14 @@
 extends Node
 
+var player: Character
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func _ready():
+	# Initialize with a default player if none exists
+	if player == null:
+		player = Character.new("Player")
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func set_player(new_player: Character):
+	player = new_player
+	
+func get_player() -> Character:
+	return player

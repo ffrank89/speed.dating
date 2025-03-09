@@ -17,7 +17,7 @@ func load_dialogue():
 	var file = FileAccess.open("res://dialogue/data/test_dialogue_tree.json", FileAccess.READ)
 	var json_text = file.get_as_text()
 	dialogue_tree = json.parse_string(json_text)
-	print(dialogue_tree)
+	#print(dialogue_tree)
 
 func start_date_dialogue(partner: Character, player_char: Character):
 	active_partner = partner
@@ -48,20 +48,6 @@ func get_dialogue(dialogue_id: String) -> DialogueData:
 	
 	dialogue.options = options
 	return dialogue
-	
-#func get_starting_dialogue() -> DialogueData:
-	#var data = DialogueData.new()
-	#data.id = "start"
-	#data.text = "Hi! I'm %s..." % active_partner.name
-#
-	## Create initial options
-	#var options = []
-	#options.append(create_option("Wow, you look amazing!", "flirt_response", {"skill": "flirt", "requirement": 25}))
-	#options.append(create_option("Tell me about yourself", "personal_response", {"skill": "insight", "requirement": 15}))
-	#options.append(create_option("Nice weather, huh?", "weather_response"))
-	#data.options = options
-#
-	#return data
 	
 func get_starting_dialogue() -> DialogueData:
 	return get_dialogue(dialogue_tree["START_ID"].id)
@@ -98,7 +84,8 @@ func select_option(option: DialogueOption):
 		emit_signal("dialogue_ended")
 
 func check_skill(skill_check: Dictionary) -> bool:
-	return player.skills[skill_check.skill] >= skill_check.requirement
+	print("Skill check", skill_check)
+	return player.skills[skill_check.skill] >= skill_check.req
 
 func apply_effects(effects: Dictionary):
 	if effects.has("compatibility"):
