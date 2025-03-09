@@ -30,10 +30,47 @@ func _ready():
 	if player_manager:
 		pass
 		# Add signals for inventory changes
-		
 func _update_position():
-	# Position at lower left with 20px margin
-	inventory_panel.position = Vector2(20, get_viewport_rect().size.y - INVENTORY_SIZE.y - 20)
+	if inventory_panel:
+		var viewport_size = get_viewport_rect().size
+		var scale_factor_x = viewport_size.x / 1920.0
+		var scale_factor_y = viewport_size.y / 1080.0
+		
+		# Reduce overall size - 70% of the scaled size
+		var size_reduction_factor = 0.7
+		
+		# Scale inventory size
+		var scaled_width = INVENTORY_SIZE.x * scale_factor_x * size_reduction_factor
+		var scaled_height = INVENTORY_SIZE.y * scale_factor_y * size_reduction_factor
+		
+		# Scale item size
+		var scaled_item_width = ITEM_SIZE.x * scale_factor_x * size_reduction_factor
+		var scaled_item_height = ITEM_SIZE.y * scale_factor_y * size_reduction_factor
+		
+		# Fixed bottom margin in pixels
+		var bottom_margin = 20
+		
+		# Calculate position to maintain bottom margin
+		var x_position = 20
+		var y_position = viewport_size.y - scaled_height - bottom_margin
+		
+		# Set custom minimum size and position
+		inventory_panel.custom_minimum_size = Vector2(scaled_width, scaled_height)
+		inventory_panel.size = Vector2(scaled_width, scaled_height)
+		inventory_panel.position = Vector2(x_position, y_position)
+		
+		# Update grid container
+		grid_container.columns = MAX_ITEMS_PER_ROW
+		grid_container.position = Vector2(ITEM_MARGIN, 35)
+		grid_container.custom_minimum_size = Vector2(
+			scaled_width - ITEM_MARGIN * 2,
+			scaled_height - 45
+		)
+		
+		# Update existing item buttons
+		for child in grid_container.get_children():
+			child.custom_minimum_size = Vector2(scaled_item_width, scaled_item_height)
+
 
 func _process(_delta):
 	# Check for viewport size changes and update position

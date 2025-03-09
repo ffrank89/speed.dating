@@ -4,7 +4,7 @@ var background_texture: Texture2D
 
 func _ready():
 	# Load the background texture
-	background_texture = load("res://assets/bedroom1.png")
+	background_texture = load("res://assets/bedroom2.png")
 	if not background_texture:
 		push_error("Failed to load background texture")
 		return

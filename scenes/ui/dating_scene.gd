@@ -14,7 +14,7 @@ var dialogue_manager: DialogueManager
 @onready var option_ui = $DialogueOptionUI
 @onready var bonus_label = $CompatibilityMeter/BonusLabel
 @onready var inventory_ui = $InventoryUI
-
+@onready var bunny_gif = $BunnyGif
 var compatibility_score: float = 0.0
 
 func _ready() -> void:
@@ -41,10 +41,13 @@ func _ready() -> void:
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
 	option_ui.set_process_input(true)
 	inventory_ui.set_process_input(false)  # Only process input when visible
+	bunny_gif.gif_clicked.connect(_on_bunny_gif_clicked)
+	bunny_gif.set_process_input(true)
 
-	
-	
 
+func _on_bunny_gif_clicked():
+	print("Bunny GIF was clicked in dating scene!")
+	
 func setup_player() -> void:
 	# Create player character
 	player = Character.new("Me!")

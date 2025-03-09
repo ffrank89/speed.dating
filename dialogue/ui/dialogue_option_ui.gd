@@ -44,22 +44,38 @@ func _process(delta: float) -> void:
 
 func _update_position():
 	if dialogue_box:
+		
+		# Dynamically scale dialogue box size based on viewport
+		var viewport_size = get_viewport_rect().size
+		var scale_factor_x = viewport_size.x / 1920.0  # Assuming 1920 as base width
+		var scale_factor_y = viewport_size.y / 1080.0  # Assuming 1080 as base height
+		
+		# Scale size and position proportionally
+		var scaled_width = DIALOGUE_BOX_SIZE.x * scale_factor_x
+		var scaled_height = DIALOGUE_BOX_SIZE.y * scale_factor_y
+		dialogue_box.custom_minimum_size = Vector2(scaled_width, scaled_height)
+		
 		# Position the dialogue box at the bottom center of the screen
-		var screen_center_x = get_viewport_rect().size.x / 2
-		var screen_bottom = get_viewport_rect().size.y
-
+		var screen_center_x = viewport_size.x / 2
+		var screen_bottom = viewport_size.y
+		
 		dialogue_box.position = Vector2(
-			screen_center_x - DIALOGUE_BOX_SIZE.x / 2,
-			screen_bottom - DIALOGUE_BOX_SIZE.y - 40  # 40px from bottom
+			screen_center_x - scaled_width / 2,
+			screen_bottom - scaled_height - 40  # 40px from bottom
 		)
 
-		# Update button positions directly
+		# Update button sizes and positions
 		var button_index = 0
 		for child in dialogue_box.get_children():
 			if child is Button:
-				# Reposition each button within the dialogue box
-				child.position = Vector2(OPTION_MARGIN, OPTION_MARGIN + button_index * (OPTION_SIZE.y + 20))
-				child.size = OPTION_SIZE
+				var scaled_option_width = OPTION_SIZE.x * scale_factor_x
+				var scaled_option_height = OPTION_SIZE.y * scale_factor_y
+				
+				child.position = Vector2(
+					OPTION_MARGIN * scale_factor_x, 
+					OPTION_MARGIN * scale_factor_y + button_index * (scaled_option_height + 20)
+				)
+				child.size = Vector2(scaled_option_width, scaled_option_height)
 				button_index += 1
 				
 func _create_dialogue_box():

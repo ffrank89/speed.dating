@@ -30,5 +30,8 @@ func initialize_inventory():
 	
 	# Add default items
 	var bag = Baggy.create_default()
+	var weed = Weed.create_default()
 	add_item(bag)
+	add_item(weed)
+
 	
