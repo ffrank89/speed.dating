@@ -21,4 +21,14 @@ func get_player() -> Character:
 # Get the full inventory
 func get_inventory() -> Array:
 	return inventory
+
+
+# Initialize with default items
+func initialize_inventory():
+	# Clear any existing items
+	inventory.clear()
+	
+	# Add default items
+	var bag = Baggy.create_default()
+	add_item(bag)
 	

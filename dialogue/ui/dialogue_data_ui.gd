@@ -3,18 +3,26 @@ class_name DialogueDataUI
 
 # Partner's response text settings
 const RESPONSE_SIZE := Vector2(800, 100)
-const RESPONSE_POSITION := Vector2(460, 50)  # Centered in upper middle
 const RESPONSE_FONT_SIZE := 32
 const RESPONSE_ANIMATION_TIME := 1.5
 
 
+func _process(_delta):
+	# Update positions of all child elements
+	for child in get_children():
+		if child is Panel or child is RichTextLabel:
+			_update_element_position(child)
+
+func _update_element_position(element):
+	# Center in the top portion of the screen
+	var screen_center_x = get_viewport_rect().size.x / 2
+	element.position = Vector2(screen_center_x - RESPONSE_SIZE.x / 2, 50)
+	
 func create_dates_response(data: DialogueData):
 	var label = RichTextLabel.new()
 	
 	label.custom_minimum_size = RESPONSE_SIZE
-	label.position = RESPONSE_POSITION
 	# Enable BBCode but keep it simple
-		# Enable BBCode for rich text formatting
 	label.bbcode_enabled = true
 	
 	var formatted_text = "[center][color=#FF2996]♥ %s ♥[/color][/center]" % data.text
@@ -28,7 +36,6 @@ func create_dates_response(data: DialogueData):
 	var bg = Panel.new()
 	bg.custom_minimum_size = RESPONSE_SIZE
 	bg.size = RESPONSE_SIZE
-	bg.position = RESPONSE_POSITION
 	
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0, 0, 0, 0.6)  # Semi-transparent black
@@ -37,8 +44,16 @@ func create_dates_response(data: DialogueData):
 	style.border_color = Color("#FF2996")  # Match the text color
 	bg.add_theme_stylebox_override("panel", style)
 	
+		
+	# Set initial positions (will be updated in _process)
+	_update_element_position(bg)
+	_update_element_position(label)
+	
 	# Add the background first, then the text on top
 	add_child(bg)
+	add_child(label)
+
+
 	
 	# Animate both the background and text
 	bg.modulate.a = 0

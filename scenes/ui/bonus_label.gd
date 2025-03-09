@@ -1,7 +1,7 @@
 extends RichTextLabel
 
 signal bonus_updated(bonuses: Dictionary)
-
+		
 func _ready():
 	custom_minimum_size = Vector2(200, 100)
 	position = Vector2(20, 60)  # Below compatibility meter

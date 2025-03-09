@@ -13,6 +13,7 @@ var dialogue_manager: DialogueManager
 @onready var dialogue_ui = $DialogueDataUI
 @onready var option_ui = $DialogueOptionUI
 @onready var bonus_label = $CompatibilityMeter/BonusLabel
+@onready var inventory_ui = $InventoryUI
 
 var compatibility_score: float = 0.0
 
@@ -36,8 +37,13 @@ func _ready() -> void:
 	spawn_new_partner()
 	
 	option_ui.option_selected.connect(_on_option_selected)
+	 # Set proper input processing priority
+	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
+	option_ui.set_process_input(true)
+	inventory_ui.set_process_input(false)  # Only process input when visible
 
-
+	
+	
 
 func setup_player() -> void:
 	# Create player character
@@ -47,12 +53,17 @@ func setup_player() -> void:
 	var player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
 		player_manager.set_player(player)
+		player_manager.initialize_inventory()
+		inventory_ui.update_inventory(player_manager.get_inventory())
+
 	else:
 		# Create manager if not available as autoload
 		player_manager = load("res://scripts/manager/player_manager.gd").new()
 		player_manager.name = "PlayerManager"
 		player_manager.player = player
 		get_tree().root.add_child(player_manager)
+		player_manager.initialize_inventory()
+		inventory_ui.update_inventory(player_manager.get_inventory())
 	
 	# Update player panel
 	player_panel.setup(player)
@@ -131,3 +142,15 @@ func calculate_compatibility() -> void:
 		tween.tween_interval(0.2)
 		tween.tween_property(compatibility_meter, "value", 
 			compatibility_score + total_bonus, 0.5)
+			
+			
+			
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_I:  # 'I' key toggles inventory
+			if inventory_ui:
+				inventory_ui.toggle_visibility()
+				# Toggle input processing so it only processes input when visible
+				inventory_ui.set_process_input(inventory_ui.is_visible())
+		else:
+			print("Inventory UI not available")

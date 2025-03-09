@@ -25,19 +25,49 @@ const OPTION_STYLE := {
 
 var dialogue_box: Panel
 var options_container: VBoxContainer
+var last_viewport_size: Vector2
+
 signal option_selected(option: DialogueOption)
 
 func _ready():
 	# Create the static dialogue box if it doesn't exist
 	if not dialogue_box:
 		_create_dialogue_box()
+		
+	last_viewport_size = get_viewport_rect().size
 
+func _process(delta: float) -> void:
+	# Only update position if viewport size has changed
+	if get_viewport_rect().size != last_viewport_size:
+		_update_position()
+		last_viewport_size = get_viewport_rect().size
+
+func _update_position():
+	if dialogue_box:
+		# Position the dialogue box at the bottom center of the screen
+		var screen_center_x = get_viewport_rect().size.x / 2
+		var screen_bottom = get_viewport_rect().size.y
+
+		dialogue_box.position = Vector2(
+			screen_center_x - DIALOGUE_BOX_SIZE.x / 2,
+			screen_bottom - DIALOGUE_BOX_SIZE.y - 40  # 40px from bottom
+		)
+
+		# Update button positions directly
+		var button_index = 0
+		for child in dialogue_box.get_children():
+			if child is Button:
+				# Reposition each button within the dialogue box
+				child.position = Vector2(OPTION_MARGIN, OPTION_MARGIN + button_index * (OPTION_SIZE.y + 20))
+				child.size = OPTION_SIZE
+				button_index += 1
+				
 func _create_dialogue_box():
 	# Create the main dialogue box panel
 	dialogue_box = Panel.new()
 	dialogue_box.custom_minimum_size = DIALOGUE_BOX_SIZE
-	dialogue_box.position = DIALOGUE_BOX_POSITION - DIALOGUE_BOX_SIZE / 2  # Center the box
-	
+	dialogue_box.mouse_filter = Control.MOUSE_FILTER_IGNORE  # CHANGE: Don't block input at all
+
 	# Style the dialogue box
 	var box_style = StyleBoxFlat.new()
 	box_style.bg_color = BOX_STYLE.bg_color
@@ -45,37 +75,49 @@ func _create_dialogue_box():
 	box_style.set_corner_radius_all(BOX_STYLE.corner_radius)
 	box_style.border_color = Color.WHITE
 	dialogue_box.add_theme_stylebox_override("panel", box_style)
-	
-	# Create a container for the options
-	options_container = VBoxContainer.new()
-	options_container.custom_minimum_size = Vector2(OPTION_SIZE.x, DIALOGUE_BOX_SIZE.y - OPTION_MARGIN * 2)
-	options_container.position = Vector2(OPTION_MARGIN, OPTION_MARGIN)
-	options_container.add_theme_constant_override("separation", 10)  # Space between buttons
-	
-	dialogue_box.add_child(options_container)
+
+	# Don't create VBoxContainer at all, we'll position buttons directly
 	add_child(dialogue_box)
-	
-	# Initially hide the dialogue box
-	dialogue_box.visible = false
+
+	# Set initial position
+	_update_position()
+
 
 func display_options(dialogue_options: Array):
 	# Clear previous options
-	for child in options_container.get_children():
-		child.queue_free()
+	for child in dialogue_box.get_children():
+		if child is Button:
+			child.queue_free()
 	
-	# Create new options
-	for option in dialogue_options:
+	# Create new options and position them directly in the dialogue box
+	for i in range(dialogue_options.size()):
+		var option = dialogue_options[i]
 		var button = create_dialogue_option(option)
-		button.pressed.connect(func():
-			emit_signal("option_selected", option)
-		)
-		options_container.add_child(button)
-	
+		# Connect the button signal directly
+		button.pressed.connect(_on_button_pressed.bind(option))
+		# Position button manually inside dialogue box
+		button.position = Vector2(OPTION_MARGIN, OPTION_MARGIN + i * (OPTION_SIZE.y + 20))
+		button.size = OPTION_SIZE
+		# Add directly to dialogue box
+		dialogue_box.add_child(button)
 	# Show the dialogue box
 	dialogue_box.visible = true
+	
+
+func _on_button_pressed(option: DialogueOption):
+	print("dialogue_option_ui.gd: Button pressed for option: ", option.hint_text)
+	emit_signal("option_selected", option)
 
 func create_dialogue_option(option: DialogueOption) -> Button:
 	var button = Button.new()
+	
+	button.mouse_filter = Control.MOUSE_FILTER_STOP  # Capture all mouse events
+	button.focus_mode = Control.FOCUS_ALL  # Allow keyboard focus
+	
+		# Monitor mouse events directly
+	#button.mouse_entered.connect(func(): print("Mouse entered button: ", option.hint_text))
+	#button.mouse_exited.connect(func(): print("Mouse exited button: ", option.hint_text))
+	#
 	
 	# Style the button
 	var style = StyleBoxFlat.new()
@@ -84,16 +126,15 @@ func create_dialogue_option(option: DialogueOption) -> Button:
 	style.set_corner_radius_all(OPTION_STYLE.corner_radius)
 	button.add_theme_stylebox_override("normal", style)
 	
-	button.custom_minimum_size = OPTION_SIZE
 	button.size_flags_horizontal = Control.SIZE_FILL
-	
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.custom_minimum_size = OPTION_SIZE	
 	if option.skill_check:
 		var skill = option.skill_check.skill
 		var req = option.skill_check.req
 		var player_manager = get_node("/root/PlayerManager")
 		var player_skill = 0
 		if player_manager and player_manager.player:
-			print("Successfully got player from root")
 			player_skill = player_manager.player.get_skill_level(skill)
 		
 		button.text = "%s [%s %d/%d]" % [
@@ -113,7 +154,7 @@ func create_dialogue_option(option: DialogueOption) -> Button:
 		button.text = option.hint_text
 		style.border_color = Color.WHITE
 		button.disabled = false
-	
+
 	return button
 
 func hide_dialogue_box():
