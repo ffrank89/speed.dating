@@ -12,13 +12,13 @@ const OPTION_MARGIN := 25   # Margin from the dialogue box edges
 
 # Styles
 const BOX_STYLE := {
-	"bg_color": Color(0.1, 0.1, 0.1, 0.9),
+	"bg_color": Color(0.1, 0.1, 0.1, 0.4),
 	"border_width": 3,
 	"corner_radius": 8
 }
 
 const OPTION_STYLE := {
-	"bg_color": Color(0.2, 0.2, 0.2, 0.8),
+	"bg_color": Color(0.2, 0.2, 0.2, 0.6),
 	"border_width": 2,
 	"corner_radius": 5
 }

@@ -25,6 +25,7 @@ func _ready() -> void:
 	print("Window size at startup: ", DisplayServer.window_get_size())
 	print("Viewport size: ", get_viewport_rect().size)
 	
+			
 	# Initialize player character
 	setup_player()
 	
@@ -35,6 +36,8 @@ func _ready() -> void:
 	spawn_new_partner()
 	
 	option_ui.option_selected.connect(_on_option_selected)
+
+
 
 func setup_player() -> void:
 	# Create player character

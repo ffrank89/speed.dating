@@ -49,20 +49,6 @@ func get_dialogue(dialogue_id: String) -> DialogueData:
 	dialogue.options = options
 	return dialogue
 	
-#func get_starting_dialogue() -> DialogueData:
-	#var data = DialogueData.new()
-	#data.id = "start"
-	#data.text = "Hi! I'm %s..." % active_partner.name
-#
-	## Create initial options
-	#var options = []
-	#options.append(create_option("Wow, you look amazing!", "flirt_response", {"skill": "flirt", "requirement": 25}))
-	#options.append(create_option("Tell me about yourself", "personal_response", {"skill": "insight", "requirement": 15}))
-	#options.append(create_option("Nice weather, huh?", "weather_response"))
-	#data.options = options
-#
-	#return data
-	
 func get_starting_dialogue() -> DialogueData:
 	return get_dialogue(dialogue_tree["START_ID"].id)
 

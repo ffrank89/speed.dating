@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://b5my1q26b4bn4"]
 
 [ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
-[ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image.tscn" id="2_r4r26"]
+[ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
 [ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_wjwxt"]
 [ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="3_olm7h"]
 [ext_resource type="Script" path="res://scenes/ui/foreground_circle.gd" id="5_4k3wo"]
