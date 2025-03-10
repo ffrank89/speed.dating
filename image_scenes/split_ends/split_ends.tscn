@@ -3,3 +3,9 @@
 [node name="SplitEnds" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+
+[node name="CharacterImage" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+stretch_mode = 6

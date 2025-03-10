@@ -15,6 +15,8 @@ var dialogue_manager: DialogueManager
 @onready var bonus_label = $CompatibilityMeter/BonusLabel
 @onready var inventory_ui = $InventoryUI
 @onready var bunny_gif = $BunnyGif
+@onready var split_ends = $SplitEnds
+
 var compatibility_score: float = 0.0
 
 func _ready() -> void:
@@ -84,18 +86,23 @@ func setup_dialogue() -> void:
 	dialogue_manager.load_dialogue()
 
 func spawn_new_partner() -> void:
-	current_date = Character.new("Date")
-	var partner_position = $BackgroundCircle
+	# Get the Character instance from the scene
+	current_date = split_ends.character
 	
-	# Animate partner entry
-	var tween = create_tween()
-	partner_position.position = Vector2(1200, partner_position.position.y)
-	tween.tween_property(partner_position, "position", 
-		Vector2(700, partner_position.position.y), 1.0)
+	# Reset the character if previously added
+	if split_ends.get_parent():
+		split_ends.get_parent().remove_child(split_ends)
 	
-	# Start both compatibility and dialogue
+	# Add the character to the scene
+	add_child(split_ends)
+	
+	# Make sure character is set up for correct positioning
+	split_ends.update_position()
+	
+	# Start the date-specific content
 	calculate_compatibility()
 	dialogue_manager.start_date_dialogue(current_date, player)
+	
 
 func _on_dialogue_started(dialogue: DialogueData) -> void:
 		# Clear previous dialogue

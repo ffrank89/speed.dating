@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b5my1q26b4bn4"]
+[gd_scene load_steps=15 format=3 uid="uid://b5my1q26b4bn4"]
 
 [ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
 [ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_n4bc8"]
 [ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="11_21ygm"]
 [ext_resource type="PackedScene" uid="uid://c0bwkjvsx1tem" path="res://image_scenes/bunnyGif/bunny_gif.tscn" id="12_4wqid"]
+[ext_resource type="PackedScene" uid="uid://sevo02sxky2b" path="res://image_scenes/split_ends/split_ends.tscn" id="13_xsmfp"]
+[ext_resource type="Script" path="res://image_scenes/split_ends/split_ends.gd" id="14_ko4ue"]
 
 [node name="DatingScene" type="Control"]
 layout_mode = 3
@@ -132,3 +134,6 @@ script = ExtResource("10_n4bc8")
 [node name="InventoryUI" parent="." instance=ExtResource("11_21ygm")]
 
 [node name="BunnyGif" parent="." instance=ExtResource("12_4wqid")]
+
+[node name="SplitEnds" parent="." instance=ExtResource("13_xsmfp")]
+script = ExtResource("14_ko4ue")

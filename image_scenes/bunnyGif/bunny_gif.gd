@@ -13,6 +13,23 @@ func _ready():
 	
 	# Set up input handling
 	set_process_input(true)
+	
+		# Apply shader
+	var shader_material = ShaderMaterial.new()
+	var shader = load("res://image_scenes/bunnyGif/bunny_shader.gdshader")
+	shader_material.shader = shader
+	
+	shader_material.shader = shader
+	
+	# Get the current frame's texture
+	var current_texture = sprite_frames.get_frame_texture(animation, 0)
+	
+	# Set the texture parameter
+	shader_material.set_shader_parameter("texture_albedo", current_texture)
+	
+	# Apply the shader material
+	material = shader_material
+	
 	print("Bunny GIF initialized, awaiting clicks")
 
 # Position the bunny in the lower-right corner with some margin
@@ -73,3 +90,8 @@ func toggle_animation():
 func _process(_delta):
 	if get_viewport_rect().size != Vector2.ZERO:
 		position_in_corner()
+		
+	if material:
+		var current_frame = get_frame()
+		var current_texture = sprite_frames.get_frame_texture(animation, current_frame)
+		material.set_shader_parameter("texture_albedo", current_texture)
