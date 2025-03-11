@@ -41,13 +41,13 @@ func position_in_corner():
 	
 	## Adjust scale if bunny is too large
 	if sprite_size.x > viewport_size.x / 4 or sprite_size.y > viewport_size.y / 4:
-		var scale_factor = min(viewport_size.x / 1 / texture.get_width(), viewport_size.y / 1 / texture.get_height())
+		var scale_factor = min(viewport_size.x / 1.3 / texture.get_width(), viewport_size.y / 1.3 / texture.get_height())
 		#0.06352941176471
 		scale = Vector2(scale_factor, scale_factor)
 		sprite_size = texture.get_size() * scale
 	position = Vector2(
 		viewport_size.x - (sprite_size.x/2) - margin,
-		viewport_size.y - (sprite_size.y/2) - margin + 199
+		viewport_size.y - (sprite_size.y/2) - margin + 150
 	)
 	
 func _input(event):

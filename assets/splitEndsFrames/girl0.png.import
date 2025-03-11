@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cncnt62pcec4b"
-path="res://.godot/imported/drugs.png-8a17bb40f3ca3542d6b4991cae892342.ctex"
+uid="uid://dsqrgui1hhma7"
+path="res://.godot/imported/girl0.png-6a6664efb73d226f86bb53a365494bca.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://drugs.png"
-dest_files=["res://.godot/imported/drugs.png-8a17bb40f3ca3542d6b4991cae892342.ctex"]
+source_file="res://assets/splitEndsFrames/girl0.png"
+dest_files=["res://.godot/imported/girl0.png-6a6664efb73d226f86bb53a365494bca.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lm7dn56oo3t1"
-path="res://.godot/imported/sittinggirl_placeholder.png-066062629a8f3b302d66a36b297421fc.ctex"
+uid="uid://hxtjyrro1uiw"
+path="res://.godot/imported/girl3.png-6d450d3230de70cdfe27d658f839ffce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sittinggirl_placeholder.png"
-dest_files=["res://.godot/imported/sittinggirl_placeholder.png-066062629a8f3b302d66a36b297421fc.ctex"]
+source_file="res://assets/splitEndsFrames/girl3.png"
+dest_files=["res://.godot/imported/girl3.png-6d450d3230de70cdfe27d658f839ffce.ctex"]
 
 [params]
 

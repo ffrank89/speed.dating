@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dphmqmfbyld53"]
+
+[ext_resource type="SpriteFrames" uid="uid://c0lm70flxl80t" path="res://image_scenes/split_ends/sprite/split_ends_sprite.tres" id="1_0udpl"]
+
+[node name="SplitEndsSprite" type="AnimatedSprite2D"]
+position = Vector2(500, 100)
+scale = Vector2(4.3, 4.3)
+sprite_frames = ExtResource("1_0udpl")
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+show_behind_parent = true
+z_index = -10
+offset_left = 500.0
+offset_top = 100.0
+offset_right = 1500.0
+offset_bottom = 1100.0
+color = Color(0, 0, 0, 1)

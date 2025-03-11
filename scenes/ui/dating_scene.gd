@@ -16,6 +16,7 @@ var dialogue_manager: DialogueManager
 @onready var inventory_ui = $InventoryUI
 @onready var bunny_gif = $BunnyGif
 @onready var split_ends = $SplitEnds
+@onready var split_ends_sprite = $SplitEndsSprite
 
 var compatibility_score: float = 0.0
 
@@ -45,10 +46,15 @@ func _ready() -> void:
 	inventory_ui.set_process_input(false)  # Only process input when visible
 	bunny_gif.gif_clicked.connect(_on_bunny_gif_clicked)
 	bunny_gif.set_process_input(true)
+	split_ends_sprite.hovering.connect(_on_sprite_hover)
+	split_ends_sprite.set_process_input(true)
 
 
 func _on_bunny_gif_clicked():
-	print("Bunny GIF was clicked in dating scene!")
+	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
+	
+func _on_sprite_hover():
+	print("Sprite hovered at: ", get_global_mouse_position())
 	
 func setup_player() -> void:
 	# Create player character
@@ -162,5 +168,6 @@ func _input(event):
 				inventory_ui.toggle_visibility()
 				# Toggle input processing so it only processes input when visible
 				inventory_ui.set_process_input(inventory_ui.is_visible())
+			print("Mouse at: ", get_global_mouse_position())
 		else:
 			print("Inventory UI not available")
