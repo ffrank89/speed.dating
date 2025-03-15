@@ -93,6 +93,7 @@ func spawn_new_partner() -> void:
 	
 	# Reset the character if previously added
 	if split_ends.get_parent():
+		print("Partner already spawned!")
 		split_ends.get_parent().remove_child(split_ends)
 	
 	# Add the character to the scene
