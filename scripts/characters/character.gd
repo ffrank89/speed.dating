@@ -14,13 +14,14 @@ var pant: Pant
 var shirt: Shirt
 var accessory: Accessory
 var skills: Dictionary
+var reaction: String
 
 func _init(char_name: String):
 	self.name = char_name
 	self.pant = Pant.create_random() as Pant
 	self.shirt = Shirt.create_random() as Shirt
 	self.accessory = Accessory.create_random() as Accessory
-	skills = {
+	self.skills = {
 		"Speech": 25,
 		"Flirt": 30,
 		"Insight": 20,
@@ -28,6 +29,7 @@ func _init(char_name: String):
 		"Size": 100,
 		"Wit": 20
 	}
+	self.reaction = "Neutral"
 	#self.accessory.color.color = ColorType.Colors.BLACK
 	
 	
@@ -56,3 +58,15 @@ func increase_skill(skill_name: String, amount: int):
 
 func get_skill(skill_name: String) -> int:
 	return skills.get(skill_name, 0)
+
+func check_item_reaction(item: InventoryItem):
+	if item is Baggy:
+		if self.skills["Wit"] < 10:
+			return "Like sooo down"
+		else:
+			return "Aren't you like thirty...?"
+	elif item is Weed:
+		if self.skills["Insight"] < 100:
+			return "OMg can we watch youtube too"
+		else:
+			return "That gets me in my head these days"

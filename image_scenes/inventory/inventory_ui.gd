@@ -144,8 +144,12 @@ func _create_item_button(item):
 	button.tooltip_text = item.name
 	
 	# Connect button press
-	button.pressed.connect(func(): emit_signal("item_selected", item))
-	
+	button.pressed.connect(func(): 
+		# Emit both local and global signals
+		emit_signal("item_selected", item)  # Local signal for backward compatibility
+		PlayerManager.select_item(item)     # Global signal through PlayerManager
+	)
+		
 	return button
 
 func toggle_visibility():

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://sevo02sxky2b"]
+[gd_scene load_steps=4 format=3 uid="uid://sevo02sxky2b"]
 
 [ext_resource type="Script" path="res://image_scenes/split_ends/split_ends.gd" id="1_mfkpf"]
 [ext_resource type="PackedScene" uid="uid://cgm1ympw5riwb" path="res://image_scenes/stats_display1/CharacterStatsDisplay.tscn" id="2_os43b"]
+[ext_resource type="PackedScene" uid="uid://7hebc478xhh3" path="res://image_scenes/reaction_display1/InventoryReaction.tscn" id="3_se16u"]
 
 [node name="SplitEnds" type="Control"]
 layout_mode = 3
@@ -13,3 +14,5 @@ layout_mode = 0
 stretch_mode = 6
 
 [node name="CharacterStatsDisplay" parent="." instance=ExtResource("2_os43b")]
+
+[node name="InventoryReaction" parent="." instance=ExtResource("3_se16u")]

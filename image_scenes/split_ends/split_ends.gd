@@ -5,6 +5,8 @@ var character: SplitEndsCharacter
 @onready var character_name_label = $CharacterNameLabel
 @onready var character_image = $CharacterImage
 @onready var stats_display = $CharacterStatsDisplay
+@onready var reaction_display = $InventoryReaction
+
 # Size and position constants
 const DEFAULT_SIZE := Vector2(600, 800)  # Adjust based on your character image
 const TARGET_POSITION := Vector2(0.5, 0.5)  # Position at center of screen
@@ -27,6 +29,8 @@ func _ready() -> void:
 	setup_character_ui()
 	apply_filter()
 	setup_stats()
+	setup_reaction_display()
+	connect_inventory_signals()
 	
 	# Initial position update
 	update_position()
@@ -65,6 +69,24 @@ func setup_stats():
 	stats_display.setup(character)
 	stats_display.start_orbiting()	
 
+func setup_reaction_display():
+	reaction_display.setup(character)
+
+func connect_inventory_signals():
+	add_to_group("characters")  # Add this character to a group for easier finding
+	
+	# Try to connect directly to inventory UI for backward compatibility
+	var inventory_ui = get_node_or_null("/root/dating_scene/InventoryUI")
+	# ALSO connect to the global PlayerManager signal
+	# This makes the system work regardless of scene structure
+	PlayerManager.item_selected.connect(_on_inventory_item_selected)
+	print("Connected to PlayerManager global inventory signals")
+	
+func _on_inventory_item_selected(item):
+	print("Character reacting to item: ", item.name)
+	if reaction_display:
+		reaction_display.show_reaction(item)
+		
 func apply_filter():
 	# Create shader material
 	var shader_material = ShaderMaterial.new()
