@@ -8,9 +8,6 @@ func _ready():
 	sprite_frames.set_animation_loop(animation, true)
 	play()
 	
-	# Position in lower right corner
-	position_in_corner()
-	
 	# Set up input handling
 	set_process_input(true)
 	
@@ -31,25 +28,6 @@ func _ready():
 	material = shader_material
 	
 	print("Bunny GIF initialized, awaiting clicks")
-
-# Position the bunny in the lower-right corner with some margin
-func position_in_corner():
-	var viewport_size = get_viewport_rect().size
-	var margin = 50  # Distance from the edges
-	var texture = sprite_frames.get_frame_texture(animation, 0)
-	var sprite_size = texture.get_size() * scale
-	
-	## Adjust scale if bunny is too large
-	if sprite_size.x > viewport_size.x / 4 or sprite_size.y > viewport_size.y / 4:
-		var scale_factor = min(viewport_size.x / 1.3 / texture.get_width(), viewport_size.y / 1.3 / texture.get_height())
-		#0.06352941176471
-		scale = Vector2(scale_factor, scale_factor)
-		sprite_size = texture.get_size() * scale
-	position = Vector2(
-		viewport_size.x - (sprite_size.x/2) - margin,
-		viewport_size.y - (sprite_size.y/2) - margin + 150
-	)
-	
 func _input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var mouse_pos = get_global_mouse_position()
@@ -88,9 +66,6 @@ func toggle_animation():
 
 # Ensure the bunny stays in the corner if viewport is resized
 func _process(_delta):
-	if get_viewport_rect().size != Vector2.ZERO:
-		position_in_corner()
-		
 	if material:
 		var current_frame = get_frame()
 		var current_texture = sprite_frames.get_frame_texture(animation, current_frame)
