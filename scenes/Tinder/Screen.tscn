@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://bebvepqudrn"]
+
+[ext_resource type="Script" path="res://scenes/Tinder/screen.gd" id="1_8no1u"]
+[ext_resource type="PackedScene" uid="uid://cjmpuniqx0xn4" path="res://image_scenes/screen/screen.tscn" id="1_gbqgm"]
+[ext_resource type="Script" path="res://scenes/Tinder/start.gd" id="2_i1xjj"]
+[ext_resource type="Script" path="res://scenes/Tinder/info_panel.gd" id="2_q0w1a"]
+[ext_resource type="Script" path="res://scenes/Tinder/next_icon.gd" id="3_3j4u5"]
+[ext_resource type="Script" path="res://scenes/Tinder/icon_panel.gd" id="3_ym8ox"]
+
+[node name="Screen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_8no1u")
+
+[node name="BackgroundImage" parent="." instance=ExtResource("1_gbqgm")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="IconPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_left = 248.0
+offset_top = 18.0
+offset_right = 288.0
+offset_bottom = 58.0
+script = ExtResource("3_ym8ox")
+
+[node name="InfoPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 102.0
+offset_right = 248.0
+offset_bottom = 142.0
+script = ExtResource("2_q0w1a")
+
+[node name="Start" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("2_i1xjj")
+
+[node name="NextIcon" type="Button" parent="."]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 134.0
+offset_right = 133.0
+offset_bottom = 170.0
+script = ExtResource("3_3j4u5")

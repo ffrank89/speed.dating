@@ -4,7 +4,7 @@ extends Control
 var player: Character
 var current_date: Character
 var dialogue_manager: DialogueManager
-
+var player_manager: PlayerManager
 # References to UI elements
 @onready var player_panel = $PlayerPanel
 @onready var date_panel = $DatePanel
@@ -28,8 +28,7 @@ func _ready() -> void:
 	# Print debug information
 	print("Window size at startup: ", DisplayServer.window_get_size())
 	print("Viewport size: ", get_viewport_rect().size)
-	
-			
+
 	# Initialize player character
 	setup_player()
 	
@@ -40,7 +39,6 @@ func _ready() -> void:
 	spawn_new_partner()
 	
 	option_ui.option_selected.connect(_on_option_selected)
-	 # Set proper input processing priority
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
 	option_ui.set_process_input(true)
 	inventory_ui.set_process_input(false)  # Only process input when visible
@@ -54,24 +52,16 @@ func _on_sprite_hover():
 	
 func setup_player() -> void:
 	# Create player character
-	player = Character.new("Me!")
 	
 	# Set up player in the global manager
 	var player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
-		player_manager.set_player(player)
 		player_manager.initialize_inventory()
 		inventory_ui.update_inventory(player_manager.get_inventory())
-
+		player = player_manager.player
 	else:
-		# Create manager if not available as autoload
-		player_manager = load("res://scripts/manager/player_manager.gd").new()
-		player_manager.name = "PlayerManager"
-		player_manager.player = player
-		get_tree().root.add_child(player_manager)
-		player_manager.initialize_inventory()
-		inventory_ui.update_inventory(player_manager.get_inventory())
-	
+		print("No PLAYER MANAGER ready")
+
 	# Update player panel
 	player_panel.setup(player)
 	
@@ -108,6 +98,7 @@ func spawn_new_partner() -> void:
 	
 
 func _on_dialogue_started(dialogue: DialogueData) -> void:
+
 		# Clear previous dialogue
 	for child in dialogue_ui.get_children():
 		child.queue_free()
@@ -120,6 +111,9 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 	option_ui.display_options(dialogue.options)
 
 func _on_option_selected(option: DialogueOption) -> void:
+	
+	player_manager = get_node_or_null("/root/PlayerManager")
+
 	dialogue_manager.select_option(option)
 	
 	# Update compatibility based on dialogue choice
@@ -128,6 +122,10 @@ func _on_option_selected(option: DialogueOption) -> void:
 		var tween = create_tween()
 		tween.tween_property(compatibility_meter, "value", compatibility_score, 0.3)
 
+	var skill = option.success_effect["Skill"]
+	var boost = option.success_effect["Effect"]
+	player_manager.player.increase_skill(skill, boost)
+	
 func _on_dialogue_ended() -> void:
 	end_date()
 

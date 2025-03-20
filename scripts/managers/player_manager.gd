@@ -4,8 +4,9 @@ signal item_selected(item)
 
 
 var player: Character
-# Store inventory items
+var selected_date: Character
 var inventory: Array = []
+
 
 # Add an item to the inventory
 func add_item(item: InventoryItem) -> bool:

@@ -2,7 +2,7 @@ extends Control
 class_name DialogueOptionUI
 
 # Dialogue box settings - base size for 1920x1080 resolution
-const BASE_DIALOGUE_BOX_SIZE := Vector2(600, 300)
+const BASE_DIALOGUE_BOX_SIZE := Vector2(600, 320)
 const BASE_OPTION_SIZE := Vector2(550, 50)
 const BASE_OPTION_MARGIN := 25
 const BASE_OPTION_SPACING := 20

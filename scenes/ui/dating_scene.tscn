@@ -142,6 +142,7 @@ offset_bottom = 220.0
 
 [node name="BunnyGif" parent="." instance=ExtResource("12_4wqid")]
 layout_mode = 1
+anchors_preset = -1
 anchor_left = 0.972646
 anchor_top = 0.695074
 anchor_right = 0.972646
