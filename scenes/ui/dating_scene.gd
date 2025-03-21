@@ -1,8 +1,8 @@
 # dating_scene.gd
 extends Control
 
-var player: Character
-var current_date: Character
+var player: PlayerCharacter
+var current_date: DateCharacter
 var dialogue_manager: DialogueManager
 var player_manager: PlayerManager
 # References to UI elements
@@ -51,7 +51,6 @@ func _on_sprite_hover():
 	print("Sprite hovered at: ", get_global_mouse_position())
 	
 func setup_player() -> void:
-	# Create player character
 	
 	# Set up player in the global manager
 	var player_manager = get_node_or_null("/root/PlayerManager")
@@ -140,7 +139,7 @@ func end_date() -> void:
 func calculate_compatibility() -> void:
 	compatibility_score = randi_range(18, 46) 
 	var tween = create_tween()
-	var bonuses = Calculations.character_outfit_bonus(current_date)
+	var bonuses = Calculations.date_outfit_bonus(current_date)
 	bonus_label.update_bonuses(bonuses)
 	
 	var total_bonus = 0

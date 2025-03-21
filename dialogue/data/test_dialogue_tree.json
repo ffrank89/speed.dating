@@ -7,13 +7,13 @@
 				"hint_text": "This is an indication",
 				"next_dialogue_id": "START_ID",
 				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 100}
+				"success_effect": {"Skill": "Heart", "Effect": 100}
 			},
 			{
 				"hint_text": "Of what you will say to your Date",
 				"next_dialogue_id": "SECOND_ID",
 				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 0}
+				"success_effect": {"Skill": "Heart", "Effect": 0}
 			}
 		]
 	},
@@ -25,27 +25,27 @@
 				"hint_text": "This is an indication",
 				"next_dialogue_id": "SECOND_ID",
 				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 10}
+				"success_effect": {"Skill": "Heart", "Effect": 10}
 			},
 			{
 				"hint_text": "Of what you will say to your Date",
 				"next_dialogue_id": "START_ID",
 				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 10}
+				"success_effect": {"Skill": "Heart", "Effect": 10}
 			}
 			,
 			{
 				"hint_text": "Show Skill Checks",
 				"next_dialogue_id": "SKILL_CHECK_ID",
 				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 10}
+				"success_effect": {"Skill": "Heart", "Effect": 10}
 			}
 			,
 			{
 				"hint_text": "END RUN",
 				"next_dialogue_id": "",
 				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 10}
+				"success_effect": {"Skill": "Heart", "Effect": 10}
 			}
 		]
 	},
@@ -56,14 +56,14 @@
 			{
 				"hint_text": "Size Check",
 				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {"skill": "Size", "req": 55},
-				"success_effect": {"Skill": "Wit", "Effect": 10}
+				"skill_check": {"skill": "Seduction", "req": 55},
+				"success_effect": {"Skill": "Heart", "Effect": 10}
 			},
 			{
 				"hint_text": "Wit Check",
 				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {"skill": "Wit", "req": 60},
-				"success_effect": {"Skill": "Wit", "Effect": 10}
+				"skill_check": {"skill": "Seduction", "req": 60},
+				"success_effect": {"Skill": "Heart", "Effect": 0}
 			}
 		]
 	},

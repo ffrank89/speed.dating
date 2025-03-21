@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bebvepqudrn"]
+[gd_scene load_steps=8 format=3 uid="uid://bebvepqudrn"]
 
 [ext_resource type="Script" path="res://scenes/Tinder/screen.gd" id="1_8no1u"]
 [ext_resource type="PackedScene" uid="uid://cjmpuniqx0xn4" path="res://image_scenes/screen/screen.tscn" id="1_gbqgm"]
 [ext_resource type="Script" path="res://scenes/Tinder/start.gd" id="2_i1xjj"]
 [ext_resource type="Script" path="res://scenes/Tinder/info_panel.gd" id="2_q0w1a"]
 [ext_resource type="Script" path="res://scenes/Tinder/next_icon.gd" id="3_3j4u5"]
+[ext_resource type="Script" path="res://image_scenes/screen/screen.gd" id="3_84w2g"]
 [ext_resource type="Script" path="res://scenes/Tinder/icon_panel.gd" id="3_ym8ox"]
 
 [node name="Screen" type="Control"]
@@ -19,6 +20,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 grow_horizontal = 1
 grow_vertical = 1
+script = ExtResource("3_84w2g")
 
 [node name="IconPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(500, 500)

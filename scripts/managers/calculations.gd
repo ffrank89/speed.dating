@@ -3,7 +3,7 @@ extends Node
 class_name Calculations
 
 
-static func character_outfit_bonus(character: Character) -> Dictionary:
+static func date_outfit_bonus(character: DateCharacter) -> Dictionary:
 	return calculate_outfit_bonus(character.pant, character.shirt, character.accessory)
 	
 static func calculate_outfit_bonus(pants: Jawn, shirt: Jawn, accessory: Jawn) -> Dictionary:

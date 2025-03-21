@@ -8,8 +8,8 @@ signal option_selected(option: DialogueOption)
 
 var current_dialogue: DialogueData
 var dialogue_tree: Dictionary
-var active_partner: Character
-var player: Character
+var active_partner: DateCharacter
+var player: PlayerCharacter
 
 # Load dialogue from JSON
 func load_dialogue():
@@ -19,7 +19,7 @@ func load_dialogue():
 	dialogue_tree = json.parse_string(json_text)
 	#print(dialogue_tree)
 
-func start_date_dialogue(partner: Character, player_char: Character):
+func start_date_dialogue(partner: DateCharacter, player_char: PlayerCharacter):
 	active_partner = partner
 	player = player_char
 	load_dialogue()

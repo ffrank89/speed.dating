@@ -3,8 +3,8 @@ extends Node
 signal item_selected(item)
 
 
-var player: Character
-var selected_date: Character
+var player: PlayerCharacter
+var selected_date: DateCharacter
 var inventory: Array = []
 
 
@@ -16,10 +16,10 @@ func add_item(item: InventoryItem) -> bool:
 		return true
 	return false
 	
-func set_player(new_player: Character):
+func set_player(new_player: PlayerCharacter):
 	player = new_player
 	
-func get_player() -> Character:
+func get_player() -> PlayerCharacter:
 	return player
 
 # Get the full inventory

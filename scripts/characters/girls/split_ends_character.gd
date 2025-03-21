@@ -1,5 +1,5 @@
 class_name SplitEndsCharacter
-extends Character
+extends DateCharacter
 
 
 func _init():
@@ -42,11 +42,6 @@ static func create_default() -> SplitEndsCharacter:
 
 # SplitEnds-specific reactions to items
 func check_item_reaction(item: InventoryItem):
-	# First check parent class for common reactions
-	var base_reaction = super.check_item_reaction(item)
-	if base_reaction:
-		return base_reaction
-		
 	# SplitEnds-specific reactions
 	if item is Baggy:
 		return "Love bag"

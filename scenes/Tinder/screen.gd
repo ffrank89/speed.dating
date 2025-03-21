@@ -3,6 +3,7 @@ extends Control
 # Character classes to load profiles from
 var character_classes = [
 	SplitEndsCharacter,
+	SmokeyCharacter
 ]
 var characters = []  # Will store loaded instances of character classes
 var current_profile_index = 0
@@ -93,6 +94,7 @@ func setup_layout():
 func load_characters():
 	# Create instances of each character class
 	for char_class in character_classes:
+		print("load_characters char_class", char_class)
 		var character = char_class.create_default()
 		# Add default interests and other fields if they're not set
 		if character.interests.is_empty():
@@ -104,7 +106,7 @@ func set_default_character_data(character):
 	print("NO CHARACTER DATA")
 	
 func update_display():
-	var character = characters[current_profile_index]
+	var character = self.characters[current_profile_index]
 	
 	# Update the icon
 	var texture_path = get_character_icon(character)
@@ -150,7 +152,7 @@ func _on_next_pressed():
 	tween.parallel().tween_property(info_panel, "modulate", Color(1,1,1,0), 0.3)
 	tween.tween_callback(func():
 		# Go to next profile
-		current_profile_index = (current_profile_index + 1) % characters.size()
+		self.current_profile_index = (self.current_profile_index + 1) % characters.size()
 		update_display()
 	)
 	
@@ -160,7 +162,7 @@ func _on_next_pressed():
 func _on_start_pressed():
 	# Store selected character in PlayerManager
 	var player_manager = get_node("/root/PlayerManager")
-	player_manager.selected_date = characters[current_profile_index]
+	player_manager.selected_date = characters[self.current_profile_index]
 	# Animate transition to dating scene
 	var fade_panel = ColorRect.new()
 	fade_panel.color = Color(0, 0, 0, 0)
@@ -168,4 +170,5 @@ func _on_start_pressed():
 	add_child(fade_panel)
 	var tween = create_tween()
 	tween.tween_property(fade_panel, "color", Color(0, 0, 0, 1), 1.0)
+	print("In _on_start_pressed")
 	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.selected_date.first_date_path))

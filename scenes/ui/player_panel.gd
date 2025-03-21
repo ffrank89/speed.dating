@@ -5,7 +5,7 @@ extends Panel
 @onready var outfit_panel = $OutfitPanel
 @onready var stats_panel = $StatsPanel
 
-var player: Character
+var player: PlayerCharacter
 
 func _ready():
 	custom_minimum_size = Vector2(200, 600)
@@ -27,7 +27,7 @@ func _ready():
 	stats_panel.size = Vector2(350, 300)
 	stats_panel.bbcode_enabled = true
 
-func setup(player_character: Character):
+func setup(player_character: PlayerCharacter):
 	player = player_character
 	update_display()
 	

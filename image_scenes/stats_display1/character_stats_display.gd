@@ -2,7 +2,7 @@
 extends Control
 
 # References
-var character: Character
+var character: DateCharacter
 @onready var stats_container = $StatsContainer
 
 # Constants for appearance
@@ -39,7 +39,7 @@ func _ready():
 	set_process(true)
 
 # Set the character reference and create the stat displays
-func setup(char: Character):
+func setup(char: DateCharacter):
 	character = char
 	refresh_stats()
 

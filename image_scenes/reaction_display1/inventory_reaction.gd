@@ -1,7 +1,7 @@
 extends Control
 
 # References
-var character: Character
+var date: DateCharacter
 
 # Constants for appearance
 const BUBBLE_WIDTH = 280
@@ -29,15 +29,15 @@ func _ready():
 	visible = false
 
 # Set the character reference
-func setup(char: Character):
-	character = char
+func setup(char: DateCharacter):
+	date = char
 
 # Show a reaction to an item
 func show_reaction(item: InventoryItem):
 	# Get the reaction text
 	var reaction_text = ""
-	if character:
-		reaction_text = character.check_item_reaction(item)
+	if date:
+		reaction_text = date.check_item_reaction(item)
 	
 	if not reaction_text:
 		# Default reaction if nothing specific

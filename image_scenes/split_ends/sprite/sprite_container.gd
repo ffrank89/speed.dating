@@ -2,7 +2,7 @@
 extends Control
 
 # Character reference - same as in your original script
-var character: Character
+var character: DateCharacter
 
 # Reference to the actual sprite
 @onready var sprite = $SplitEndsSprite

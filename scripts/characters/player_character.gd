@@ -1,5 +1,4 @@
-# character.gd
-class_name Character
+class_name PlayerCharacter
 extends Node
 
 
@@ -13,7 +12,6 @@ var charm: float = .1
 var age: int = 0
 var bio: String = ""
 var icon_path: String = ""
-var first_date_path: String = ""
 var pant: Pant
 var shirt: Shirt
 var accessory: Accessory
@@ -26,16 +24,12 @@ func _init(char_name: String):
 	self.shirt = Shirt.create_random() as Shirt
 	self.accessory = Accessory.create_random() as Accessory
 	self.skills = {
-		"Speech": 0,
-		"Flirt": 0,
-		"Insight": 0,
-		"Style": 0,
-		"Size": 0,
-		"Wit": 0
+		"Culture": 0,
+		"Intellect": 0,
+		"Seduction": 0,
+		"Heart": 0
 	}
-	self.reaction = "Neutral"
-	#self.accessory.color.color = ColorType.Colors.BLACK
-	
+	self.reaction = "Neutral"	
 	
 
 func change_outfit_piece(piece_type: String, new_piece):
@@ -50,6 +44,7 @@ func change_outfit_piece(piece_type: String, new_piece):
 	emit_signal("outfit_changed")
 	
 func get_skill_level(skill: String):
+	print("get_skill_level: ", self.skills)
 	return self.skills[skill]
 	
 func get_skills():
@@ -70,7 +65,6 @@ func _increase_skill_add(skill_name: String, amount: int):
 	emit_signal("stats_changed")
 
 func get_skill(skill_name: String) -> int:
-	print()
 	return self.skills.get(skill_name, 0)
 
 func check_item_reaction(item: InventoryItem):
