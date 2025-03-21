@@ -38,6 +38,7 @@ func get_dialogue(dialogue_id: String) -> DialogueData:
 	# Convert each option in the JSON to DialogueOption objects
 	var options: Array[DialogueOption] = []
 	for option_data in data.options:
+		print("Option_data: ", option_data)
 		var option = DialogueOption.new()
 		option.hint_text = option_data.hint_text
 		option.next_dialogue_id = option_data.next_dialogue_id

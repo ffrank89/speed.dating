@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0bwkjvsx1tem"]
+
+[ext_resource type="Script" path="res://image_scenes/bunnyGif/bunny_gif_controller.gd" id="1_6ljkp"]
+[ext_resource type="SpriteFrames" uid="uid://b520l8l7sycfr" path="res://image_scenes/bunnyGif/bunny_gif.tres" id="1_r4oqt"]
+[ext_resource type="Script" path="res://image_scenes/bunnyGif/bunny_gif.gd" id="2_5557b"]
+
+[node name="Container" type="Control"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = 20.0
+offset_right = 80.0
+offset_bottom = 120.0
+grow_horizontal = 0
+size_flags_stretch_ratio = 0.74
+script = ExtResource("1_6ljkp")
+metadata/_edit_use_anchors_ = true
+
+[node name="BunnyGif" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_r4oqt")
+speed_scale = 20.0
+script = ExtResource("2_5557b")

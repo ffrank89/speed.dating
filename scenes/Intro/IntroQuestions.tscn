@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://efp3ydwobkem"]
+
+[ext_resource type="Script" path="res://scenes/Intro/intro_questions.gd" id="1_72tvp"]
+[ext_resource type="PackedScene" uid="uid://qit272pittup" path="res://image_scenes/split_ends/sprite2/split_ends_sprite.tscn" id="2_wnd8f"]
+
+[node name="IntroQuestions" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_72tvp")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 2
+offset_top = 31.0
+offset_right = 97.0
+offset_bottom = 31.0
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="QuestionContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="QuestionLabel" type="Label" parent="QuestionContainer"]
+layout_mode = 2
+text = "Your Results"
+
+[node name="OptionsContainer" type="VBoxContainer" parent="QuestionContainer"]
+layout_mode = 2
+
+[node name="StatsInputContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="FinalScreen" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 66.0
+
+[node name="ResultLabel" type="Label" parent="FinalScreen"]
+layout_mode = 2
+
+[node name="StartDatingButton" type="Button" parent="FinalScreen"]
+layout_mode = 2
+
+[node name="ResultTitle" type="Label" parent="FinalScreen"]
+layout_mode = 2
+
+[node name="StatsContainer" type="VBoxContainer" parent="FinalScreen"]
+layout_mode = 2
+
+[node name="SplitEndsSpriteContainer" parent="." instance=ExtResource("2_wnd8f")]
+layout_mode = 0

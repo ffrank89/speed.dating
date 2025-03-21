@@ -4,7 +4,7 @@ extends Control
 var player: Character
 var current_date: Character
 var dialogue_manager: DialogueManager
-
+var player_manager: PlayerManager
 # References to UI elements
 @onready var player_panel = $PlayerPanel
 @onready var date_panel = $DatePanel
@@ -13,6 +13,10 @@ var dialogue_manager: DialogueManager
 @onready var dialogue_ui = $DialogueDataUI
 @onready var option_ui = $DialogueOptionUI
 @onready var bonus_label = $CompatibilityMeter/BonusLabel
+@onready var inventory_ui = $InventoryUI
+@onready var split_ends = $SplitEnds
+@onready var split_ends_sprite_container = $SplitEndsSprite
+@onready var bunny_gif_container = $BunnyGif
 
 var compatibility_score: float = 0.0
 
@@ -24,8 +28,7 @@ func _ready() -> void:
 	# Print debug information
 	print("Window size at startup: ", DisplayServer.window_get_size())
 	print("Viewport size: ", get_viewport_rect().size)
-	
-			
+
 	# Initialize player character
 	setup_player()
 	
@@ -36,24 +39,29 @@ func _ready() -> void:
 	spawn_new_partner()
 	
 	option_ui.option_selected.connect(_on_option_selected)
+	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
+	option_ui.set_process_input(true)
+	inventory_ui.set_process_input(false)  # Only process input when visible
 
 
-
+func _on_bunny_gif_clicked():
+	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
+	
+func _on_sprite_hover():
+	print("Sprite hovered at: ", get_global_mouse_position())
+	
 func setup_player() -> void:
 	# Create player character
-	player = Character.new("Me!")
 	
 	# Set up player in the global manager
 	var player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
-		player_manager.set_player(player)
+		player_manager.initialize_inventory()
+		inventory_ui.update_inventory(player_manager.get_inventory())
+		player = player_manager.player
 	else:
-		# Create manager if not available as autoload
-		player_manager = load("res://scripts/manager/player_manager.gd").new()
-		player_manager.name = "PlayerManager"
-		player_manager.player = player
-		get_tree().root.add_child(player_manager)
-	
+		print("No PLAYER MANAGER ready")
+
 	# Update player panel
 	player_panel.setup(player)
 	
@@ -70,20 +78,27 @@ func setup_dialogue() -> void:
 	dialogue_manager.load_dialogue()
 
 func spawn_new_partner() -> void:
-	current_date = Character.new("Date")
-	var partner_position = $BackgroundCircle
+	# Get the Character instance from the scene
+	current_date = split_ends.character
 	
-	# Animate partner entry
-	var tween = create_tween()
-	partner_position.position = Vector2(1200, partner_position.position.y)
-	tween.tween_property(partner_position, "position", 
-		Vector2(700, partner_position.position.y), 1.0)
+	# Reset the character if previously added
+	if split_ends.get_parent():
+		print("Partner already spawned!")
+		split_ends.get_parent().remove_child(split_ends)
 	
-	# Start both compatibility and dialogue
+	# Add the character to the scene
+	add_child(split_ends)
+	
+	# Make sure character is set up for correct positioning
+	split_ends.update_position()
+	
+	# Start the date-specific content
 	calculate_compatibility()
 	dialogue_manager.start_date_dialogue(current_date, player)
+	
 
 func _on_dialogue_started(dialogue: DialogueData) -> void:
+
 		# Clear previous dialogue
 	for child in dialogue_ui.get_children():
 		child.queue_free()
@@ -96,6 +111,9 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 	option_ui.display_options(dialogue.options)
 
 func _on_option_selected(option: DialogueOption) -> void:
+	
+	player_manager = get_node_or_null("/root/PlayerManager")
+
 	dialogue_manager.select_option(option)
 	
 	# Update compatibility based on dialogue choice
@@ -104,6 +122,10 @@ func _on_option_selected(option: DialogueOption) -> void:
 		var tween = create_tween()
 		tween.tween_property(compatibility_meter, "value", compatibility_score, 0.3)
 
+	var skill = option.success_effect["Skill"]
+	var boost = option.success_effect["Effect"]
+	player_manager.player.increase_skill(skill, boost)
+	
 func _on_dialogue_ended() -> void:
 	end_date()
 
@@ -131,3 +153,16 @@ func calculate_compatibility() -> void:
 		tween.tween_interval(0.2)
 		tween.tween_property(compatibility_meter, "value", 
 			compatibility_score + total_bonus, 0.5)
+			
+			
+			
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_I:  # 'I' key toggles inventory
+			if inventory_ui:
+				inventory_ui.toggle_visibility()
+				# Toggle input processing so it only processes input when visible
+				inventory_ui.set_process_input(inventory_ui.is_visible())
+			print("Mouse at: ", get_global_mouse_position())
+		else:
+			print("Inventory UI not available")

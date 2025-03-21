@@ -1,8 +1,12 @@
 extends Node
 
+signal item_selected(item)
+
+
 var player: Character
-# Store inventory items
+var selected_date: Character
 var inventory: Array = []
+
 
 # Add an item to the inventory
 func add_item(item: InventoryItem) -> bool:
@@ -21,4 +25,23 @@ func get_player() -> Character:
 # Get the full inventory
 func get_inventory() -> Array:
 	return inventory
+	
+# New method to handle item selection
+func select_item(item: InventoryItem):
+	# Emit a global signal that any character can listen for
+	emit_signal("item_selected", item)
+	print("PlayerManager: Item selected: ", item.name)
+
+
+# Initialize with default items
+func initialize_inventory():
+	# Clear any existing items
+	inventory.clear()
+	
+	# Add default items
+	var bag = Baggy.create_default()
+	var weed = Weed.create_default()
+	add_item(bag)
+	add_item(weed)
+
 	
