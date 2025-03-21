@@ -111,9 +111,8 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 	option_ui.display_options(dialogue.options)
 
 func _on_option_selected(option: DialogueOption) -> void:
-	
 	player_manager = get_node_or_null("/root/PlayerManager")
-
+	
 	dialogue_manager.select_option(option)
 	
 	# Update compatibility based on dialogue choice

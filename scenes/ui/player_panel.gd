@@ -40,7 +40,6 @@ func update_display():
 
 	# Skills section - eventually these would come from player
 	var skill_text = "[b]SKILLS:[/b]\n"
-	print(player.skills)
 	var skills = player.skills
 	for skill_name in skills:
 		skill_text += "%s: %d\n" % [skill_name, skills[skill_name]]

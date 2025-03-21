@@ -38,7 +38,6 @@ func get_dialogue(dialogue_id: String) -> DialogueData:
 	# Convert each option in the JSON to DialogueOption objects
 	var options: Array[DialogueOption] = []
 	for option_data in data.options:
-		print("Option_data: ", option_data)
 		var option = DialogueOption.new()
 		option.hint_text = option_data.hint_text
 		option.next_dialogue_id = option_data.next_dialogue_id
@@ -86,6 +85,7 @@ func select_option(option: DialogueOption):
 
 func check_skill(skill_check: Dictionary) -> bool:
 	print("Skill check", skill_check)
+	print("\n player.skills", player.skills)
 	return player.skills[skill_check.skill] >= skill_check.req
 
 func apply_effects(effects: Dictionary):

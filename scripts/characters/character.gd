@@ -52,42 +52,26 @@ func change_outfit_piece(piece_type: String, new_piece):
 func get_skill_level(skill: String):
 	return self.skills[skill]
 	
+func get_skills():
+	return self.skills
+	
 func increase_skill(skill_name: String, amount):
-	if amount is int:
-		_increase_skill_add(skill_name, amount)
-	elif amount is float:
-		_increase_skill_mult(skill_name, amount)
+	_increase_skill_add(skill_name, amount)
 
 func _increase_skill_add(skill_name: String, amount: int):
-	if skills.has(skill_name):
-		skills[skill_name] += amount
+	if self.skills.has(skill_name):
+		print("Increase skill add, ADDING")
+		self.skills[skill_name] += amount
 	else:
-		skills[skill_name] = amount
-	
-	emit_signal("stats_changed")
+		print("Increase skill add, EQIAL")
 
-func _increase_skill_mult(skill_name: String, amount: float):
-	if skills.has(skill_name):
-		var h = skills[skill_name]
-		skills[skill_name] = int(h*(amount))
-	else:
-		print("TODO logic for when new skill introduced as mult")
-		#TODO logic for when new skill introduced as mult
-		skills[skill_name] = amount
+		self.skills[skill_name] = amount
 	
 	emit_signal("stats_changed")
 
 func get_skill(skill_name: String) -> int:
-	return skills.get(skill_name, 0)
+	print()
+	return self.skills.get(skill_name, 0)
 
 func check_item_reaction(item: InventoryItem):
-	if item is Baggy:
-		if self.skills["Wit"] < 10:
-			return "Like sooo down"
-		else:
-			return "Aren't you like thirty...?"
-	elif item is Weed:
-		if self.skills["Insight"] < 100:
-			return "OMg can we watch youtube too"
-		else:
-			return "That gets me in my head these days"
+	return "NO REACTIONS"
