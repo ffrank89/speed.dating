@@ -123,18 +123,6 @@ func update_display():
 	for interest in character.interests:
 		info_text += "• " + interest + "\n"
 	
-	# Add some skill information
-	info_text += "\n[b]Skills:[/b]\n"
-	for skill_name in ["Style", "Wit", "Flirt"]:  # Show a subset of skills
-		var skill_level = character.get_skill(skill_name)
-		var stars = ""
-		for i in range(5):
-			if i < skill_level / 20:  # Convert 0-100 to 0-5 stars
-				stars += "★"
-			else:
-				stars += "☆"
-		info_text += "%s: %s\n" % [skill_name, stars]
-		
 	info_panel.update_text(info_text)
 
 func get_character_icon(character):

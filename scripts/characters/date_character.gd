@@ -16,23 +16,36 @@ var first_date_path: String = ""
 var pant: Pant
 var shirt: Shirt
 var accessory: Accessory
-var skills: Dictionary
 var reaction: String
+var skill_scores: Dictionary = {}
+var compatibility_weights: Dictionary = {}
+var relationship_requirements: Dictionary = {}
+
+var success_threshold: float = 70
+var is_in_party: bool = false
 
 func _init(char_name: String):
 	self.name = char_name
 	self.pant = Pant.create_random() as Pant
 	self.shirt = Shirt.create_random() as Shirt
 	self.accessory = Accessory.create_random() as Accessory
-	self.skills = {
-		"Speech": 0,
-		"Flirt": 0,
-		"Insight": 0,
-		"Style": 0,
-		"Size": 0,
-		"Wit": 0
-	}
 	self.reaction = "Neutral"
+	self.skill_scores = {
+		"Culture": 0,
+		"Intellect": 0,
+		"Seduction": 0,
+		"Heart": 0
+	}
+	self.compatibility_weights = {
+		"Culture": 1,
+		"Intellect": 1,
+		"Seduction": 1,
+		"Heart": 1
+	}
+	self.relationship_requirements = {
+		"max_party_size": 6
+	}
+
 	#self.accessory.color.color = ColorType.Colors.BLACK
 	
 	
@@ -47,30 +60,52 @@ func change_outfit_piece(piece_type: String, new_piece):
 			accessory = new_piece
 	
 	emit_signal("outfit_changed")
-	
-func get_skill_level(skill: String):
-	return self.skills[skill]
-	
-func get_skills():
-	return self.skills
-	
-func increase_skill(skill_name: String, amount):
-	_increase_skill_add(skill_name, amount)
 
-func _increase_skill_add(skill_name: String, amount: int):
-	if self.skills.has(skill_name):
-		print("Increase skill add, ADDING")
-		self.skills[skill_name] += amount
-	else:
-		print("Increase skill add, EQIAL")
-
-		self.skills[skill_name] = amount
+func calculate_option_score(option, player: PlayerCharacter) -> float:
+	var skill_type = option.skill_type  # "Culture", "Intellect", etc.
+	var req = option.req  # Required value to select the option
 	
-	emit_signal("stats_changed")
+	# Get this character's preference weight for this skill
+	var preference_weight = compatibility_weights.get(skill_type, 1.0)
+	
+	# Calculate the score based on weight × threshold
+	var score = preference_weight * req
+	
+	# bonus points for skills far above threshold
+	var player_skill = player.get_skill(skill_type)
+	if player_skill > req * 1.5:
+		score *= 1.2  # 20% bonus for greatly exceeding threshold
+	
+	return score
 
-func get_skill(skill_name: String) -> int:
-	print()
-	return self.skills.get(skill_name, 0)
+
+func get_relationship_hint() -> String:
+	var requirements = relationship_requirements.keys()
+	if requirements.is_empty():
+		return "I'm pretty easy-going about what I'm looking for."
+	
+	# Randomly select a requirement to hint about
+	requirements.shuffle()
+	var req = requirements[0]
+	
+	if req == "max_party_size":
+		if relationship_requirements["max_party_size"] < 3:
+			var hints = [
+				"I'm looking for something exclusive at the moment.",
+				"I don't really like to shareee haha. if you know what I mean.",
+				"Are you seeing anyone else right now?"
+			]
+			hints.shuffle()
+			return hints[0]
+		else:
+			var hints = [
+				"Yeah im just into meeting people",
+				"I'm new to the city!",
+				"Sure I guess you could say im playing the field",
+			]
+			hints.shuffle()
+			return hints[0]
+	return "I have certain expectations in a relationship."
 
 func check_item_reaction(item: InventoryItem):
 	return "NO REACTIONS"

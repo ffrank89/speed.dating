@@ -25,17 +25,12 @@ func _init():
 		"conscientious": 0.3,
 		"open": 0.6
 	}
-	
-	# Set skills
-	self.skills = {
-		"Speech": 40,
-		"Flirt": 65,
-		"Insight": 25,
-		"Style": 70,
-		"Wit": 35,
-		"Size": 100
-	}
-		
+	self.compatibility_weights = {
+		"Culture": 0.2,
+		"Intellect": 0.3,
+		"Seduction": 0.3,
+		"Heart": 0.2
+	}	
 static func create_default() -> SplitEndsCharacter:
 	return SplitEndsCharacter.new()
 

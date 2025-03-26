@@ -6,7 +6,6 @@ signal stats_changed
 signal outfit_changed
 
 var personality_traits: Dictionary = {}
-var interests: Array = []
 var charm: float = .1
 
 var age: int = 0
@@ -16,6 +15,7 @@ var pant: Pant
 var shirt: Shirt
 var accessory: Accessory
 var skills: Dictionary
+var perks: Array = []
 var reaction: String
 
 func _init(char_name: String):

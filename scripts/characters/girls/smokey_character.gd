@@ -24,16 +24,6 @@ func _init():
 		"conscientious": 0.0,
 		"open": 0.0
 	}
-	
-	# Set skills
-	self.skills = {
-		"Speech": 0,
-		"Flirt": 0,
-		"Insight": 0,
-		"Style": 0,
-		"Wit": 0,
-		"Size": 0
-	}
 		
 static func create_default() -> SmokeyCharacter:
 	return SmokeyCharacter.new()

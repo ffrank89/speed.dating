@@ -13,7 +13,7 @@ const STAT_PADDING = 5
 const STAT_MARGIN = 10
 
 # Stats to display (can be customized)
-var stats_to_display = ["Speech", "Flirt", "Insight", "Style", "Wit"]
+var stats_to_display = ["Culture", "Intellect", "Seduction", "Heart"]
 
 # Variables for orbital animation
 var orbit_center = Vector2.ZERO
@@ -55,8 +55,8 @@ func refresh_stats():
 	if character:
 		var index = 0
 		for stat_name in stats_to_display:
-			if character.skills.has(stat_name):
-				var stat_value = character.skills[stat_name]
+			if character.compatibility_weights.has(stat_name):
+				var stat_value = character.compatibility_weights[stat_name]
 				var stat_node = create_stat_node(stat_name, stat_value, index)
 				stats_container.add_child(stat_node)
 				stat_nodes.append(stat_node)

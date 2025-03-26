@@ -1,72 +1,9 @@
 {
-	"START_ID": {
-		"id": "START_ID",
-		"text": "This is an example of what a Date can say. This should prompt a response",
-		"options": [
-			{
-				"hint_text": "This is an indication",
-				"next_dialogue_id": "START_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Heart", "Effect": 100}
-			},
-			{
-				"hint_text": "Of what you will say to your Date",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Heart", "Effect": 0}
-			}
-		]
-	},
-		"SECOND_ID": {
-		"id": "SECOND_ID",
-		"text": "NEXT NEXT NEXT.",
-		"options": [
-			{
-				"hint_text": "This is an indication",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Heart", "Effect": 10}
-			},
-			{
-				"hint_text": "Of what you will say to your Date",
-				"next_dialogue_id": "START_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Heart", "Effect": 10}
-			}
-			,
-			{
-				"hint_text": "Show Skill Checks",
-				"next_dialogue_id": "SKILL_CHECK_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Heart", "Effect": 10}
-			}
-			,
-			{
-				"hint_text": "END RUN",
-				"next_dialogue_id": "",
-				"skill_check": {},
-				"success_effect": {"Skill": "Heart", "Effect": 10}
-			}
-		]
-	},
-	"SKILL_CHECK_ID": {
-		"id": "SECOND_ID",
-		"text": "NEXT NEXT NEXT.",
-		"options": [
-			{
-				"hint_text": "Size Check",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {"skill": "Seduction", "req": 55},
-				"success_effect": {"Skill": "Heart", "Effect": 10}
-			},
-			{
-				"hint_text": "Wit Check",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {"skill": "Seduction", "req": 60},
-				"success_effect": {"Skill": "Heart", "Effect": 0}
-			}
-		]
-	},
-	
-	
+  "START_ID": {
+    "id": "split_ends_intro"
+  },
+  "split_ends_intro": {
+    "id": "split_ends_intro",
+    "text": "I'm SPLIT END and im not gay ",
+    "options": [
 }

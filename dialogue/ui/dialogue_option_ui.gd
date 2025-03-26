@@ -139,10 +139,6 @@ func _on_button_pressed(option: DialogueOption):
 	emit_signal("option_selected", option)
 
 func create_dialogue_option(option: DialogueOption) -> Button:
-	var player_manager = get_node("/root/PlayerManager")
-
-	print("1 player_manager.player", player_manager.player.get_skills())
-
 	var button = Button.new()
 	
 	# Configure input handling
@@ -160,16 +156,13 @@ func create_dialogue_option(option: DialogueOption) -> Button:
 	if option.skill_check:
 		var skill = option.skill_check.skill
 		var req = option.skill_check.req
+		var player_manager = get_node("/root/PlayerManager")
 		var player_skill = 0
 		
 		if player_manager and player_manager.player:
-			print("skill", skill)
-			print("player_manager.player", player_manager.player.get_skills())
 			player_skill = player_manager.player.get_skill_level(skill)
 		else:
 			print("No Skill available")
-			print("skill", skill)
-			print("player_manager.player", player_manager.player.get_skills())
 		button.text = "%s [%s %d/%d]" % [
 			option.hint_text,
 			skill.capitalize(),

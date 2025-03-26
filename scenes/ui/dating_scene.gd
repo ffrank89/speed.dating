@@ -12,11 +12,11 @@ var player_manager: PlayerManager
 @onready var compatibility_meter = $CompatibilityMeter
 @onready var dialogue_ui = $DialogueDataUI
 @onready var option_ui = $DialogueOptionUI
-@onready var bonus_label = $CompatibilityMeter/BonusLabel
 @onready var inventory_ui = $InventoryUI
 @onready var split_ends = $SplitEnds
 @onready var split_ends_sprite_container = $SplitEndsSprite
 @onready var bunny_gif_container = $BunnyGif
+@onready var hint_label = $HintLabelx
 
 var compatibility_score: float = 0.0
 
@@ -42,7 +42,11 @@ func _ready() -> void:
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
 	option_ui.set_process_input(true)
 	inventory_ui.set_process_input(false)  # Only process input when visible
-
+	
+	# Initialize hint label if it exists
+	if hint_label:
+		hint_label.text = ""
+		hint_label.visible = false
 
 func _on_bunny_gif_clicked():
 	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
@@ -53,7 +57,7 @@ func _on_sprite_hover():
 func setup_player() -> void:
 	
 	# Set up player in the global manager
-	var player_manager = get_node_or_null("/root/PlayerManager")
+	player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
 		player_manager.initialize_inventory()
 		inventory_ui.update_inventory(player_manager.get_inventory())
@@ -74,6 +78,9 @@ func setup_dialogue() -> void:
 	add_child(dialogue_manager)
 	dialogue_manager.dialogue_started.connect(_on_dialogue_started)
 	dialogue_manager.dialogue_ended.connect(_on_dialogue_ended)
+	dialogue_manager.compatibility_changed.connect(_on_compatibility_changed)
+	dialogue_manager.relationship_hint_given.connect(_on_relationship_hint)
+	
 	dialogue_manager.load_dialogue()
 
 func spawn_new_partner() -> void:
@@ -110,26 +117,58 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 	option_ui.display_options(dialogue.options)
 
 func _on_option_selected(option: DialogueOption) -> void:
-	player_manager = get_node_or_null("/root/PlayerManager")
-	
 	dialogue_manager.select_option(option)
 	
-	# Update compatibility based on dialogue choice
-	if option.success_effect.has("compatibility"):
-		compatibility_score += option.success_effect.compatibility * 100
-		var tween = create_tween()
-		tween.tween_property(compatibility_meter, "value", compatibility_score, 0.3)
+	# TODO player response
+	dialogue_ui.create_player_response(option)
+	
+	# Wait a bit, then show date's response
+	await get_tree().create_timer(0.8).timeout
 
-	var skill = option.success_effect["Skill"]
-	var boost = option.success_effect["Effect"]
-	player_manager.player.increase_skill(skill, boost)
+func _on_compatibility_changed(value: float, increase: float) -> void:
+	compatibility_score = value
+	
+	# Animate the meter
+	var tween = create_tween()
+	tween.tween_property(compatibility_meter, "value", compatibility_score, 0.3)
+	
+	# Show a floating indicator for the increase
+	if increase > 0:
+		show_compatibility_increase(increase)
+
+func show_compatibility_increase(amount: float) -> void:
+	# Create a floating label to show the increase
+	var label = Label.new()
+	label.text = "+ " + str(int(amount * 10))
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", Color(0.2, 0.9, 0.2))
+	label.position = Vector2(compatibility_meter.position.x + 100, compatibility_meter.position.y - 30)
+	add_child(label)
+	
+	# Animate it floating up and fading out
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 50, 1.0)
+	tween.parallel().tween_property(label, "modulate:a", 0, 1.0)
+	tween.tween_callback(label.queue_free)
+
+func _on_relationship_hint(hint: String) -> void:
+	if hint_label:
+		hint_label.text = "💭 " + hint
+		hint_label.visible = true
+		
+		# Fade in and out
+		hint_label.modulate.a = 0
+		var tween = create_tween()
+		tween.tween_property(hint_label, "modulate:a", 1.0, 0.5)
+		tween.tween_interval(4.0)
+		tween.tween_property(hint_label, "modulate:a", 0.0, 0.5)
+		tween.tween_callback(func(): hint_label.visible = false)
 	
 func _on_dialogue_ended() -> void:
 	end_date()
 
 func end_date() -> void:
 	var tween = create_tween()
-	bonus_label.clear_bonuses()
 	tween.tween_interval(0.2)
 	tween.tween_property($BackgroundCircle, "position",
 		Vector2(-200, $BackgroundCircle.position.y), 1.0)
@@ -138,22 +177,9 @@ func end_date() -> void:
 
 func calculate_compatibility() -> void:
 	compatibility_score = randi_range(18, 46) 
-	var tween = create_tween()
-	var bonuses = Calculations.date_outfit_bonus(current_date)
-	bonus_label.update_bonuses(bonuses)
-	
-	var total_bonus = 0
-	for bonus in bonuses:
-		total_bonus += bonuses[bonus] * 33
-		
+	var tween = create_tween()		
 	tween.tween_property(compatibility_meter, "value", compatibility_score, 0.3)
-	if total_bonus > 0:
-		tween.tween_interval(0.2)
-		tween.tween_property(compatibility_meter, "value", 
-			compatibility_score + total_bonus, 0.5)
-			
-			
-			
+	
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_I:  # 'I' key toggles inventory
