@@ -29,9 +29,7 @@ func _ready():
 
 func update_display(frames_path):
 		
-	if ResourceLoader.exists(frames_path):
-		print("here")
-		
+	if ResourceLoader.exists(frames_path):		
 		var sprite_frames = load(frames_path)
 		print(sprite_frames)
 		animated_sprite.sprite_frames = sprite_frames

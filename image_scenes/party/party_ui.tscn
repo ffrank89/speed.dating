@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bu5n0gkpipjci"]
+
+[ext_resource type="Script" path="res://image_scenes/party/party_ui.gd" id="1_r3n3h"]
+
+[node name="PartyUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_r3n3h")

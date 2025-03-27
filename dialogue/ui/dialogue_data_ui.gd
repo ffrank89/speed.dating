@@ -6,8 +6,7 @@ const RESPONSE_SIZE := Vector2(800, 100)
 const RESPONSE_FONT_SIZE := 32
 const RESPONSE_ANIMATION_TIME := 1.5
 
-
-func _process(_delta):
+func _process(delta):
 	# Update positions of all child elements
 	for child in get_children():
 		if child is Panel or child is RichTextLabel:
@@ -44,7 +43,6 @@ func create_dates_response(data: DialogueData):
 	style.border_color = Color("#FF2996")  # Match the text color
 	bg.add_theme_stylebox_override("panel", style)
 	
-		
 	# Set initial positions (will be updated in _process)
 	_update_element_position(bg)
 	_update_element_position(label)
@@ -52,8 +50,6 @@ func create_dates_response(data: DialogueData):
 	# Add the background first, then the text on top
 	add_child(bg)
 	add_child(label)
-
-
 	
 	# Animate both the background and text
 	bg.modulate.a = 0
@@ -66,3 +62,6 @@ func create_dates_response(data: DialogueData):
 	tween.tween_property(label, "visible_characters", formatted_text.length(), RESPONSE_ANIMATION_TIME)
 	
 	return label
+
+func create_player_response(option: DialogueOption):
+	pass

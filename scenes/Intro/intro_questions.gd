@@ -5,12 +5,10 @@ const MAIN_SCENE_PATH = "res://scenes/ui/dating_scene.tscn"
 const DATING_SITE_PATH = "res://scenes/Tinder/Screen.tscn"
 # Track player stats
 var player_stats = {
-	"Speech": 20,
-	"Flirt": 20,
-	"Insight": 20,
-	"Size": 20,
-	"Style": 20,
-	"Wit": 20
+	"Culture": 0,
+	"Intellect": 0,
+	"Seduction": 0,
+	"Heart": 0
 }
 
 # UI References
@@ -188,7 +186,7 @@ func _on_start_dating_pressed():
 	var player_manager = get_node("/root/PlayerManager")
 	
 	# Create a new player with custom stats
-	var new_player = Character.new("Me!")
+	var new_player = PlayerCharacter.new("Me!")
 	
 	# Set the stats based on slider values
 	for stat in player_stats:

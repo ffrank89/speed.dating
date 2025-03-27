@@ -1,72 +1,275 @@
 {
-	"START_ID": {
-		"id": "START_ID",
-		"text": "This is an example of what a Date can say. This should prompt a response",
-		"options": [
-			{
-				"hint_text": "This is an indication",
-				"next_dialogue_id": "START_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			},
-			{
-				"hint_text": "Of what you will say to your Date",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 25}
-			}
-		]
-	},
-		"SECOND_ID": {
-		"id": "SECOND_ID",
-		"text": "NEXT NEXT NEXT.",
-		"options": [
-			{
-				"hint_text": "This is an indication",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			},
-			{
-				"hint_text": "Of what you will say to your Date",
-				"next_dialogue_id": "START_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			}
-			,
-			{
-				"hint_text": "Show Skill Checks",
-				"next_dialogue_id": "SKILL_CHECK_ID",
-				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			}
-			,
-			{
-				"hint_text": "END RUN",
-				"next_dialogue_id": "",
-				"skill_check": {},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			}
-		]
-	},
-	"SKILL_CHECK_ID": {
-		"id": "SECOND_ID",
-		"text": "NEXT NEXT NEXT.",
-		"options": [
-			{
-				"hint_text": "Size Check",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {"skill": "Size", "req": 55},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			},
-			{
-				"hint_text": "Wit Check",
-				"next_dialogue_id": "SECOND_ID",
-				"skill_check": {"skill": "Wit", "req": 60},
-				"success_effect": {"Skill": "Wit", "Effect": 0.15}
-			}
-		]
-	},
-	
-	
+  "START_ID": {
+    "id": "split_ends_intro"
+  },
+  "split_ends_intro": {
+    "id": "split_ends_intro",
+    "text": "Hey! I'm Split Ends. Love your vibe. What's your deal?",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_music",
+        "next_dialogue_id": "split_ends_music",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 30
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Culture",
+          "Effect": 1
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_fashion",
+        "next_dialogue_id": "split_ends_fashion",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.2,
+          "Skill": "Intellect",
+          "Effect": 1
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_compliment.",
+        "next_dialogue_id": "split_ends_compliment",
+        "skill_check": {
+          "skill": "Seduction",
+          "req": 25
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Seduction",
+          "Effect": 1
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_genuine",
+        "next_dialogue_id": "split_ends_genuine",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 20
+        },
+        "success_effect": {
+          "compatibility": 0.3,
+          "Skill": "Heart",
+          "Effect": 1
+        }
+      }
+    ]
+  },
+  "split_ends_music": {
+    "id": "split_ends_music",
+    "text": "Yeah! I went to this shoegaze show last weekend. Its like underground but youd probably like it",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_end",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 40
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 45
+        },
+        "success_effect": {
+          "compatibility": 0.3,
+          "Skill": "Intellect",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Seduction",
+          "req": 50
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Seduction",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Heart",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_fashion": {
+    "id": "split_ends_fashion",
+    "text": "Oh... that sounds kind of interesting I guess. I'm more into fashion for the aesthetic, but I can see how it connects to bigger things.",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 40
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Intellect",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_compliment": {
+    "id": "split_ends_compliment",
+    "text": "*blushes* Oh my god, thank you! I actually put this together specifically for today. I like that you actually notice the details... most people don't.",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 40
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 30
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Heart",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_genuine": {
+    "id": "split_ends_genuine",
+    "text": "split_ends_genuine",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_end",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Intellect",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 30
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_end": {
+    "id": "split_ends_end",
+    "text": "This has been really fun. So... would you want to maybe hang out again sometime?",
+    "options": [
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 70
+        },
+        "success_effect": {
+          "compatibility": 0.7,
+          "Skill": "Culture",
+          "Effect": 5
+        }
+      },
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 65
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Intellect",
+          "Effect": 5
+        }
+      },
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Seduction",
+          "req": 75
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Seduction",
+          "Effect": 5
+        }
+      },
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 60
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Heart",
+          "Effect": 5
+        }
+      }
+    ]
+  }
 }

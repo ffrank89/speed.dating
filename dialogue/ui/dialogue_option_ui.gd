@@ -158,9 +158,11 @@ func create_dialogue_option(option: DialogueOption) -> Button:
 		var req = option.skill_check.req
 		var player_manager = get_node("/root/PlayerManager")
 		var player_skill = 0
+		
 		if player_manager and player_manager.player:
 			player_skill = player_manager.player.get_skill_level(skill)
-		
+		else:
+			print("No Skill available")
 		button.text = "%s [%s %d/%d]" % [
 			option.hint_text,
 			skill.capitalize(),
