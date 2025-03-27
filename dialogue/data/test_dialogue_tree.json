@@ -123,7 +123,7 @@
     "text": "Oh... that sounds kind of interesting I guess. I'm more into fashion for the aesthetic, but I can see how it connects to bigger things.",
     "options": [
       {
-        "hint_text": "I'd love to hear more about your history studies and how they influence your fashion sense.",
+        "hint_text": "GO TO split_ends_end.",
         "next_dialogue_id": "split_ends_end",
         "skill_check": {
           "skill": "Intellect",
@@ -136,7 +136,7 @@
         }
       },
       {
-        "hint_text": "Your style is so distinctive. You must have an incredible eye for fashion.",
+        "hint_text": "GO TO split_ends_end.",
         "next_dialogue_id": "split_ends_end",
         "skill_check": {
           "skill": "Culture",
@@ -184,10 +184,10 @@
   },
   "split_ends_genuine": {
     "id": "split_ends_genuine",
-    "text": "GO TO split_ends_end.",
+    "text": "split_ends_genuine",
     "options": [
       {
-        "hint_text": "That's fascinating. History and fashion together must give you such a unique perspective on style and trends.",
+        "hint_text": "GO TO split_ends_end",
         "next_dialogue_id": "split_ends_end",
         "skill_check": {
           "skill": "Intellect",
