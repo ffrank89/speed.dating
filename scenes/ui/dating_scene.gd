@@ -1,10 +1,10 @@
-# dating_scene.gd
 extends Control
 
 var player: PlayerCharacter
 var current_date: DateCharacter
 var dialogue_manager: DialogueManager
 var player_manager: PlayerManager
+
 # References to UI elements
 @onready var player_panel = $PlayerPanel
 @onready var date_panel = $DatePanel
@@ -13,10 +13,10 @@ var player_manager: PlayerManager
 @onready var dialogue_ui = $DialogueDataUI
 @onready var option_ui = $DialogueOptionUI
 @onready var inventory_ui = $InventoryUI
+@onready var party_ui = $PartyUI
 @onready var split_ends = $SplitEnds
 @onready var split_ends_sprite_container = $SplitEndsSprite
 @onready var bunny_gif_container = $BunnyGif
-@onready var hint_label = $HintLabelx
 
 var compatibility_score: float = 0.0
 
@@ -38,15 +38,13 @@ func _ready() -> void:
 	# Spawn initial partner
 	spawn_new_partner()
 	
+	# Connect signals
 	option_ui.option_selected.connect(_on_option_selected)
+	
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
 	option_ui.set_process_input(true)
 	inventory_ui.set_process_input(false)  # Only process input when visible
-	
-	# Initialize hint label if it exists
-	if hint_label:
-		hint_label.text = ""
-		hint_label.visible = false
+	party_ui.set_process_input(false)  # Only process input when visible
 
 func _on_bunny_gif_clicked():
 	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
@@ -55,12 +53,13 @@ func _on_sprite_hover():
 	print("Sprite hovered at: ", get_global_mouse_position())
 	
 func setup_player() -> void:
-	
 	# Set up player in the global manager
 	player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
 		player_manager.initialize_inventory()
+		player_manager.initialize_party()
 		inventory_ui.update_inventory(player_manager.get_inventory())
+		party_ui.update_party(player_manager.get_party())
 		player = player_manager.player
 	else:
 		print("No PLAYER MANAGER ready")
@@ -76,11 +75,12 @@ func setup_player() -> void:
 func setup_dialogue() -> void:
 	dialogue_manager = DialogueManager.new()
 	add_child(dialogue_manager)
+	
+	# Connect dialogue signals
 	dialogue_manager.dialogue_started.connect(_on_dialogue_started)
 	dialogue_manager.dialogue_ended.connect(_on_dialogue_ended)
 	dialogue_manager.compatibility_changed.connect(_on_compatibility_changed)
-	dialogue_manager.relationship_hint_given.connect(_on_relationship_hint)
-	
+		
 	dialogue_manager.load_dialogue()
 
 func spawn_new_partner() -> void:
@@ -101,11 +101,9 @@ func spawn_new_partner() -> void:
 	# Start the date-specific content
 	calculate_compatibility()
 	dialogue_manager.start_date_dialogue(current_date, player)
-	
 
 func _on_dialogue_started(dialogue: DialogueData) -> void:
-
-		# Clear previous dialogue
+	# Clear previous dialogue
 	for child in dialogue_ui.get_children():
 		child.queue_free()
 		
@@ -118,12 +116,6 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 
 func _on_option_selected(option: DialogueOption) -> void:
 	dialogue_manager.select_option(option)
-	
-	# TODO player response
-	dialogue_ui.create_player_response(option)
-	
-	# Wait a bit, then show date's response
-	await get_tree().create_timer(0.8).timeout
 
 func _on_compatibility_changed(value: float, increase: float) -> void:
 	compatibility_score = value
@@ -139,7 +131,7 @@ func _on_compatibility_changed(value: float, increase: float) -> void:
 func show_compatibility_increase(amount: float) -> void:
 	# Create a floating label to show the increase
 	var label = Label.new()
-	label.text = "+ " + str(int(amount * 10))
+	label.text = "+ " + str(int(amount))
 	label.add_theme_font_size_override("font_size", 24)
 	label.add_theme_color_override("font_color", Color(0.2, 0.9, 0.2))
 	label.position = Vector2(compatibility_meter.position.x + 100, compatibility_meter.position.y - 30)
@@ -150,43 +142,51 @@ func show_compatibility_increase(amount: float) -> void:
 	tween.tween_property(label, "position:y", label.position.y - 50, 1.0)
 	tween.parallel().tween_property(label, "modulate:a", 0, 1.0)
 	tween.tween_callback(label.queue_free)
-
-func _on_relationship_hint(hint: String) -> void:
-	if hint_label:
-		hint_label.text = "💭 " + hint
-		hint_label.visible = true
-		
-		# Fade in and out
-		hint_label.modulate.a = 0
-		var tween = create_tween()
-		tween.tween_property(hint_label, "modulate:a", 1.0, 0.5)
-		tween.tween_interval(4.0)
-		tween.tween_property(hint_label, "modulate:a", 0.0, 0.5)
-		tween.tween_callback(func(): hint_label.visible = false)
 	
-func _on_dialogue_ended() -> void:
+func _on_dialogue_ended(success: bool) -> void:
+	if success:
+		print("DATE SUCCESS")
+		print("Adding ", current_date, " to party! ")
+		if player_manager:
+			player_manager.add_date(current_date)
+			party_ui.update_party(player_manager.get_party())
+		else:
+			print("ERROR player_manager DOES NOT EXIST!!!! IN _on_dialogue_ended success!!!")
 	end_date()
 
 func end_date() -> void:
+	# Animate transition to player_manager SCENE
+	var fade_panel = ColorRect.new()
+	fade_panel.color = Color(0, 0, 0, 0)
+	fade_panel.anchors_preset = Control.PRESET_FULL_RECT
+	add_child(fade_panel)
 	var tween = create_tween()
-	tween.tween_interval(0.2)
-	tween.tween_property($BackgroundCircle, "position",
-		Vector2(-200, $BackgroundCircle.position.y), 1.0)
-	tween.tween_interval(0.5)
-	tween.tween_callback(spawn_new_partner)
+	tween.tween_property(fade_panel, "color", Color(0, 0, 0, 1), 1.0)
+	print("In _on_start_pressed")
+	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.SCENE))
+	
 
 func calculate_compatibility() -> void:
 	compatibility_score = randi_range(18, 46) 
-	var tween = create_tween()		
+	var tween = create_tween()
+	
+		
 	tween.tween_property(compatibility_meter, "value", compatibility_score, 0.3)
 	
 func _input(event):
 	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_I:  # 'I' key toggles inventory
+		if event.keycode == KEY_I:
 			if inventory_ui:
 				inventory_ui.toggle_visibility()
 				# Toggle input processing so it only processes input when visible
 				inventory_ui.set_process_input(inventory_ui.is_visible())
-			print("Mouse at: ", get_global_mouse_position())
-		else:
-			print("Inventory UI not available")
+			else:
+				print("Inventory UI not available")
+		elif event.keycode == KEY_P:
+			if party_ui:
+				party_ui.toggle_visibility()
+				# Toggle input processing so it only processes input when visible
+				party_ui.set_process_input(party_ui.is_visible())
+			else:
+				print("Party UI not available")
+		print("2 Mouse at: ", get_global_mouse_position())

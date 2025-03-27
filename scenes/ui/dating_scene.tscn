@@ -6,13 +6,13 @@
 [ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="3_olm7h"]
 [ext_resource type="Script" path="res://scenes/ui/foreground_circle.gd" id="5_4k3wo"]
 [ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_uonoj"]
-[ext_resource type="Script" path="res://scenes/ui/bonus_label.gd" id="7_ginkj"]
 [ext_resource type="Script" path="res://scenes/ui/pass.gd" id="8_tilss"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_qhuv2"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_n4bc8"]
 [ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="11_21ygm"]
 [ext_resource type="PackedScene" uid="uid://c0bwkjvsx1tem" path="res://image_scenes/bunnyGif/bunny_gif.tscn" id="12_4wqid"]
 [ext_resource type="PackedScene" uid="uid://sevo02sxky2b" path="res://image_scenes/split_ends/split_ends.tscn" id="13_xsmfp"]
+[ext_resource type="PackedScene" uid="uid://bu5n0gkpipjci" path="res://image_scenes/party/party_ui.tscn" id="14_b30ly"]
 [ext_resource type="PackedScene" uid="uid://dphmqmfbyld53" path="res://image_scenes/split_ends/sprite/split_ends_sprite.tscn" id="15_kj358"]
 
 [node name="DatingScene" type="Control"]
@@ -107,12 +107,6 @@ offset_right = 4.0
 offset_bottom = 27.0
 script = ExtResource("6_uonoj")
 
-[node name="BonusLabel" type="RichTextLabel" parent="CompatibilityMeter"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("7_ginkj")
-
 [node name="Pass" type="Button" parent="."]
 layout_mode = 0
 offset_right = 8.0
@@ -132,6 +126,8 @@ offset_bottom = 40.0
 script = ExtResource("10_n4bc8")
 
 [node name="InventoryUI" parent="." instance=ExtResource("11_21ygm")]
+
+[node name="PartyUI" parent="." instance=ExtResource("14_b30ly")]
 
 [node name="SplitEndsSpriteContainer" parent="." instance=ExtResource("15_kj358")]
 layout_mode = 0

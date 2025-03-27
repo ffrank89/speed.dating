@@ -4,6 +4,272 @@
   },
   "split_ends_intro": {
     "id": "split_ends_intro",
-    "text": "I'm SPLIT END and im not gay ",
+    "text": "Hey! I'm Split Ends. Love your vibe. What's your deal?",
     "options": [
+      {
+        "hint_text": "GO TO split_ends_music",
+        "next_dialogue_id": "split_ends_music",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 30
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Culture",
+          "Effect": 1
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_fashion",
+        "next_dialogue_id": "split_ends_fashion",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.2,
+          "Skill": "Intellect",
+          "Effect": 1
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_compliment.",
+        "next_dialogue_id": "split_ends_compliment",
+        "skill_check": {
+          "skill": "Seduction",
+          "req": 25
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Seduction",
+          "Effect": 1
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_genuine",
+        "next_dialogue_id": "split_ends_genuine",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 20
+        },
+        "success_effect": {
+          "compatibility": 0.3,
+          "Skill": "Heart",
+          "Effect": 1
+        }
+      }
+    ]
+  },
+  "split_ends_music": {
+    "id": "split_ends_music",
+    "text": "Yeah! I went to this shoegaze show last weekend. Its like underground but youd probably like it",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_end",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 40
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 45
+        },
+        "success_effect": {
+          "compatibility": 0.3,
+          "Skill": "Intellect",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Seduction",
+          "req": 50
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Seduction",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Heart",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_fashion": {
+    "id": "split_ends_fashion",
+    "text": "Oh... that sounds kind of interesting I guess. I'm more into fashion for the aesthetic, but I can see how it connects to bigger things.",
+    "options": [
+      {
+        "hint_text": "I'd love to hear more about your history studies and how they influence your fashion sense.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 40
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Intellect",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "Your style is so distinctive. You must have an incredible eye for fashion.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_compliment": {
+    "id": "split_ends_compliment",
+    "text": "*blushes* Oh my god, thank you! I actually put this together specifically for today. I like that you actually notice the details... most people don't.",
+    "options": [
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 40
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 30
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Heart",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_genuine": {
+    "id": "split_ends_genuine",
+    "text": "GO TO split_ends_end.",
+    "options": [
+      {
+        "hint_text": "That's fascinating. History and fashion together must give you such a unique perspective on style and trends.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 35
+        },
+        "success_effect": {
+          "compatibility": 0.4,
+          "Skill": "Intellect",
+          "Effect": 2
+        }
+      },
+      {
+        "hint_text": "GO TO split_ends_end.",
+        "next_dialogue_id": "split_ends_end",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 30
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Culture",
+          "Effect": 2
+        }
+      }
+    ]
+  },
+  "split_ends_end": {
+    "id": "split_ends_end",
+    "text": "This has been really fun. So... would you want to maybe hang out again sometime?",
+    "options": [
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Culture",
+          "req": 70
+        },
+        "success_effect": {
+          "compatibility": 0.7,
+          "Skill": "Culture",
+          "Effect": 5
+        }
+      },
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Intellect",
+          "req": 65
+        },
+        "success_effect": {
+          "compatibility": 0.5,
+          "Skill": "Intellect",
+          "Effect": 5
+        }
+      },
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Seduction",
+          "req": 75
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Seduction",
+          "Effect": 5
+        }
+      },
+      {
+        "hint_text": "END CONVERSATION",
+        "next_dialogue_id": "",
+        "skill_check": {
+          "skill": "Heart",
+          "req": 60
+        },
+        "success_effect": {
+          "compatibility": 0.6,
+          "Skill": "Heart",
+          "Effect": 5
+        }
+      }
+    ]
+  }
 }

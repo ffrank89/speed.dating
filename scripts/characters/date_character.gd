@@ -44,10 +44,7 @@ func _init(char_name: String):
 	}
 	self.relationship_requirements = {
 		"max_party_size": 6
-	}
-
-	#self.accessory.color.color = ColorType.Colors.BLACK
-	
+	}	
 	
 
 func change_outfit_piece(piece_type: String, new_piece):
@@ -77,35 +74,6 @@ func calculate_option_score(option, player: PlayerCharacter) -> float:
 		score *= 1.2  # 20% bonus for greatly exceeding threshold
 	
 	return score
-
-
-func get_relationship_hint() -> String:
-	var requirements = relationship_requirements.keys()
-	if requirements.is_empty():
-		return "I'm pretty easy-going about what I'm looking for."
-	
-	# Randomly select a requirement to hint about
-	requirements.shuffle()
-	var req = requirements[0]
-	
-	if req == "max_party_size":
-		if relationship_requirements["max_party_size"] < 3:
-			var hints = [
-				"I'm looking for something exclusive at the moment.",
-				"I don't really like to shareee haha. if you know what I mean.",
-				"Are you seeing anyone else right now?"
-			]
-			hints.shuffle()
-			return hints[0]
-		else:
-			var hints = [
-				"Yeah im just into meeting people",
-				"I'm new to the city!",
-				"Sure I guess you could say im playing the field",
-			]
-			hints.shuffle()
-			return hints[0]
-	return "I have certain expectations in a relationship."
 
 func check_item_reaction(item: InventoryItem):
 	return "NO REACTIONS"
