@@ -60,8 +60,7 @@ func update_position():
 	if bunny_gif:
 		# Center the sprite in the container
 		bunny_gif.position = scaled_size / 2
-		
-		# For AnimatedSprite2D in Godot 4.3
+		#resize gif to be in center of container
 		if bunny_gif.sprite_frames and bunny_gif.sprite_frames.has_animation(bunny_gif.animation):
 			var frame_texture = bunny_gif.sprite_frames.get_frame_texture(bunny_gif.animation, 0)
 			if frame_texture:

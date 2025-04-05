@@ -133,13 +133,8 @@ func _create_item_button(item):
 	button.custom_minimum_size = ITEM_SIZE
 	button.expand_icon = true
 	
-	# Set the item icon if available
-	if item.icon:
-		button.icon = load(item.icon)
-	else:
-		# Use text if no icon
-		button.text = item.name.substr(0, 2)  # First two letters as fallback
-	
+	button.icon = load(item.icon)
+
 	# Add tooltip with item info
 	button.tooltip_text = item.name
 	

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsgyj5tlou5d4"]
+
+[ext_resource type="SpriteFrames" uid="uid://c6a8plaaqcpk0" path="res://image_scenes/icons/question_mark/q.tres" id="1_k2uiv"]
+
+[node name="Node2D" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_k2uiv")
+animation = &"new_animation"

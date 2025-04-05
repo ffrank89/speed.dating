@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b5my1q26b4bn4"]
+[gd_scene load_steps=17 format=3 uid="uid://b5my1q26b4bn4"]
 
 [ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
 [ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
@@ -13,7 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://c0bwkjvsx1tem" path="res://image_scenes/bunnyGif/bunny_gif.tscn" id="12_4wqid"]
 [ext_resource type="PackedScene" uid="uid://sevo02sxky2b" path="res://image_scenes/split_ends/split_ends.tscn" id="13_xsmfp"]
 [ext_resource type="PackedScene" uid="uid://bu5n0gkpipjci" path="res://image_scenes/party/party_ui.tscn" id="14_b30ly"]
+[ext_resource type="PackedScene" uid="uid://c1o1hcy02dlwb" path="res://image_scenes/icons/culture/culture.tscn" id="15_ebrnj"]
 [ext_resource type="PackedScene" uid="uid://dphmqmfbyld53" path="res://image_scenes/split_ends/sprite/split_ends_sprite.tscn" id="15_kj358"]
+[ext_resource type="Script" path="res://image_scenes/icons/culture/culture.gd" id="16_f5axm"]
 
 [node name="DatingScene" type="Control"]
 layout_mode = 3
@@ -150,3 +152,9 @@ grow_vertical = 0
 
 [node name="SplitEnds" parent="." instance=ExtResource("13_xsmfp")]
 layout_mode = 1
+
+[node name="CultureSprite" parent="." instance=ExtResource("15_ebrnj")]
+script = ExtResource("16_f5axm")
+
+[node name="CultureSprite2" parent="." instance=ExtResource("15_ebrnj")]
+script = ExtResource("16_f5axm")

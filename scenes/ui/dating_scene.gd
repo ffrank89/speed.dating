@@ -148,6 +148,7 @@ func _on_dialogue_ended(success: bool) -> void:
 		print("DATE SUCCESS")
 		print("Adding ", current_date, " to party! ")
 		if player_manager:
+			print("current_date", current_date)
 			player_manager.add_date(current_date)
 			party_ui.update_party(player_manager.get_party())
 		else:
@@ -155,16 +156,26 @@ func _on_dialogue_ended(success: bool) -> void:
 	end_date()
 
 func end_date() -> void:
-	# Animate transition to player_manager SCENE
+	# Animate transition to calendar scene
 	var fade_panel = ColorRect.new()
 	fade_panel.color = Color(0, 0, 0, 0)
 	fade_panel.anchors_preset = Control.PRESET_FULL_RECT
 	add_child(fade_panel)
+	
 	var tween = create_tween()
 	tween.tween_property(fade_panel, "color", Color(0, 0, 0, 1), 1.0)
-	print("In _on_start_pressed")
-	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.SCENE))
+	print("In end_date - transitioning to calendar")
 	
+	# After the fade completes, open the calendar
+	tween.tween_callback(func(): 
+		if player_manager:			
+			# Change scene to calendar
+			get_tree().change_scene_to_file(player_manager.CALENDAR)
+		else:
+			print("ERROR: No player_manager found!")
+			# Fallback to a default scene
+			get_tree().change_scene_to_file(player_manager.STATS_SELECT)
+	)
 
 func calculate_compatibility() -> void:
 	compatibility_score = randi_range(18, 46) 

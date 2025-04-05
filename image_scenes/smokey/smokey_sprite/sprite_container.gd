@@ -2,10 +2,10 @@
 extends Control
 
 # Character reference - same as in your original script
-var character: Character
+var character: DateCharacter
 
 # Reference to the actual sprite
-@onready var sprite = $SplitEndsSprite
+@onready var sprite = $SmokeySprite
 
 # Forward the hovering signal from the sprite
 signal hovering

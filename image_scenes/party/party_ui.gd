@@ -162,29 +162,35 @@ func _create_character_slot(character: DateCharacter):
 	hbox.custom_minimum_size = CHARACTER_SLOT_SIZE
 	
 	# Character portrait/icon
-	var texture_rect = TextureRect.new()
-	texture_rect.custom_minimum_size = Vector2(80, 80)
-	texture_rect.expand = true
-	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	
+	var portrait_container = Control.new()
+	portrait_container.custom_minimum_size = Vector2(80, 80)
+
+	# Create animated sprite for the character's icon
+	var animated_sprite = AnimatedSprite2D.new()
+	animated_sprite.centered = true
+
+	# Set sprite frames and play animation
 	if character.icon_path and character.icon_path != "":
-		var texture = load(character.icon_path)
-		if texture:
-			texture_rect.texture = texture
-	else:
-		# Create a placeholder colored rect if no icon
-		var placeholder = ColorRect.new()
-		placeholder.color = Color(0.5, 0.5, 0.5)
-		placeholder.custom_minimum_size = Vector2(80, 80)
-		texture_rect.add_child(placeholder)
-		
-		# Add initials
-		var initials = Label.new()
-		initials.text = character.name.substr(0, 2).to_upper()
-		initials.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		initials.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		initials.add_theme_font_size_override("font_size", 24)
-		placeholder.add_child(initials)
+		if ResourceLoader.exists(character.icon_path):
+			var sprite_frames = load(character.icon_path)
+			animated_sprite.sprite_frames = sprite_frames
+			animated_sprite.play()
+			
+			# Center the sprite in the container
+			animated_sprite.position = Vector2(40, 40)  # Half of 80x80
+			
+			# Scale the sprite to fit the container
+			if animated_sprite.sprite_frames:
+				var texture = animated_sprite.sprite_frames.get_frame_texture(animated_sprite.animation, 0)
+				if texture:
+					var texture_size = texture.get_size()
+					var scale_factor = min(
+						(80.0 * 0.9) / texture_size.x,
+						(80.0 * 0.9) / texture_size.y
+					)
+					animated_sprite.scale = Vector2(scale_factor, scale_factor)
+
+	portrait_container.add_child(animated_sprite)
 	
 	# Character info container
 	var info_container = VBoxContainer.new()
@@ -247,7 +253,7 @@ func _create_character_slot(character: DateCharacter):
 	)
 	
 	# Add elements to the layout
-	hbox.add_child(texture_rect)
+	hbox.add_child(portrait_container)
 	hbox.add_child(info_container)
 	
 	slot.add_child(hbox)

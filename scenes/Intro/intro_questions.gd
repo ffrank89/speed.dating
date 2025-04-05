@@ -5,10 +5,10 @@ const MAIN_SCENE_PATH = "res://scenes/ui/dating_scene.tscn"
 const DATING_SITE_PATH = "res://scenes/Tinder/Screen.tscn"
 # Track player stats
 var player_stats = {
-	"Culture": 0,
-	"Intellect": 0,
-	"Seduction": 0,
-	"Heart": 0
+	"Culture": 100,
+	"Intellect": 100,
+	"Seduction": 100,
+	"Heart": 100
 }
 
 # UI References
