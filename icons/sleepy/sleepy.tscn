@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://y3gae0ams1fc"]
+
+[ext_resource type="SpriteFrames" uid="uid://6cos4rqweyb4" path="res://icons/sleepy/sleepy.tres" id="1_vq14t"]
+
+[node name="SleepySprite" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_vq14t")
+animation = &"new_animation"

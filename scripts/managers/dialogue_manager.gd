@@ -13,6 +13,8 @@ var player: PlayerCharacter
 # Date scoring
 var date_score: float = 0.0
 
+var click_sound: AudioStreamPlayer
+
 # Load dialogue from JSON
 func load_dialogue():
 	var json = JSON.new()
@@ -26,6 +28,16 @@ func start_date_dialogue(partner: DateCharacter, player_char: PlayerCharacter):
 	
 	# Reset scoring for new date
 	date_score = 0.0
+
+	if not click_sound:
+		click_sound = AudioStreamPlayer.new()
+		add_child(click_sound)
+		var sound = load("res://assets/audio/clicks/clickApr42025.ogg")
+		print("Before SOUND")
+
+		if sound:
+			print("SOUND")
+			click_sound.stream = sound
 	
 	load_dialogue()
 	current_dialogue = get_starting_dialogue()
@@ -67,6 +79,11 @@ func get_starting_dialogue() -> DialogueData:
 
 func select_option(option: DialogueOption):
 	# Check if option passes skill check
+
+	if click_sound and click_sound.stream:
+		print("Yes Click sound select_option")
+		click_sound.play()
+
 	var success = true
 	var skill_type = ""
 	var req = 0

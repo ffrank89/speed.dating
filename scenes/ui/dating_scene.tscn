@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://b5my1q26b4bn4"]
+[gd_scene load_steps=14 format=3 uid="uid://b5my1q26b4bn4"]
 
 [ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
 [ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
 [ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_wjwxt"]
 [ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="3_olm7h"]
-[ext_resource type="Script" path="res://scenes/ui/foreground_circle.gd" id="5_4k3wo"]
 [ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_uonoj"]
 [ext_resource type="Script" path="res://scenes/ui/pass.gd" id="8_tilss"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_qhuv2"]
@@ -13,9 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c0bwkjvsx1tem" path="res://image_scenes/bunnyGif/bunny_gif.tscn" id="12_4wqid"]
 [ext_resource type="PackedScene" uid="uid://sevo02sxky2b" path="res://image_scenes/split_ends/split_ends.tscn" id="13_xsmfp"]
 [ext_resource type="PackedScene" uid="uid://bu5n0gkpipjci" path="res://image_scenes/party/party_ui.tscn" id="14_b30ly"]
-[ext_resource type="PackedScene" uid="uid://c1o1hcy02dlwb" path="res://image_scenes/icons/culture/culture.tscn" id="15_ebrnj"]
 [ext_resource type="PackedScene" uid="uid://dphmqmfbyld53" path="res://image_scenes/split_ends/sprite/split_ends_sprite.tscn" id="15_kj358"]
-[ext_resource type="Script" path="res://image_scenes/icons/culture/culture.gd" id="16_f5axm"]
 
 [node name="DatingScene" type="Control"]
 layout_mode = 3
@@ -33,6 +30,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 grow_horizontal = 1
 grow_vertical = 1
+
+[node name="InventoryUI" parent="." instance=ExtResource("11_21ygm")]
 
 [node name="PlayerPanel" type="Panel" parent="."]
 z_index = 10
@@ -69,40 +68,6 @@ offset_top = 400.0
 offset_right = 400.0
 offset_bottom = 500.0
 
-[node name="ForegroundCircle" type="Sprite2D" parent="."]
-position = Vector2(400, 300)
-centered = false
-script = ExtResource("5_4k3wo")
-
-[node name="HoverShadow" type="Sprite2D" parent="ForegroundCircle"]
-modulate = Color(1, 1, 1, 0.33)
-z_index = -1
-position = Vector2(0, 5)
-scale = Vector2(100, 100)
-
-[node name="ColorRect" type="ColorRect" parent="ForegroundCircle"]
-offset_left = -1.0
-offset_top = 7.0
-offset_right = 99.0
-offset_bottom = 107.0
-color = Color(1, 1, 1, 0.503)
-
-[node name="BackgroundCircle" type="Sprite2D" parent="."]
-position = Vector2(700, 200)
-centered = false
-script = ExtResource("5_4k3wo")
-
-[node name="HoverShadow" type="Sprite2D" parent="BackgroundCircle"]
-modulate = Color(1, 1, 1, 0.33)
-z_index = -1
-position = Vector2(0, 5)
-scale = Vector2(100, 100)
-
-[node name="ColorRect" type="ColorRect" parent="BackgroundCircle"]
-offset_right = 100.0
-offset_bottom = 100.0
-color = Color(1, 1, 1, 0.503)
-
 [node name="CompatibilityMeter" type="ProgressBar" parent="."]
 layout_mode = 0
 offset_right = 4.0
@@ -127,9 +92,8 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("10_n4bc8")
 
-[node name="InventoryUI" parent="." instance=ExtResource("11_21ygm")]
-
 [node name="PartyUI" parent="." instance=ExtResource("14_b30ly")]
+visible = false
 
 [node name="SplitEndsSpriteContainer" parent="." instance=ExtResource("15_kj358")]
 layout_mode = 0
@@ -152,9 +116,3 @@ grow_vertical = 0
 
 [node name="SplitEnds" parent="." instance=ExtResource("13_xsmfp")]
 layout_mode = 1
-
-[node name="CultureSprite" parent="." instance=ExtResource("15_ebrnj")]
-script = ExtResource("16_f5axm")
-
-[node name="CultureSprite2" parent="." instance=ExtResource("15_ebrnj")]
-script = ExtResource("16_f5axm")

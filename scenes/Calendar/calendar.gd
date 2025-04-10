@@ -13,7 +13,7 @@ signal action_selected(action_data)
 var current_day = 0
 var current_month = 0 # January
 var month_names = ["January", "February", "March", "April", "May", "June", 
-				  "July", "August", "September", "October", "November", "December"]
+				"July", "August", "September", "October", "November", "December"]
 
 # Action database - will be populated dynamically
 var available_actions = {}

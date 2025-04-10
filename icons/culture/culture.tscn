@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1o1hcy02dlwb"]
+
+[ext_resource type="SpriteFrames" uid="uid://10w1bcdyy17k" path="res://icons/culture/culture.tres" id="1_esayh"]
+
+[node name="CultureSprite" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_esayh")
+animation = &""

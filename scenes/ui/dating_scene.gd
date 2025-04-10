@@ -43,9 +43,7 @@ func _ready() -> void:
 	
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
 	option_ui.set_process_input(true)
-	inventory_ui.set_process_input(false)  # Only process input when visible
 	party_ui.set_process_input(false)  # Only process input when visible
-
 func _on_bunny_gif_clicked():
 	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
 	
