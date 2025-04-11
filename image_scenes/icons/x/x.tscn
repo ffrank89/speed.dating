@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqv35xlv5m1ka"]
-
-[ext_resource type="SpriteFrames" uid="uid://b1xc7pf43jane" path="res://image_scenes/icons/x/x.tres" id="1_et7mb"]
-
-[node name="XSprite" type="AnimatedSprite2D"]
-sprite_frames = ExtResource("1_et7mb")
-animation = &"new_animation"

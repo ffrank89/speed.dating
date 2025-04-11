@@ -5,9 +5,11 @@ signal item_selected(item)
 
 # Inventory panel settings
 const INVENTORY_SIZE := Vector2(500, 600)
-const ITEM_SIZE := Vector2(180, 180)
+const ITEM_WIDTH_SCALE := 1.6
+const ITEM_HEIGHT_SCALE := 1.75
+const ITEM_SIZE := Vector2(INVENTORY_SIZE.x/ITEM_WIDTH_SCALE, INVENTORY_SIZE.y/ITEM_HEIGHT_SCALE)
 const ITEM_MARGIN := 10
-const MAX_ITEMS_PER_ROW := 1
+const MAX_ITEMS_PER_ROW := 2
 
 # Styling
 const PANEL_STYLE := {
@@ -19,17 +21,48 @@ const PANEL_STYLE := {
 var inventory_panel: Panel  # Declare as type Panel
 var grid_container: GridContainer
 var inventory_items = []
+var animation_layer: CanvasLayer  # Canvas layer for animations
+var animation_container: CenterContainer
+var current_animation: AnimatedSprite2D  # Reference to the currently playing animation
 
 func _ready():
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	_create_inventory_panel()
+	_create_animation_layer()
 	
 	# Connect to player manager global for updates
 	var player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
 		pass
 		# Add signals for inventory changes
+
+func _create_animation_layer():
+	# Create a CanvasLayer for animations (layer 100 ensures it's on top)
+	animation_layer = CanvasLayer.new()
+	animation_layer.layer = 100
+	add_child(animation_layer)
+	
+	# Create a panel for blocking interactions
+	var blocker = Panel.new()
+	blocker.anchor_right = 1
+	blocker.anchor_bottom = 1
+
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0.5)
+	blocker.add_theme_stylebox_override("panel", style)
+	animation_layer.add_child(blocker)
+	
+	# Create a centered container for the animation
+	animation_container = CenterContainer.new()
+	animation_container.anchor_right = .5
+	animation_container.anchor_bottom = .5
+	animation_container.anchor_left = .5
+	animation_container.anchor_top = .5
+	animation_layer.add_child(animation_container)
+	# Initially hide the animation layer
+	animation_layer.visible = false
+
 func _update_position():
 	if inventory_panel:
 		var viewport_size = get_viewport_rect().size
@@ -44,8 +77,8 @@ func _update_position():
 		var scaled_height = INVENTORY_SIZE.y * scale_factor_y * size_reduction_factor
 		
 		# Scale item size
-		var scaled_item_width = ITEM_SIZE.x * scale_factor_x * size_reduction_factor
-		var scaled_item_height = ITEM_SIZE.y * scale_factor_y * size_reduction_factor
+		var scaled_item_width = scaled_width / ITEM_WIDTH_SCALE * size_reduction_factor
+		var scaled_item_height = scaled_height / ITEM_HEIGHT_SCALE * size_reduction_factor
 		
 		# Fixed bottom margin in pixels
 		var bottom_margin = 20
@@ -133,19 +166,86 @@ func _create_item_button(item):
 	button.custom_minimum_size = ITEM_SIZE
 	button.expand_icon = true
 	
-	button.icon = load(item.icon)
+	if item.icon:
+		button.icon = load(item.icon)
+	else:
+		# Use text if no icon
+		button.text = item.name.substr(0, 2)
 
 	# Add tooltip with item info
 	button.tooltip_text = item.name
 	
 	# Connect button press
 	button.pressed.connect(func(): 
+		# Play animation if available
+		if item.animation:
+			_play_item_animation(item.ANIMATION_PATH)
+		
 		# Emit both local and global signals
 		emit_signal("item_selected", item)  # Local signal for backward compatibility
-		PlayerManager.select_item(item)     # Global signal through PlayerManager
+		if get_node_or_null("/root/PlayerManager"):
+			PlayerManager.select_item(item)  # Global signal through PlayerManager
 	)
 		
 	return button
 
+func _play_item_animation(animation_path: String):
+	# Clear any existing animation
+	if current_animation and is_instance_valid(current_animation):
+		current_animation.queue_free()
+		current_animation = null
+	
+	# Show the animation layer
+	animation_layer.visible = true
+	
+	# Try to load and instance the animation scene
+	var animation_scene = load(animation_path)
+	if animation_scene:
+		var scene_instance = animation_scene.instantiate()
+		
+		# Since AnimatedSprite2D is always at the root, we can directly cast it
+		if scene_instance is AnimatedSprite2D:
+			current_animation = scene_instance
+			animation_container.add_child(current_animation)
+			
+			print("Current Animation: ", current_animation.name)
+			# Make sure animation is centered
+			current_animation.position = Vector2.ZERO
+			
+			# Slow down the animation
+			current_animation.speed_scale = 0.25
+			
+			# Start the animation
+			current_animation.play()
+			
+			# Set timer to automatically hide after 5 seconds
+			var timer = Timer.new()
+			timer.one_shot = true
+			timer.wait_time = 2
+			timer.timeout.connect(_stop_animation)
+			add_child(timer)
+			timer.start()
+		else:
+			print("Error: Root node is not an AnimatedSprite2D:", animation_path)
+			if scene_instance:
+				scene_instance.queue_free()
+			_stop_animation()
+	else:
+		print("Failed to load animation: ", animation_path)
+		_stop_animation()
+
+func _stop_animation():
+	# Hide the animation layer
+	animation_layer.visible = false
+	
+	# Remove the current animation if it exists
+	if current_animation and is_instance_valid(current_animation):
+		current_animation.queue_free()
+		current_animation = null
+
 func toggle_visibility():
 	inventory_panel.visible = !inventory_panel.visible
+	
+	# If we're hiding the inventory and an animation is playing, stop it
+	if !inventory_panel.visible and animation_layer.visible:
+		_stop_animation()

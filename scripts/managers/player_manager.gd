@@ -21,8 +21,6 @@ var days_in_month = 30  # Simplified - all months have 30 days
 var month_names = ["January", "February", "March", "April", "May", "June", 
 "July", "August", "September", "October", "November", "December"]
 
-func _ready():
-	print("func _ready")
 
 var available_actions = {}
 # Add an item to the inventory
@@ -68,8 +66,12 @@ func initialize_inventory():
 	# Add default items
 	var bag = Baggy.create_default()
 	var weed = Weed.create_default()
+	var cigs = Cigs.create_default()
+	var lighter = Lighter.create_default()
 	add_item(bag)
 	add_item(weed)
+	add_item(cigs)
+	add_item(lighter)
 
 func get_party() -> Array:
 	return party  

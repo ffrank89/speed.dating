@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bmqiock38d4kl"]
-
-[ext_resource type="SpriteFrames" uid="uid://r0r2f7kw8i5k" path="res://image_scenes/some_background_gif/x.tres" id="1_nls3e"]
-
-[node name="PosterGif" type="AnimatedSprite2D"]
-sprite_frames = ExtResource("1_nls3e")
-animation = &"new_animation"

@@ -25,7 +25,7 @@ const SLOT_STYLE := {
 const STAT_BAR_COLORS := {
 	"Culture": Color(0.0, 0.7, 0.0),    # Green
 	"Intellect": Color(0.0, 0.0, 0.8),  # Blue
-	"Seduction": Color(0.8, 0.0, 0.0),  # Red
+	"Seduction": Color( 0.8, 0.0, 0.0),  # Red
 	"Heart": Color(0.8, 0.0, 0.8)       # Purple
 }
 
@@ -307,6 +307,11 @@ func _highlight_selected_slot(selected_slot):
 
 func toggle_visibility():
 	party_panel.visible = !party_panel.visible
-
+	
+	# When panel is not visible, make sure it doesn't block mouse events
+	if !party_panel.visible:
+		party_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	else:
+		party_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 func get_selected_character():
 	return selected_character

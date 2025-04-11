@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxo10gptf4ylo"]
+
+[ext_resource type="SpriteFrames" uid="uid://dndverslayvul" path="res://image_scenes/poster_gif_background/poster_gif.tres" id="1_e8d34"]
+
+[node name="PosterGif" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_e8d34")
+animation = &"new_animation"

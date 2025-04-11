@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://r0r2f7kw8i5k"]
+
+[ext_resource type="Texture2D" uid="uid://bhlq8qps04gn6" path="res://assets/background/background1.png" id="1_jbxpg"]
+[ext_resource type="Texture2D" uid="uid://xiyhthi4c6hb" path="res://assets/background/background2.png" id="2_m36i4"]
+[ext_resource type="Texture2D" uid="uid://5eqdwurmyynf" path="res://assets/background/background3.png" id="3_uiyij"]
+[ext_resource type="Texture2D" uid="uid://ctllirimf3mvq" path="res://assets/background/background4.png" id="4_ddvq2"]
+[ext_resource type="Texture2D" uid="uid://dli2enjx0fwr7" path="res://assets/background/background5.png" id="5_laj62"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jbxpg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_m36i4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_uiyij")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ddvq2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_laj62")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]

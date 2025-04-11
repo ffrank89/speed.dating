@@ -8,6 +8,8 @@ signal day_pressed(day_number)
 @onready var x_sprite = $XSprite
 @onready var question_sprite = $QSprite
 @onready var culture_sprite = $CultureSprite
+@onready var sleepy_sprite = $SleepySprite
+
 # Day number (extracted from node name)
 var day_number = 0
 
@@ -29,9 +31,10 @@ func _ready():
 	sprite_map = {	
 	"x": x_sprite,
 	"question": question_sprite,
-	"culture": culture_sprite
+	"culture": culture_sprite,
+	"sleep": sleepy_sprite
 	}
-	sprites = [x_sprite, question_sprite, culture_sprite]
+	sprites = [x_sprite, question_sprite, culture_sprite, sleepy_sprite]
 	# Make this container completely transparent
 	self.modulate.a = 0
 	
