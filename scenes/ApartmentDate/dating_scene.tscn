@@ -1,9 +1,9 @@
 [gd_scene load_steps=12 format=3 uid="uid://b5my1q26b4bn4"]
 
-[ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
+[ext_resource type="Script" path="res://scenes/ApartmentDate/dating_scene.gd" id="1_s6dkl"]
 [ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
-[ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_wjwxt"]
-[ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_uonoj"]
+[ext_resource type="Script" path="res://scenes/ApartmentDate/player_panel.gd" id="2_wjwxt"]
+[ext_resource type="Script" path="res://scenes/ApartmentDate/compatibility_meter.gd" id="6_uonoj"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_qhuv2"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_n4bc8"]
 [ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="11_21ygm"]

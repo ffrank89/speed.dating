@@ -5,7 +5,9 @@ signal item_selected(item)
 
 # Inventory panel settings
 const INVENTORY_SIZE := Vector2(500, 600)
-const ITEM_SIZE := Vector2(180, 180)
+const ITEM_WIDTH_SCALE := 1.6
+const ITEM_HEIGHT_SCALE := 1.75
+const ITEM_SIZE := Vector2(INVENTORY_SIZE.x/ITEM_WIDTH_SCALE, INVENTORY_SIZE.y/ITEM_HEIGHT_SCALE)
 const ITEM_MARGIN := 10
 const MAX_ITEMS_PER_ROW := 2
 
@@ -75,8 +77,8 @@ func _update_position():
 		var scaled_height = INVENTORY_SIZE.y * scale_factor_y * size_reduction_factor
 		
 		# Scale item size
-		var scaled_item_width = ITEM_SIZE.x * scale_factor_x * size_reduction_factor
-		var scaled_item_height = ITEM_SIZE.y * scale_factor_y * size_reduction_factor
+		var scaled_item_width = scaled_width / ITEM_WIDTH_SCALE * size_reduction_factor
+		var scaled_item_height = scaled_height / ITEM_HEIGHT_SCALE * size_reduction_factor
 		
 		# Fixed bottom margin in pixels
 		var bottom_margin = 20

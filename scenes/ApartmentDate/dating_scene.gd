@@ -39,10 +39,10 @@ func _ready() -> void:
 	
 	# Connect signals
 	option_ui.option_selected.connect(_on_option_selected)
+	move_child(inventory_ui, get_child_count() - 1)
+
 	
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
-	option_ui.set_process_input(true)
-	party_ui.set_process_input(false)  # Only process input when visible
 func _on_bunny_gif_clicked():
 	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
 	
@@ -193,7 +193,7 @@ func _input(event):
 		elif event.keycode == KEY_P:
 			if party_ui:
 				party_ui.toggle_visibility()
-				# Toggle input processing so it only processes input when visible
+				# Add this line to match what you do with inventory:
 				party_ui.set_process_input(party_ui.is_visible())
 			else:
 				print("Party UI not available")

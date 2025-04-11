@@ -16,7 +16,7 @@ func _init():
 		"Vintage shopping",
 		"fixing up my dads boat ;P"
 	]
-	self.first_date_path = "res://scenes/ui/dating_scene.tscn";
+	self.first_date_path = "res://scenes/ApartmentDate/dating_scene.tscn";
 	# Set personality traits
 	self.personality_traits = {
 		"extroverted": 0.7,
