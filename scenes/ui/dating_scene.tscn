@@ -1,11 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://b5my1q26b4bn4"]
+[gd_scene load_steps=12 format=3 uid="uid://b5my1q26b4bn4"]
 
 [ext_resource type="Script" path="res://scenes/ui/dating_scene.gd" id="1_s6dkl"]
 [ext_resource type="PackedScene" uid="uid://bqal55sfr32gc" path="res://image_scenes/background_image/background_image.tscn" id="2_r4r26"]
 [ext_resource type="Script" path="res://scenes/ui/player_panel.gd" id="2_wjwxt"]
-[ext_resource type="Script" path="res://scenes/ui/date_panel.gd" id="3_olm7h"]
 [ext_resource type="Script" path="res://scenes/ui/compatibility_meter.gd" id="6_uonoj"]
-[ext_resource type="Script" path="res://scenes/ui/pass.gd" id="8_tilss"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="9_qhuv2"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="10_n4bc8"]
 [ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="11_21ygm"]
@@ -55,30 +53,11 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="DatePanel" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("3_olm7h")
-
-[node name="DialoguePanel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 400.0
-offset_right = 400.0
-offset_bottom = 500.0
-
 [node name="CompatibilityMeter" type="ProgressBar" parent="."]
 layout_mode = 0
 offset_right = 4.0
 offset_bottom = 27.0
 script = ExtResource("6_uonoj")
-
-[node name="Pass" type="Button" parent="."]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-script = ExtResource("8_tilss")
 
 [node name="DialogueDataUI" type="Control" parent="."]
 anchors_preset = 0
@@ -93,7 +72,6 @@ offset_bottom = 40.0
 script = ExtResource("10_n4bc8")
 
 [node name="PartyUI" parent="." instance=ExtResource("14_b30ly")]
-visible = false
 
 [node name="SplitEndsSpriteContainer" parent="." instance=ExtResource("15_kj358")]
 layout_mode = 0
@@ -104,11 +82,10 @@ offset_bottom = 220.0
 
 [node name="BunnyGif" parent="." instance=ExtResource("12_4wqid")]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.972646
-anchor_top = 0.695074
-anchor_right = 0.972646
-anchor_bottom = 0.695074
+anchor_left = 0.889583
+anchor_top = 0.753704
+anchor_right = 0.941667
+anchor_bottom = 0.846296
 offset_right = -20.0
 offset_bottom = 20.0
 grow_horizontal = 2

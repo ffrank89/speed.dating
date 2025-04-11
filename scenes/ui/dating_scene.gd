@@ -7,7 +7,6 @@ var player_manager: PlayerManager
 
 # References to UI elements
 @onready var player_panel = $PlayerPanel
-@onready var date_panel = $DatePanel
 @onready var dialogue_panel = $DialoguePanel
 @onready var compatibility_meter = $CompatibilityMeter
 @onready var dialogue_ui = $DialogueDataUI

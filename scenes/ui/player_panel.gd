@@ -2,7 +2,6 @@
 extends Panel
 
 @onready var money_label = $MoneyLabel
-@onready var outfit_panel = $OutfitPanel
 @onready var stats_panel = $StatsPanel
 
 var player: PlayerCharacter
@@ -19,9 +18,6 @@ func _ready():
 	money_label.text = "Money: $100"
 	money_label.position = Vector2(10, 10)
 	money_label.size = Vector2(180, 30)
-
-	outfit_panel.position = Vector2(10, 50)
-	outfit_panel.custom_minimum_size = Vector2(180, 200)
 
 	stats_panel.position = Vector2(10, 260)
 	stats_panel.size = Vector2(350, 300)
@@ -44,22 +40,8 @@ func update_display():
 	for skill_name in skills:
 		skill_text += "%s: %d\n" % [skill_name, skills[skill_name]]
 
-	# Outfit section
-	var outfit_text = "\n[b]CURRENT OUTFIT:[/b]\n"
-
-	# Get color names as readable strings
-	var pant_color = ColorType.Colors.keys()[player.pant.color.color]
-	var shirt_color = ColorType.Colors.keys()[player.shirt.color.color]
-	var accessory_color = ColorType.Colors.keys()[player.accessory.color.color]
-
-	outfit_text += "Pants: %s\n" % pant_color
-	outfit_text += "Shirt: %s\n" % shirt_color
-	outfit_text += "Accessory: %s\n" % accessory_color
-
 	# Update the stats panel text
-	stats_panel.text = skill_text + outfit_text
-func update_outfit():
-	update_display()
+	stats_panel.text = skill_text
 
 func update_skills():
 	update_display()

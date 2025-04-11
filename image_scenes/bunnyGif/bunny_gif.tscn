@@ -7,8 +7,7 @@
 [node name="Container" type="Control"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
-anchors_preset = 1
-anchor_left = 1.0
+anchor_left = -0.222917
 anchor_right = 1.0
 offset_left = -20.0
 offset_top = 20.0
@@ -20,6 +19,7 @@ script = ExtResource("1_6ljkp")
 metadata/_edit_use_anchors_ = true
 
 [node name="BunnyGif" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
 sprite_frames = ExtResource("1_r4oqt")
 speed_scale = 20.0
 script = ExtResource("2_5557b")

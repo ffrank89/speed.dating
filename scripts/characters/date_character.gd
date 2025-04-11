@@ -13,9 +13,6 @@ var age: int = 0
 var bio: String = ""
 var icon_path: String = ""
 var first_date_path: String = ""
-var pant: Pant
-var shirt: Shirt
-var accessory: Accessory
 var reaction: String
 var skill_scores: Dictionary = {}
 var compatibility_weights: Dictionary = {}
@@ -26,9 +23,6 @@ var is_in_party: bool = false
 
 func _init(char_name: String):
 	self.name = char_name
-	self.pant = Pant.create_random() as Pant
-	self.shirt = Shirt.create_random() as Shirt
-	self.accessory = Accessory.create_random() as Accessory
 	self.reaction = "Neutral"
 	self.skill_scores = {
 		"Culture": 0,
@@ -46,17 +40,6 @@ func _init(char_name: String):
 		"max_party_size": 6
 	}	
 	
-
-func change_outfit_piece(piece_type: String, new_piece):
-	match piece_type.to_lower():
-		"pant", "pants":
-			pant = new_piece
-		"shirt":
-			shirt = new_piece
-		"accessory", "accessories":
-			accessory = new_piece
-	
-	emit_signal("outfit_changed")
 
 func calculate_option_score(option, player: PlayerCharacter) -> float:
 	var skill_type = option.skill_type  # "Culture", "Intellect", etc.

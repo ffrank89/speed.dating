@@ -25,7 +25,7 @@ const SLOT_STYLE := {
 const STAT_BAR_COLORS := {
 	"Culture": Color(0.0, 0.7, 0.0),    # Green
 	"Intellect": Color(0.0, 0.0, 0.8),  # Blue
-	"Seduction": Color(0.8, 0.0, 0.0),  # Red
+	"Seduction": Color( 0.8, 0.0, 0.0),  # Red
 	"Heart": Color(0.8, 0.0, 0.8)       # Purple
 }
 
