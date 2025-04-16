@@ -74,6 +74,6 @@ func update_position():
 					var scale_factor = min(scale_x, scale_y) * 0.9  # 90% of container for margin
 					sprite.scale = Vector2(scale_factor, scale_factor)
 
-func _process(delta):
+func _process(_delta):
 	# Update on each frame to handle viewport changes
 	update_position()

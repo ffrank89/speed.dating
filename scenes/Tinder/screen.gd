@@ -150,7 +150,8 @@ func _on_next_pressed():
 func _on_start_pressed():
 	# Store selected character in PlayerManager
 	var player_manager = get_node("/root/PlayerManager")
-	player_manager.selected_date = characters[self.current_profile_index]
+	player_manager.select_date(characters[self.current_profile_index])
+	
 	# Animate transition to dating scene
 	var fade_panel = ColorRect.new()
 	fade_panel.color = Color(0, 0, 0, 0)
@@ -159,4 +160,4 @@ func _on_start_pressed():
 	var tween = create_tween()
 	tween.tween_property(fade_panel, "color", Color(0, 0, 0, 1), 1.0)
 	print("In _on_start_pressed")
-	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.selected_date.first_date_path))
+	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.current_date.first_date_path))

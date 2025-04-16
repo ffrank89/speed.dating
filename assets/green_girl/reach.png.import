@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2jbs6ckflorv"
-path="res://.godot/imported/placeholder_girl.png-843e2d827425c660ca88306d37d96d1a.ctex"
+uid="uid://suhiobr1pax"
+path="res://.godot/imported/reach.png-cb1fd725de59d35cc148af85b9c1cad4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://placeholder_girl.png"
-dest_files=["res://.godot/imported/placeholder_girl.png-843e2d827425c660ca88306d37d96d1a.ctex"]
+source_file="res://assets/green_girl/reach.png"
+dest_files=["res://.godot/imported/reach.png-cb1fd725de59d35cc148af85b9c1cad4.ctex"]
 
 [params]
 

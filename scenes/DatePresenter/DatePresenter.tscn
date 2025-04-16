@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcjmiti6cqxk3"]
+
+[ext_resource type="Script" path="res://scenes/DatePresenter/date_presenter.gd" id="1_t04yr"]
+[ext_resource type="PackedScene" uid="uid://cgm1ympw5riwb" path="res://image_scenes/stats_display1/CharacterStatsDisplay.tscn" id="2_ca61d"]
+[ext_resource type="PackedScene" uid="uid://7hebc478xhh3" path="res://image_scenes/reaction_display1/InventoryReaction.tscn" id="3_ekmdo"]
+
+[node name="DatePresenter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t04yr")
+
+[node name="BackgroundImage" type="ColorRect" parent="."]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterImage" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CharacterStatsDisplay" parent="." instance=ExtResource("2_ca61d")]
+
+[node name="InventoryReaction" parent="." instance=ExtResource("3_ekmdo")]
+
+[node name="CharacterNameLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

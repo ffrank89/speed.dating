@@ -127,13 +127,14 @@ func _create_party_panel():
 	party_panel.visible = false
 	
 func update_party(characters):
+	print("Update party")
 	for child in vbox_container.get_children():
 		child.queue_free()
-	
-	party_members = characters
-	
+		
+	print(characters)
 	# Add each character to the vertical box
 	for character in characters:
+		print("character", character)
 		var character_slot = _create_character_slot(character)
 		vbox_container.add_child(character_slot)
 	

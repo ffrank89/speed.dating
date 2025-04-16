@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://suhiobr1pax"
-path="res://.godot/imported/reach.png-41da2a5db45ea583aec4a8e6e74b014a.ctex"
+uid="uid://wplfnjm2lbq8"
+path="res://.godot/imported/beauit.png-31f08d460b3cd5be0bcfd6c64c1c55b4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/reach.png"
-dest_files=["res://.godot/imported/reach.png-41da2a5db45ea583aec4a8e6e74b014a.ctex"]
+source_file="res://assets/green_girl/beauit.png"
+dest_files=["res://.godot/imported/beauit.png-31f08d460b3cd5be0bcfd6c64c1c55b4.ctex"]
 
 [params]
 

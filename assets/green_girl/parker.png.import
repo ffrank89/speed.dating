@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6ubma5wjr81w"
-path="res://.godot/imported/parker.png-280c5dbd2d7a8cb4a838272335f60642.ctex"
+path="res://.godot/imported/parker.png-c1cd27e9fce2416bf36e27cf46fe4790.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/parker.png"
-dest_files=["res://.godot/imported/parker.png-280c5dbd2d7a8cb4a838272335f60642.ctex"]
+source_file="res://assets/green_girl/parker.png"
+dest_files=["res://.godot/imported/parker.png-c1cd27e9fce2416bf36e27cf46fe4790.ctex"]
 
 [params]
 

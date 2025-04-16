@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://fedvobowh4wv"
+path="res://.godot/imported/(FREE) 2hollis  Snow Strippers type beat keflavik.mp3-095460a983d34eba8c738401d2afb2b0.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/loops/(FREE) 2hollis  Snow Strippers type beat keflavik.mp3"
+dest_files=["res://.godot/imported/(FREE) 2hollis  Snow Strippers type beat keflavik.mp3-095460a983d34eba8c738401d2afb2b0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

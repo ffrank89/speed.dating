@@ -8,7 +8,11 @@ func _init():
 	# Set profile information
 	self.age = 24
 	self.bio = "(pretending to be) reading books lol"
-	self.icon_path = "res://image_scenes/split_ends/sprite2/split_ends_sprite.tres"
+	self.icon_path = "res://image_scenes/split_ends_ui/sprite2/split_ends_sprite.tres"
+	self.poses = {
+		"pose_one": "res://assets/green_girl/beauit.png",
+		"pose_two": "res://assets/green_girl/reach.png"
+	}
 	# Set interests
 	self.interests = [
 		"yapping",
@@ -16,7 +20,8 @@ func _init():
 		"Vintage shopping",
 		"fixing up my dads boat ;P"
 	]
-	self.first_date_path = "res://scenes/ApartmentDate/dating_scene.tscn";
+	self.first_date_path = "res://scenes/Dates/BaseDate/dating_scene.tscn";
+	self.first_date_background = "res://assets/bedroom1.png"
 	# Set personality traits
 	self.personality_traits = {
 		"extroverted": 0.7,

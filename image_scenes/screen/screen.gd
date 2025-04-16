@@ -15,7 +15,7 @@ func _ready():
 	var shader_material = ShaderMaterial.new()
 	
 	# Load shader
-	var shader = load("res://image_scenes/split_ends/static_filter.gdshader")
+	var shader = load("res://image_scenes/split_ends_ui/static_filter.gdshader")
 	if shader:
 		shader_material.shader = shader
 		

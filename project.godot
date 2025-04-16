@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.3", "GL Compatibility")
 [autoload]
 
 PlayerManager="*res://scripts/managers/player_manager.gd"
+MusicManager="*res://scripts/managers/music_manager.gd"
 
 [display]
 

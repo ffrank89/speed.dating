@@ -1,110 +1,76 @@
-# SplitEnds.gd
 extends Control
+class_name DatePresenter
 
-var character: SplitEndsCharacter
 @onready var character_name_label = $CharacterNameLabel
 @onready var character_image = $CharacterImage
 @onready var stats_display = $CharacterStatsDisplay
 @onready var reaction_display = $InventoryReaction
-
-# Size and position constants
-const DEFAULT_SIZE := Vector2(600, 800)  # Adjust based on your character image
-const TARGET_POSITION := Vector2(0.5, 0.5)  # Position at center of screen
-const PADDING := 30  # Minimum padding from screen edges
-# Shader parameters
-const STATIC_AMOUNT := 0.50
-const SCAN_LINE_INTENSITY := 0.1
+@onready var background = $BackgroundImage
+const DEFAULT_SIZE := Vector2(600, 800)
+const TARGET_POSITION := Vector2(0.5, 0.5)
+const PADDING := 30
 
 signal entry_completed
 
-func _ready() -> void:
-	# Set up full screen anchors for boundary control
-	anchor_right = 1.0
-	anchor_bottom = 1.0
+var date_character: DateCharacter
+
+func _ready():
+	# Initial setup
+	update_position()
+
+	# Connect to window resize signal to update when needed
+	get_viewport().connect("size_changed", Callable(self, "update_position"))
+
+func initialize(character: DateCharacter) -> void:
+	self.date_character = character
 	
-	# Create the character instance
-	character = SplitEndsCharacter.create_default()
-	
+	setup_background()
 	# Setup UI elements
 	setup_character_ui()
-	apply_filter()
 	setup_stats()
 	setup_reaction_display()
 	connect_inventory_signals()
-	
-	# Initial position update
-	update_position()
-	
-	# Set up process to handle window resizing
-	set_process(true)
-	
-	# Debug print to verify proper initialization
-	print("SplitEnds initialized with size: ", size)
 
-func _process(delta):
-	# Update position on each frame to handle viewport changes
+	# Initial position update
 	update_position()
 
 func setup_character_ui():
-	# Set the character name
 	if character_name_label:
-		character_name_label.text = character.name
+		character_name_label.text = date_character.name
+	
+	var cur_image = date_character.poses.pose_one
 	
 	# Load and set character image
-	if character_image:
-		var texture = load("res://assets/splitends.png")
+	if character_image and cur_image:
+		var texture = load(cur_image)
 		if texture:
 			character_image.texture = texture
 			print("Texture loaded successfully with size: ", texture.get_size())
 			
-			# Configure the TextureRect for proper display
 			character_image.expand = true
 			character_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		else:
-			print("Failed to load character texture")
+			print("Failed to load character texture from path: ", cur_image)
 	else:
-		print("Character image node not found!")
+		print("Character image node not found or no valid pose path!")
 
 func setup_stats():
-	stats_display.setup(character)
-	stats_display.start_orbiting()	
+	stats_display.setup(date_character)
+	stats_display.start_orbiting()
 
 func setup_reaction_display():
-	reaction_display.setup(character)
+	reaction_display.setup(date_character)
+
 
 func connect_inventory_signals():
 	add_to_group("characters")  # Add this character to a group for easier finding
-	
-	# Try to connect directly to inventory UI for backward compatibility
-	var inventory_ui = get_node_or_null("/root/dating_scene/InventoryUI")
-	# ALSO connect to the global PlayerManager signal
-	# This makes the system work regardless of scene structure
 	PlayerManager.item_selected.connect(_on_inventory_item_selected)
-	print("Connected to PlayerManager global inventory signals")
-	
+
 func _on_inventory_item_selected(item):
 	print("Character reacting to item: ", item.name)
 	if reaction_display:
 		reaction_display.show_reaction(item)
-		
-func apply_filter():
-	# Create shader material
-	var shader_material = ShaderMaterial.new()
-	
-	# Load shader
-	var shader = load("res://image_scenes/split_ends/static_filter.gdshader")
-	if shader:
-		shader_material.shader = shader
-		
-		# Set shader parameters
-		shader_material.set_shader_parameter("static_amount", STATIC_AMOUNT)
-		shader_material.set_shader_parameter("scan_line_intensity", SCAN_LINE_INTENSITY)
-		
-		# Apply material to the character image
-		character_image.material = shader_material
-		print("Shader applied to character image")
-	else:
-		print("Failed to load static filter shader")
+
 
 func update_position():
 	var viewport_size = get_viewport_rect().size
@@ -145,7 +111,6 @@ func update_position():
 	# Set position directly (in global coordinates)
 	global_position = Vector2(safe_x, safe_y)
 	
-	# CRITICAL: Configure the character image to properly fill the container
 	if character_image:
 		# Set the character image to fill the container
 		character_image.custom_minimum_size = scaled_size
@@ -165,9 +130,31 @@ func update_position():
 			scaled_size.y * 0.2  # Near the top (adjust as needed)
 		)
 		stats_display.update_position(orbit_center)
+		
+func change_pose(pose_key: String) -> bool:
+	if date_character.poses.has(pose_key):
+		var pose_path = date_character.poses[pose_key]
+		var texture = load(pose_path)
+		if texture and character_image:
+			character_image.texture = texture
+			return true
+	return false
 
-func _on_stats_changed():
-	print("Character stats updated")
+func setup_background():
+	if background and date_character.first_date_background:
+		# Load the background texture
+		var background_texture = load(date_character.first_date_background)
+		if background_texture:
+			# Create a shader material to display the texture
+			var shader_material = ShaderMaterial.new()
+			shader_material.shader = load("res://image_scenes/background_image/background_shader.gdshader")
+			shader_material.set_shader_parameter("texture_albedo", background_texture)
 
-func _on_outfit_changed():
-	print("Character outfit changed")
+			# Apply the material
+			background.material = shader_material
+
+			# Set size to match viewport
+			background.size = get_viewport_rect().size
+			print("Background loaded successfully")
+		else:
+			print("Failed to load background texture from path: ", date_character.first_date_background)

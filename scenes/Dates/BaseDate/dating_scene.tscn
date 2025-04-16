@@ -1,0 +1,161 @@
+[gd_scene load_steps=9 format=3 uid="uid://b5my1q26b4bn4"]
+
+[ext_resource type="Script" path="res://scenes/Dates/BaseDate/dating_scene.gd" id="1_0xxkl"]
+[ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="2_ba4j2"]
+[ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="3_88ruv"]
+[ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="4_sos4w"]
+[ext_resource type="PackedScene" uid="uid://bu5n0gkpipjci" path="res://image_scenes/party/party_ui.tscn" id="5_b4yvb"]
+[ext_resource type="PackedScene" uid="uid://c0bwkjvsx1tem" path="res://image_scenes/bunnyGif/bunny_gif.tscn" id="7_od0i4"]
+
+[sub_resource type="GDScript" id="GDScript_4d5c8"]
+script/source = "#player_panel.gd
+extends Panel
+
+@onready var money_label = $MoneyLabel
+@onready var stats_panel = $StatsPanel
+
+var player: PlayerCharacter
+
+func _ready():
+	custom_minimum_size = Vector2(200, 600)
+	position = Vector2(20, 20)
+
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.2, 0.2, 0.2, 0.8)
+	add_theme_stylebox_override(\"panel\", style)
+
+	# Configure child nodes
+	money_label.text = \"Money: $100\"
+	money_label.position = Vector2(10, 10)
+	money_label.size = Vector2(180, 30)
+
+	stats_panel.position = Vector2(10, 260)
+	stats_panel.size = Vector2(350, 300)
+	stats_panel.bbcode_enabled = true
+
+func setup(player_character: PlayerCharacter):
+	player = player_character
+	update_display()
+	
+func update_display():
+	if not player:
+		return
+
+	# Update money display
+	money_label.text = \"Money: $100\"
+
+	# Skills section - eventually these would come from player
+	var skill_text = \"[b]SKILLS:[/b]\\n\"
+	var skills = player.skills
+	for skill_name in skills:
+		skill_text += \"%s: %d\\n\" % [skill_name, skills[skill_name]]
+
+	# Update the stats panel text
+	stats_panel.text = skill_text
+
+func update_skills():
+	update_display()
+"
+
+[sub_resource type="GDScript" id="GDScript_w5d1a"]
+script/source = "extends ProgressBar
+
+func _ready():
+	# Basic settings
+	min_value = 0
+	max_value = 100
+	custom_minimum_size = Vector2(200, 30)
+	position = Vector2(500, 20)
+
+	# Style
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(\"#333333\")  # Dark background
+	add_theme_stylebox_override(\"background\", style)
+
+	var fill_style = StyleBoxFlat.new()
+	fill_style.bg_color = Color(\"#4CAF50\")  # Green fill
+	add_theme_stylebox_override(\"fill\", fill_style)
+
+func update_compatibility(value: float):
+	self.value = value * 100  # Convert 0-1 to percentage
+	modulate = Color.GREEN.lerp(Color.RED, 1 - value)  # Color changes with value
+
+func _update_position():
+	var screen_center_x = get_viewport_rect().size.x / 2
+	position = Vector2(screen_center_x - custom_minimum_size.x / 3, 20)
+
+func _process(delta: float) -> void:
+	_update_position()
+"
+
+[node name="DatingScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0xxkl")
+
+[node name="InventoryUI" parent="." instance=ExtResource("2_ba4j2")]
+
+[node name="PlayerPanel" type="Panel" parent="."]
+z_index = 10
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = SubResource("GDScript_4d5c8")
+
+[node name="MoneyLabel" type="Label" parent="PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="OutfitPanel" type="VBoxContainer" parent="PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StatsPanel" type="RichTextLabel" parent="PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CompatibilityMeter" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+script = SubResource("GDScript_w5d1a")
+
+[node name="DialogueDataUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_88ruv")
+
+[node name="DialogueOptionUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_sos4w")
+
+[node name="PartyUI" parent="." instance=ExtResource("5_b4yvb")]
+
+[node name="BunnyGif" parent="." instance=ExtResource("7_od0i4")]
+layout_mode = 1
+anchor_left = 0.889583
+anchor_top = 0.753704
+anchor_right = 0.941667
+anchor_bottom = 0.846296
+offset_right = -20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DatePresenterContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -5,7 +5,8 @@ signal date_selected(date)
 signal day_advanced(new_day, new_month)
 
 var player: PlayerCharacter
-var selected_date: DateCharacter
+var current_date: DateCharacter
+
 var inventory: Array = []
 var party: Array = []
 
@@ -55,8 +56,7 @@ func select_item(item: InventoryItem):
 	print("PlayerManager: Item selected: ", item.name)
 
 func select_date(date: DateCharacter):
-	# Emit a global signal
-	emit_signal("date_selected", date)
+	current_date = date
 	print("PlayerManager: Date selected: ", date.name)
 	
 func initialize_inventory():
@@ -77,8 +77,8 @@ func get_party() -> Array:
 	return party  
 
 func initialize_party():
-	#Clear any existing dates
-	#party.clear()
+	#TODO this is a beta system -Clear any existing dates
+	party.clear()
 	print("PlayerManager: Party initialized with", party.size(), "characters")
 
 func advance_day():

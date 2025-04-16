@@ -1,10 +1,6 @@
 class_name DateCharacter
 extends Node
 
-
-signal stats_changed
-signal outfit_changed
-
 var personality_traits: Dictionary = {}
 var interests: Array = []
 var charm: float = .1
@@ -20,6 +16,10 @@ var relationship_requirements: Dictionary = {}
 
 var success_threshold: float = 70
 var is_in_party: bool = false
+
+var first_date_background: String
+var poses: Dictionary 
+
 
 func _init(char_name: String):
 	self.name = char_name

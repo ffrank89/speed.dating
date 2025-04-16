@@ -73,7 +73,6 @@ func update_calendar():
 				container.set_available_action_day(available_actions.get(i))
 			
 
-#TODO Combine this and _on_calendar_action_selected in player_manager
 func _on_day_pressed(day_number):
 	print("CalendarScene: Day", day_number, "pressed")
 	
