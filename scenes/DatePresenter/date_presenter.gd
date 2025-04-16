@@ -71,9 +71,20 @@ func _on_inventory_item_selected(item):
 	if reaction_display:
 		reaction_display.show_reaction(item)
 
-
 func update_position():
 	var viewport_size = get_viewport_rect().size
+	
+	# Set background size first, before any position changes
+	if background:
+		# Make background ignore position changes by setting it back to fill viewport
+		background.anchor_right = 1.0
+		background.anchor_bottom = 1.0
+		background.offset_left = 0
+		background.offset_top = 0
+		background.offset_right = 0
+		background.offset_bottom = 0
+		background.size = viewport_size
+		print("viewport_size", viewport_size)
 	
 	# Calculate a proportional size based on viewport
 	var size_factor = min(viewport_size.x / 1920.0, viewport_size.y / 1080.0)
@@ -110,6 +121,10 @@ func update_position():
 	
 	# Set position directly (in global coordinates)
 	global_position = Vector2(safe_x, safe_y)
+	
+	# After position change, reset background to fill screen
+	if background:
+		background.global_position = Vector2.ZERO
 	
 	if character_image:
 		# Set the character image to fill the container
@@ -152,9 +167,5 @@ func setup_background():
 
 			# Apply the material
 			background.material = shader_material
-
-			# Set size to match viewport
-			background.size = get_viewport_rect().size
-			print("Background loaded successfully")
 		else:
 			print("Failed to load background texture from path: ", date_character.first_date_background)
