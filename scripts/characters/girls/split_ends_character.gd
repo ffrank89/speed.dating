@@ -10,8 +10,9 @@ func _init():
 	self.bio = "(pretending to be) reading books lol"
 	self.icon_path = "res://image_scenes/split_ends_ui/sprite2/split_ends_sprite.tres"
 	self.poses = {
-		"pose_one": "res://assets/green_girl/beauit.png",
-		"pose_two": "res://assets/green_girl/reach.png"
+		"concerned": "res://assets/green_girl/beauit.png",
+		"happy": "res://assets/green_girl/reach.png",
+		"normal": "res://assets/green_girl/parker.png",
 	}
 	# Set interests
 	self.interests = [

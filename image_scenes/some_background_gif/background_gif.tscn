@@ -4,4 +4,4 @@
 
 [node name="PosterGif" type="AnimatedSprite2D"]
 sprite_frames = ExtResource("1_nls3e")
-animation = &"new_animation"
+animation = &"items"

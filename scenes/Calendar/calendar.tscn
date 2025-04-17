@@ -1,8 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=14 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" path="res://scenes/Calendar/calendar.gd" id="1_rtpg6"]
-[ext_resource type="PackedScene" uid="uid://bmqiock38d4kl" path="res://image_scenes/some_background_gif/background_gif.tscn" id="2_mwgx6"]
-[ext_resource type="Script" path="res://scenes/Calendar/background.gd" id="2_s0qqg"]
+[ext_resource type="PackedScene" uid="uid://dshri7i831rjb" path="res://spritebackground.tscn" id="2_b2xyy"]
 [ext_resource type="Texture2D" uid="uid://cxa5t06lb1mcg" path="res://assets/january.png" id="3_jt0fh"]
 [ext_resource type="PackedScene" uid="uid://cqv35xlv5m1ka" path="res://icons/x/x.tscn" id="4_v33tw"]
 [ext_resource type="Script" path="res://icons/x/x.gd" id="5_0wlti"]
@@ -20,22 +19,8 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_rtpg6")
 
-[node name="Background" type="Control" parent="."]
+[node name="Background" parent="." instance=ExtResource("2_b2xyy")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -4.0
-offset_top = -18.0
-offset_right = -4.0
-offset_bottom = -18.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("2_s0qqg")
-
-[node name="BackgroundSprite" parent="Background" instance=ExtResource("2_mwgx6")]
-position = Vector2(0, -1)
-scale = Vector2(9, 9)
 
 [node name="CalendarContainer" type="CenterContainer" parent="."]
 layout_mode = 1

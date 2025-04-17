@@ -5,9 +5,14 @@ extends DateCharacter
 func _init():
 	super("Smokey")
 	
-	self.age = 27
+	self.age = 24
 	self.bio = "friends made me get on here but im indaa not opposed rn!"
 	self.icon_path = "res://image_scenes/smokey/smokey_sprite/smokey_sprite.tres"
+	self.poses = {
+		"normal": "res://assets/green_girl/beauit.png",
+		"happy": "res://assets/green_girl/reach.png",
+		"concerned": "res://assets/green_girl/parker.png",
+	}
 	# Set interests
 	self.interests = [
 		"weed",
@@ -15,7 +20,9 @@ func _init():
 		"smoken it ",
 		"frogs in the park"
 	]
-	self.first_date_path = "res://scenes/Intro/IntroQuestions.tscn";
+	self.first_date_path = "res://scenes/Dates/BaseDate/dating_scene.tscn";
+	self.first_date_background = "res://assets/background 2.png"
+
 	# Set personality traits
 	self.personality_traits = {
 		"extroverted": 0.0,

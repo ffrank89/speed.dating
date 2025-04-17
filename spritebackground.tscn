@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dshri7i831rjb"]
+
+[ext_resource type="Script" path="res://scenes/Calendar/background.gd" id="1_pxknp"]
+[ext_resource type="PackedScene" uid="uid://bmqiock38d4kl" path="res://image_scenes/some_background_gif/background_gif.tscn" id="2_wbjx5"]
+
+[node name="Background" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -18.0
+offset_right = -4.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pxknp")
+
+[node name="BackgroundSprite" parent="." instance=ExtResource("2_wbjx5")]
+position = Vector2(0, -1)
+scale = Vector2(9, 9)
+animation = &"new_animation"

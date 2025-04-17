@@ -38,7 +38,7 @@ func setup_character_ui():
 	if character_name_label:
 		character_name_label.text = date_character.name
 	
-	var cur_image = date_character.poses.pose_one
+	var cur_image = date_character.poses.normal
 	
 	# Load and set character image
 	if character_image and cur_image:

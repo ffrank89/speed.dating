@@ -160,13 +160,11 @@ func end_date() -> void:
 	
 	# After the fade completes, open the calendar
 	tween.tween_callback(func(): 
-		if player_manager:			
-			# Change scene to calendar
+		if player_manager:
 			get_tree().change_scene_to_file(player_manager.CALENDAR)
 		else:
 			print("ERROR: No player_manager found!")
-			# Fallback to a default scene
-			get_tree().change_scene_to_file(player_manager.STATS_SELECT)
+			
 	)
 
 func calculate_compatibility() -> void:
