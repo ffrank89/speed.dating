@@ -108,6 +108,15 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 
 func _on_option_selected(option: DialogueOption) -> void:
 	dialogue_manager.select_option(option)
+	
+	#TODO function to determine which pose should be changed to
+	print("date_presenter.cur_pose", date_presenter.cur_pose)
+	if(date_presenter.cur_pose == "concerned"):
+		date_presenter.change_pose("normal")
+	elif(date_presenter.cur_pose == "normal"):
+		date_presenter.change_pose("happy")
+	elif(date_presenter.cur_pose == "happy"):
+		date_presenter.change_pose("concerned")
 
 func _on_compatibility_changed(value: float, increase: float) -> void:
 	compatibility_score = value

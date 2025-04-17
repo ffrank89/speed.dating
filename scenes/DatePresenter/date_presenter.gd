@@ -14,6 +14,8 @@ signal entry_completed
 
 var date_character: DateCharacter
 
+var cur_pose = "normal"
+
 func _ready():
 	# Initial setup
 	update_position()
@@ -38,7 +40,7 @@ func setup_character_ui():
 	if character_name_label:
 		character_name_label.text = date_character.name
 	
-	var cur_image = date_character.poses.normal
+	var cur_image = date_character.poses[cur_pose]
 	
 	# Load and set character image
 	if character_image and cur_image:
@@ -148,11 +150,14 @@ func update_position():
 		
 func change_pose(pose_key: String) -> bool:
 	if date_character.poses.has(pose_key):
+
 		var pose_path = date_character.poses[pose_key]
 		var texture = load(pose_path)
 		if texture and character_image:
+			cur_pose = pose_key
 			character_image.texture = texture
 			return true
+	print("change_pose BAD KEY")
 	return false
 
 func setup_background():
