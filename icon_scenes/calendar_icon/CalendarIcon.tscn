@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://de7jnh7bcf5yi"]
+
+[node name="CalendarIcon" type="AnimatedSprite2D"]

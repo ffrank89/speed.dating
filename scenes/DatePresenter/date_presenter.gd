@@ -6,6 +6,10 @@ class_name DatePresenter
 @onready var stats_display = $CharacterStatsDisplay
 @onready var reaction_display = $InventoryReaction
 @onready var background = $BackgroundImage
+@onready var reaction_icon1 = $ReactionIcon1
+@onready var reaction_icon2 = $ReactionIcon2
+@onready var reaction_icon3 = $ReactionIcon3
+
 const DEFAULT_SIZE := Vector2(600, 800)
 const TARGET_POSITION := Vector2(0.5, 0.5)
 const PADDING := 30
@@ -14,7 +18,8 @@ signal entry_completed
 
 var date_character: DateCharacter
 
-var cur_pose = "normal"
+var cur_pose: String = "normal"
+var cur_reaction: String = "none"
 
 func _ready():
 	# Initial setup
@@ -35,7 +40,14 @@ func initialize(character: DateCharacter) -> void:
 
 	# Initial position update
 	update_position()
-
+	
+	if reaction_icon1:
+		reaction_icon1.visible = false
+	if reaction_icon2:
+		reaction_icon2.visible = false
+	if reaction_icon3:
+		reaction_icon3.visible = false
+		
 func setup_character_ui():
 	if character_name_label:
 		character_name_label.text = date_character.name
@@ -148,6 +160,80 @@ func update_position():
 		)
 		stats_display.update_position(orbit_center)
 		
+	var reaction_icons = [reaction_icon1, reaction_icon2, reaction_icon3]
+	var icon_spacing = 50.0  # Space between icons
+	
+	for i in range(reaction_icons.size()):
+		var icon = reaction_icons[i]
+		if icon:
+			# Position horizontally with spacing
+			var x_pos = (scaled_size.x / 2) + (i - 1) * icon_spacing
+			icon.position = Vector2(
+				x_pos,  # Centered and spaced horizontally
+				scaled_size.y * 0.1  # Near the top of the character
+			)
+
+func show_reaction(reaction_type: String, count: int = 1) -> bool:
+	# Validate count
+	count = clamp(count, 1, 3)
+	
+	var reaction_icons = [reaction_icon1, reaction_icon2, reaction_icon3]
+	
+	# Hide all icons first
+	for icon in reaction_icons:
+		if icon:
+			icon.visible = false
+	
+	# Check if we have at least one icon
+	if not reaction_icon1:
+		print("Error: No reaction icon nodes found!")
+		return false
+		
+	cur_reaction = reaction_type
+		
+	# Make sure the animation exists
+	if not reaction_icon1.sprite_frames.has_animation(reaction_type):
+		print("Error: No animation found for reaction type: ", reaction_type)
+		return false
+	
+	# Create a sequence tween for pop-in effect
+	var tween = create_tween()
+	
+	# Show and animate the required number of icons
+	for i in range(count):
+		var icon = reaction_icons[i]
+		if icon:
+			# Set animation
+			icon.play(reaction_type)
+			icon.visible = true
+			
+			# Set initial scale
+			icon.scale = Vector2(0.1, 0.1)
+			
+			# Create sequential popup animation
+			tween.tween_interval(0.033 * i)  # Small delay between icons
+			tween.tween_property(icon, "scale", Vector2(1.0, 1.0), 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	
+	return true
+
+# Function to hide all reaction icons
+func hide_reaction() -> void:
+	var reaction_icons = [reaction_icon1, reaction_icon2, reaction_icon3]
+	
+	var tween = create_tween()
+	for icon in reaction_icons:
+		if icon and icon.visible:
+			tween.parallel().tween_property(icon, "scale", Vector2(0.1, 0.1), 0.2)
+	
+	tween.tween_callback(func():
+		for icon in reaction_icons:
+			if icon:
+				icon.visible = false
+				icon.play("none")
+	)
+	
+	cur_reaction = "none"
+
 func change_pose(pose_key: String) -> bool:
 	if date_character.poses.has(pose_key):
 

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg04c6yebgcgu"]
+
+[ext_resource type="SpriteFrames" uid="uid://ddhi5t14hlmal" path="res://icon_scenes/reaction_icon/reaction_icon.tres" id="1_ly3yb"]
+
+[node name="ReactionIcon" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_ly3yb")
+animation = &"question"
