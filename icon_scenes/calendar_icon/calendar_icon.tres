@@ -1,3 +1,72 @@
-[gd_resource type="SpriteFrames" format=3 uid="uid://428tdvgmryw2"]
+[gd_resource type="SpriteFrames" load_steps=14 format=3 uid="uid://428tdvgmryw2"]
+
+[ext_resource type="Texture2D" uid="uid://occ3kb8qg841" path="res://assets/culture stat gif/culturestat2.png" id="1_fqbnp"]
+[ext_resource type="Texture2D" uid="uid://t1eq03af3hpc" path="res://assets/culture stat gif/culturestat3.png" id="2_k2yh2"]
+[ext_resource type="Texture2D" uid="uid://oajdme67e501" path="res://assets/culture stat gif/culturestat4.png" id="3_c5lqw"]
+[ext_resource type="Texture2D" uid="uid://8uid4ww7day2" path="res://assets/culture stat gif/culturestat5.png" id="4_3861h"]
+[ext_resource type="Texture2D" uid="uid://c584o6ncq0l18" path="res://assets/culture stat gif/culturestat.png" id="5_g08hu"]
+[ext_resource type="Texture2D" uid="uid://dobwhnvbfelye" path="res://assets/girl sprite 1 gif/girl1 sprite1.png" id="6_kvbqi"]
+[ext_resource type="Texture2D" uid="uid://da88guvnen0jl" path="res://assets/girl sprite 1 gif/girl1 sprite2.png" id="7_genyg"]
+[ext_resource type="Texture2D" uid="uid://c3630obvus354" path="res://assets/girl sprite 1 gif/girl1 sprite3.png" id="8_l6ar7"]
+[ext_resource type="Texture2D" uid="uid://6r1qjeyv0y22" path="res://assets/girl sprite 1 gif/girl1 sprite4.png" id="9_4jafu"]
+[ext_resource type="Texture2D" uid="uid://g8lqlq5pqu6i" path="res://assets/sleepy stat gif/sleepy1.png" id="10_edh0w"]
+[ext_resource type="Texture2D" uid="uid://cssvv61etfij7" path="res://assets/sleepy stat gif/sleepy2.png" id="11_gdh2i"]
+[ext_resource type="Texture2D" uid="uid://b6316txhp8jw4" path="res://assets/sleepy stat gif/sleepy3.png" id="12_iiyhr"]
+[ext_resource type="Texture2D" uid="uid://d336mtq38xddk" path="res://assets/sleepy stat gif/sleepy4.png" id="13_1syl5"]
 
 [resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_fqbnp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_k2yh2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_c5lqw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_3861h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_g08hu")
+}],
+"loop": true,
+"name": &"culture",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_edh0w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_gdh2i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_iiyhr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_1syl5")
+}],
+"loop": true,
+"name": &"sleepy",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_kvbqi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_genyg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_l6ar7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_4jafu")
+}],
+"loop": true,
+"name": &"split_ends",
+"speed": 5.0
+}]

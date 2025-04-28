@@ -24,6 +24,9 @@ var cur_reaction: String = "none"
 func _ready():
 	# Initial setup
 	update_position()
+	
+	var player_manager = get_node_or_null("/root/PlayerManager")
+	player_manager.initialize_perk_viewport()
 
 	# Connect to window resize signal to update when needed
 	get_viewport().connect("size_changed", Callable(self, "update_position"))
@@ -74,7 +77,6 @@ func setup_stats():
 
 func setup_reaction_display():
 	reaction_display.setup(date_character)
-
 
 func connect_inventory_signals():
 	add_to_group("characters")  # Add this character to a group for easier finding

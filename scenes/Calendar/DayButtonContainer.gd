@@ -6,9 +6,7 @@ signal day_pressed(day_number)
 # References to child nodes
 @onready var day_button = $Day_Button
 @onready var x_sprite = $XSprite
-@onready var question_sprite = $QSprite
-@onready var culture_sprite = $CultureSprite
-@onready var sleepy_sprite = $SleepySprite
+@onready var calendar_icon = $CalendarIcon
 
 # Day number (extracted from node name)
 var day_number = 0
@@ -30,11 +28,9 @@ func _ready():
 	print("Day Button ", name, "_ready")
 	sprite_map = {	
 	"x": x_sprite,
-	"question": question_sprite,
-	"culture": culture_sprite,
-	"sleep": sleepy_sprite
+	"calendar": calendar_icon
 	}
-	sprites = [x_sprite, question_sprite, culture_sprite, sleepy_sprite]
+	sprites = [x_sprite, calendar_icon]
 	# Make this container completely transparent
 	self.modulate.a = 0
 	
@@ -136,9 +132,15 @@ func update_position():
 		day_button.custom_minimum_size = cell_size
 		day_button.size = cell_size
 	
-	# Position and scale sprites
-	for sprite in sprites:
-		position_sprite(sprite)
+	# Position the x_sprite at the center
+	if x_sprite:
+		x_sprite.position = cell_size / 2
+		position_sprite(x_sprite)
+	
+	# Position the calendar_icon at the center
+	if calendar_icon:
+		calendar_icon.position = cell_size / 2
+		position_sprite(calendar_icon)
 
 func position_sprite(sprite):
 	if sprite:
@@ -178,24 +180,45 @@ func set_available_action_day(available_action):
 func update_sprites(available_action):
 	# Logic to determine which sprite to show:
 	# - If it's a past day, show X
-	# - If it's an available action day, show Q
+	# - If it's an available action day, show calendar icon with the appropriate animation
 	# - Otherwise, show neither
 	
 	if is_past_day:
-		x_sprite.visible
+		x_sprite.visible = true
+		calendar_icon.visible = false
 		return
 	
-	print("\nsprite_map: ", sprite_map)
-	print("\n available_action: ", available_action)
-	var cur_sprite = sprite_map.get(available_action[0].get("icon"))
-	cur_sprite.visible = true
+	# Make sure calendar_icon exists
+	if not calendar_icon:
+		print("Error: No calendar icon found!")
+		return false
 	
+	# Get icon type from the action data
+	var icon_type = available_action[0].get("icon")
+	if not icon_type:
+		print("Error: No icon type specified in action data")
+		return false
+	
+	# Check if the calendar icon has the requested animation
+	if not calendar_icon.sprite_frames.has_animation(icon_type):
+		print("Error: No animation found for icon type: ", icon_type)
+		return false
+	
+	# Hide X sprite and show calendar icon
+	x_sprite.visible = false
+	
+	# Play the appropriate animation
+	calendar_icon.play(icon_type)
+	calendar_icon.visible = true
+	
+	# Create pop-in effect
+	var tween = create_tween()
+	calendar_icon.scale = Vector2(0.1, 0.1)  # Start small
+	tween.tween_property(calendar_icon, "scale", Vector2(1.0, 1.0), 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	
+	print("Showing calendar icon with animation: ", icon_type)
+	return true
 
-	#elif sprite_map[available_action[0]["icon"]]:
-		#print
-	#if question_sprite:
-		#question_sprite.visible = !is_past_day && is_available_action_day
-	
 func set_debug_mode(enabled):
 	debug_mode = enabled
 	if debug_mode:

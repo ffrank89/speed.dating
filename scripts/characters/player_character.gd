@@ -12,8 +12,8 @@ var age: int = 0
 var bio: String = ""
 var icon_path: String = ""
 var skills: Dictionary
-var perks: Array = []
 var reaction: String
+
 
 func _init(char_name: String):
 	self.name = char_name
@@ -23,7 +23,7 @@ func _init(char_name: String):
 		"Seduction": 0,
 		"Heart": 0
 	}
-	self.reaction = "Neutral"	
+	self.reaction = "Neutral"
 	
 
 func get_skill_level(skill: String):

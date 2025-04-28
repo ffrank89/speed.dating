@@ -199,6 +199,7 @@ func _on_start_dating_pressed():
 	
 	# Initialize inventory
 	player_manager.initialize_inventory()
+	player_manager.initialize_perk_viewport()
 	#change to main scene
 	var tween = create_tween()
 	tween.tween_callback(func(): get_tree().change_scene_to_file(DATING_SITE_PATH))

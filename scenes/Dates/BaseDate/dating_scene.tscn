@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5my1q26b4bn4"]
+[gd_scene load_steps=10 format=3 uid="uid://b5my1q26b4bn4"]
 
 [ext_resource type="Script" path="res://scenes/Dates/BaseDate/dating_scene.gd" id="1_0xxkl"]
 [ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="2_ba4j2"]
+[ext_resource type="PackedScene" uid="uid://ulxeiqa6tkle" path="res://scenes/Border/Border.tscn" id="2_xl6m4"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="3_88ruv"]
 [ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="4_sos4w"]
 [ext_resource type="PackedScene" uid="uid://bu5n0gkpipjci" path="res://image_scenes/party/party_ui.tscn" id="5_b4yvb"]
@@ -96,6 +97,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0xxkl")
+
+[node name="PerkBorder" parent="." instance=ExtResource("2_xl6m4")]
+layout_mode = 1
 
 [node name="InventoryUI" parent="." instance=ExtResource("2_ba4j2")]
 

@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl1lbyq136yhq"]
+
+[sub_resource type="GDScript" id="GDScript_41bai"]
+script/source = "extends Node2D
+
+func _ready():
+	# Create a colored background
+	var background = ColorRect.new()
+	background.color = Color(0.2, 0.3, 0.4) # Dark blue
+	background.size = get_viewport_rect().size
+	add_child(background)
+	
+	# Initialize perk viewport
+	var viewport_scene = load(\"res://scenes/Border/PerkViewport.tscn\")
+	var perk_viewport = viewport_scene.instantiate()
+	add_child(perk_viewport)
+	
+	# Add some test perks
+	var perk_border = perk_viewport.get_node(\"SubViewportContainer/SubViewport/PerkBorder\")
+	if perk_border:
+		# Create a test perk
+		var test_perk = {
+			\"id\": \"test_perk\",
+			\"name\": \"Test Perk\",
+			\"description\": \"This is a test perk to check visibility\",
+			\"type\": \"default\",
+			\"duration\": -1
+		}
+		
+		# Add the perk
+		perk_border.add_perk(test_perk)
+"
+
+[node name="Test" type="Node2D"]
+script = SubResource("GDScript_41bai")

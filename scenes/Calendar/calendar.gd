@@ -48,7 +48,14 @@ func generate_available_actions():
 			available_actions[i] = [{
 				"action_name": "return_to_start",
 				"scene": "res://scenes/Tinder/Screen.tscn",
-				"icon": "question"
+				"icon": "girl"
+			}]
+			
+	for i in range(current_day + 3, 30- current_day + 3):
+			available_actions[i] = [{
+				"action_name": "",
+				"scene": "",
+				"icon": "sleepy"
 			}]
 	
 	print("Generated available actions for days", current_day, "to", current_day + 3)
@@ -66,7 +73,7 @@ func update_calendar():
 	for i in range(1, 31):  # 30 days in a month
 		var container = grid_container.get_node_or_null("Day_" + str(i))
 		if container:
-			print("THIS IS WHY QUESTION MARKS BEING PRINTED RELIES ON available actions")
+			print("in for loop: update_calendar")
 			if i < current_day:
 				container.set_past_day(true)
 			elif available_actions.has(i):

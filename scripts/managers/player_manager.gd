@@ -10,6 +10,8 @@ var current_date: DateCharacter
 var inventory: Array = []
 var party: Array = []
 
+var perks: Array = []
+
 var DATE_SELECT = "res://scenes/Tinder/Screen.tscn"
 var STATS_SELECT = "res://scenes/Intro/IntroQuestions.tscn"
 var CALENDAR = "res://scenes/Calendar/calendar.tscn"
@@ -22,8 +24,9 @@ var days_in_month = 30  # Simplified - all months have 30 days
 var month_names = ["January", "February", "March", "April", "May", "June", 
 "July", "August", "September", "October", "November", "December"]
 
-
 var available_actions = {}
+var perk_viewport
+
 # Add an item to the inventory
 func add_item(item: InventoryItem) -> bool:
 	if item:
@@ -37,6 +40,12 @@ func add_date(date: DateCharacter) -> bool:
 	if date:
 		party.append(date)
 		print("Added date to party: ", date.name)
+		return true
+	return false
+	
+func add_perk(perk):
+	if perk:
+		perks.append(perk)
 		return true
 	return false
 	
@@ -81,6 +90,12 @@ func initialize_party():
 	party.clear()
 	print("PlayerManager: Party initialized with", party.size(), "characters")
 
+		
+# Call this when a player acquires a new perk
+func add_player_perk(perk_data):
+	perks.append(perk_data)
+	
+	
 func advance_day():
 	current_day += 1
 	print("current_day: ", current_day)
@@ -105,3 +120,49 @@ func calendar_action(action):
 	
 	# Change to the action scene
 	get_tree().change_scene_to_file(action[0].scene)
+
+
+# In PlayerManager.gd
+
+# Initialize the perk viewport
+func initialize_perk_viewport():
+	# Only initialize once
+	if perk_viewport != null:
+		return
+		
+	# Load the viewport scene
+	var viewport_scene = load("res://scenes/Border/PerkViewport.tscn")
+	perk_viewport = viewport_scene.instantiate()
+	
+	# Add it to the root of the SceneTree to make it persistent
+	get_tree().root.add_child(perk_viewport)
+	
+	print("Initialized perk viewport")
+	
+	# Get a reference to the perk border
+	var perk_border = perk_viewport.get_node("SubViewportContainer/SubViewport/PerkBorder")
+	
+	# The PerkBorder will create its own default perks in corners
+	# We need to get references to these default perks and add them to our perks array
+	if perk_border:
+		# Wait a frame to ensure PerkBorder has completed its setup
+		await get_tree().process_frame
+		
+		# Add the default perks from PerkBorder to our perks array
+		for perk in perk_border.active_perks:
+			if perk.has("is_default") and perk.is_default:
+				# Check if we already have this perk (by ID)
+				var already_have = false
+				for existing_perk in perks:
+					if existing_perk.id == perk.id:
+						already_have = true
+						break
+				
+				# Add it if we don't already have it
+				if not already_have:
+					perks.append(perk)
+		
+		# Add any existing non-default perks to the UI
+		for perk in perks:
+			if not perk.has("is_default") or not perk.is_default:
+				perk_border.add_perk(perk)

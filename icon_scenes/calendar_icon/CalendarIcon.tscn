@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://de7jnh7bcf5yi"]
+[gd_scene load_steps=2 format=3 uid="uid://de7jnh7bcf5yi"]
+
+[ext_resource type="SpriteFrames" uid="uid://428tdvgmryw2" path="res://icon_scenes/calendar_icon/calendar_icon.tres" id="1_m3k5w"]
 
 [node name="CalendarIcon" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_m3k5w")
+animation = &"split_ends"

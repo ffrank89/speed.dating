@@ -16,6 +16,8 @@ var date_presenter: DatePresenter
 @onready var party_ui = $PartyUI
 @onready var bunny_gif_container = $BunnyGif
 @onready var date_presenter_container = $DatePresenterContainer
+@onready var perk_border = $PerkBorder
+
 var compatibility_score: float = 0.0
 
 func _ready() -> void:
@@ -40,7 +42,8 @@ func _ready() -> void:
 	option_ui.option_selected.connect(_on_option_selected)
 	move_child(inventory_ui, get_child_count() - 1)
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
-	
+	move_child(perk_border, get_child_count() - 1)  # Move to end (top of draw stack)
+
 func _on_bunny_gif_clicked():
 	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
 
