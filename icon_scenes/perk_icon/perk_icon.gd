@@ -34,12 +34,11 @@ func _input(event):
 			mouse_over = false
 			_on_mouse_exit()
 
-func setup(data):
-	perk_data = data
+func setup(data: Perk):
 	# Set the animation based on perk type
-	if sprite_frames.has_animation(data.type):
+	if sprite_frames.has_animation(data.animation):
 		print("PerkIcon setup. yes has_animation. data: ", data)
-		play(data.type)
+		play(data.animation)
 	else:
 		# Default animation if type-specific one isn't available
 		play("default")

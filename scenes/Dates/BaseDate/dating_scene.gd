@@ -40,9 +40,10 @@ func _ready() -> void:
 	
 	# Connect signals
 	option_ui.option_selected.connect(_on_option_selected)
+	move_child(perk_border, get_child_count() - 1)  # Move to end (top of draw stack)
+	move_child(party_ui, get_child_count() - 1)  # Move to end (top of draw stack)
 	move_child(inventory_ui, get_child_count() - 1)
 	move_child(option_ui, get_child_count() - 1)  # Move to end (top of draw stack)
-	move_child(perk_border, get_child_count() - 1)  # Move to end (top of draw stack)
 
 func _on_bunny_gif_clicked():
 	print("Bunny GIF was clicked in dating scene at: ", get_global_mouse_position())
@@ -51,8 +52,7 @@ func setup_player() -> void:
 	# Set up player in the global manager
 	if player_manager:
 		#TODO change how we do this, shouldnt be intitializing and updating like this
-		player_manager.initialize_inventory()
-		player_manager.initialize_party()
+		player_manager.initialize_perks()
 		inventory_ui.update_inventory(player_manager.get_inventory())
 		party_ui.update_party(player_manager.get_party())
 		player = player_manager.player
