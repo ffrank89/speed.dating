@@ -1,0 +1,41 @@
+{
+  "START_ID": {
+	"id": "INTRO"
+  },
+  "INTRO": {
+	"id": "INTRO",
+	"text": "Hi there! `Nice to meet you.",
+	"options": [
+	  {
+		"hint_text": "Nice to meet you too!",
+		"next_dialogue_id": "RESPONSE1",
+		"skill_check": {"skill": "Heart", "req": 20},
+		"score_value": 20
+	  },
+	  {
+		"hint_text": "Whatever...",
+		"next_dialogue_id": "RESPONSE1",
+		"skill_check": {"skill": "Seduction", "req": 10},
+		"score_value": -10
+	  }
+	]
+  },
+  "RESPONSE1": {
+	"id": "RESPONSE1",
+	"text": "So, tell me about yourself.",
+	"options": [
+	  {
+		"hint_text": "I'm really into books and culture.",
+		"next_dialogue_id": "INTRO",
+		"skill_check": {"skill": "Culture", "req": 30},
+		"score_value": 40
+	  },
+	  {
+		"hint_text": "I'm just here for a good time.",
+		"next_dialogue_id": "INTRO",
+		"skill_check": {"skill": "Seduction", "req": 40},
+		"score_value": 20
+	  }
+	]
+  }
+}
