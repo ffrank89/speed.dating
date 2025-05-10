@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0vwkoisnwlgg"
-path="res://.godot/imported/surprise3.png-8dcea9ac551a2291ceead435b4d9e717.ctex"
+uid="uid://tchce1ojtoqr"
+path="res://.godot/imported/splitends_earring.png-ee54be98726cd99c8856f6ac4aeaa769.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/exclamation point gif/surprise3.png"
-dest_files=["res://.godot/imported/surprise3.png-8dcea9ac551a2291ceead435b4d9e717.ctex"]
+source_file="res://assets/splitends/splitends_earring.png"
+dest_files=["res://.godot/imported/splitends_earring.png-ee54be98726cd99c8856f6ac4aeaa769.ctex"]
 
 [params]
 

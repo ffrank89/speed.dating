@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhiwfm2tv1yjb"
-path="res://.godot/imported/surprise1.png-5f466c12f8baa3d790526e463ecbea70.ctex"
+uid="uid://c18ob4n5exrlf"
+path="res://.godot/imported/splitends_point.png-4584dc3b59427cee395a5a9a5dd904b4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/exclamation point gif/surprise1.png"
-dest_files=["res://.godot/imported/surprise1.png-5f466c12f8baa3d790526e463ecbea70.ctex"]
+source_file="res://assets/splitends/splitends_point.png"
+dest_files=["res://.godot/imported/splitends_point.png-4584dc3b59427cee395a5a9a5dd904b4.ctex"]
 
 [params]
 

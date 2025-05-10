@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0oh3og3m8o4o"
-path="res://.godot/imported/surprise4.png-0b8828ea301badbb7da2d88845d0eeb4.ctex"
+uid="uid://bm86ue356ghbd"
+path="res://.godot/imported/splitends_parker.png-76170944c6acc0ad94fcbd983b8db00f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/exclamation point gif/surprise4.png"
-dest_files=["res://.godot/imported/surprise4.png-0b8828ea301badbb7da2d88845d0eeb4.ctex"]
+source_file="res://assets/splitends/splitends_parker.png"
+dest_files=["res://.godot/imported/splitends_parker.png-76170944c6acc0ad94fcbd983b8db00f.ctex"]
 
 [params]
 

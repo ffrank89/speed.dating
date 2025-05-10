@@ -9,6 +9,8 @@ class_name DatePresenter
 @onready var reaction_icon1 = $ReactionIcon1
 @onready var reaction_icon2 = $ReactionIcon2
 @onready var reaction_icon3 = $ReactionIcon3
+@onready var date_score = $DateScore
+@onready var success_threshold = $SuccessThreshold
 
 const DEFAULT_SIZE := Vector2(600, 800)
 const TARGET_POSITION := Vector2(0.5, 0.5)
@@ -18,7 +20,7 @@ signal entry_completed
 
 var date_character: DateCharacter
 
-var cur_pose: String = "normal"
+var cur_pose: String = "default"
 var cur_reaction: String = "none"
 
 func _ready():
@@ -26,7 +28,7 @@ func _ready():
 	update_position()
 	# Connect to window resize signal to update when needed
 	get_viewport().connect("size_changed", Callable(self, "update_position"))
-
+	
 func initialize(character: DateCharacter) -> void:
 	self.date_character = character
 	
@@ -50,6 +52,11 @@ func initialize(character: DateCharacter) -> void:
 func setup_character_ui():
 	if character_name_label:
 		character_name_label.text = date_character.name
+	
+	if success_threshold:
+		print("Success Threshold")
+		var success_threshold_text = str(date_character.success_threshold)
+		success_threshold.text = success_threshold_text
 	
 	var cur_image = date_character.poses[cur_pose]
 	
@@ -232,6 +239,11 @@ func hide_reaction() -> void:
 	
 	cur_reaction = "none"
 
+func update_player_score(score: float):
+	if date_score:
+		var date_score_text = str(score)
+		date_score.text = date_score_text
+	
 func change_pose(pose_key: String) -> bool:
 	if date_character.poses.has(pose_key):
 

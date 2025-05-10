@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brkopuromobvf"
-path="res://.godot/imported/surprise2.png-78ea8c711f013d3d8e70aa6a79a8b1a4.ctex"
+uid="uid://c82bss4l1k7nl"
+path="res://.godot/imported/splitends_reach.png-732c36be3dbcead4801c276d53b99c77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/exclamation point gif/surprise2.png"
-dest_files=["res://.godot/imported/surprise2.png-78ea8c711f013d3d8e70aa6a79a8b1a4.ctex"]
+source_file="res://assets/splitends/splitends_reach.png"
+dest_files=["res://.godot/imported/splitends_reach.png-732c36be3dbcead4801c276d53b99c77.ctex"]
 
 [params]
 

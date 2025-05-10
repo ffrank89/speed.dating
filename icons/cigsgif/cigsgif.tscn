@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0niauq6x6f8u"]
-
-[ext_resource type="SpriteFrames" uid="uid://b01q0ibcws5h1" path="res://icons/cigsgif/cigsgif.tres" id="1_cv2wd"]
-[ext_resource type="Script" path="res://icons/cigsgif/cigsgif.gd" id="2_3o47m"]
-
-[node name="CigsSprite" type="AnimatedSprite2D"]
-sprite_frames = ExtResource("1_cv2wd")
-animation = &"new_animation"
-script = ExtResource("2_3o47m")

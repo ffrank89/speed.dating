@@ -14,11 +14,13 @@ var skill_scores: Dictionary = {}
 var compatibility_weights: Dictionary = {}
 var relationship_requirements: Dictionary = {}
 
-var success_threshold: float = 70
 var is_in_party: bool = false
 
 var first_date_background: String
 var poses: Dictionary 
+
+var max_turns: int = 10
+var success_threshold: int = 300
 
 
 func _init(char_name: String):
@@ -40,7 +42,6 @@ func _init(char_name: String):
 		"max_party_size": 6
 	}	
 	
-
 func calculate_option_score(option, player: PlayerCharacter) -> float:
 	var skill_type = option.skill_type  # "Culture", "Intellect", etc.
 	var req = option.req  # Required value to select the option

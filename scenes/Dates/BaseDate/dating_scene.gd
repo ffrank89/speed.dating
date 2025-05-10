@@ -20,6 +20,8 @@ var date_presenter: DatePresenter
 
 var compatibility_score: float = 0.0
 
+var date_score: float = 0.0
+
 func _ready() -> void:
 	player_manager = get_node_or_null("/root/PlayerManager")
 	
@@ -75,7 +77,8 @@ func setup_dialogue() -> void:
 	dialogue_manager.dialogue_started.connect(_on_dialogue_started)
 	dialogue_manager.dialogue_ended.connect(_on_dialogue_ended)
 	dialogue_manager.compatibility_changed.connect(_on_compatibility_changed)
-		
+	dialogue_manager.turn_used.connect(_on_turn_used)
+
 	dialogue_manager.load_dialogue()
 
 func spawn_new_partner() -> void:
@@ -115,6 +118,8 @@ func _on_option_selected(option: DialogueOption) -> void:
 	pose_changer(option, date_presenter.cur_pose)
 	
 	reaction_shower(option, date_presenter.cur_reaction)	
+	
+	score_keeper(option)
 
 func _on_compatibility_changed(value: float, increase: float) -> void:
 	compatibility_score = value
@@ -126,14 +131,24 @@ func _on_compatibility_changed(value: float, increase: float) -> void:
 	# Show a floating indicator for the increase
 	if increase > 0:
 		show_compatibility_increase(increase)
+	
 
+func _on_turn_used(turns: int) -> void:
+	print("_on_turn_used")
+	print("Date Scene turn_used: ", turns)
+	if turns >= player_manager.current_date.max_turns:
+		print("Turns > player_manager.current_date.max_turns: ", turns, "::", player_manager.current_date.max_turns)
+		end_date()
+
+	
 func pose_changer(option, cur_pose):
-	if(cur_pose == "concerned"):
-		date_presenter.change_pose("normal")
-	elif(cur_pose == "normal"):
-		date_presenter.change_pose("happy")
-	elif(cur_pose == "happy"):
-		date_presenter.change_pose("concerned")
+
+		
+	var x = current_date.poses.size()
+
+	var rand_index = randi_range(0, x-1)
+	date_presenter.change_pose(current_date.poses.keys()[rand_index])
+
 
 func reaction_shower(option, cur_reaction):
 	# Generate a random emphasis level between 1 and 3
@@ -146,6 +161,14 @@ func reaction_shower(option, cur_reaction):
 	elif cur_reaction == "question":
 		date_presenter.show_reaction("exclamation", emphasis)
 
+
+func score_keeper(option):
+	date_score += option.score_value
+	print("SCORE: ", date_score)
+	
+	date_presenter.update_player_score(date_score)
+	
+	
 func show_compatibility_increase(amount: float) -> void:
 	# Create a floating label to show the increase
 	var label = Label.new()
@@ -173,7 +196,28 @@ func _on_dialogue_ended(success: bool) -> void:
 			print("ERROR player_manager DOES NOT EXIST!!!! IN _on_dialogue_ended success!!!")
 	end_date()
 
+
+func check_success(player_score: float, success_threshold: float):
+	print("check_success player_score: ", player_score)
+	print("check_success success_threshold: ", success_threshold)
+
+	if player_score >= success_threshold:
+		print("check_success DATE SUCCESS")
+		print("Adding ", current_date, " to party! ")
+		if player_manager:
+			print("current_date", current_date)
+			player_manager.add_date(current_date)
+			party_ui.update_party(player_manager.get_party())
+		else:
+			print("ERROR player_manager DOES NOT EXIST!!!! IN _on_dialogue_ended success!!!")
+	else:
+		print("check_success DATE FAILED")
+
+
 func end_date() -> void:
+
+	
+	check_success(date_score, current_date.success_threshold)
 	# Animate transition to calendar scene
 	var fade_panel = ColorRect.new()
 	fade_panel.color = Color(0, 0, 0, 0)

@@ -6,7 +6,6 @@ extends Resource
 @export var animation: String = ""
 #TODO
 #ADD EFFECTS FIELDS OR AN EFFECTS DICTIONARY
-
 func _init(p_name="", p_description="", p_animation=""):
 	name = p_name
 	description = p_description
