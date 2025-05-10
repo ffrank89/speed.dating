@@ -4,6 +4,7 @@ extends Node
 signal dialogue_started(dialogue: DialogueData)
 signal dialogue_ended(success: bool)
 signal compatibility_changed(value, increase)
+signal turn_used(turns: int)
 
 var current_dialogue: DialogueData
 var dialogue_tree: Dictionary
@@ -15,13 +16,15 @@ var date_score: float = 0.0
 
 var click_sound: AudioStreamPlayer
 
+var turns_used: int = 0
+
 # Load dialogue from JSON
 func load_dialogue():
 	var json = JSON.new()
-	var file = FileAccess.open("res://dialogue/data/test_dialogue_tree.json", FileAccess.READ)
+	var file = FileAccess.open("res://dialogue/data/cursor_json.json", FileAccess.READ)
 	var json_text = file.get_as_text()
 	dialogue_tree = json.parse_string(json_text)
-
+	
 func start_date_dialogue(partner: DateCharacter, player_char: PlayerCharacter):
 	active_partner = partner
 	player = player_char
@@ -58,7 +61,7 @@ func get_dialogue(dialogue_id: String) -> DialogueData:
 		var option = DialogueOption.new()
 		option.hint_text = option_data.hint_text
 		option.next_dialogue_id = option_data.next_dialogue_id
-		
+		option.score_value = option_data.score_value
 		# Handle skill checking - keep your original structure
 		if option_data.has("skill_check"):
 			option.skill_check = option_data.skill_check
@@ -93,7 +96,8 @@ func select_option(option: DialogueOption):
 		req = option.skill_check.req
 		success = check_skill(option.skill_check)
 		print("SKILL CHECK: ", skill_type, req, success)
-
+	
+	print("Option: ", option.hint_text, "Score: ", option.score_value)
 	
 	# Calculate compatibility impact
 	if success and skill_type != "":
@@ -106,12 +110,11 @@ func select_option(option: DialogueOption):
 		
 		emit_signal("compatibility_changed", compatibility_percentage, compatibility_impact)
 	
-	# Apply effects
-	if success:
-		apply_effects(option.success_effect)
-	else:
-		apply_effects(option.failure_effect)
-	
+	#Increment turns used
+	turns_used += 1
+	print("\n turns_used: ", turns_used)
+	emit_signal("turn_used", turns_used)
+
 	# Get next dialogue
 	current_dialogue = get_dialogue(option.next_dialogue_id)
 	if current_dialogue:

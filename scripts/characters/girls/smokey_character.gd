@@ -12,6 +12,7 @@ func _init():
 		"normal": "res://assets/green_girl/beauit.png",
 		"happy": "res://assets/green_girl/reach.png",
 		"concerned": "res://assets/green_girl/parker.png",
+		"default": "res://assets/green_girl/parker.png"
 	}
 	# Set interests
 	self.interests = [

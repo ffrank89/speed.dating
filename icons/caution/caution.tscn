@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://rkeycu6nwulv"]
-
-[ext_resource type="SpriteFrames" uid="uid://det2bb6doyh5t" path="res://icons/caution/caution.tres" id="1_usge4"]
-
-[node name="CautionSprite" type="AnimatedSprite2D"]
-sprite_frames = ExtResource("1_usge4")
-animation = &"new_animation"
