@@ -5,6 +5,7 @@ var current_date: DateCharacter
 var dialogue_manager: DialogueManager
 var player_manager: PlayerManager
 var date_presenter: DatePresenter
+var score_calculator: ScoreCalculator
 
 # References to UI elements
 @onready var player_panel = $PlayerPanel
@@ -17,6 +18,7 @@ var date_presenter: DatePresenter
 @onready var bunny_gif_container = $BunnyGif
 @onready var date_presenter_container = $DatePresenterContainer
 @onready var perk_border = $PerkBorder
+@onready var dialogue_history = $DialogueHistory
 
 var compatibility_score: float = 0.0
 
@@ -37,6 +39,8 @@ func _ready() -> void:
 	# Setup dialogue system
 	setup_dialogue()
 	
+	#setup score calculator
+	setup_score_calculator()
 	# Spawn initial partner
 	spawn_new_partner()
 	
@@ -69,6 +73,9 @@ func setup_player() -> void:
 	compatibility_meter.max_value = 100
 	compatibility_meter.value = 0
 
+func setup_score_calculator() -> void:
+	score_calculator = ScoreCalculator.new()
+	
 func setup_dialogue() -> void:
 	dialogue_manager = DialogueManager.new()
 	add_child(dialogue_manager)
@@ -101,7 +108,7 @@ func spawn_new_partner() -> void:
 		print("ERROR NO PLAYER MANAGER")
 
 func _on_dialogue_started(dialogue: DialogueData) -> void:
-	# Clear previous dialogue
+	# Clear previous dialogue options
 	for child in dialogue_ui.get_children():
 		child.queue_free()
 		
@@ -109,15 +116,21 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 	var response = dialogue_ui.create_dates_response(dialogue)
 	dialogue_ui.add_child(response)
 	
+	# Add the dialogue text to the history
+	dialogue_history.add_message(dialogue.text, current_date.name)
+	
 	# Create options in the static dialogue box
 	option_ui.display_options(dialogue.options)
 
 func _on_option_selected(option: DialogueOption) -> void:
+	# Add the player's choice to the dialogue history
+	dialogue_history.add_message(option.hint_text, player.name)
+	
+	# Process the option selection
 	dialogue_manager.select_option(option)
 	
 	pose_changer(option, date_presenter.cur_pose)
-	
-	reaction_shower(option, date_presenter.cur_reaction)	
+	reaction_shower(option, date_presenter.cur_reaction)
 	
 	score_keeper(option)
 
@@ -163,10 +176,11 @@ func reaction_shower(option, cur_reaction):
 
 
 func score_keeper(option):
-	date_score += option.score_value
+
+	date_score += score_calculator.calculate_score(option, player_manager.player, player_manager.perks)
 	print("SCORE: ", date_score)
-	
-	date_presenter.update_player_score(date_score)
+
+	date_presenter.update_scores_sequence(option.score_value, 30, date_score)
 	
 	
 func show_compatibility_increase(amount: float) -> void:
@@ -216,7 +230,6 @@ func check_success(player_score: float, success_threshold: float):
 
 func end_date() -> void:
 
-	
 	check_success(date_score, current_date.success_threshold)
 	# Animate transition to calendar scene
 	var fade_panel = ColorRect.new()

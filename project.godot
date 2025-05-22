@@ -21,8 +21,9 @@ MusicManager="*res://scripts/managers/music_manager.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=3000
+window/size/viewport_height=1700
+window/size/resizable=false
 
 [rendering]
 

@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dcjmiti6cqxk3"]
+[gd_scene load_steps=7 format=3 uid="uid://dcjmiti6cqxk3"]
 
 [ext_resource type="Script" path="res://scenes/DatePresenter/date_presenter.gd" id="1_t04yr"]
 [ext_resource type="PackedScene" uid="uid://cgm1ympw5riwb" path="res://image_scenes/stats_display1/CharacterStatsDisplay.tscn" id="2_ca61d"]
 [ext_resource type="PackedScene" uid="uid://7hebc478xhh3" path="res://image_scenes/reaction_display1/InventoryReaction.tscn" id="3_ekmdo"]
 [ext_resource type="PackedScene" uid="uid://bg04c6yebgcgu" path="res://icon_scenes/reaction_icon/ReactionIcon.tscn" id="4_ucbc7"]
+[ext_resource type="FontFile" uid="uid://c2ofet0riv356" path="res://assets/script-VF.ttf" id="5_xj07h"]
+[ext_resource type="PackedScene" uid="uid://b4uipuhf0dkh3" path="res://scenes/ScoreDisplay/ScoreDisplay.tscn" id="6_1d3le"]
 
 [node name="DatePresenter" type="Control"]
 layout_mode = 3
@@ -44,14 +46,18 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="DateScore" type="Label" parent="."]
+visible = false
 modulate = Color(1, 1, 0.137255, 1)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -37.0
-offset_bottom = 29.0
+offset_left = -1025.0
+offset_top = 348.0
+offset_right = -988.0
+offset_bottom = 650.0
 grow_horizontal = 0
+theme_override_fonts/font = ExtResource("5_xj07h")
 theme_override_font_sizes/font_size = 300
 horizontal_alignment = 2
 
@@ -60,4 +66,8 @@ modulate = Color(1, 0.576471, 1, 1)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("5_xj07h")
 theme_override_font_sizes/font_size = 100
+
+[node name="ScoreDisplay" parent="." instance=ExtResource("6_1d3le")]
+layout_mode = 1

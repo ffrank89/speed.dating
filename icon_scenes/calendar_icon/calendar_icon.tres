@@ -1,16 +1,23 @@
-[gd_resource type="SpriteFrames" load_steps=14 format=3 uid="uid://428tdvgmryw2"]
+[gd_resource type="SpriteFrames" load_steps=21 format=3 uid="uid://428tdvgmryw2"]
 
 [ext_resource type="Texture2D" uid="uid://occ3kb8qg841" path="res://assets/culture stat gif/culturestat2.png" id="1_fqbnp"]
 [ext_resource type="Texture2D" uid="uid://t1eq03af3hpc" path="res://assets/culture stat gif/culturestat3.png" id="2_k2yh2"]
 [ext_resource type="Texture2D" uid="uid://oajdme67e501" path="res://assets/culture stat gif/culturestat4.png" id="3_c5lqw"]
 [ext_resource type="Texture2D" uid="uid://8uid4ww7day2" path="res://assets/culture stat gif/culturestat5.png" id="4_3861h"]
 [ext_resource type="Texture2D" uid="uid://c584o6ncq0l18" path="res://assets/culture stat gif/culturestat.png" id="5_g08hu"]
+[ext_resource type="Texture2D" uid="uid://b77a5oklxvspj" path="res://assets/x1/x1_1.png" id="6_6phwo"]
 [ext_resource type="Texture2D" uid="uid://dobwhnvbfelye" path="res://assets/girl sprite 1 gif/girl1 sprite1.png" id="6_kvbqi"]
 [ext_resource type="Texture2D" uid="uid://da88guvnen0jl" path="res://assets/girl sprite 1 gif/girl1 sprite2.png" id="7_genyg"]
+[ext_resource type="Texture2D" uid="uid://boxoykg2vmhk7" path="res://assets/x1/x1_2.png" id="7_wm7m4"]
 [ext_resource type="Texture2D" uid="uid://c3630obvus354" path="res://assets/girl sprite 1 gif/girl1 sprite3.png" id="8_l6ar7"]
+[ext_resource type="Texture2D" uid="uid://ctfb7kcpmf2xf" path="res://assets/x1/x1_3.png" id="8_o8pjg"]
+[ext_resource type="Texture2D" uid="uid://bqppgtq5c0oij" path="res://assets/x1/x1_4.png" id="9_3fodr"]
 [ext_resource type="Texture2D" uid="uid://6r1qjeyv0y22" path="res://assets/girl sprite 1 gif/girl1 sprite4.png" id="9_4jafu"]
 [ext_resource type="Texture2D" uid="uid://g8lqlq5pqu6i" path="res://assets/sleepy stat gif/sleepy1.png" id="10_edh0w"]
+[ext_resource type="Texture2D" uid="uid://dw5ye3rfmofo2" path="res://assets/x1/x1_5.png" id="10_m30m3"]
 [ext_resource type="Texture2D" uid="uid://cssvv61etfij7" path="res://assets/sleepy stat gif/sleepy2.png" id="11_gdh2i"]
+[ext_resource type="Texture2D" uid="uid://cr6odxdcm1ly3" path="res://assets/x1/x1_6.png" id="11_hokod"]
+[ext_resource type="Texture2D" uid="uid://dtafoo5ekck0l" path="res://assets/x1/x1_7.png" id="12_gtkte"]
 [ext_resource type="Texture2D" uid="uid://b6316txhp8jw4" path="res://assets/sleepy stat gif/sleepy3.png" id="12_iiyhr"]
 [ext_resource type="Texture2D" uid="uid://d336mtq38xddk" path="res://assets/sleepy stat gif/sleepy4.png" id="13_1syl5"]
 
@@ -34,6 +41,32 @@ animations = [{
 }],
 "loop": true,
 "name": &"culture",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_6phwo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_wm7m4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_o8pjg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_3fodr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_m30m3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_hokod")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_gtkte")
+}],
+"loop": true,
+"name": &"mult",
 "speed": 5.0
 }, {
 "frames": [{

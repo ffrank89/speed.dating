@@ -7,13 +7,13 @@
 	"text": "Hi there! `Nice to meet you.",
 	"options": [
 	  {
-		"hint_text": "Nice to meet you too!",
+		"hint_text": "Heart! 20",
 		"next_dialogue_id": "RESPONSE1",
 		"skill_check": {"skill": "Heart", "req": 20},
 		"score_value": 20
 	  },
 	  {
-		"hint_text": "Whatever...",
+		"hint_text": "Seduction -10",
 		"next_dialogue_id": "RESPONSE1",
 		"skill_check": {"skill": "Seduction", "req": 10},
 		"score_value": -10
@@ -25,13 +25,13 @@
 	"text": "So, tell me about yourself.",
 	"options": [
 	  {
-		"hint_text": "I'm really into books and culture.",
+		"hint_text": "Culture 40",
 		"next_dialogue_id": "INTRO",
 		"skill_check": {"skill": "Culture", "req": 30},
 		"score_value": 40
 	  },
 	  {
-		"hint_text": "I'm just here for a good time.",
+		"hint_text": "Seduction 20",
 		"next_dialogue_id": "INTRO",
 		"skill_check": {"skill": "Seduction", "req": 40},
 		"score_value": 20

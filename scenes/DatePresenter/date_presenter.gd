@@ -12,6 +12,11 @@ class_name DatePresenter
 @onready var date_score = $DateScore
 @onready var success_threshold = $SuccessThreshold
 
+@onready var score_display = $ScoreDisplay
+@onready var base_score_display = $ScoreDisplay/HBoxContainer/BaseScoreDisplay
+@onready var perk_score_display = $ScoreDisplay/HBoxContainer/PerkScoreDisplay
+@onready var player_score_display = $ScoreDisplay/HBoxContainer/PlayerScoreDisplay
+
 const DEFAULT_SIZE := Vector2(600, 800)
 const TARGET_POSITION := Vector2(0.5, 0.5)
 const PADDING := 30
@@ -29,6 +34,10 @@ func _ready():
 	# Connect to window resize signal to update when needed
 	get_viewport().connect("size_changed", Callable(self, "update_position"))
 	
+	base_score_display.tween_completed.connect(_on_base_score_completed)
+	perk_score_display.tween_completed.connect(_on_perk_score_completed)
+	player_score_display.tween_completed.connect(_on_player_score_completed)
+
 func initialize(character: DateCharacter) -> void:
 	self.date_character = character
 	
@@ -55,7 +64,7 @@ func setup_character_ui():
 	
 	if success_threshold:
 		print("Success Threshold")
-		var success_threshold_text = str(date_character.success_threshold)
+		var success_threshold_text = str("Three-Hundred")
 		success_threshold.text = success_threshold_text
 	
 	var cur_image = date_character.poses[cur_pose]
@@ -144,6 +153,10 @@ func update_position():
 	# After position change, reset background to fill screen
 	if background:
 		background.global_position = Vector2.ZERO
+	
+		# After position change, reset background to fill screen
+	if score_display:
+		score_display.global_position = Vector2.ZERO
 	
 	if character_image:
 		# Set the character image to fill the container
@@ -240,9 +253,44 @@ func hide_reaction() -> void:
 	cur_reaction = "none"
 
 func update_player_score(score: float):
-	if date_score:
-		var date_score_text = str(score)
-		date_score.text = date_score_text
+	player_score_display.set_display_mode(false)
+	player_score_display.count_to(score)
+
+func update_perk_score(score: float):
+	perk_score_display.set_display_mode(false)
+	perk_score_display.count_to(score)
+
+func update_base_score(score: float):
+	base_score_display.set_display_mode(true)
+	base_score_display.count_to(score)
+
+# Add these handler functions:
+func _on_base_score_completed():
+	# If you need to do anything when the base score animation completes
+	pass
+
+func _on_perk_score_completed():
+	# If you need to do anything when the perk score animation completes
+	pass
+
+func _on_player_score_completed():
+	# If you need to do anything when the player score animation completes
+	print("All score animations completed!")
+
+# Add this new function to sequence the animations:
+func update_scores_sequence(base: float, perk: float, total: float):
+	# First animation
+	update_base_score(base)
+	await base_score_display.tween_completed
+	await get_tree().create_timer(1.0).timeout
+	
+	# Second animation
+	update_perk_score(perk)
+	await perk_score_display.tween_completed
+	await get_tree().create_timer(1.0).timeout
+	
+	# Third animation
+	update_player_score(total)
 	
 func change_pose(pose_key: String) -> bool:
 	if date_character.poses.has(pose_key):
