@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bu5n0gkpipjci"]
 
-[ext_resource type="Script" path="res://image_scenes/party/party_ui.gd" id="1_r3n3h"]
+[ext_resource type="Script" uid="uid://l0al2gf7gili" path="res://image_scenes/party/party_ui.gd" id="1_r3n3h"]
 
 [node name="PartyUI" type="Control"]
 layout_mode = 3

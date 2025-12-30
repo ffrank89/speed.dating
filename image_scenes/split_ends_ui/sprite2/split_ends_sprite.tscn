@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://qit272pittup"]
 
-[ext_resource type="Script" path="res://image_scenes/split_ends_ui/sprite/sprite_container.gd" id="1_0d0nj"]
+[ext_resource type="Script" uid="uid://c383hgb0nrsqc" path="res://image_scenes/split_ends_ui/sprite/sprite_container.gd" id="1_0d0nj"]
 [ext_resource type="SpriteFrames" uid="uid://5jogglwriude" path="res://image_scenes/split_ends_ui/sprite2/split_ends_sprite.tres" id="2_oc8hj"]
-[ext_resource type="Script" path="res://image_scenes/split_ends_ui/sprite/split_ends_sprite.gd" id="3_olhd5"]
+[ext_resource type="Script" uid="uid://cam0b13ybj7of" path="res://image_scenes/split_ends_ui/sprite/split_ends_sprite.gd" id="3_olhd5"]
 
 [node name="SplitEndsSpriteContainer" type="HSplitContainer"]
 offset_right = 40.0

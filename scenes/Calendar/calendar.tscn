@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://bgn2jmt66pr2e"]
 
-[ext_resource type="Script" path="res://scenes/Calendar/calendar.gd" id="1_rtpg6"]
+[ext_resource type="Script" uid="uid://c8mxmqt48fy4a" path="res://scenes/Calendar/calendar.gd" id="1_rtpg6"]
 [ext_resource type="PackedScene" uid="uid://dshri7i831rjb" path="res://spritebackground.tscn" id="2_b2xyy"]
 [ext_resource type="Texture2D" uid="uid://cxa5t06lb1mcg" path="res://assets/january.png" id="3_jt0fh"]
 [ext_resource type="PackedScene" uid="uid://cqv35xlv5m1ka" path="res://icons/x/x.tscn" id="4_v33tw"]
-[ext_resource type="Script" path="res://icons/x/x.gd" id="5_0wlti"]
-[ext_resource type="Script" path="res://scenes/Calendar/grid_container.gd" id="5_ihk44"]
-[ext_resource type="Script" path="res://scenes/Calendar/DayButtonContainer.gd" id="5_mte6u"]
+[ext_resource type="Script" uid="uid://bpgg4almyh5gt" path="res://icons/x/x.gd" id="5_0wlti"]
+[ext_resource type="Script" uid="uid://ydo8mjvmx3ou" path="res://scenes/Calendar/grid_container.gd" id="5_ihk44"]
+[ext_resource type="Script" uid="uid://dfhstdb5wxnsc" path="res://scenes/Calendar/DayButtonContainer.gd" id="5_mte6u"]
 [ext_resource type="PackedScene" uid="uid://de7jnh7bcf5yi" path="res://icon_scenes/calendar_icon/CalendarIcon.tscn" id="8_2lb33"]
-[ext_resource type="Script" path="res://icon_scenes/calendar_icon/calendar_icon.gd" id="9_bl5eu"]
+[ext_resource type="Script" uid="uid://5ffuh7ek5x2s" path="res://icon_scenes/calendar_icon/calendar_icon.gd" id="9_bl5eu"]
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3

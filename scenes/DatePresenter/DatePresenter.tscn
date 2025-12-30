@@ -1,11 +1,13 @@
 [gd_scene load_steps=7 format=3 uid="uid://dcjmiti6cqxk3"]
 
-[ext_resource type="Script" path="res://scenes/DatePresenter/date_presenter.gd" id="1_t04yr"]
+[ext_resource type="Script" uid="uid://jfefe73mmn5e" path="res://scenes/DatePresenter/date_presenter.gd" id="1_t04yr"]
 [ext_resource type="PackedScene" uid="uid://cgm1ympw5riwb" path="res://image_scenes/stats_display1/CharacterStatsDisplay.tscn" id="2_ca61d"]
 [ext_resource type="PackedScene" uid="uid://7hebc478xhh3" path="res://image_scenes/reaction_display1/InventoryReaction.tscn" id="3_ekmdo"]
 [ext_resource type="PackedScene" uid="uid://bg04c6yebgcgu" path="res://icon_scenes/reaction_icon/ReactionIcon.tscn" id="4_ucbc7"]
-[ext_resource type="FontFile" uid="uid://c2ofet0riv356" path="res://assets/script-VF.ttf" id="5_xj07h"]
-[ext_resource type="PackedScene" uid="uid://b4uipuhf0dkh3" path="res://scenes/ScoreDisplay/ScoreDisplay.tscn" id="6_1d3le"]
+[ext_resource type="FontFile" uid="uid://onomd60todd" path="res://assets/script-VF.ttf" id="5_xj07h"]
+
+[sub_resource type="Resource" id="Resource_lxnmv"]
+metadata/__load_path__ = "res://scenes/ScoreDisplay/ScoreDisplay.tscn"
 
 [node name="DatePresenter" type="Control"]
 layout_mode = 3
@@ -69,5 +71,5 @@ offset_bottom = 23.0
 theme_override_fonts/font = ExtResource("5_xj07h")
 theme_override_font_sizes/font_size = 100
 
-[node name="ScoreDisplay" parent="." instance=ExtResource("6_1d3le")]
+[node name="ScoreDisplay" parent="."]
 layout_mode = 1

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dshri7i831rjb"]
 
-[ext_resource type="Script" path="res://scenes/Calendar/background.gd" id="1_pxknp"]
+[ext_resource type="Script" uid="uid://b65asn3eu2pkh" path="res://scenes/Calendar/background.gd" id="1_pxknp"]
 [ext_resource type="PackedScene" uid="uid://bmqiock38d4kl" path="res://image_scenes/some_background_gif/background_gif.tscn" id="2_wbjx5"]
 
 [node name="Background" type="Control"]
