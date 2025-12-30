@@ -1,7 +1,3 @@
-1. suck on some eeeee stuff when you log on
-2. wash yo mouf out
-3. then sniff it actually biiitch
-
 WIP:
 
 <img width="1234" height="728" alt="Screenshot 2025-11-02 at 6 39 18 PM" src="https://github.com/user-attachments/assets/0d7235bc-d057-4432-a38a-9245fc6b5f35" />
