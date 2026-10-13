@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c0bwkjvsx1tem"]
 
-[ext_resource type="Script" path="res://image_scenes/bunnyGif/bunny_gif_controller.gd" id="1_6ljkp"]
+[ext_resource type="Script" uid="uid://nb1q8x25o07r" path="res://image_scenes/bunnyGif/bunny_gif_controller.gd" id="1_6ljkp"]
 [ext_resource type="SpriteFrames" uid="uid://b520l8l7sycfr" path="res://image_scenes/bunnyGif/bunny_gif.tres" id="1_r4oqt"]
-[ext_resource type="Script" path="res://image_scenes/bunnyGif/bunny_gif.gd" id="2_5557b"]
+[ext_resource type="Script" uid="uid://dgi22i181ir5r" path="res://image_scenes/bunnyGif/bunny_gif.gd" id="2_5557b"]
 
 [node name="Container" type="Control"]
 custom_minimum_size = Vector2(100, 100)

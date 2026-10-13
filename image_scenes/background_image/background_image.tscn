@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bqal55sfr32gc"]
 
-[ext_resource type="Script" path="res://image_scenes/background_image/background_image.gd" id="1_2u0ru"]
+[ext_resource type="Script" uid="uid://c52nc4o1suxji" path="res://image_scenes/background_image/background_image.gd" id="1_2u0ru"]
 
 [node name="BackgroundImage" type="ColorRect"]
 anchors_preset = 15

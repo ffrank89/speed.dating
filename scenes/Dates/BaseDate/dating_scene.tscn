@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=3 uid="uid://b5my1q26b4bn4"]
 
-[ext_resource type="Script" path="res://scenes/Dates/BaseDate/dating_scene.gd" id="1_0xxkl"]
+[ext_resource type="Script" uid="uid://dkis8eprfl8qd" path="res://scenes/Dates/BaseDate/dating_scene.gd" id="1_0xxkl"]
 [ext_resource type="PackedScene" uid="uid://cyn04gd72ltyc" path="res://image_scenes/inventory/inventory_ui.tscn" id="2_ba4j2"]
 [ext_resource type="PackedScene" uid="uid://ulxeiqa6tkle" path="res://scenes/Border/Border.tscn" id="2_xl6m4"]
-[ext_resource type="Script" path="res://dialogue/ui/dialogue_data_ui.gd" id="3_88ruv"]
-[ext_resource type="Script" path="res://dialogue/ui/dialogue_option_ui.gd" id="4_sos4w"]
+[ext_resource type="Script" uid="uid://ca6uum55c0cii" path="res://dialogue/ui/dialogue_data_ui.gd" id="3_88ruv"]
+[ext_resource type="Script" uid="uid://dyg6s1lw443df" path="res://dialogue/ui/dialogue_option_ui.gd" id="4_sos4w"]
 [ext_resource type="PackedScene" uid="uid://bu5n0gkpipjci" path="res://image_scenes/party/party_ui.tscn" id="5_b4yvb"]
 [ext_resource type="PackedScene" uid="uid://c0bwkjvsx1tem" path="res://image_scenes/bunnyGif/bunny_gif.tscn" id="7_od0i4"]
-[ext_resource type="Script" path="res://scenes/Dates/BaseDate/dialogue_history.gd" id="8_f1xov"]
+[ext_resource type="Script" uid="uid://esoa2e3w44kj" path="res://scenes/Dates/BaseDate/dialogue_history.gd" id="8_f1xov"]
 
 [sub_resource type="GDScript" id="GDScript_4d5c8"]
 script/source = "#player_panel.gd

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://efp3ydwobkem"]
 
-[ext_resource type="Script" path="res://scenes/Intro/intro_questions.gd" id="1_72tvp"]
+[ext_resource type="Script" uid="uid://c0osn8ak6ofih" path="res://scenes/Intro/intro_questions.gd" id="1_72tvp"]
 [ext_resource type="PackedScene" uid="uid://dshri7i831rjb" path="res://spritebackground.tscn" id="2_isxcp"]
 [ext_resource type="PackedScene" uid="uid://qit272pittup" path="res://image_scenes/split_ends_ui/sprite2/split_ends_sprite.tscn" id="2_wnd8f"]
 

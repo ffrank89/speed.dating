@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ulxeiqa6tkle"]
 
-[ext_resource type="Script" path="res://scenes/Border/perk_border.gd" id="1_l0ipf"]
+[ext_resource type="Script" uid="uid://dkvu1vbymvf2q" path="res://scenes/Border/perk_border.gd" id="1_l0ipf"]
 
 [node name="PerkBorder" type="Control"]
 layout_mode = 3
