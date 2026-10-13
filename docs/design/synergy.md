@@ -36,7 +36,7 @@
 | `player_girl_multiplier(member, player, perks) -> float` | Affection + preference match + perk bonuses. Formula TBD. |
 | `TagData` | `name`, `icon`, `thresholds: Array[int]`, `bonus_per_threshold` (TBD: stat bonus? ability? applies to tagged girls or all?) |
 | `SynergyReport` | `active_tags: Array[{tag, count, tier}]`, `per_girl_multiplier: Dictionary[PartyMember, float]`, `notes` for UI. |
-| Tag list for the first build | TBD. Started with stoner, artsy, chaotic; need ~4–6 for 6 girls. |
+| Tag list for the first build | TBD. Started with stoner, artsy, chaotic; need ~4–6 tags across the first build's ~6 girls. |
 | Unit tests | Hand-built parties → expected report. Plain GDScript test or GUT (TBD). |
 
 ## Art needed

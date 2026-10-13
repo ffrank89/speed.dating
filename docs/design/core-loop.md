@@ -25,7 +25,7 @@ flowchart LR
     Date -->|DateResult| Cal
     Train --> Cal
     Event --> Cal
-    Cal -->|Last day of chapter| Pick[Party screen<br/>pick 3 + order<br/>see synergy]
+    Cal -->|Last day of chapter| Pick[Party screen<br/>pick up to 3 + order<br/>see synergy]
     Pick --> Boss[Boss Scene<br/>autobattle]
     Boss -->|Win| Next{More chapters?}
     Next -->|Yes| Cal
@@ -92,7 +92,7 @@ System** reads the whole party and works out:
   her preferences, and perks that interact with her tags (Inebriated boosts
   Stoner girls).
 
-With a cap of 6, a full party forces a **break-up** to add someone new. That
+With a cap of 3, a full party forces a **break-up** to add someone new. That
 is where you prune the build.
 
 ### 6. Perks bend the rules
@@ -104,7 +104,7 @@ early can redirect the whole run! Rule of thumb: the player should laugh when th
 
 ### 7. The boss is the exam
 
-On the last day you pick **3 of your girls and their order** on the party
+On the last day you pick **up to 3 of your girls and their order** on the party
 screen, which shows the synergy report. Then the **Boss Scene** runs a lineup fight with no input. Each girl's strength is:
 
 ```
@@ -143,7 +143,7 @@ different girls, perks and events.
 | Calendar → Player              | Training gains; event perks and items                                                   |
 | Party + Player → Synergy       | Tags, Affection, preferences vs attributes, perks                                       |
 | Synergy → Calendar             | Synergy report on the party screen                                                      |
-| Synergy + Girls + Perks → Boss | Battle stats × multipliers, abilities                                                  |
+| Synergy + Girls + Perks → Boss | Battle stats × multipliers, girl type vs boss (crit / fumble)                           |
 | Boss → Calendar                | Win (next chapter) or loss (run ends)                                                   |
 
 ---
@@ -178,7 +178,7 @@ Every module builds on this layer. Nothing here is written yet. The
 | `SceneRouter`   | `Node` (autoload)                    | Scene changes and fade transitions, so`RunState` stays pure data.                                                                                                             | `PlayerManager` (scene-change half)                            |
 | `PlayerData`    | `Resource` (runtime)                 | Four attributes (Culture, Intellect, Seduction, Heart, 0–100).                                                                                                                 | `PlayerCharacter`                                              |
 | `GirlData`      | `Resource` (`.tres`, one per girl) | Everything about a girl that's the same every run. See[girls.md](girls.md).                                                                                                      | `DateCharacter` + `SmokeyCharacter` / `SplitEndsCharacter` |
-| `PartyMember`   | `Resource` (runtime)                 | A girl in*t his* run: `GirlData` ref, Affection, current HP, buffs.                                                                                                         | `party` array of `DateCharacter` nodes                       |
+| `PartyMember`   | `Resource` (runtime)                 | A girl in *this* run: `GirlData` ref, Affection, current HP, buffs.                                                                                                         | `party` array of `DateCharacter` nodes                       |
 | `PerkData`      | `Resource` (`.tres`)               | A perk's name, art and hook functions. See [perks.md](perks.md).                                                                                                                | `Perk`, `Inebriated`, `Sleepy`                             |
 | `TagData`       | `Resource` (`.tres`)               | A tag's name, icon, thresholds and bonus per threshold.                                                                                                                         | —                                                               |
 | `BossData`      | `Resource` (`.tres`)               | Life event, type, stats, abilities, art.                                                                                                                                        | —                                                               |

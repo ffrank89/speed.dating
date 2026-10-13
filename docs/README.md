@@ -14,10 +14,10 @@ checks that make choices risky but never locked, and short WarioWare-style
 microgames taken from moments in the date. A good date recruits her to your
 party, and follow-up dates raise her Affection. Girls carry tags that stack
 into Teamfight Tactics–style synergies, and your perks are Balatro-style
-build-arounds. You can keep 6 girls; past that, someone gets dumped. Each
+build-arounds. You can keep 3 girls; past that, someone gets dumped. Each
 chapter ends with a life-event boss (a concert, meeting the parents,
-Valentine's Day). You pick 3 girls and their order, then watch a Super Auto
-Pets–style autobattle. You never fight yourself. Lose and the run is over.
+Valentine's Day). You pick up to 3 girls and their order, then watch a Super
+Auto Pets–style autobattle. You never fight yourself. Lose and the run is over.
 
 The first build has 1 chapter, 1 boss, 3 girls with full art and about 3
 art-less test girls. Nothing carries over between runs yet.

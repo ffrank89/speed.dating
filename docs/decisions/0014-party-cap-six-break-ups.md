@@ -1,6 +1,6 @@
 # 0014: Party cap 6; break up to make room
 
-- **Status:** Accepted
+- **Status:** Superseded by 0029
 - **Date:** 2026-10-11
 - **Affects:** [girls.md](../design/girls.md), [calendar.md](../design/calendar.md)
 

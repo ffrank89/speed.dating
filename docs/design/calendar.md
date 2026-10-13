@@ -5,7 +5,9 @@
 - The calendar is the **run's clock and hub**. Each day costs one action.
 - About **5 actions per chapter** (to tune). The **boss is shown from the
   chapter's first day** and is forced on the last day.
-- Actions:| Action         | What happens                               | Leads to                    |
+- Actions:
+
+  | Action         | What happens                               | Leads to                    |
   | -------------- | ------------------------------------------ | --------------------------- |
   | Date           | Pick 1 of 2–3 random profiles, or skip    | Tinder screen → Date Scene |
   | Follow-up date | Date a party member to raise her Affection | Date Scene                  |

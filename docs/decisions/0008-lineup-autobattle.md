@@ -1,6 +1,6 @@
 # 0008: Fight format: pick 3 and their order, Super Auto Pets–style lineup
 
-- **Status:** Accepted
+- **Status:** Superseded by 0030
 - **Date:** 2026-10-11
 - **Affects:** [boss.md](../design/boss.md), [calendar.md](../design/calendar.md)
 
