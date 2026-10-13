@@ -2,17 +2,19 @@
 
 ## Concept
 
-- Bosses are **life events**: a concert or party, meeting the parents,
-  Valentine's Day. Several per run in a **fixed, escalating order**; the
-  first build has **one**.
+- Bosses are **life events**
+  - Concert / party / meeting the parents / valentines day
 - Each boss has a **type**. Girls do better or worse against it
-  (Pokémon-style strengths and weaknesses). A **special rule per boss**
-  (like Balatro boss blinds) comes later.
-- The boss is **shown from the chapter's first day**, so you plan your dates
+  (Pokémon-style strengths and weaknesses).
+  - A **special rule per boss**
+    (like Balatro boss blinds) comes later.
+- The boss is **shown from the chapter's first day**, so you plan your dates / training
   around it.
-- Before the fight you pick **3 girls and their order**. Then it's a
-  **Super Auto Pets–style lineup** with **no player input**: girls attack in
-  order, the boss hits whoever is in front, abilities fire on triggers.
+- Before the fight you pick **3 girls and their order**. Then it's an autobattle. Girls attack in
+  order, the boss hits whoever is in front, Girl abilities fire if they're the right pick for the Boss.
+  - EX:
+    - Boss: Thanksgiving
+    - Party: Lawyer girl ( critical hit! *she went to Yale?* ) X Affection -> Party Girl ( weak *did she do cocaine in the bathroom?* )
 - Each girl's strength comes from her battle stats, her Affection and the
   party's synergy:
   `attack = base attack × (1 + 0.25 × Affection) × synergy multiplier`
@@ -38,28 +40,28 @@
 
 ### Custom objects and functions
 
-| Thing | Notes |
-|---|---|
-| `BossData` | `id`, `display_name`, `life_event`, `type`, `hp`, `attack`, `speed`, `abilities`, `special_rule` (later), art refs |
-| `BossScene` | Lays out lineup vs boss, runs the fight, plays animations. |
+| Thing                             | Notes                                                                                                                                                           |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BossData`                      | `id`, `display_name`, `life_event`, `type`, `hp`, `attack`, `speed`, `abilities`, `special_rule` (later), art refs                            |
+| `BossScene`                     | Lays out lineup vs boss, runs the fight, plays animations.                                                                                                      |
 | `Battle` (pure logic, no nodes) | `Battle.new(lineup, boss, report).step()` until done; emits events the scene animates. Pure logic means it can be simulated thousands of times for balancing. |
-| Turn/tick rules | Who acts when (speed? fixed order?). TBD. |
-| Ability triggers | `on_start`, `on_hurt`, `on_ally_faint`, `on_kill`… TBD list. |
-| Type chart | `type_multiplier(girl, boss) -> float`. Comes from girl tags or a separate girl "type"? TBD. |
-| `BossTestScene` | Drop 3 `GirlData` files in the Inspector, press F6, watch. First thing to build after the data model. |
-| Win/lose screen | TBD. Should show *why* (which synergy carried, who fell first). |
+| Turn/tick rules                   | Who acts when (speed? fixed order?). TBD.                                                                                                                       |
+| Ability triggers                  | `on_start`, `on_hurt`, `on_ally_faint`, `on_kill`… TBD list.                                                                                           |
+| Type chart                        | `type_multiplier(girl, boss) -> float`. Comes from girl tags or a separate girl "type"? TBD.                                                                  |
+| `BossTestScene`                 | Drop 3`GirlData` files in the Inspector, press F6, watch. First thing to build after the data model.                                                          |
+| Win/lose screen                   | TBD. Should show*why* (which synergy carried, who fell first).                                                                                                |
 
 ## Art needed
 
-| Asset | Used by | Status |
-|---|---|---|
-| Boss art per boss (idle, attack, hurt, defeated) | `BossScene` | TBD |
-| Boss preview card | Calendar header from day 1, pre-fight screen | TBD |
-| Arena background per life event | `BossScene` | TBD |
-| Girls' pixel sprites: idle, attack, hurt, knocked out | Lineup in `BossScene` | Not yet animated (see [girls.md](girls.md)) |
-| Hit numbers, ability procs, type-advantage flash | `BossScene` | TBD |
-| Lineup slots ×3 | Party screen and `BossScene` | TBD |
-| Win / lose screen | End of fight | TBD |
+| Asset                                                 | Used by                                      | Status                                    |
+| ----------------------------------------------------- | -------------------------------------------- | ----------------------------------------- |
+| Boss art per boss (idle, attack, hurt, defeated)      | `BossScene`                                | TBD                                       |
+| Boss preview card                                     | Calendar header from day 1, pre-fight screen | TBD                                       |
+| Arena background per life event                       | `BossScene`                                | TBD                                       |
+| Girls' pixel sprites: idle, attack, hurt, knocked out | Lineup in`BossScene`                       | Not yet animated (see[girls.md](girls.md)) |
+| Hit numbers, ability procs, type-advantage flash      | `BossScene`                                | TBD                                       |
+| Lineup slots ×3                                      | Party screen and`BossScene`                | TBD                                       |
+| Win / lose screen                                     | End of fight                                 | TBD                                       |
 
 ## Systems it's part of
 
