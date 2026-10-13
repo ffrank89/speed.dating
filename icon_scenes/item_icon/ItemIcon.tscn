@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c77gxw31pa8rp"]
+
+[ext_resource type="SpriteFrames" uid="uid://bktv6xy40058p" path="res://icon_scenes/item_icon/item_icon.tres" id="1_0y7md"]
+[ext_resource type="Script" path="res://icon_scenes/item_icon/item_icon.gd" id="2_op3wu"]
+
+[node name="ItemIcon" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_0y7md")
+animation = &"new_animation"
+script = ExtResource("2_op3wu")
