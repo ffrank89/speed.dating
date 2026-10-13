@@ -11,7 +11,7 @@ signal action_selected(action_data)
 
 # Game state
 var current_day = 0
-var current_month = 0 # January
+var current_month = 1 # January (1-based, matches PlayerManager)
 var month_names = ["January", "February", "March", "April", "May", "June", 
 				"July", "August", "September", "October", "November", "December"]
 
@@ -28,6 +28,7 @@ func _ready():
 	var player_manager = get_node_or_null("/root/PlayerManager")
 	if player_manager:
 		current_day = player_manager.current_day
+		current_month = player_manager.current_month
 		print("Calendar initialized with day:", current_day)
 	
 	# Update calendar to reflect current state
@@ -62,10 +63,9 @@ func generate_available_actions():
 
 func update_calendar():
 	# Update month title
-	var calendar_path = "res://assets/" + month_names[current_month-1].to_lower() + "_calendar.png"
-	var texture = load(calendar_path)
-	if texture:
-		calendar_image.texture = texture
+	var calendar_path = "res://assets/" + month_names[current_month-1].to_lower() + ".png"
+	if ResourceLoader.exists(calendar_path):
+		calendar_image.texture = load(calendar_path)
 	
 	# Generate available actions for the right days
 	generate_available_actions()

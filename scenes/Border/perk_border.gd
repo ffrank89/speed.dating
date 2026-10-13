@@ -37,6 +37,10 @@ func _ready():
 	# Initialize slot arrays
 	initialize_slot_arrays()
 	
+	# Perks added before this scene loaded (e.g. by PlayerManager._ready)
+	for perk in player_manager.perks:
+		add_perk(perk)
+	
 
 func initialize_slot_arrays():
 	

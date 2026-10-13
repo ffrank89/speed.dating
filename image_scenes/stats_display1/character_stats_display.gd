@@ -3,7 +3,7 @@ extends Control
 
 # References
 var character: DateCharacter
-@onready var stats_container = $StatsContainer
+@onready var stats_container = get_node_or_null("StatsContainer")
 
 # Constants for appearance
 const STAT_FONT_SIZE = 16

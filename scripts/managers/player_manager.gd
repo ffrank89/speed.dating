@@ -44,7 +44,7 @@ func add_item(item: InventoryItem) -> bool:
 
 # Add date to party
 func add_date(date: DateCharacter) -> bool:
-	if date:
+	if date and not date in party:
 		party.append(date)
 		print("Added date to party: ", date.name)
 		return true
@@ -132,5 +132,6 @@ func calendar_action(action):
 	# Advance the day for the next time the calendar is opened
 	advance_day()
 	
-	# Change to the action scene
-	get_tree().change_scene_to_file(action[0].scene)
+	# Change to the action scene (rest days have no scene, so stay on the calendar)
+	var scene_path = action[0].scene if action[0].scene != "" else CALENDAR
+	get_tree().change_scene_to_file(scene_path)

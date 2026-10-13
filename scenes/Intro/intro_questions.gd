@@ -15,7 +15,7 @@ var player_stats = {
 @onready var title_label = $TitleLabel
 @onready var stats_container = $StatsInputContainer
 @onready var start_button = $FinalScreen/StartDatingButton
-@onready var split_ends_sprite_container = $SplitEndsSprite2
+@onready var split_ends_sprite_container = $SplitEndsSpriteContainer
 
 # Sliders for each stat
 var stat_sliders = {}

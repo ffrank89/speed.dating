@@ -9,7 +9,6 @@ var score_calculator: ScoreCalculator
 
 # References to UI elements
 @onready var player_panel = $PlayerPanel
-@onready var dialogue_panel = $DialoguePanel
 @onready var compatibility_meter = $CompatibilityMeter
 @onready var dialogue_ui = $DialogueDataUI
 @onready var option_ui = $DialogueOptionUI
@@ -23,6 +22,9 @@ var score_calculator: ScoreCalculator
 var compatibility_score: float = 0.0
 
 var date_score: float = 0.0
+
+# Set once end_date() runs so late clicks during the fade can't end the date again
+var date_over: bool = false
 
 func _ready() -> void:
 	player_manager = get_node_or_null("/root/PlayerManager")
@@ -57,8 +59,6 @@ func _on_bunny_gif_clicked():
 func setup_player() -> void:
 	# Set up player in the global manager
 	if player_manager:
-		#TODO change how we do this, shouldnt be intitializing and updating like this
-		player_manager.initialize_perks()
 		inventory_ui.update_inventory(player_manager.get_inventory())
 		party_ui.update_party(player_manager.get_party())
 		player = player_manager.player
@@ -113,8 +113,7 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 		child.queue_free()
 		
 	# Create new dialogue elements
-	var response = dialogue_ui.create_dates_response(dialogue)
-	dialogue_ui.add_child(response)
+	dialogue_ui.create_dates_response(dialogue)
 	
 	# Add the dialogue text to the history
 	dialogue_history.add_message(dialogue.text, current_date.name)
@@ -123,6 +122,8 @@ func _on_dialogue_started(dialogue: DialogueData) -> void:
 	option_ui.display_options(dialogue.options)
 
 func _on_option_selected(option: DialogueOption) -> void:
+	if date_over:
+		return
 	# Add the player's choice to the dialogue history
 	dialogue_history.add_message(option.hint_text, player.name)
 	
@@ -229,6 +230,9 @@ func check_success(player_score: float, success_threshold: float):
 
 
 func end_date() -> void:
+	if date_over:
+		return
+	date_over = true
 
 	check_success(date_score, current_date.success_threshold)
 	# Animate transition to calendar scene
