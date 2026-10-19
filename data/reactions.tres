@@ -1,0 +1,93 @@
+[gd_resource type="SpriteFrames" load_steps=18 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/anger icon/anger1.png" id="1_iq2xi"]
+[ext_resource type="Texture2D" path="res://assets/anger icon/anger2.png" id="2_qjagn"]
+[ext_resource type="Texture2D" path="res://assets/anger icon/anger3.png" id="3_hfdct"]
+[ext_resource type="Texture2D" path="res://assets/exclamation point gif/surprise1.png" id="4_g34rm"]
+[ext_resource type="Texture2D" path="res://assets/exclamation point gif/surprise2.png" id="5_f87wc"]
+[ext_resource type="Texture2D" path="res://assets/exclamation point gif/surprise3.png" id="6_4hwv4"]
+[ext_resource type="Texture2D" path="res://assets/exclamation point gif/surprise4.png" id="7_cndx4"]
+[ext_resource type="Texture2D" path="res://assets/love stat/love react1.png" id="8_imkxr"]
+[ext_resource type="Texture2D" path="res://assets/love stat/love react2.png" id="9_l402d"]
+[ext_resource type="Texture2D" path="res://assets/love stat/love react3.png" id="10_kjkch"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark1.png" id="11_6u3cl"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark2.png" id="12_5irjm"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark3.png" id="13_tjv4q"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark4.png" id="14_u8okj"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark5.png" id="15_uterw"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark6.png" id="16_n0jrj"]
+[ext_resource type="Texture2D" path="res://assets/question mark gif/qmark7.png" id="17_ajp1w"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_iq2xi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_qjagn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hfdct")
+}],
+"loop": true,
+"name": &"anger",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_g34rm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f87wc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_4hwv4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_cndx4")
+}],
+"loop": true,
+"name": &"exclamation",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_imkxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_l402d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_kjkch")
+}],
+"loop": true,
+"name": &"heart",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_6u3cl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_5irjm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_tjv4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_u8okj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_uterw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_n0jrj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ajp1w")
+}],
+"loop": true,
+"name": &"question",
+"speed": 8.0
+}]

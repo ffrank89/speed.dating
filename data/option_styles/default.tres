@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="OptionListStyle" load_steps=12 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/culture stat gif/culturestat.png" id="1_lwrlb"]
+[ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="2_en2jh"]
+[ext_resource type="Texture2D" path="res://assets/lovestat gif/lovestat.png" id="3_cgiyp"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/roll_hit.wav" id="4_avmjk"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/option_hover.wav" id="5_vxsn7"]
+[ext_resource type="Texture2D" path="res://assets/ui/attributes/intellect_placeholder.png" id="6_x8ou3"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/roll_miss.wav" id="7_j80w3"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/roll_tick.wav" id="8_vcr8x"]
+[ext_resource type="Script" path="res://scripts/data/option_list_style.gd" id="9_jpbsd"]
+[ext_resource type="Texture2D" path="res://assets/ui/attributes/seduction_placeholder.png" id="10_5cssd"]
+[ext_resource type="AudioStream" path="res://assets/audio/clicks/clickApr42025.ogg" id="11_5idl3"]
+
+[resource]
+script = ExtResource("9_jpbsd")
+button_color = Color(0.07, 0.08, 0.1, 0.9)
+hover_color = Color(0.16, 0.18, 0.24, 0.95)
+outline_color = Color(1, 1, 1, 0.7)
+hover_outline_color = Color(1, 1, 1, 1)
+outline_width = 3
+corner_radius = 18
+padding = 22
+spacing = 16
+hover_slide = 18
+font = ExtResource("2_en2jh")
+font_size = 38
+text_color = Color(1, 1, 1, 1)
+check_color = Color(1, 1, 1, 0.65)
+show_number_keys = true
+number_key_color = Color(1, 1, 1, 0.45)
+risky_outline_color = Color(1, 0.701961, 0.278431, 1)
+badge_color = Color(1, 0.701961, 0.278431, 1)
+badge_text_color = Color(0.164706, 0.101961, 0.0196078, 1)
+roll_seconds = 1.1
+hit_color = Color(0.298039, 0.831373, 0.478431, 1)
+miss_color = Color(1, 0.352941, 0.352941, 1)
+hit_text = "HIT"
+miss_text = "MISS"
+culture_icon = ExtResource("1_lwrlb")
+intellect_icon = ExtResource("6_x8ou3")
+seduction_icon = ExtResource("10_5cssd")
+heart_icon = ExtResource("3_cgiyp")
+icon_size = 64
+hover_sound = ExtResource("5_vxsn7")
+select_sound = ExtResource("11_5idl3")
+roll_tick_sound = ExtResource("8_vcr8x")
+hit_sound = ExtResource("4_avmjk")
+miss_sound = ExtResource("7_j80w3")
+volume_db = -6.0

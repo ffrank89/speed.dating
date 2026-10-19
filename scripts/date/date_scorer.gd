@@ -1,0 +1,67 @@
+class_name DateScorer
+extends RefCounted
+## The one score for a date. Works out each option's odds, rolls risky ones,
+## and adds up the points. The numbers it uses live in DateRules.
+##
+##   points if it lands = value × (1 + her like for the attribute × likes_weight)
+##   chance             = 100% at or above the requirement, else
+##                        attribute ÷ requirement, clamped to min/max chance
+##   points if it misses = −max(points × miss_penalty, min_miss_cost)
+
+## What happened when an option was picked.
+class Result:
+	var option: DateOption
+	## True when the option needed a roll (player was below the requirement).
+	var rolled := false
+	## 0-100. The chance it had of landing.
+	var chance := 100
+	## 1-100. What was rolled; the option lands if roll <= chance.
+	var roll := 0
+	var hit := true
+	var points := 0.0
+
+var rules: DateRules
+var girl: GirlData
+## Attr.Id -> the player's attribute value (0-100).
+var attributes: Dictionary = {}
+var score := 0.0
+var rng := RandomNumberGenerator.new()
+
+
+func _init(p_rules: DateRules, p_girl: GirlData, p_attributes: Dictionary) -> void:
+	rules = p_rules
+	girl = p_girl
+	attributes = p_attributes
+	rng.randomize()
+
+
+## 0-100: the chance this option lands, as shown on its button.
+func chance_of(option: DateOption) -> int:
+	if not option.has_check() or option.requirement <= 0:
+		return 100
+	var have: int = attributes.get(option.attribute, 0)
+	if have >= option.requirement:
+		return 100
+	var percent := int(floor(100.0 * have / option.requirement))
+	return clampi(percent, rules.min_chance, rules.max_chance)
+
+
+## What the option earns if it lands, after her likes.
+func points_if_hit(option: DateOption) -> float:
+	var like := girl.likes(option.attribute) if option.has_check() else 0.0
+	return option.value * (1.0 + like * rules.likes_weight)
+
+
+## Picks the option: rolls if needed, adds the points to the score, and says what happened.
+func resolve(option: DateOption) -> Result:
+	var result := Result.new()
+	result.option = option
+	result.chance = chance_of(option)
+	result.rolled = result.chance < 100
+	if result.rolled:
+		result.roll = rng.randi_range(1, 100)
+		result.hit = result.roll <= result.chance
+	var earned := points_if_hit(option)
+	result.points = earned if result.hit else -maxf(absf(earned) * rules.miss_penalty, rules.min_miss_cost)
+	score += result.points
+	return result

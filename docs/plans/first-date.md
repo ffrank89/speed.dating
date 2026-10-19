@@ -84,7 +84,16 @@ scroll-back history log (M4).
 **Done when:** her lines type out letter by letter in her voice, pause at
 punctuation, can be skipped, and change her pose.
 
-### M2: Picking options
+### M2: Picking options ✅ Done (2026-10-19)
+
+Built: `OptionList` (keys 1–4, mouse, arrows; hover slide; % badge; spinning
+roll that lands on HIT/MISS), `DateScorer` with tunable `data/date_rules.tres`,
+`DateOption` tags (`#check=culture:40`, `#value=2`), `if hit` / `else` replies
+via `DateState`, and `[#react=…]` reactions (`ReactionIcon`,
+`data/reactions.tres`, moved here from M1). One shared option style
+(`data/option_styles/default.tres`). Placeholder art/audio: Intellect and
+Seduction icons, hover/tick/hit/miss sounds.
+Guide: [options-and-scoring.md](../guides/options-and-scoring.md).
 
 | Code | Art | Writing / audio |
 |---|---|---|

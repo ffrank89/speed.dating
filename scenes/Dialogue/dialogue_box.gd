@@ -14,6 +14,8 @@ extends Control
 signal line_started(line: DialogueLine)
 ## A line asked for a pose with a tag like [#pose=cig].
 signal pose_requested(speaker: GirlData, pose_name: String)
+## A line asked for a reaction with a tag like [#react=heart].
+signal reaction_requested(speaker: GirlData, reaction_name: String)
 ## A line ended in choices. Call choose(response) to continue.
 signal responses_ready(responses: Array)
 ## The dialogue reached its end.
@@ -25,6 +27,7 @@ signal finished
 @export var advance_action: StringName = &"ui_accept"
 
 var _resource: DialogueResource
+var _game_states: Array = []
 var _line: DialogueLine
 var _cast := {}  # display name -> GirlData
 var _style: DialogueBoxStyle
@@ -53,14 +56,16 @@ func _ready() -> void:
 
 
 ## Starts a dialogue file at a title (the "~ start" line). The cast is the girls in
-## this scene; their names must match the speaker names in the file.
-func start(resource: DialogueResource, title: String = "start", cast: Array[GirlData] = []) -> void:
+## this scene; their names must match the speaker names in the file. Game states are
+## objects whose properties the file can check, e.g. a DateState for "if hit".
+func start(resource: DialogueResource, title: String = "start", cast: Array[GirlData] = [], game_states: Array = []) -> void:
 	_resource = resource
+	_game_states = game_states
 	_cast.clear()
 	for girl in cast:
 		_cast[girl.display_name] = girl
 	show()
-	_show_line(await resource.get_next_dialogue_line(title))
+	_show_line(await resource.get_next_dialogue_line(title, _game_states))
 
 
 ## Finishes the current line, or moves to the next one if it's already finished.
@@ -72,12 +77,12 @@ func advance() -> void:
 		return
 	if not _line.responses.is_empty():
 		return
-	_show_line(await _resource.get_next_dialogue_line(_line.next_id))
+	_show_line(await _resource.get_next_dialogue_line(_line.next_id, _game_states))
 
 
 ## Continues the dialogue down the chosen response.
 func choose(response: DialogueResponse) -> void:
-	_show_line(await _resource.get_next_dialogue_line(response.next_id))
+	_show_line(await _resource.get_next_dialogue_line(response.next_id, _game_states))
 
 
 ## Restyles the box. Called automatically for each line's speaker.
@@ -134,6 +139,9 @@ func _show_line(line: DialogueLine) -> void:
 	var pose := line.get_tag_value("pose")
 	if speaker and not pose.is_empty():
 		pose_requested.emit(speaker, pose)
+	var reaction := line.get_tag_value("react")
+	if speaker and not reaction.is_empty():
+		reaction_requested.emit(speaker, reaction)
 	line_started.emit(line)
 
 	label.dialogue_line = line

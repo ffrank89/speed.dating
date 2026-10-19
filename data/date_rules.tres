@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="DateRules" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/date_rules.gd" id="1_ubkdo"]
+
+[resource]
+script = ExtResource("1_ubkdo")
+min_chance = 5
+max_chance = 95
+likes_weight = 1.0
+miss_penalty = 0.5
+min_miss_cost = 1.0

@@ -1,0 +1,45 @@
+# Test lines for picking options (milestone M2). Not her real first date.
+#
+# Option tags:  [#check=attribute:requirement, #value=points]
+#   attribute    culture, intellect, seduction or heart
+#   requirement  0-100. At or above it, the option always lands. Below it, the
+#                button shows your % chance.
+#   value        what the option is worth if it lands, -3 to 3.
+#                Leave out #check for an option with no roll.
+#
+# After an option, "if hit" / "else" picks her reply to a landed or missed option.
+# [#react=heart] shows a reaction above her: exclamation, question, anger or heart.
+
+~ start
+
+Split Ends: [#pose=reach] Okay. Speed round. My dad's boat has a name. Guess it.
+- Guess "The Unsinkable II". [#check=culture:40, #value=2]
+	if hit
+		Split Ends: [#pose=point, #react=exclamation] HOW did you know there was a first one?!
+	else
+		Split Ends: [#pose=parker, #react=question] ...There wasn't a first one. Now I'm sad.
+- Guess "Boat". [#value=1]
+	Split Ends: [#pose=hunched] Honestly? Respect.
+- Ask if she'll take you out on it sometime. [#check=seduction:70, #value=3]
+	if hit
+		Split Ends: [#pose=earring, #react=heart] ...Yeah. Okay. I'd like that.
+	else
+		Split Ends: [#pose=backshot, #react=anger] Whoa. Buy me a drink first, sailor.
+
+Split Ends: [#pose=cig] Next question. Are birds real?
+- Explain the government drone theory in detail. [#check=intellect:60, #value=3]
+	if hit
+		Split Ends: [#pose=point, #react=heart] Oh my GOD. You've read the zine.
+	else
+		Split Ends: [#pose=parker, #react=question] That's... not how batteries work.
+- Say you just think they're neat. [#check=heart:20, #value=2]
+	if hit
+		Split Ends: [#pose=reach] That's actually really sweet. Wrong, but sweet.
+	else
+		Split Ends: [#pose=hunched] Cool. Cool cool cool.
+- Say "Who cares?" [#value=-2]
+	Split Ends: [#pose=backshot, #react=anger] I care. Obviously.
+
+Split Ends: [#pose=reach] That's the end of the test lines. Press Restart to go again.
+
+=> END

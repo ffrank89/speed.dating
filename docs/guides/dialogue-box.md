@@ -208,7 +208,8 @@ Split Ends: Quick test. Are birds real?
 | `You: …` (or any name without a girl file) | Plain default box, no voice. |
 | `[#pose=cig]` | She switches to her `cig` pose. Pose names are in her girl file under **Art → Poses**. |
 | `[b]…[/b]`, `[i]…[/i]` | Bold, italics. |
-| `- An answer` | A choice for the player. Indent (Tab) the lines that follow it. |
+| `- An answer` | A choice for the player. Indent (Tab) the lines that follow it. Checks, odds and points are in the [options guide](options-and-scoring.md). |
+| `[#react=heart]` | A reaction pops up above her (see the [options guide](options-and-scoring.md#reactions)). |
 | `~ start` | Where the conversation begins. |
 | `=> END` | The conversation ends. |
 

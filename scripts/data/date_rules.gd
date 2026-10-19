@@ -1,0 +1,23 @@
+class_name DateRules
+extends Resource
+## The numbers that decide how dates score. One file: data/date_rules.tres.
+## Change them to make dates easier, harder, swingier or safer.
+## Full guide: docs/guides/options-and-scoring.md
+
+@export_group("Odds")
+## Lowest chance a risky option can show, in percent. Even a hopeless option gets this.
+@export_range(0, 100) var min_chance: int = 5
+## Highest chance an option below its requirement can show, in percent.
+## (At or above the requirement there's no roll: it always lands.)
+@export_range(0, 100) var max_chance: int = 95
+
+@export_group("Points")
+## How much her likes boost an option's points. An option is worth
+## value × (1 + her like for that attribute × Likes Weight).
+## 0 = her likes don't matter. 1 = an attribute she likes at 1.0 doubles the points.
+@export_range(0.0, 3.0, 0.05) var likes_weight: float = 1.0
+## How much a missed risky option costs, as a share of what it would have earned.
+## 0.5 = a +3 option that misses costs half as much (-1.5). 1.0 = it costs the full 3.
+@export_range(0.0, 2.0, 0.05) var miss_penalty: float = 0.5
+## A missed option always costs at least this many points.
+@export_range(0.0, 5.0, 0.5) var min_miss_cost: float = 1.0

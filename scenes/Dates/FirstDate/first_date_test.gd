@@ -7,6 +7,8 @@ extends Control
 @export var dialogue: DialogueResource
 ## Where in the dialogue file to start (the name after "~").
 @export var start_title: String = "start"
+## The scoring numbers (data/date_rules.tres).
+@export var rules: DateRules
 
 # Static so the sliders keep their values when the date restarts.
 static var attributes := {
@@ -18,14 +20,18 @@ static var attributes := {
 
 var _pose_names: Array[String] = []
 var _pose_index := 0
+var _scorer: DateScorer
+var _state := DateState.new()
 
 @onready var background: TextureRect = $Background
 @onready var portrait: GirlPortrait = $Portrait
+@onready var reaction_icon: ReactionIcon = $ReactionIcon
 @onready var dialogue_box: DialogueBox = $DialogueBox
+@onready var option_list: OptionList = $OptionList
 @onready var girl_label: Label = %GirlLabel
 @onready var status_label: Label = %StatusLabel
+@onready var score_label: Label = %ScoreLabel
 @onready var sliders: VBoxContainer = %Sliders
-@onready var choices: VBoxContainer = %Choices
 @onready var pose_button: Button = %PoseButton
 @onready var restart_button: Button = %RestartButton
 
@@ -35,7 +41,9 @@ func _ready() -> void:
 	pose_button.pressed.connect(_next_pose)
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	dialogue_box.pose_requested.connect(_on_pose_requested)
-	dialogue_box.responses_ready.connect(_show_choices)
+	dialogue_box.reaction_requested.connect(_on_reaction_requested)
+	dialogue_box.responses_ready.connect(func(responses: Array) -> void: option_list.show_options(responses, _scorer))
+	option_list.option_resolved.connect(_on_option_resolved)
 	dialogue_box.finished.connect(func() -> void: status_label.text = "Dialogue finished. Press Restart.")
 
 	if not girl:
@@ -47,13 +55,23 @@ func _ready() -> void:
 	background.texture = girl.date_background
 	_pose_names.assign(girl.poses.keys())
 	_show_pose(girl.default_pose)
+	_scorer = DateScorer.new(rules if rules else DateRules.new(), girl, attributes)
 
 	var lines := dialogue if dialogue else girl.first_date_dialogue
 	if lines:
-		status_label.text = "Click the box or press Space"
-		dialogue_box.start(lines, start_title, [girl])
+		status_label.text = "Click the box or press Space. Pick with 1-4."
+		dialogue_box.start(lines, start_title, [girl], [_state])
 	else:
 		status_label.text = "No dialogue: set 'dialogue' here or her First Date Dialogue"
+
+
+func _on_option_resolved(response: DialogueResponse, result: DateScorer.Result) -> void:
+	_state.hit = result.hit
+	_state.last_points = result.points
+	_state.score = _scorer.score
+	var roll := "rolled %d vs %d%%, %s" % [result.roll, result.chance, "hit" if result.hit else "miss"] if result.rolled else "no roll"
+	score_label.text = "Date score: %.1f   (last: %+.1f, %s)" % [_scorer.score, result.points, roll]
+	dialogue_box.choose(response)
 
 
 func _build_sliders() -> void:
@@ -98,15 +116,6 @@ func _on_pose_requested(speaker: GirlData, pose_name: String) -> void:
 		_show_pose(pose_name)
 
 
-# Temporary plain buttons for choices. Milestone M2 replaces these with styled options.
-func _show_choices(responses: Array) -> void:
-	for response: DialogueResponse in responses:
-		var button := Button.new()
-		button.text = response.text
-		button.focus_mode = Control.FOCUS_NONE
-		button.pressed.connect(func() -> void:
-			for child in choices.get_children():
-				child.queue_free()
-			dialogue_box.choose(response)
-		)
-		choices.add_child(button)
+func _on_reaction_requested(speaker: GirlData, reaction_name: String) -> void:
+	if speaker == girl:
+		reaction_icon.show_reaction(reaction_name)

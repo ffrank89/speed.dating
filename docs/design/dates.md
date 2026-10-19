@@ -43,8 +43,9 @@
 | Thing | Notes |
 |---|---|
 | `DateScene` (root `Control`) | Owns the turn loop. Replaces `dating_scene.gd`. |
-| `DateScorer` | **One** score per date. Replaces both `ScoreCalculator` and `DialogueManager`'s compatibility score. `score_option(option, attrs, girl) -> float`, then perks' `modify_score`. |
-| `check_risk(option, attrs) -> {chance, penalty}` | At or above the requirement: no roll. Below: `chance = attribute ÷ requirement`, clamped 5–95%, shown on the button. Miss = lose points + bad reaction. |
+| `DateScorer` | **Built (M2).** One score per date (`scripts/date/date_scorer.gd`): `chance_of`, `points_if_hit`, `resolve`. Points = value × (1 + her like × likes_weight); miss = −max(points × miss_penalty, min_miss_cost). Numbers in `data/date_rules.tres` (`DateRules`). Perks' `modify_score` hook still to come. |
+| Odds | **Built (M2).** At or above the requirement: no roll. Below: `chance = attribute ÷ requirement`, clamped 5–95%, shown on the button. |
+| `OptionList` + `DateOption` + `DateState` | **Built (M2).** Options parsed from response tags (`#check`, `#value`, `#microgame`); buttons styled by `OptionListStyle` (`data/option_styles/default.tres`); roll animation; `if hit` / `else` in dialogue via `DateState`. `ReactionIcon` plays `[#react=…]` from `data/reactions.tres`. Guide: [options-and-scoring.md](../guides/options-and-scoring.md). |
 | `score_to_affection(score, thresholds) -> int` | 0–3. |
 | `GirlPortrait` | **Built.** `scenes/Dates/Portrait/girl_portrait.gd`. Shows a `GirlPose` with its own scale (from her feet), offset and flip. Replaces the pose half of the old `DatePresenter`; reaction icons still to move (M2). |
 | `DialogueHistory`, `DialogueOptionUI`, `DialogueDataUI` | Exist. Keep the UI, swap the data source to Dialogue Manager. |
