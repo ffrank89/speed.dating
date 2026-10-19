@@ -1,15 +1,19 @@
-# PLACEHOLDER interface sounds
+# Interface sounds
 
-Computer-generated stand-ins. Replace them with real sounds.
+`kenney_interface_sounds/` is **Kenney's Interface Sounds** pack: 100 sounds,
+**CC0** (free for any use, including commercial; crediting Kenney is optional
+but appreciated). See its `LICENSE.txt`.
 
-| File | Plays when | Plugged in at |
+The option buttons use four of them:
+
+| Plays when | Sound | Plugged in at |
 |---|---|---|
-| `option_hover.wav` | The mouse moves onto a choice | `data/option_styles/default.tres` → Sounds → Hover Sound |
-| `roll_tick.wav` | Each spin of the % roll | `data/option_styles/default.tres` → Sounds → Roll Tick Sound |
-| `roll_hit.wav` | A risky option lands | `data/option_styles/default.tres` → Sounds → Hit Sound |
-| `roll_miss.wav` | A risky option misses | `data/option_styles/default.tres` → Sounds → Miss Sound |
+| The mouse moves onto a choice | `select_002.wav` | `data/option_styles/default.tres` → Sounds → Hover Sound |
+| Each spin of the % roll | `click_003.wav` | `data/option_styles/default.tres` → Sounds → Roll Tick Sound |
+| A risky option lands | `confirmation_001.wav` | `data/option_styles/default.tres` → Sounds → Hit Sound |
+| A risky option misses | `error_006.wav` | `data/option_styles/default.tres` → Sounds → Miss Sound |
 
-**Quickest way:** put your sound here with the same name, replacing the
-placeholder. Or drag your own file onto the slot listed above.
-
-Full steps: `docs/guides/replacing-placeholders.md`.
+**To try a different one:** click `data/option_styles/default.tres`, then drag
+any sound from this folder onto the slot. Good alternatives: hover
+`glass_005`, `select_001`; tick `click_002`, `tick_002`; hit
+`confirmation_003`, `maximize_003`; miss `error_008`, `minimize_001`.

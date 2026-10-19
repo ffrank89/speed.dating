@@ -48,3 +48,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0042](0042-per-girl-dialogue-style.md) | Each girl styles her own dialogue box | Accepted |
 | [0043](0043-shared-option-style.md) | The player's options share one look | Accepted |
 | [0044](0044-date-scoring-formula.md) | How options score | Accepted |
+| [0045](0045-microgames-overlay-handmade.md) | Microgames are overlays on the date, built by hand | Accepted |

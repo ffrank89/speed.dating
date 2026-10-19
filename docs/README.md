@@ -22,6 +22,8 @@ Auto Pets–style autobattle. You never fight yourself. Lose and the run is over
 The first build has 1 chapter, 1 boss, 3 girls with full art and about 3
 art-less test girls. Nothing carries over between runs yet.
 
+Third-party fonts, sounds and code are listed with their licences in [`CREDITS.md`](../CREDITS.md).
+
 ## How these docs are laid out
 
 | Folder | What's in it |

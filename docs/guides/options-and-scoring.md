@@ -130,9 +130,11 @@ date: the options are the player's voice, not hers.
 art that doesn't exist yet. Drag real art onto **Attribute Icons → Intellect
 Icon / Seduction Icon** to replace them. Square pictures work best.
 
-**Sounds:** the hover, tick, hit and miss sounds in `assets/audio/ui/` are
-generated placeholders. [Replacing placeholders](replacing-placeholders.md)
-lists each one and shows two ways to swap in real sounds.
+**Sounds:** hover, tick, hit and miss come from Kenney's Interface Sounds
+(CC0, `assets/audio/ui/kenney_interface_sounds/`). To try others, drag any
+sound from that folder onto the **Sounds** slots; its `README.md` suggests
+alternatives. [Replacing placeholders](replacing-placeholders.md) explains
+the two ways to swap a sound.
 
 **Where the options appear:** open `scenes/Dates/FirstDate/FirstDateTest.tscn`,
 click **OptionList** in the Scene panel, and drag it or change its size.

@@ -92,7 +92,7 @@ roll that lands on HIT/MISS), `DateScorer` with tunable `data/date_rules.tres`,
 via `DateState`, and `[#react=…]` reactions (`ReactionIcon`,
 `data/reactions.tres`, moved here from M1). One shared option style
 (`data/option_styles/default.tres`). Placeholders (see [replacing-placeholders.md](../guides/replacing-placeholders.md)): Intellect and
-Seduction icons, hover/tick/hit/miss sounds.
+Seduction icons (Godot logo). Option sounds: Kenney Interface Sounds (CC0).
 Guide: [options-and-scoring.md](../guides/options-and-scoring.md).
 
 | Code | Art | Writing / audio |
@@ -107,6 +107,12 @@ Guide: [options-and-scoring.md](../guides/options-and-scoring.md).
 and the score moves correctly (checked with the debug sliders).
 
 ### M3: Microgames
+
+> **How M3 is being built (2026-10-19):** Frank builds the microgames by
+> hand; Claude answers questions and gives guidance but doesn't write the
+> microgame code. A microgame is an **overlay on top of the date scene**
+> (her, the room and the dialogue stay underneath), not a separate scene
+> the game switches to. See [decision 0045](../decisions/0045-microgames-overlay-handmade.md).
 
 | Code | Art | Writing / audio |
 |---|---|---|
