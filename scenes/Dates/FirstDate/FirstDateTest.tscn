@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/Dates/FirstDate/first_date_test.gd" id="1_test"]
 [ext_resource type="Resource" path="res://data/girls/split_ends.tres" id="2_girl"]
+[ext_resource type="Resource" path="res://dialogue/split_ends/m1_test.dialogue" id="3_lines"]
+[ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="4_box"]
 
 [sub_resource type="Theme" id="Theme_debug"]
 default_font_size = 32
@@ -15,6 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_test")
 girl = ExtResource("2_girl")
+dialogue = ExtResource("3_lines")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -40,6 +43,9 @@ grow_horizontal = 2
 grow_vertical = 0
 expand_mode = 1
 stretch_mode = 5
+
+[node name="DialogueBox" parent="." instance=ExtResource("4_box")]
+layout_mode = 1
 
 [node name="DebugPanel" type="PanelContainer" parent="."]
 layout_mode = 0
@@ -68,6 +74,11 @@ text = "FIRST DATE TEST"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="StatusLabel" type="Label" parent="DebugPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+
 [node name="Sliders" type="VBoxContainer" parent="DebugPanel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -75,8 +86,14 @@ layout_mode = 2
 [node name="PoseButton" type="Button" parent="DebugPanel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 
 [node name="RestartButton" type="Button" parent="DebugPanel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 text = "Restart date"
+
+[node name="Choices" type="VBoxContainer" parent="DebugPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="DialogueBoxStyle" load_steps=3 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="1_5i1vk"]
+[ext_resource type="Script" path="res://scripts/data/dialogue_box_style.gd" id="2_sywyj"]
+
+[resource]
+script = ExtResource("2_sywyj")
+background_color = Color(0.07, 0.08, 0.1, 0.88)
+image_corner_size = 32
+outline_color = Color(1, 1, 1, 1)
+outline_width = 4
+corner_radius = 24
+padding = 44
+font = ExtResource("1_5i1vk")
+font_size = 46
+text_color = Color(1, 1, 1, 1)
+text_outline_width = 0
+text_outline_color = Color(0, 0, 0, 1)
+show_name_plate = true
+name_plate_color = Color(0.07, 0.08, 0.1, 0.95)
+name_plate_outline_color = Color(1, 1, 1, 1)
+name_color = Color(1, 1, 1, 1)
+name_font_size = 40
+next_arrow_color = Color(1, 1, 1, 1)

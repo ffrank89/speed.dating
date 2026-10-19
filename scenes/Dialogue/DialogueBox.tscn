@@ -1,0 +1,95 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/Dialogue/dialogue_box.gd" id="1_box"]
+[ext_resource type="Resource" path="res://data/dialogue_styles/default.tres" id="2_style"]
+[ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_label.gd" id="3_label"]
+[ext_resource type="Script" path="res://scripts/dialogue/voice_player.gd" id="4_voice"]
+
+[node name="DialogueBox" type="Control"]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 220.0
+offset_top = -480.0
+offset_right = -220.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_box")
+default_style = ExtResource("2_style")
+
+[node name="Box" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Text" type="RichTextLabel" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+shortcut_keys_enabled = false
+visible_characters_behavior = 1
+script = ExtResource("3_label")
+skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex")
+
+[node name="NamePlate" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 60.0
+offset_top = -84.0
+offset_right = 120.0
+offset_bottom = -4.0
+mouse_filter = 2
+
+[node name="NameLabel" type="Label" parent="NamePlate"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NextArrow" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -110.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="ArrowLabel" type="Label" parent="NextArrow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "▼"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArrowImage" type="TextureRect" parent="NextArrow"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VoicePlayer" type="Node" parent="."]
+script = ExtResource("4_voice")

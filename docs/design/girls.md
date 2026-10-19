@@ -43,7 +43,8 @@
 | Unlock | `unlock_requirement` (attribute or perk threshold, optional) | Tinder offer generator |
 | Full art | `poses: Dictionary[StringName, Texture2D]`, `date_background` | Date Scene (`DatePresenter`) |
 | Pixel art | `battle_sprites: SpriteFrames` (idle, attack, hurt, knocked_out) | Party panel, Boss Scene |
-| Dating | `preferences: Dictionary[Attr, float]`, `dialogue: DialogueResource`, `microgames: Array[PackedScene]`, `item_reactions`, `affection_thresholds: Array[int]` | Date Scene, Synergy |
+| Dialogue | `dialogue_style: DialogueBoxStyle` (box, outline, font, name plate), `voice: GirlVoice`, `first_date_dialogue: DialogueResource` | Date Scene (`DialogueBox`) |
+| Dating | `likes_culture` … `likes_heart` (0–1), `microgames: Array[PackedScene]`, `item_reactions`, `affection_thresholds: Array[int]` | Date Scene, Synergy |
 | Battle | `hp`, `attack`, `type: GirlType`, `barks` (per boss: crit and fumble lines) | Boss Scene |
 | Synergy | `tags: Array[TagData]` | Synergy |
 

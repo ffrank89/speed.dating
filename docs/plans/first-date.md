@@ -62,7 +62,16 @@ earring, hunched, parker, point, reach); `scenes/Dates/FirstDate/FirstDateTest.t
 **Done when:** F6 on `FirstDateTest.tscn` shows Split Ends and her
 background, and the debug sliders change the attributes.
 
-### M1: Dialogue box and voice
+### M1: Dialogue box and voice ✅ Done (2026-10-19)
+
+Built, beyond the original plan: every girl's **box, outline, font and name
+plate** come from a `DialogueBoxStyle` file in her GirlData's Dialogue section
+(`data/dialogue_styles/`), and a picture can replace the flat box. Fonts:
+Nunito (default) and Patrick Hand (Split Ends), both OFL. 26 generated
+placeholder letter sounds in `assets/audio/voice/default/`. Non-coder guide:
+[docs/guides/dialogue-box.md](../guides/dialogue-box.md).
+Moved to later milestones: `[#react=…]` reaction icons (M2) and the
+scroll-back history log (M4).
 
 | Code | Art | Writing / audio |
 |---|---|---|

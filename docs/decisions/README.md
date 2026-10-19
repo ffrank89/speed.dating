@@ -45,3 +45,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0039](0039-animalese-voice.md) | Girls 'speak' with Animalese-style letter sounds | Accepted |
 | [0040](0040-risk-shown-chance.md) | Options above your attribute show a % chance | Accepted |
 | [0041](0041-split-ends-first.md) | Split Ends is the first girl built | Accepted |
+| [0042](0042-per-girl-dialogue-style.md) | Each girl styles her own dialogue box | Accepted |

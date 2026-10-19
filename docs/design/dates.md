@@ -49,7 +49,7 @@
 | `DatePresenter` | Exists. Shows poses and reaction icons. Keep, feed from `GirlData`. |
 | `DialogueHistory`, `DialogueOptionUI`, `DialogueDataUI` | Exist. Keep the UI, swap the data source to Dialogue Manager. |
 | Dialogue Manager integration | **v3.10.5** (the Godot 4.4 version). Lines and options in `.dialogue` files. Tags: `[#pose=cig]`, `[#react=heart]` on her lines; `[#check=culture:40, #value=2, #microgame=light_cigarette]` on options. |
-| `DialogueBox` + `VoicePlayer` | Typewriter via the addon's `DialogueLabel`; `VoicePlayer` plays a letter sound on each `spoke` signal at the girl's pitch. `GirlVoice` resource: `pitch`, `pitch_variance`, `seconds_per_letter`, `volume_db`. |
+| `DialogueBox` + `VoicePlayer` | **Built (M1).** `scenes/Dialogue/DialogueBox.tscn`. Typewriter via the addon's `DialogueLabel`; restyles per speaker from her `DialogueBoxStyle` (box colour/outline or a 9-slice picture, font, name plate, next arrow). `VoicePlayer` plays a letter sound on each `spoke` signal. `GirlVoice`: `letter_sounds_folder`, `pitch`, `pitch_variance`, `seconds_per_letter`, `letters_per_sound`, `volume_db`. Guide: [dialogue-box.md](../guides/dialogue-box.md). |
 | Microgames ×3 for v1 | Each its own scene extending `Microgame`, playable alone via F6. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
 | Item reactions | Show an item → her reaction from `GirlData.item_reactions`. Flavor only in the first build. |
 | Turn count | Shared constant or per date type (first vs follow-up). TBD. |

@@ -2,25 +2,41 @@ class_name GirlData
 extends Resource
 ## Everything about a girl that's the same in every run.
 ## One .tres per girl (data/girls/), edited in the Inspector, so a new girl needs no code.
+## Hover any setting in the Inspector to see what it does.
 ## Per-run state (Affection, HP) will live in PartyMember, not here.
 
 @export_group("Identity")
+## Short internal name with no spaces, e.g. split_ends. Never shown to players.
 @export var id: StringName
+## Her name as players see it, on her profile and her name plate.
+## Dialogue lines must use exactly this name, e.g. "Split Ends: Hi!".
 @export var display_name: String
 @export var age: int = 0
+## Her dating-profile bio.
 @export_multiline var bio: String
+## Shown on her dating profile.
 @export var interests: Array[String] = []
 
 @export_group("Art")
-## Pose name -> full-art image. Her dialogue picks one with [#pose=name].
+## Her full-art poses. Each entry is a name and a picture. A dialogue line switches
+## pose with a tag, e.g. "Split Ends: [#pose=cig] Got a light?"
 @export var poses: Dictionary[String, Texture2D] = {}
-## Shown when a line names no pose, or a pose she doesn't have.
+## The pose shown when a line names no pose, or a pose she doesn't have.
 @export var default_pose: String
+## The picture behind her on dates.
 @export var date_background: Texture2D
 
-@export_group("Dating")
+@export_group("Dialogue")
+## How her dialogue box looks: colours, outline, font, name plate.
+## Drag a file from data/dialogue_styles/ here. Empty = the default style.
+@export var dialogue_style: DialogueBoxStyle
+## How she sounds while her text types out: pitch, speed, which letter sounds.
 @export var voice: GirlVoice
+## Her first-date script (a .dialogue file).
 @export var first_date_dialogue: DialogueResource
+
+@export_group("Dating")
+## Microgame scenes that can happen on her dates.
 @export var microgames: Array[PackedScene] = []
 ## Date score needed for 1, 2 and 3 hearts. Placeholder until scoring is tuned.
 @export var affection_thresholds: Array[int] = [3, 6, 9]

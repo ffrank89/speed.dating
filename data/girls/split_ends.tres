@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="GirlData" load_steps=12 format=3]
+[gd_resource type="Resource" script_class="GirlData" load_steps=13 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/bedroom1.png" id="1_ppwxq"]
 [ext_resource type="Texture2D" path="res://assets/splitends/splitends_backshot_updated.png" id="2_fwail"]
+[ext_resource type="Resource" path="res://data/dialogue_styles/split_ends.tres" id="2_wf6us"]
 [ext_resource type="Texture2D" path="res://assets/splitends/splitends_cig_updated.png" id="3_wf6us"]
 [ext_resource type="Texture2D" path="res://assets/splitends/splitends_earring_updated.png" id="4_mpoun"]
 [ext_resource type="Texture2D" path="res://assets/splitends/splitends_hunched_updated.png" id="5_hgqhe"]
@@ -13,9 +14,11 @@
 
 [sub_resource type="Resource" id="Resource_pl6gq"]
 script = ExtResource("10_p7plj")
+letter_sounds_folder = "res://assets/audio/voice/default"
 pitch = 1.25
 pitch_variance = 0.12
 seconds_per_letter = 0.035
+letters_per_sound = 2
 volume_db = -6.0
 
 [resource]
@@ -36,6 +39,7 @@ poses = Dictionary[String, Texture2D]({
 })
 default_pose = "reach"
 date_background = ExtResource("1_ppwxq")
+dialogue_style = ExtResource("2_wf6us")
 voice = SubResource("Resource_pl6gq")
 microgames = Array[PackedScene]([])
 affection_thresholds = Array[int]([3, 6, 9])

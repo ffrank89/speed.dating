@@ -1,0 +1,18 @@
+# Test lines for the dialogue box (milestone M1). Not her real first date.
+# Speaker names must match a girl's Display Name exactly ("Split Ends").
+# [#pose=name] switches her pose. Anyone without a girl file (like "You") gets the default box.
+
+~ start
+
+Split Ends: [#pose=reach] Oh my god, hi! You actually showed up.
+Split Ends: [#pose=point] I was SO sure you'd be a catfish. Like... ninety percent sure.
+Split Ends: [#pose=hunched] Sorry. I talk a [i]lot[/i] when I'm nervous. Is that weird?
+You: Not weird at all.
+Split Ends: [#pose=cig] Okay, good. Quick test. Are birds real?
+- Obviously.
+	Split Ends: [#pose=parker] Wow. Okay. They got to you too.
+- Absolutely not.
+	Split Ends: [#pose=earring] [b]FINALLY.[/b] Someone who gets it.
+Split Ends: [#pose=reach] That's the end of the test lines. Press Restart to hear them again.
+
+=> END

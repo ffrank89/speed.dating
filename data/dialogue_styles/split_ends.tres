@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="DialogueBoxStyle" load_steps=3 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/patrick_hand/PatrickHand-Regular.ttf" id="1_0fr20"]
+[ext_resource type="Script" path="res://scripts/data/dialogue_box_style.gd" id="2_dob8y"]
+
+[resource]
+script = ExtResource("2_dob8y")
+background_color = Color(0.945098, 0.960784, 0.823529, 0.960784)
+image_corner_size = 32
+outline_color = Color(0.847059, 0.207843, 0.168627, 1)
+outline_width = 6
+corner_radius = 40
+padding = 48
+font = ExtResource("1_0fr20")
+font_size = 56
+text_color = Color(0.164706, 0.227451, 0.101961, 1)
+text_outline_width = 0
+text_outline_color = Color(0, 0, 0, 1)
+show_name_plate = true
+name_plate_color = Color(0.847059, 0.207843, 0.168627, 1)
+name_plate_outline_color = Color(0.945098, 0.960784, 0.823529, 1)
+name_color = Color(1, 0.964706, 0.917647, 1)
+name_font_size = 48
+next_arrow_color = Color(0.847059, 0.207843, 0.168627, 1)
