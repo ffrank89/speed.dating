@@ -6,10 +6,12 @@
   one number: **Affection 0–3**. Affection 1+ means she joins the party; 0 on
   a first date means **she's gone for the run**.
 - **Each turn:**
-  1. She says a line and changes pose.
+  1. She says a line and changes pose. Letters type out one at a time, each
+     with a little sound in **her voice** (Animalese-style).
   2. You pick an option. Each option shows its attribute check. Options above
-     your attributes **stay clickable but are weaker or riskier**
-     (Disco Elysium–style). Perks can add or remove options.
+     your attributes **stay clickable but show a % chance** (Disco
+     Elysium–style): hit for the full reward, miss and lose points. Perks
+     can add or remove options.
   3. Some options start a **microgame**: a WarioWare-style test of a few
      seconds taken from the date itself (light her cigarette, catch her
      drink). It passes or fails.
@@ -42,12 +44,13 @@
 |---|---|
 | `DateScene` (root `Control`) | Owns the turn loop. Replaces `dating_scene.gd`. |
 | `DateScorer` | **One** score per date. Replaces both `ScoreCalculator` and `DialogueManager`'s compatibility score. `score_option(option, attrs, girl) -> float`, then perks' `modify_score`. |
-| `check_risk(option, attrs) -> {chance, penalty}` | How an over-your-head option behaves. Exact rule TBD (chance-based? reduced reward? both?). |
+| `check_risk(option, attrs) -> {chance, penalty}` | At or above the requirement: no roll. Below: `chance = attribute ÷ requirement`, clamped 5–95%, shown on the button. Miss = lose points + bad reaction. |
 | `score_to_affection(score, thresholds) -> int` | 0–3. |
 | `DatePresenter` | Exists. Shows poses and reaction icons. Keep, feed from `GirlData`. |
 | `DialogueHistory`, `DialogueOptionUI`, `DialogueDataUI` | Exist. Keep the UI, swap the data source to Dialogue Manager. |
-| Dialogue Manager integration | Lines and options in `.dialogue` files; options tagged with their attribute check and microgame (exact tag syntax TBD). |
-| Microgames ×3 for v1 | Each its own scene extending `Microgame`. Candidates: light her cigarette, catch her drink, TBD. Playable alone via F6. |
+| Dialogue Manager integration | **v3.10.5** (the Godot 4.4 version). Lines and options in `.dialogue` files. Tags: `[#pose=cig]`, `[#react=heart]` on her lines; `[#check=culture:40, #value=2, #microgame=light_cigarette]` on options. |
+| `DialogueBox` + `VoicePlayer` | Typewriter via the addon's `DialogueLabel`; `VoicePlayer` plays a letter sound on each `spoke` signal at the girl's pitch. `GirlVoice` resource: `pitch`, `pitch_variance`, `seconds_per_letter`, `volume_db`. |
+| Microgames ×3 for v1 | Each its own scene extending `Microgame`, playable alone via F6. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
 | Item reactions | Show an item → her reaction from `GirlData.item_reactions`. Flavor only in the first build. |
 | Turn count | Shared constant or per date type (first vs follow-up). TBD. |
 

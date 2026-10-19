@@ -41,3 +41,7 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0035](0035-fight-fiction-tbd.md) | The fight is literal for now; what it represents is TBD | Accepted |
 | [0036](0036-day-costs.md) | Actions cost different numbers of days | Accepted |
 | [0037](0037-phone-app-overlays.md) | Tinder and the party screen are phone apps over the calendar | Accepted |
+| [0038](0038-first-date-slice-first.md) | Build the first date before anything else | Accepted |
+| [0039](0039-animalese-voice.md) | Girls 'speak' with Animalese-style letter sounds | Accepted |
+| [0040](0040-risk-shown-chance.md) | Options above your attribute show a % chance | Accepted |
+| [0041](0041-split-ends-first.md) | Split Ends is the first girl built | Accepted |
