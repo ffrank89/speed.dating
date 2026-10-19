@@ -19,3 +19,5 @@ Hover over any setting to see what it does.
   letter sounds, poses, writing lines
 - `docs/guides/options-and-scoring.md`: writing options, odds, scoring,
   tuning, option buttons, reactions
+- `docs/guides/replacing-placeholders.md`: every placeholder picture (the
+  Godot logo) and sound, and how to swap in the real ones

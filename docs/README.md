@@ -28,7 +28,7 @@ art-less test girls. Nothing carries over between runs yet.
 |---|---|
 | [`design/core-loop.md`](design/core-loop.md) | **Start here.** The run from start to finish, how every module feeds the others, and the shared code all modules use. |
 | `design/<module>.md` | One file per module, all with the same four sections (below). |
-| [`guides/`](guides/) | How-tos for artists and writers, no code needed. [Dialogue box, fonts, voices and poses](guides/dialogue-box.md); [options, odds and scoring](guides/options-and-scoring.md). |
+| [`guides/`](guides/) | How-tos for artists and writers, no code needed. [Dialogue box, fonts, voices and poses](guides/dialogue-box.md); [options, odds and scoring](guides/options-and-scoring.md); [replacing placeholders](guides/replacing-placeholders.md). |
 | [`plans/`](plans/) | Build plans for what we're working on now. Current: [first date](plans/first-date.md). |
 | [`decisions/`](decisions/) | One short record per settled decision: what we chose, why, what we didn't pick, and when to revisit it. |
 

@@ -126,12 +126,13 @@ date: the options are the player's voice, not hers.
 | Sounds | Hover, pick, roll tick, hit and miss sounds, and volume |
 
 **Attribute icons:** Culture uses the statue and Heart the winged heart.
-**Intellect and Seduction are placeholders** (`assets/ui/attributes/…_placeholder.png`).
-Drag real art onto **Attribute Icons → Intellect Icon / Seduction Icon** to
-replace them. Square pictures work best.
+**Intellect and Seduction show the Godot logo**, which is the placeholder for
+art that doesn't exist yet. Drag real art onto **Attribute Icons → Intellect
+Icon / Seduction Icon** to replace them. Square pictures work best.
 
 **Sounds:** the hover, tick, hit and miss sounds in `assets/audio/ui/` are
-generated placeholders. Drag replacements onto the **Sounds** slots.
+generated placeholders. [Replacing placeholders](replacing-placeholders.md)
+lists each one and shows two ways to swap in real sounds.
 
 **Where the options appear:** open `scenes/Dates/FirstDate/FirstDateTest.tscn`,
 click **OptionList** in the Scene panel, and drag it or change its size.

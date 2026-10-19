@@ -91,7 +91,7 @@ roll that lands on HIT/MISS), `DateScorer` with tunable `data/date_rules.tres`,
 `DateOption` tags (`#check=culture:40`, `#value=2`), `if hit` / `else` replies
 via `DateState`, and `[#react=…]` reactions (`ReactionIcon`,
 `data/reactions.tres`, moved here from M1). One shared option style
-(`data/option_styles/default.tres`). Placeholder art/audio: Intellect and
+(`data/option_styles/default.tres`). Placeholders (see [replacing-placeholders.md](../guides/replacing-placeholders.md)): Intellect and
 Seduction icons, hover/tick/hit/miss sounds.
 Guide: [options-and-scoring.md](../guides/options-and-scoring.md).
 
@@ -174,6 +174,10 @@ Split Ends: [#pose=point] Okay so my dad's boat. It has a name. Guess it.
 ```
 
 (Exact tag spelling gets confirmed in M0 against the addon.)
+
+> **Placeholder rule (2026-10-19):** no generated art. Missing art uses the
+> Godot logo (`assets/placeholders/godot_logo.svg`) and is listed in
+> [replacing-placeholders.md](../guides/replacing-placeholders.md).
 
 ## Art needed: summary
 

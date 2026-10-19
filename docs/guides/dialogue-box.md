@@ -87,9 +87,10 @@ When a picture is set, Background Color is ignored. The outline is up to you:
 
 If the corners look squashed or blurry, raise Image Corner Size.
 
-**Try it:** `assets/ui/dialogue/example_sticker_frame.png` is a sample frame
-(240 × 160). Drag it onto Background Image, set Image Corner Size to **44**
-and Text Color to a dark colour, and press F6.
+**Try it** with any PNG you have. To see how the stretching works before
+real art exists, drag the placeholder `assets/placeholders/godot_logo.svg`
+onto Background Image and set Image Corner Size to about **20**. It will look
+odd (a logo isn't a frame), but it shows which parts stretch.
 
 ## Change her font
 
@@ -140,7 +141,8 @@ by pitch and speed.
 ## Replace the letter sounds with real recordings
 
 The sounds in `assets/audio/voice/default/` are generated placeholders.
-To replace them:
+(Every placeholder, and two ways to replace each, is listed in
+[replacing-placeholders.md](replacing-placeholders.md).) To replace them:
 
 1. Record 26 very short sounds, one per letter: a quick syllable like
    "ah", "bee", "see"… Keep each one **under 0.12 seconds**, with **no
