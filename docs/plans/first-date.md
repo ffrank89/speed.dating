@@ -113,6 +113,14 @@ and the score moves correctly (checked with the debug sliders).
 > microgame code. A microgame is an **overlay on top of the date scene**
 > (her, the room and the dialogue stay underneath), not a separate scene
 > the game switches to. See [decision 0045](../decisions/0045-microgames-overlay-handmade.md).
+>
+> Settled with Frank: **Light her cigarette** first. A microgame **replaces
+> the % roll** for its option (pass = hit, fail = miss; the attribute sets
+> difficulty instead of odds). Each lasts **5 seconds**. **Mouse and keyboard
+> both work**, for every input. The banner, timer bar and NICE/OOPS stamp
+> are **one shared frame** used by every microgame, but **modular**: its look
+> lives in a style file and each microgame can set its own banner text and
+> length. See [decision 0046](../decisions/0046-microgame-replaces-roll.md).
 
 | Code | Art | Writing / audio |
 |---|---|---|
