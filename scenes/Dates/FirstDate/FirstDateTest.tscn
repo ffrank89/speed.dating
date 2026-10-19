@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scenes/Dates/FirstDate/first_date_test.gd" id="1_test"]
 [ext_resource type="Resource" path="res://data/girls/split_ends.tres" id="2_girl"]
 [ext_resource type="Resource" path="res://dialogue/split_ends/m1_test.dialogue" id="3_lines"]
 [ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="4_box"]
+[ext_resource type="Script" path="res://scenes/Dates/Portrait/girl_portrait.gd" id="5_portrait"]
 
 [sub_resource type="Theme" id="Theme_debug"]
 default_font_size = 32
@@ -29,7 +30,7 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Portrait" type="TextureRect" parent="."]
+[node name="Portrait" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -41,8 +42,8 @@ offset_top = -1600.0
 offset_right = 650.0
 grow_horizontal = 2
 grow_vertical = 0
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
+script = ExtResource("5_portrait")
 
 [node name="DialogueBox" parent="." instance=ExtResource("4_box")]
 layout_mode = 1

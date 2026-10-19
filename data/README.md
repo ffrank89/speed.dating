@@ -6,7 +6,7 @@ Hover over any setting to see what it does.
 
 | Folder | What's in it |
 |---|---|
-| `girls/` | One file per girl: name, bio, poses, background, dialogue style, voice and lines. |
+| `girls/` | One file per girl: name, bio, poses (each with its own size, nudge and flip), background, dialogue style, voice and lines. |
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
 
 **Try your change:** open `scenes/Dates/FirstDate/FirstDateTest.tscn` and press **F6**.

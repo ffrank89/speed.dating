@@ -32,6 +32,7 @@ var _arrow_tween: Tween
 var _arrow_rest_y := 0.0
 
 @onready var box: PanelContainer = $Box
+@onready var outline: Panel = $Outline
 @onready var label: DialogueLabel = %Text
 @onready var name_plate: PanelContainer = $NamePlate
 @onready var name_label: Label = %NameLabel
@@ -85,6 +86,10 @@ func apply_style(style: DialogueBoxStyle) -> void:
 		return
 	_style = style
 	box.add_theme_stylebox_override("panel", style.make_box())
+	var line := style.make_outline()
+	outline.visible = line != null
+	if line:
+		outline.add_theme_stylebox_override("panel", line)
 	name_plate.add_theme_stylebox_override("panel", style.make_name_plate())
 
 	var font := _font_or_default(style.font)

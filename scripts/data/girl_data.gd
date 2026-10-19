@@ -18,9 +18,9 @@ extends Resource
 @export var interests: Array[String] = []
 
 @export_group("Art")
-## Her full-art poses. Each entry is a name and a picture. A dialogue line switches
-## pose with a tag, e.g. "Split Ends: [#pose=cig] Got a light?"
-@export var poses: Dictionary[String, Texture2D] = {}
+## Her full-art poses. Each entry is a name and a pose (picture, size, nudge, flip).
+## A dialogue line switches pose with a tag, e.g. "Split Ends: [#pose=cig] Got a light?"
+@export var poses: Dictionary[String, GirlPose] = {}
 ## The pose shown when a line names no pose, or a pose she doesn't have.
 @export var default_pose: String
 ## The picture behind her on dates.
@@ -49,7 +49,8 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var likes_heart: float = 0.25
 
 
-func get_pose(pose_name: String) -> Texture2D:
+## The named pose, or her default pose if she doesn't have one by that name.
+func get_pose(pose_name: String) -> GirlPose:
 	if poses.has(pose_name):
 		return poses[pose_name]
 	return poses.get(default_pose)

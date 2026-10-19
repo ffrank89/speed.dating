@@ -40,6 +40,16 @@ visible_characters_behavior = 1
 script = ExtResource("3_label")
 skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex")
 
+[node name="Outline" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="NamePlate" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_left = 60.0

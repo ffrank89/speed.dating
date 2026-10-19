@@ -1,4 +1,4 @@
-# Changing a girl's dialogue box, font and voice
+# Changing a girl's dialogue box, font, voice and poses
 
 For artists and writers. **No code needed**: everything here is done by
 clicking files in Godot's **FileSystem** panel (bottom left) and changing
@@ -16,7 +16,7 @@ Inspector to see a short explanation of what it does.
 
 | What | Where | What it controls |
 |---|---|---|
-| **Her girl file** | `data/girls/split_ends.tres` | Everything about her. The **Dialogue** section points at her style, voice and lines. |
+| **Her girl file** | `data/girls/split_ends.tres` | Everything about her. **Art → Poses** holds her poses and their sizes; the **Dialogue** section points at her style, voice and lines. |
 | **Dialogue styles** | `data/dialogue_styles/` | How a dialogue box looks. `default.tres` is used for anyone without their own (including the player). |
 | **Fonts** | `assets/fonts/` | One folder per font, with its licence file next to it. |
 | **Letter sounds** | `assets/audio/voice/default/` | The 26 sounds her voice is made of: `a.wav` … `z.wav`. |
@@ -78,8 +78,14 @@ middle stretches to fill:
 └────┴──────────────┴────┘
 ```
 
-When a picture is set, Background Color and Outline are ignored. If the
-corners look squashed or blurry, raise Image Corner Size.
+When a picture is set, Background Color is ignored. The outline is up to you:
+
+| Keep Outline With Image | Result |
+|---|---|
+| Off (default) | The picture is the whole box. Draw any border into the picture itself. |
+| On | The outline (Outline Color, Outline Width) is drawn on top of the picture. Set **Corner Radius** to match the picture's rounded corners, or the outline and the picture won't line up. |
+
+If the corners look squashed or blurry, raise Image Corner Size.
 
 **Try it:** `assets/ui/dialogue/example_sticker_frame.png` is a sample frame
 (240 × 160). Drag it onto Background Image, set Image Corner Size to **44**
@@ -151,6 +157,30 @@ always silent.
 
 ---
 
+## Her poses: size, position and flip
+
+Each pose has its own settings, so a picture drawn bigger, smaller or
+off-centre can be fixed here without re-exporting the art.
+
+1. Click her girl file (`data/girls/split_ends.tres`) and open **Art → Poses**.
+2. Each entry is a pose name (e.g. `cig`) and a pose. Click the pose to
+   expand it.
+
+| Setting | What it does |
+|---|---|
+| Image | The picture for this pose. Drag a PNG here. |
+| Scale | Size of this pose. 1.0 = normal, 1.2 = 20% bigger, 0.8 = 20% smaller. She grows and shrinks from her **feet**, so she stays standing on the same spot. |
+| Offset | Nudge her, in pixels. **X**: positive moves right, negative left. **Y**: positive moves down, negative up. |
+| Flip | Mirror her left-to-right. |
+
+To **add a pose**: in Poses, click **Add Key/Value Pair**, type the name in
+the left box, then in the right box choose **New GirlPose**, expand it and
+drag the picture onto Image. Lines can use it straight away with
+`[#pose=yourname]`.
+
+**Tip:** compare poses quickly with the **Pose: … (next)** button in the
+test scene (F6). It flips through all of her poses in order.
+
 ## Writing her lines
 
 Lines live in `.dialogue` files (e.g. `dialogue/split_ends/m1_test.dialogue`).
@@ -194,14 +224,23 @@ The full writing reference is the Dialogue Manager addon's own
 | Her box is the plain dark one | The speaker name in the line doesn't match her **Display Name** exactly, or her **Dialogue Style** slot is empty. |
 | No voice | Check **Letter Sounds Folder** points at a folder with `a.wav` … `z.wav`, and Volume Db isn't very low. |
 | She doesn't change pose | The pose name in `[#pose=…]` must match a name in her **Poses** list. A wrong name shows her default pose. |
+| She's too big or small in one pose | Change that pose's **Scale** (Art → Poses → the pose). |
+| One pose sits off to the side or floats | Change that pose's **Offset**. Negative Y moves her up, positive moves her down. |
+| The outline and a picture box don't line up | Match **Corner Radius** to the picture's corners, or turn off **Keep Outline With Image**. |
 | Letters show as boxes | The font is missing those characters. Try another font. |
 | Picture box looks squashed | Raise **Image Corner Size**. |
 | Text runs off the bottom of the box | Lower **Font Size** or **Padding**, or split the line in two. |
 
 ## For programmers
 
+- `GirlPose` (`scripts/data/girl_pose.gd`) holds a pose's image, scale,
+  offset and flip. `GirlData.poses` is `Dictionary[String, GirlPose]`;
+  `get_pose(name)` falls back to `default_pose`.
+- `GirlPortrait` (`scenes/Dates/Portrait/girl_portrait.gd`) draws a pose
+  inside its own rect, scaling from bottom-centre. Reuse it anywhere she's shown.
 - `DialogueBoxStyle` (`scripts/data/dialogue_box_style.gd`) builds the
-  box's `StyleBox` from its settings in `make_box()`.
+  box's `StyleBox` in `make_box()`, and `make_outline()` returns the optional
+  outline drawn over a picture box (the `Outline` panel in `DialogueBox.tscn`).
 - `DialogueBox` (`scenes/Dialogue/`) restyles itself per line by matching
   `line.character` to the cast's `GirlData.display_name`.
 - `VoicePlayer` (`scripts/dialogue/voice_player.gd`) listens to the addon's

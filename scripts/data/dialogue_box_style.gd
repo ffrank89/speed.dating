@@ -17,11 +17,15 @@ extends Resource
 ## Only used with Background Image: how many pixels in from each edge of the picture
 ## are "frame" that must never stretch. Raise it if the corners look squashed.
 @export_range(0, 512) var image_corner_size: int = 32
+## Only used with Background Image: also draw the outline (colour, width and corner
+## radius below) on top of the picture. Off = the picture is the whole box.
+@export var keep_outline_with_image: bool = false
 ## Colour of the line around the box.
 @export var outline_color: Color = Color.WHITE
 ## Thickness of the line around the box, in pixels. 0 = no outline.
 @export_range(0, 40) var outline_width: int = 4
 ## How rounded the corners are, in pixels. 0 = square corners.
+## With a picture box and Keep Outline With Image, match this to the picture's corners.
 @export_range(0, 200) var corner_radius: int = 24
 ## Empty space between the edge of the box and the text, in pixels.
 @export_range(0, 200) var padding: int = 44
@@ -72,6 +76,16 @@ func make_box() -> StyleBox:
 	var flat := _flat(background_color, outline_color, corner_radius)
 	flat.set_content_margin_all(padding)
 	return flat
+
+
+## The outline drawn on top of a picture box, or null when there shouldn't be one.
+## (A flat box already includes its outline.)
+func make_outline() -> StyleBox:
+	if not background_image or not keep_outline_with_image or outline_width == 0:
+		return null
+	var line := _flat(Color.TRANSPARENT, outline_color, corner_radius)
+	line.draw_center = false
+	return line
 
 
 ## The name tab background, built from the settings above.

@@ -20,7 +20,7 @@ var _pose_names: Array[String] = []
 var _pose_index := 0
 
 @onready var background: TextureRect = $Background
-@onready var portrait: TextureRect = $Portrait
+@onready var portrait: GirlPortrait = $Portrait
 @onready var dialogue_box: DialogueBox = $DialogueBox
 @onready var girl_label: Label = %GirlLabel
 @onready var status_label: Label = %StatusLabel
@@ -88,7 +88,7 @@ func _next_pose() -> void:
 
 
 func _show_pose(pose_name: String) -> void:
-	portrait.texture = girl.get_pose(pose_name)
+	portrait.show_pose(girl.get_pose(pose_name))
 	_pose_index = maxi(_pose_names.find(pose_name), 0)
 	pose_button.text = "Pose: %s  (next)" % pose_name
 
