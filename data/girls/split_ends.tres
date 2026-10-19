@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="GirlData" load_steps=12 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/bedroom1.png" id="1_ppwxq"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_backshot_updated.png" id="2_fwail"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_cig_updated.png" id="3_wf6us"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_earring_updated.png" id="4_mpoun"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_hunched_updated.png" id="5_hgqhe"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_parker_updated.png" id="6_riqjt"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_point_updated.png" id="7_2uhp7"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_reach_update.png" id="8_jliqn"]
+[ext_resource type="Script" path="res://scripts/data/girl_data.gd" id="9_nssko"]
+[ext_resource type="Script" path="res://scripts/data/girl_voice.gd" id="10_p7plj"]
+
+[sub_resource type="Resource" id="Resource_pl6gq"]
+script = ExtResource("10_p7plj")
+pitch = 1.25
+pitch_variance = 0.12
+seconds_per_letter = 0.035
+volume_db = -6.0
+
+[resource]
+script = ExtResource("9_nssko")
+id = &"split_ends"
+display_name = "Split Ends"
+age = 24
+bio = "(pretending to be) reading books lol"
+interests = Array[String](["yapping", "birds are NOT real!!!", "Vintage shopping", "fixing up my dads boat ;P"])
+poses = Dictionary[String, Texture2D]({
+"backshot": ExtResource("2_fwail"),
+"cig": ExtResource("3_wf6us"),
+"earring": ExtResource("4_mpoun"),
+"hunched": ExtResource("5_hgqhe"),
+"parker": ExtResource("6_riqjt"),
+"point": ExtResource("7_2uhp7"),
+"reach": ExtResource("8_jliqn")
+})
+default_pose = "reach"
+date_background = ExtResource("1_ppwxq")
+voice = SubResource("Resource_pl6gq")
+microgames = Array[PackedScene]([])
+affection_thresholds = Array[int]([3, 6, 9])
+likes_culture = 0.2
+likes_intellect = 0.3
+likes_seduction = 0.3
+likes_heart = 0.2

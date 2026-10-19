@@ -2,7 +2,7 @@ extends Control
 
 var player: PlayerCharacter
 var current_date: DateCharacter
-var dialogue_manager: DialogueManager
+var dialogue_manager: LegacyDialogueManager
 var player_manager: PlayerManager
 var date_presenter: DatePresenter
 var score_calculator: ScoreCalculator
@@ -77,7 +77,7 @@ func setup_score_calculator() -> void:
 	score_calculator = ScoreCalculator.new()
 	
 func setup_dialogue() -> void:
-	dialogue_manager = DialogueManager.new()
+	dialogue_manager = LegacyDialogueManager.new()
 	add_child(dialogue_manager)
 	
 	# Connect dialogue signals

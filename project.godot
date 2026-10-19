@@ -18,12 +18,17 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 PlayerManager="*res://scripts/managers/player_manager.gd"
 MusicManager="*res://scripts/managers/music_manager.gd"
+DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 
 [display]
 
 window/size/viewport_width=3000
 window/size/viewport_height=1700
 window/size/resizable=false
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
 
 [rendering]
 

@@ -44,7 +44,13 @@ Opener (fixed) ─► 5 exchanges drawn at random from her pool ─► Closer �
 
 Each milestone ends with something you can press F6 on and judge.
 
-### M0: Setup
+### M0: Setup ✅ Done (2026-10-19)
+
+Built: Dialogue Manager v3.10.5 in `addons/` (the old `DialogueManager` class is
+renamed `LegacyDialogueManager` to free the name for the addon until M4 retires
+it); `scripts/data/` (`Attr`, `GirlData`, `GirlVoice`, `DateResult`);
+`data/girls/split_ends.tres` using the `_updated` art (7 poses: backshot, cig,
+earring, hunched, parker, point, reach); `scenes/Dates/FirstDate/FirstDateTest.tscn`.
 
 | Code | Art | Writing / audio |
 |---|---|---|

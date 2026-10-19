@@ -1,4 +1,4 @@
-class_name DialogueManager
+class_name LegacyDialogueManager
 extends Node
 
 signal dialogue_started(dialogue: DialogueData)
