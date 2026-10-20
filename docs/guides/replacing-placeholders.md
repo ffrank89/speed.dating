@@ -59,7 +59,7 @@ when you want to keep the placeholder around.
    `data/option_styles/default.tres`.
 3. In the Inspector, open the section (e.g. **Sounds**) and drag your file
    from FileSystem onto the slot (e.g. **Hit Sound**).
-4. Press **F6** in `scenes/Dates/FirstDate/FirstDateTest.tscn` to hear or see it.
+4. Press **F5** (the date test bench) to hear or see it.
 
 ---
 

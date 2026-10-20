@@ -4,9 +4,10 @@ For writers, artists and designers. **No code needed.** This covers the
 player's choices on a date: how to write them, how they're scored, how to
 tune the numbers, and how to change how the option bubbles look, move and sound.
 
-See your changes the usual way: open
-`scenes/Dates/FirstDate/FirstDateTest.tscn` and press **F6**. Drag the
-attribute sliders (top left) to see how the odds change.
+See your changes the usual way: press **F5** (the test bench,
+`scenes/Dates/FirstDate/FirstDateTest.tscn`). Drag the attribute sliders
+(top left) to see how the odds change. How the whole date is put together
+(opener, exchanges, closers) is in [the-full-date.md](the-full-date.md).
 
 ## How it works, in one picture
 
@@ -129,7 +130,7 @@ the edges.
 - A bubble **stops drifting while the mouse is over it**, so it's easy to click.
 - Keys **1–4** still pick, and the arrow keys then Space/Enter still work.
 
-**Where they float:** open `scenes/Dates/FirstDate/FirstDateTest.tscn` and
+**Where they float:** open the date scene, `scenes/Dates/Date/Date.tscn`, and
 click **OptionList**. Its rectangle is the area the bubbles stay inside. It
 fills the screen above the dialogue box; drag its edges to change that. To
 change it for every scene, edit `scenes/Dialogue/OptionList.tscn` instead.
@@ -193,7 +194,7 @@ Double-click it to open the **SpriteFrames** panel at the bottom of Godot.
 - **Change one:** select the animation (e.g. `heart`) and replace its frames.
 - **Add one:** click **Add Animation**, name it (e.g. `sweat`), drag its
   frames in, and set the speed. Writers can use `[#react=sweat]` straight away.
-- **Move them / resize them:** in the test scene, click **ReactionIcon**.
+- **Move them / resize them:** in the date scene (`scenes/Dates/Date/Date.tscn`), click **ReactionIcon**.
   Drag it to where reactions should appear, and change **Icon Scale** and
   **Seconds Shown** in the Inspector.
 
@@ -208,7 +209,7 @@ Double-click it to open the **SpriteFrames** panel at the bottom of Godot.
 | Number keys don't pick | Only options 1–4 have keys. Also, picks are ignored for a moment (**Input Delay** on OptionList) right after options appear, so players mashing Space don't pick by accident. |
 | Bubbles float over the dialogue box or off where I can't see them | Resize **OptionList** in the scene: bubbles stay inside its rectangle. |
 | Bubbles don't come from her head | Move **OptionsStart** in the scene, and check OptionList's **Start At** slot points at it. |
-| My girl's own option style isn't used | Check it's in her girl file's **Dialogue → Option Style** slot, and that she's the girl in the test scene's **Girl** slot. |
+| My girl's own option style isn't used | Check it's in her girl file's **Dialogue → Option Style** slot, and that she's the girl in the test bench's **Girl** slot (click the top node of `FirstDateTest.tscn`). |
 | Dragging a bubble picks it | Letting go on her picks it (that's on purpose). Away from her, it only picks if the mouse barely moved (under 12 pixels): drag further. |
 | Dropping on her doesn't pick | Let go with the **mouse pointer** over a drawn part of her (not the see-through space around her). Check OptionList's **Drop Target** is **Portrait** and **Drop On Her Picks** is on. Picks are also ignored for a moment after the bubbles appear (**Input Delay**). |
 

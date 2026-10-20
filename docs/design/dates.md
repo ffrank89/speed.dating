@@ -2,9 +2,11 @@
 
 ## Concept
 
-- A date is a **fixed number of turns** (10 today, to tune) that ends with
-  one number: **Affection 0–3**. Affection 1+ means she joins the party; 0 on
-  a first date means **she's gone for the run**.
+- A first date is an **opener, 5 exchanges (2 with a microgame) and a
+  closer** (tunable in `data/date_rules.tres` → Flow). It ends with her
+  contact card: **Affection 0–3 hearts**, or a **failed** date. If she gives
+  you her number (0 hearts or more) she joins the party; a failed first date
+  means **she's gone for the run**. Then it's back to the calendar.
 - **Each turn:**
   1. She says a line and changes pose. Letters type out one at a time, each
      with a little sound in **her voice** (Animalese-style).
@@ -42,7 +44,7 @@
 
 | Thing | Notes |
 |---|---|
-| `DateScene` (root `Control`) | Owns the turn loop. Replaces `dating_scene.gd`. |
+| `DateScene` (root `Control`) | **Built (M4).** `scenes/Dates/Date/Date.tscn` + `date_scene.gd`. Plans the date from her first-date file's titles (`~ opener`, 5 of `~ exchange_…` / `~ microgame_…` with 2 microgame ones, no repeats, then `~ closer_failed` / `~ closer_no_hearts` / `~ closer_hearts`), ends on her contact card, emits `DateResult` (`got_number`, `affection`), puts her in the party or marks her gone for the run (`PlayerManager.mark_gone`, the dating app skips her), and opens the calendar. Opened by the dating app; the test bench `FirstDateTest.tscn` wraps it with debug sliders. Guide: [the-full-date.md](../guides/the-full-date.md), decision [0053](../decisions/0053-full-date-flow.md). |
 | `DateScorer` | **Built (M2).** One score per date (`scripts/date/date_scorer.gd`): `chance_of`, `points_if_hit`, `resolve`. Points = value × (1 + her like × likes_weight); miss = −max(points × miss_penalty, min_miss_cost). Numbers in `data/date_rules.tres` (`DateRules`). Perks' `modify_score` hook still to come. |
 | Odds | **Built (M2).** At or above the requirement: no roll. Below: `chance = attribute ÷ requirement`, clamped 5–95%, shown on the button. |
 | `OptionList` + `DateOption` + `DateState` | **Built (M2).** Options parsed from response tags (`#check`, `#value`, `#microgame`); shown as floating bubbles (`OptionBubble`) that pop out above her head, drift, and can be dragged to drop a trail of attribute icons; dropping one on her picks it; styled by `OptionListStyle` (`data/option_styles/default.tres`, or her own **Option Style**), which has the same box options as her dialogue style; roll animation; `if hit` / `else` in dialogue via `DateState`. `ReactionIcon` plays `[#react=…]` from `data/reactions.tres`. Guide: [options-and-scoring.md](../guides/options-and-scoring.md). |
@@ -56,7 +58,7 @@
 | Microgames ×3 for v1 | Each its own scene extending `Microgame`, built by hand. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
 | `StageHazard` + `StageHazards` | **Built.** Things that turn up mid-date; dealing with one earns points and a reaction. First: the **fly** (`scenes/Hazards/Fly/`), which follows a random drawn path and is shooed off screen with the mouse. When it appears (after N answers, repeat, delay, chance) and the reward are Inspector settings. Guide: [stage-hazards.md](../guides/stage-hazards.md), decision [0050](../decisions/0050-stage-hazards.md). |
 | Item reactions | Show an item → her reaction from `GirlData.item_reactions`. Flavor only in the first build. |
-| Turn count | Shared constant or per date type (first vs follow-up). TBD. |
+| Turn count | First dates: `DateRules.exchanges` (5) and `microgame_exchanges` (2). Follow-ups TBD. |
 
 **Microgame contract**
 
@@ -85,7 +87,7 @@ the timer).
 | Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
 | Stage hazard art: the fly (and wing-flap frames), a buzz loop | `Fly.tscn` → Body/Sprite, Sounds → Buzz Sound | Not made. Godot logo placeholder. |
-| Date-end summary card (Affection hearts 0–3, gains, perks) | End of date, before returning to calendar | TBD |
+| ~~Date-end summary card~~ Her contact card ([0052](../decisions/0052-result-is-her-contact-card.md)): optional contact photo per girl, optional heart image | `ContactCard` | Works without art. Gains and perks: TBD |
 
 ## Systems it's part of
 

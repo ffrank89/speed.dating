@@ -7,10 +7,13 @@ Inspector to see a short explanation of what it does.
 
 ## See your changes
 
-1. In FileSystem, open `scenes/Dates/FirstDate/FirstDateTest.tscn`.
-2. Press **F6** (or the "Run Current Scene" button, top right).
-3. Click the dialogue box or press **Space** to move through her lines.
-4. Change something, close the game window, press F6 again.
+1. Press **F5** (or open `scenes/Dates/FirstDate/FirstDateTest.tscn`, the
+   test bench, and press **F6**). It plays a whole date.
+2. Click the dialogue box or press **Space** to move through her lines.
+3. Change something, close the game window, press F5 again.
+
+Her room, her portrait and the dialogue box sit in the date scene,
+`scenes/Dates/Date/Date.tscn`. Move things there.
 
 ## Where everything lives
 
@@ -181,13 +184,15 @@ drag the picture onto Image. Lines can use it straight away with
 `[#pose=yourname]`.
 
 **Tip:** compare poses quickly with the **Pose: … (next)** button in the
-test scene (F6). It flips through all of her poses in order.
+test bench (F5). It flips through all of her poses in order.
 
 ## Writing her lines
 
 Lines live in `.dialogue` files (e.g. `dialogue/split_ends/m1_test.dialogue`).
 Double-click one in Godot to edit it in the **Dialogue** tab, or use any
-text editor.
+text editor. Her first date is `dialogue/split_ends/first_date.dialogue`;
+how its titles (`~ opener`, `~ exchange_...`, closers) become a date is in
+[the-full-date.md](the-full-date.md).
 
 ```
 ~ start

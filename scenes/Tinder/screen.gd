@@ -96,6 +96,9 @@ func load_characters():
 	for char_class in character_classes:
 		print("load_characters char_class", char_class)
 		var character = char_class.create_default()
+		# A girl whose first date failed is gone for the run.
+		if get_node("/root/PlayerManager").is_gone(character.name):
+			continue
 		# Add default interests and other fields if they're not set
 		if character.interests.is_empty():
 			set_default_character_data(character)
@@ -106,6 +109,10 @@ func set_default_character_data(character):
 	print("NO CHARACTER DATA")
 	
 func update_display():
+	if characters.is_empty():
+		info_panel.update_text("[center]No one left to swipe on.[/center]")
+		start_button.disabled = true
+		return
 	var character = self.characters[current_profile_index]
 	
 	# Update the icon

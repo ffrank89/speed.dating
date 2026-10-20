@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://6ngbo558gxas"
+path="res://.godot/imported/first_date.dialogue-88587707bf3a0d102c5b4201afa4d5a3.tres"
+
+[deps]
+
+source_file="res://dialogue/split_ends/first_date.dialogue"
+dest_files=["res://.godot/imported/first_date.dialogue-88587707bf3a0d102c5b4201afa4d5a3.tres"]
+
+[params]
+
+defaults=true

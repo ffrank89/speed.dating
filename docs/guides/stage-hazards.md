@@ -111,7 +111,7 @@ Under **Reward**:
 
 ## Putting hazards in a date
 
-The date scene has a **StageHazards** node. Its **Hazards** list holds the
+The date scene (`scenes/Dates/Date/Date.tscn`) has a **StageHazards** node. Its **Hazards** list holds the
 hazard scenes this date can have (the fly now). Add more by dragging their
 `.tscn` files into the list. Hazards freeze while a microgame plays.
 

@@ -1,8 +1,26 @@
 class_name DateRules
 extends Resource
-## The numbers that decide how dates score. One file: data/date_rules.tres.
-## Change them to make dates easier, harder, swingier or safer.
-## Full guide: docs/guides/options-and-scoring.md
+## The numbers that decide how dates run and score. One file: data/date_rules.tres.
+## Change them to make dates longer, shorter, easier, harder, swingier or safer.
+## Full guides: docs/guides/the-full-date.md (Flow), docs/guides/options-and-scoring.md
+
+@export_group("Flow")
+## Exchanges per date, between the opener and the closer.
+@export_range(1, 20) var exchanges: int = 5
+## How many of those are microgame exchanges (their titles start with Microgame Prefix).
+@export_range(0, 20) var microgame_exchanges: int = 2
+## The title names in her first-date dialogue file.
+@export var opener_title: String = "opener"
+## Regular exchanges: ~ exchange_boat, ~ exchange_band...
+@export var exchange_prefix: String = "exchange_"
+## Exchanges with a microgame option: ~ microgame_light_it...
+@export var microgame_prefix: String = "microgame_"
+## The closer when the date failed (below her Number Threshold).
+@export var closer_failed_title: String = "closer_failed"
+## The closer when she gives her number but you earned no hearts.
+@export var closer_no_hearts_title: String = "closer_no_hearts"
+## The closer at 1 heart or more.
+@export var closer_hearts_title: String = "closer_hearts"
 
 @export_group("Odds")
 ## Lowest chance a risky option can show, in percent. Even a hopeless option gets this.

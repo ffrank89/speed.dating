@@ -21,7 +21,7 @@ func _init():
 		"smoken it ",
 		"frogs in the park"
 	]
-	self.first_date_path = "res://scenes/Dates/FirstDate/FirstDateTest.tscn"
+	self.first_date_path = "res://scenes/Dates/Date/Date.tscn"
 	self.first_date_background = "res://assets/background 2.png"
 
 	# Set personality traits

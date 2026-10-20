@@ -1,0 +1,136 @@
+# Split Ends' first date.
+# TEST POOL: these are placeholder lines (some from m2_test) until the real pool is written.
+#
+# How a date plays (names and numbers: data/date_rules.tres → Flow):
+#   ~ opener                 always first
+#   5 exchanges, drawn at random with no repeats:
+#     2 from the ~ microgame_... titles (exchanges with a [#microgame=...] option)
+#     3 from the ~ exchange_... titles
+#   one closer, picked by how it went:
+#     ~ closer_failed        score below her Number Threshold (no number, she's gone)
+#     ~ closer_no_hearts     she gives you her number, no hearts
+#     ~ closer_hearts        1 heart or more
+#   then her contact card.
+# End every title with => END. Add as many exchanges as you like; the plan is 12,
+# 2-3 of them microgame ones. Option tags: see m2_test.dialogue and m3_test.dialogue.
+
+~ opener
+
+Split Ends: [#pose=reach] Oh. Hey. You actually showed up.
+- Wouldn't miss it. [#value=1]
+	Split Ends: [#pose=point] Smooth. Kind of.
+- You look... really good. [#check=seduction:40, #value=2]
+	if hit
+		Split Ends: [#pose=earring, #react=heart] Stop it. Okay, don't stop it.
+	else
+		Split Ends: [#pose=parker, #react=question] Was that a question?
+- Sorry I'm late. [#value=0]
+	Split Ends: [#pose=hunched] You're not. I'm early. It's a whole thing.
+=> END
+
+~ exchange_moved_here
+
+Split Ends: [#pose=reach] So when did you move here...?
+- I'm from the city. [#check=culture:40, #value=2]
+	if hit
+		Split Ends: [#pose=point, #react=exclamation] Omg what high school did u go to?
+	else
+		Split Ends: [#pose=parker, #react=question] Weird I've never seen you around...
+- Couple years ago. [#value=1]
+	Split Ends: [#pose=hunched] Oh yeah lotta ppl did around then.
+- Yesterday. Show me around? [#check=seduction:70, #value=3]
+	if hit
+		Split Ends: [#pose=earring, #react=heart] ...Yeah. Okay. I'd like that.
+	else
+		Split Ends: [#pose=backshot, #react=anger] Uhhh we just met.
+=> END
+
+~ exchange_whats_in_it
+
+Split Ends: [#pose=cig] Next question. What's in this for me?
+- Describe the female anatomy in detail. [#check=intellect:60, #value=3]
+	if hit
+		Split Ends: [#pose=point, #react=heart] Oh my GOD. I'm trying you out.
+	else
+		Split Ends: [#pose=parker, #react=question] There's... one butthole.
+- Trips to the farmers market. White picket fence. Whole shabang. [#check=heart:20, #value=2]
+	if hit
+		Split Ends: [#pose=reach] Ok that's actually really sweet.
+	else
+		Split Ends: [#pose=hunched] You know thats not everyone's thing.
+- Who cares? [#value=-2]
+	Split Ends: [#pose=backshot, #react=anger] I care. Obviously.
+=> END
+
+~ exchange_boat
+
+Split Ends: [#pose=point] Okay. Speed round. My dad's boat has a name. Guess it.
+- Guess "The Unsinkable II". [#check=culture:40, #value=2]
+	if hit
+		Split Ends: [#react=exclamation] HOW did you know there was a first one?!
+	else
+		Split Ends: [#react=question] ...There wasn't a first one. Now I'm sad.
+- Guess "Boat". [#value=1]
+	Split Ends: Honestly? Respect.
+- Ask if she'll take you out on it sometime. [#check=seduction:70, #value=3]
+	if hit
+		Split Ends: [#react=heart] ...Yeah. Okay. I'd like that.
+	else
+		Split Ends: [#react=anger] Whoa. Buy me a drink first, sailor.
+=> END
+
+~ exchange_band
+
+Split Ends: [#pose=earring] Favourite band. Go. This is a test.
+- The Sex Pistols. [#check=culture:50, #value=2]
+	if hit
+		Split Ends: [#pose=point, #react=heart] Correct answer. Marry me. Kidding.
+	else
+		Split Ends: [#pose=parker, #react=question] You just read my poster.
+- Whatever's on the radio. [#value=-1]
+	Split Ends: [#pose=hunched, #react=anger] ...Wow.
+- I'll make you a playlist instead. [#check=heart:40, #value=2]
+	if hit
+		Split Ends: [#pose=reach, #react=heart] Okay that's actually cute.
+	else
+		Split Ends: [#pose=backshot] Don't. Last guy did that. It was all Coldplay.
+=> END
+
+~ microgame_light_it
+
+Split Ends: [#pose=cig] Got a light?
+- Light it for her. [#check=seduction:50, #value=2, #microgame=light_cigarette]
+	if hit
+		Split Ends: [#pose=cig, #react=heart] ...Smooth.
+	else
+		Split Ends: [#pose=hunched, #react=anger] You almost torched my bangs.
+- I don't smoke. [#value=0]
+	Split Ends: [#pose=backshot] Cool. More for me.
+=> END
+
+~ microgame_catch
+
+Split Ends: [#pose=reach] Think fast!
+- Catch the lighter she tosses you. [#check=culture:40, #value=2, #microgame=example]
+	if hit
+		Split Ends: [#pose=point, #react=exclamation] Nice hands.
+	else
+		Split Ends: [#pose=parker, #react=question] ...It's on the floor now.
+- Let it hit you. [#value=-1]
+	Split Ends: [#pose=hunched, #react=question] Are you okay? Like in general?
+=> END
+
+~ closer_failed
+
+Split Ends: [#pose=backshot] Yeah... I'm gonna go. Don't text me. You can't anyway.
+=> END
+
+~ closer_no_hearts
+
+Split Ends: [#pose=hunched] This was... fine. Gimme your phone before I change my mind.
+=> END
+
+~ closer_hearts
+
+Split Ends: [#pose=point, #react=heart] Okay, you're kind of great. Gimme your phone.
+=> END

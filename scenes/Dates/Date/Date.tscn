@@ -1,0 +1,94 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scenes/Dates/Date/date_scene.gd" id="1_date"]
+[ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="2_girl"]
+[ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="4_box"]
+[ext_resource type="Script" uid="uid://cx3an5smygw6u" path="res://scenes/Dates/Portrait/girl_portrait.gd" id="5_portrait"]
+[ext_resource type="Resource" path="res://data/date_rules.tres" id="6_rules"]
+[ext_resource type="PackedScene" uid="uid://jo0wuneeg2qu" path="res://scenes/Dialogue/OptionList.tscn" id="7_options"]
+[ext_resource type="Script" uid="uid://dx2okv54iogi3" path="res://scenes/Dates/Reaction/reaction_icon.gd" id="8_reaction"]
+[ext_resource type="SpriteFrames" path="res://data/reactions.tres" id="9_reactions"]
+[ext_resource type="PackedScene" path="res://scenes/Microgames/MicrogameHost.tscn" id="10_microgames"]
+[ext_resource type="Script" path="res://scenes/Hazards/stage_hazards.gd" id="11_hazards"]
+[ext_resource type="PackedScene" path="res://scenes/Hazards/Fly/Fly.tscn" id="12_fly"]
+[ext_resource type="PackedScene" path="res://scenes/Results/ContactCard.tscn" id="13_card"]
+
+[node name="Date" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_date")
+fallback_girl = ExtResource("2_girl")
+rules = ExtResource("6_rules")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Portrait" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -650.0
+offset_top = -1600.0
+offset_right = 650.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("5_portrait")
+
+[node name="ReactionIcon" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 250.0
+offset_top = 180.0
+offset_right = 450.0
+offset_bottom = 380.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("8_reaction")
+reactions = ExtResource("9_reactions")
+
+[node name="OptionsStart" type="Marker2D" parent="."]
+position = Vector2(1500, 330)
+gizmo_extents = 40.0
+
+[node name="DialogueBox" parent="." instance=ExtResource("4_box")]
+layout_mode = 1
+
+[node name="OptionList" parent="." node_paths=PackedStringArray("start_at", "drop_target", "microgame_host") instance=ExtResource("7_options")]
+layout_mode = 1
+start_at = NodePath("../OptionsStart")
+drop_target = NodePath("../Portrait")
+microgame_host = NodePath("../MicrogameHost")
+
+[node name="StageHazards" type="Control" parent="." node_paths=PackedStringArray("option_list", "microgame_host")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_hazards")
+hazards = Array[PackedScene]([ExtResource("12_fly")])
+option_list = NodePath("../OptionList")
+microgame_host = NodePath("../MicrogameHost")
+
+[node name="MicrogameHost" parent="." instance=ExtResource("10_microgames")]
+
+[node name="ContactCard" parent="." instance=ExtResource("13_card")]

@@ -10,6 +10,8 @@ var current_date: DateCharacter
 
 var inventory: Array = []
 var party: Array = []
+## Girls whose first date failed: they're gone for the rest of the run.
+var gone_for_run: Array = []
 
 var perks: Array = []
 
@@ -50,6 +52,17 @@ func add_date(date: DateCharacter) -> bool:
 		return true
 	return false
 	
+# A failed first date: she's gone for the rest of the run (the dating app skips her).
+func mark_gone(date: DateCharacter) -> void:
+	if date and not date in gone_for_run:
+		gone_for_run.append(date)
+		print("Gone for the run: ", date.name)
+
+
+func is_gone(date_name: String) -> bool:
+	return gone_for_run.any(func(date: DateCharacter) -> bool: return date.name == date_name)
+
+
 func add_perk(perk):
 	if perk:
 		perks.append(perk)

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GirlData" load_steps=26 format=3 uid="uid://dglthbg00jke5"]
+[gd_resource type="Resource" script_class="GirlData" load_steps=27 format=3 uid="uid://dglthbg00jke5"]
 
 [ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="1_wf6us"]
 [ext_resource type="Resource" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="11_v70mn"]
 [ext_resource type="Script" uid="uid://yvy4bgbrod73" path="res://scripts/data/girl_voice.gd" id="12_13src"]
 [ext_resource type="Script" path="res://scripts/data/girl_trait.gd" id="13_trait"]
+[ext_resource type="Resource" path="res://dialogue/split_ends/first_date.dialogue" id="14_first_date"]
 
 [sub_resource type="Resource" id="Resource_qbi5r"]
 script = ExtResource("3_hgqhe")
@@ -119,6 +120,7 @@ default_pose = "reach"
 date_background = ExtResource("1_wf6us")
 dialogue_style = ExtResource("2_mpoun")
 voice = SubResource("Resource_s0o2p")
+first_date_dialogue = ExtResource("14_first_date")
 microgames = Array[PackedScene]([])
 affection_thresholds = Array[int]([3, 6, 9])
 likes_culture = 0.2

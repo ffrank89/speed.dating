@@ -9,6 +9,8 @@ var age: int = 0
 var bio: String = ""
 var icon_path: String = ""
 var first_date_path: String = ""
+## Her girl file (data/girls/...), used by the date scene. Empty = the date's Fallback Girl.
+var girl_data_path: String = ""
 var reaction: String
 var skill_scores: Dictionary = {}
 var compatibility_weights: Dictionary = {}

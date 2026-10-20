@@ -79,8 +79,10 @@ The **Date Scene** is where you actually play. Your **Player** attributes
 decide which dialogue options are safe and which are risky. Your **Perks**
 add or remove options and change **microgame** difficulty. The girl's
 `GirlData` supplies her lines, preferences and microgames. Doing well turns
-into **Affection** (0–3); Affection 1+ means she joins. A failed first date
-means she's gone for the run, so risk has a real cost.
+into **Affection** (0–3). If she gives you her number (the score reached
+her Number Threshold, even at 0 hearts) she joins. A failed first date
+means she's gone for the run, so risk has a real cost
+([0053](../decisions/0053-full-date-flow.md)).
 
 ### 5. The party is the build
 

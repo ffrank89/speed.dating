@@ -25,8 +25,10 @@ Patrick Hand.
 - **On its own:** open `scenes/Results/ContactCard.tscn` and press **F6**.
   Click the top node → **Testing (F6) → Test Hearts** (0–3) to see each ending.
   **Test Girl** picks whose card it is.
-- **In the date:** play to the end of the dialogue, or press **End date now**
-  in the debug panel. The hearts come from the date score so far.
+- **In the date:** press **F5** and play to the end (after the closer), or
+  press **End date now** in the debug panel. The hearts come from the date
+  score so far. What happens after the card (party, gone for the run, back
+  to the calendar) is in [the-full-date.md](the-full-date.md).
 
 ## Her details
 
@@ -125,13 +127,14 @@ claddagh ring as a placeholder icon. See [phone apps](phone-apps.md).
 
 `ContactCard` (`scenes/Results/contact_card.gd`, a CanvasLayer on layer 20):
 
-- `show_card(girl)`
-- `await play(hearts, rules) -> bool`, which also emits `finished(got_number)`
+- `show_card(girl, rules)`
+- `await play(hearts) -> bool` (hearts -1 = a failed date), which also emits `finished(got_number)`
 
 The boxes use `DialogueBoxStyle.make_box()` and `make_outline()` (drawn on
 each group's `draw` signal). `DateScorer.hearts()` counts reached thresholds.
-The test scene's `_end_date()` runs, in order:
+The date scene's `_end_date()` (`scenes/Dates/Date/date_scene.gd`) runs, in order:
 
 1. `AppLauncher.open("contacts", show_card)`
 2. `play()`
-3. `AppLauncher.close`
+3. `PlayerManager.add_date()` or `mark_gone()`
+4. `AppLauncher.close`
