@@ -11,8 +11,8 @@ animation (`AppLauncher`), used by:
 
 | What opens | App file | Opens from |
 |---|---|---|
-| The dating app (after the intro, and from a calendar day) | `data/apps/dating_app.tres` | Where the player clicked |
-| The calendar (rest days) | `data/apps/calendar.tres` | Where the player clicked |
+| The calendar (after the intro, and after a date) | `data/apps/calendar.tres` | Where the player clicked |
+| The dating app (a **Date** on the calendar) | `data/apps/dating_app.tres` | The Date choice (the app named in `data/day_actions/date.tres`) |
 | A new date (Start on a profile) | `data/apps/date.tres` | The **Start** button |
 | A microgame | the microgame's **App**, or `data/apps/microgame.tres` | The picked option bubble, and closes back into it |
 | The boss fight | `data/apps/boss.tres` | Ready for when the boss scene exists (see below) |
@@ -114,6 +114,6 @@ screen is built from these.
   `open_scene` loads the scene on a thread while the tile grows.
 - Closing screenshots the app into the tile, calls `swap` (so the live
   screen behind is back), then shrinks the tile into `to`.
-- Wired in: `intro_questions.gd` (→ dating app), `screen.gd` (Start → date),
-  `PlayerManager.calendar_action` (each calendar action names its `"app"`),
-  `MicrogameHost.play(..., from)`.
+- Wired in: `intro_questions.gd` (→ calendar), `calendar.gd` (a Date choice
+  opens its action's **App Name** and **Scene**), `screen.gd` (Start → date),
+  `date_scene.gd` (→ calendar), `ContactsApp` (C), `MicrogameHost.play(..., from)`.

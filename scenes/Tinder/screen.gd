@@ -111,8 +111,10 @@ func set_default_character_data(character):
 	
 func update_display():
 	if characters.is_empty():
+		# Everyone's taken or gone: Start goes back to the calendar instead.
 		info_panel.update_text("[center]No one left to swipe on.[/center]")
-		start_button.disabled = true
+		start_button.text = "Back to the calendar"
+		next_button.disabled = true
 		return
 	var character = self.characters[current_profile_index]
 	
@@ -156,8 +158,11 @@ func _on_next_pressed():
 	tween.parallel().tween_property(info_panel, "modulate", Color(1,1,1,1), 0.3)
 
 func _on_start_pressed():
-	# Store selected character in PlayerManager
 	var player_manager = get_node("/root/PlayerManager")
+	if characters.is_empty():
+		AppLauncher.open_scene("calendar", player_manager.CALENDAR, start_button.get_global_rect())
+		return
+	# Store selected character in PlayerManager
 	player_manager.select_date(characters[self.current_profile_index])
 	
 	# Open the date like an app, growing from the Start button (data/apps/date.tres)

@@ -17,6 +17,9 @@ Hover over any setting to see what it does.
 | `microgames.tres` | Every microgame by the name writers use: `[#microgame=light_cigarette]`. Add one like a pose: Add Key/Value Pair. |
 | `microgame_style.tres` | How the frame around every microgame looks and sounds: dim, banner, timer bar, NICE/OOPS stamp. |
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |
+| `calendar_rules.tres` | How the calendar runs: days per chapter, the boss day, what each day can offer and how many choices, how much of the whole calendar shows, and how far ahead you can see. |
+| `day_actions/` | One file per thing you can spend a day on (date, training, rest, boss): its name, picture, how many days it takes, how often it's offered, and what it does. |
+| `calendar_style.tres` | How the calendar looks and sounds: its words, day sizes, today's highlight, the X on days you can't see. Its boxes and font are `dialogue_styles/calendar.tres`. |
 
 **Try your change:** press **F5**. It plays a whole date on the test bench (`scenes/Dates/FirstDate/FirstDateTest.tscn`) with sliders for the player's attributes.
 

@@ -199,6 +199,6 @@ func _on_start_dating_pressed():
 
 
 
-	#change to main scene
-	AppLauncher.open_scene("dating_app", DATING_SITE_PATH)
+	# The run starts on the calendar (a date day opens the dating app from there).
+	AppLauncher.open_scene("calendar", player_manager.CALENDAR)
 	

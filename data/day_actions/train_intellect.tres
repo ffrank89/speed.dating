@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DayAction" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/day_action.gd" id="1_action"]
+[ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_icon"]
+
+[resource]
+script = ExtResource("1_action")
+title = "Train Intellect"
+description = "+5 Intellect"
+icon = ExtResource("2_icon")
+kind = 1
+days = 1
+weight = 1.0
+attribute = 1
+amount = 5
+dialogue_title = "train"

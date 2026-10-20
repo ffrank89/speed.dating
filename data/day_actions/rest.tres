@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DayAction" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/day_action.gd" id="1_action"]
+[ext_resource type="Texture2D" path="res://assets/sleepy stat gif/sleepy1.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_action")
+title = "Rest"
+description = "Nothing happens. It's nice."
+icon = ExtResource("2_icon")
+kind = 2
+days = 1
+weight = 1.0
+dialogue_title = "rest"

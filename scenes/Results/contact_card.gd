@@ -506,7 +506,7 @@ static func box_style_of(girl: GirlData) -> DialogueBoxStyle:
 
 ## The font for a box style (the default style's font if it has none).
 static func font_of(box: DialogueBoxStyle) -> Font:
-	return box.font if box.font else (load(DEFAULT_BOX_STYLE) as DialogueBoxStyle).font
+	return box.text_font()
 
 
 func _draw_outline(group: PanelContainer) -> void:

@@ -65,6 +65,14 @@ extends Resource
 @export var next_arrow_color: Color = Color.WHITE
 
 
+## Its font, or the default style's font (data/dialogue_styles/default.tres) when it has none.
+func text_font() -> Font:
+	if font:
+		return font
+	var fallback := load("res://data/dialogue_styles/default.tres") as DialogueBoxStyle
+	return fallback.font if fallback and fallback != self else null
+
+
 ## The box background, built from the settings above.
 func make_box() -> StyleBox:
 	if background_image:
