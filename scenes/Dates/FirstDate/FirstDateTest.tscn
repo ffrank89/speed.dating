@@ -71,9 +71,10 @@ gizmo_extents = 40.0
 [node name="DialogueBox" parent="." instance=ExtResource("4_box")]
 layout_mode = 1
 
-[node name="OptionList" parent="." node_paths=PackedStringArray("start_at") instance=ExtResource("7_options")]
+[node name="OptionList" parent="." node_paths=PackedStringArray("start_at", "drop_target") instance=ExtResource("7_options")]
 layout_mode = 1
 start_at = NodePath("../OptionsStart")
+drop_target = NodePath("../Portrait")
 
 [node name="DebugPanel" type="PanelContainer" parent="."]
 layout_mode = 0

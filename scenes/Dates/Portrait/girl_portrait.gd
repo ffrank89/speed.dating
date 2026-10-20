@@ -7,6 +7,8 @@ extends Control
 
 var _image: TextureRect
 var _pose: GirlPose
+# Pose pictures read back for is_point_on_her(), so each is only read once.
+var _pixels := {}
 
 
 func _ready() -> void:
@@ -17,6 +19,34 @@ func _ready() -> void:
 	add_child(_image)
 	resized.connect(_apply)
 	_apply()
+
+
+## True if `point` (in screen space) is on a drawn part of her current pose, not on
+## the see-through space around her. Used to drop option bubbles onto her.
+func is_point_on_her(point: Vector2) -> bool:
+	if not _image or not _image.texture:
+		return false
+	var local := _image.get_global_transform().affine_inverse() * point
+	if not Rect2(Vector2.ZERO, _image.size).has_point(local):
+		return false
+	var texture := _image.texture
+	if not _pixels.has(texture):
+		var read := texture.get_image()
+		if read and read.is_compressed():
+			read.decompress()
+		_pixels[texture] = read
+	var picture: Image = _pixels[texture]
+	if not picture:
+		return true  # Can't read the picture: count the whole pose's box.
+	# Undo the "keep aspect, centred" fit to find the pixel under the point.
+	var picture_size := Vector2(picture.get_size())
+	var fit := minf(_image.size.x / picture_size.x, _image.size.y / picture_size.y)
+	var pixel := (local - (_image.size - picture_size * fit) / 2.0) / fit
+	if _image.flip_h:
+		pixel.x = picture_size.x - 1.0 - pixel.x
+	if not Rect2(Vector2.ZERO, picture_size).has_point(pixel):
+		return false
+	return picture.get_pixelv(Vector2i(pixel)).a > 0.3
 
 
 ## Shows a pose. Pass null to show nothing.

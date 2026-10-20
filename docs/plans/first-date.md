@@ -96,8 +96,8 @@ Seduction icons (Godot logo). Option sounds: Kenney Interface Sounds (CC0).
 Guide: [options-and-scoring.md](../guides/options-and-scoring.md).
 
 **Changed 2026-10-20:** options are now floating bubbles that pop out above
-her head and drift; click to pick, drag to throw them and drop a trail of
-attribute icons. Bubbles take the same box options as the dialogue box
+her head and drift; click or drop one on her to pick, drag to throw them
+and drop a trail of attribute icons. Bubbles take the same box options as the dialogue box
 (picture, keep/drop outline, text outline), and a girl can have her own
 option style ([0047](../decisions/0047-floating-option-bubbles.md)).
 

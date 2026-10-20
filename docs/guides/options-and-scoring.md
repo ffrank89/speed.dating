@@ -119,9 +119,12 @@ drift slowly around the screen, nudging each other apart and bouncing off
 the edges.
 
 - **Click** a bubble to pick it.
-- **Drag** a bubble to throw it around. While it's dragged it drops a trail
-  of little copies of its attribute icon, which fade away. Letting go doesn't
-  pick it.
+- **Drag a bubble onto her** and let go to pick it. While it's over her it
+  glows pink (**Dragging → Drop Outline Color**). Only her drawn pixels
+  count, not the see-through space around her picture.
+- **Drag** a bubble anywhere else to throw it around. While it's dragged it
+  drops a trail of little copies of its attribute icon, which fade away.
+  Letting go away from her doesn't pick it.
 - A bubble **stops drifting while the mouse is over it**, so it's easy to click.
 - Keys **1–4** still pick, and the arrow keys then Space/Enter still work.
 
@@ -133,6 +136,10 @@ change it for every scene, edit `scenes/Dialogue/OptionList.tscn` instead.
 **Where they start:** in the same scene, click **OptionsStart** (the cross
 above her head) and drag it. OptionList's **Start At** slot points at it.
 Empty = the top middle of the OptionList area.
+
+**What counts as "her":** OptionList's **Drop Target** slot points at the
+**Portrait** node. To stop drops from picking, turn off **Dragging → Drop On
+Her Picks** in the option style.
 
 ## Changing how the options look, move and sound
 
@@ -153,7 +160,7 @@ picture frame, with the outline kept or dropped.
 | Risky Options | The outline and % badge colours for options the player might miss |
 | Roll | How long the numbers spin, the hit and miss colours, and the words (HIT / MISS) |
 | Attribute Icons | The small picture for each attribute, and its size. The drag trail uses these too. |
-| Dragging | Trail icon size, **Trail Spacing** (lower = more icons), how long each lasts, the icon for options with no attribute, and how hard a bubble can be thrown |
+| Dragging | Trail icon size, **Trail Spacing** (lower = more icons), how long each lasts, the icon for options with no attribute, how hard a bubble can be thrown, and **Drop On Her Picks** with its glow colour |
 | Sounds | Hover, pick, roll tick, hit and miss sounds, and volume |
 
 **Picture bubbles:** drag a picture onto **Bubbles → Background Image**. If
@@ -200,7 +207,8 @@ Double-click it to open the **SpriteFrames** panel at the bottom of Godot.
 | Bubbles float over the dialogue box or off where I can't see them | Resize **OptionList** in the scene: bubbles stay inside its rectangle. |
 | Bubbles don't come from her head | Move **OptionsStart** in the scene, and check OptionList's **Start At** slot points at it. |
 | My girl's own option style isn't used | Check it's in her girl file's **Dialogue → Option Style** slot, and that she's the girl in the test scene's **Girl** slot. |
-| Dragging a bubble picks it | It only picks if the mouse barely moved (under 12 pixels). Drag further. |
+| Dragging a bubble picks it | Letting go on her picks it (that's on purpose). Away from her, it only picks if the mouse barely moved (under 12 pixels): drag further. |
+| Dropping on her doesn't pick | Let go with the **mouse pointer** over a drawn part of her (not the see-through space around her). Check OptionList's **Drop Target** is **Portrait** and **Drop On Her Picks** is on. Picks are also ignored for a moment after the bubbles appear (**Input Delay**). |
 
 ## For programmers
 
@@ -211,7 +219,8 @@ Double-click it to open the **SpriteFrames** panel at the bottom of Godot.
   game state, which is why `if hit` works in `.dialogue` files.
 - `OptionList` (`scenes/Dialogue/`) spawns one `OptionBubble` per option at
   `start_at`, moves them (drift, bounce, separation, drag and throw, icon
-  trail), plays the roll and emits `option_resolved(response, result)`.
+  trail), picks on a drop onto `drop_target` (`GirlPortrait.is_point_on_her()`,
+  an alpha test on her pose picture), plays the roll and emits `option_resolved(response, result)`.
   `show_options(responses, scorer, look)` takes an optional per-girl
   `OptionListStyle`; the date scene then sets
   `DateState.hit` and calls `DialogueBox.choose(response)`.

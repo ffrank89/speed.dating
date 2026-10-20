@@ -111,6 +111,11 @@ extends Resource
 @export var trail_fallback_icon: Texture2D
 ## Fastest a bubble can be thrown when it's let go, in pixels per second. 0 = no throwing.
 @export_range(0.0, 5000.0, 50.0) var max_throw_speed: float = 1400.0
+## Dropping a bubble onto her picks that option. Only her drawn pixels count,
+## not the empty space around her picture.
+@export var drop_on_her_picks: bool = true
+## Outline colour while a dragged bubble is over her, so the player knows letting go picks it.
+@export var drop_outline_color: Color = Color("#ff7eb6")
 
 @export_group("Sounds")
 ## Played when the mouse moves onto a bubble.
@@ -141,7 +146,8 @@ func icon_for(attribute: int) -> Texture2D:
 
 ## A bubble's background: her picture if one is set, otherwise the flat colour with
 ## its outline in `line`. `hovered` picks the hover colour or hover picture.
-func make_bubble(hovered: bool, line: Color) -> StyleBox:
+## `width` is the outline's thickness; -1 = Outline Width.
+func make_bubble(hovered: bool, line: Color, width := -1) -> StyleBox:
 	var picture := hover_image if hovered and hover_image else background_image
 	if picture:
 		var box := StyleBoxTexture.new()
@@ -149,17 +155,17 @@ func make_bubble(hovered: bool, line: Color) -> StyleBox:
 		box.set_texture_margin_all(image_corner_size)
 		box.set_content_margin_all(padding)
 		return box
-	var flat := _flat(hover_color if hovered else background_color, line, outline_width)
+	var flat := _flat(hover_color if hovered else background_color, line, outline_width if width < 0 else width)
 	flat.set_content_margin_all(padding)
 	return flat
 
 
 ## The outline drawn on top of a picture bubble, or null when there shouldn't be one.
 ## (A flat bubble already includes its outline.)
-func make_outline(line: Color) -> StyleBox:
+func make_outline(line: Color, width := -1) -> StyleBox:
 	if not background_image or not keep_outline_with_image or outline_width == 0:
 		return null
-	return _flat(Color.TRANSPARENT, line, outline_width)
+	return _flat(Color.TRANSPARENT, line, outline_width if width < 0 else width)
 
 
 ## The thick line in the hit or miss colour drawn around the picked bubble.

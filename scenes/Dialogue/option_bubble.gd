@@ -7,6 +7,8 @@ extends PanelContainer
 
 ## Clicked (pressed and let go without moving much), or Space/Enter while selected.
 signal picked
+## Let go after a drag. OptionList checks whether it landed on her.
+signal dropped
 
 # How far the mouse must move while held before a click becomes a drag, in pixels.
 const DRAG_THRESHOLD := 12.0
@@ -38,6 +40,7 @@ var _highlight: StyleBox
 # Drawn over the background: the outline on a picture bubble, or the hit/miss line.
 var _overlay: StyleBox
 var _highlighted := false
+var _over_target := false
 var _held := false
 var _pressed_at := Vector2.ZERO
 var _scale_tween: Tween
@@ -136,6 +139,19 @@ func tween_scale(to: float, seconds: float, delay := 0.0) -> void:
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
+## Drop look: shown while it's dragged over her, so the player knows letting go picks it.
+func set_over_target(on: bool) -> void:
+	if on == _over_target or locked:
+		return
+	_over_target = on
+	var line := _style.drop_outline_color if on else _style.hover_outline_color
+	var width := _style.outline_width * (2 if on else 1)
+	add_theme_stylebox_override("panel", _style.make_bubble(true, line, width))
+	_overlay = _style.make_outline(line, width)
+	queue_redraw()
+	tween_scale(_style.hover_grow * (1.1 if on else 1.0), 0.1)
+
+
 ## Shows the picked bubble's result with a thick line in `color` (hit or miss).
 func flash(color: Color) -> void:
 	add_theme_stylebox_override("panel", _highlight)
@@ -163,7 +179,9 @@ func _gui_input(event: InputEvent) -> void:
 				dragging = false
 				ignore_hover = true
 				release_focus()
+				set_over_target(false)
 				set_highlight(false)
+				dropped.emit()
 			else:
 				picked.emit()
 	elif event is InputEventMouseMotion and _held and not dragging:

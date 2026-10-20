@@ -5,8 +5,9 @@ extends Control
 ## risky option (player below the requirement), its % chance. Picking one plays the
 ## roll, then reports what happened through option_resolved.
 ##
-## Click a bubble to pick it. Drag one to throw it around: it drops a trail of its
-## attribute icon. Keys 1-4 pick too, or arrow keys then Space/Enter.
+## Click a bubble to pick it, or drag it onto her (Drop Target) and let go. Dragging
+## also throws it around and drops a trail of its attribute icon. Keys 1-4 pick too,
+## or arrow keys then Space/Enter.
 ##
 ## Where they float: this node's rectangle (move and resize it in the scene).
 ## Where they start: the Start At marker. Look, motion and sounds: Style
@@ -22,6 +23,9 @@ signal option_resolved(response: DialogueResponse, result: DateScorer.Result)
 ## The point the bubbles pop out from: a marker (Marker2D) placed above her head.
 ## Empty = the top middle of this node.
 @export var start_at: Node2D
+## Her portrait. Dropping a bubble onto her picks it (turn this off with the style's
+## Drop On Her Picks). Empty = dropping never picks.
+@export var drop_target: GirlPortrait
 ## Seconds after the options appear before a pick counts, so a player mashing
 ## Space to skip her text doesn't pick an option by accident.
 @export_range(0.0, 2.0, 0.05) var input_delay: float = 0.35
@@ -75,6 +79,7 @@ func show_options(responses: Array, scorer: DateScorer, look: OptionListStyle = 
 		var bubble := OptionBubble.new()
 		bubble.setup(option, i, _scorer.chance_of(option), _style)
 		bubble.picked.connect(_pick.bind(i))
+		bubble.dropped.connect(_on_dropped.bind(i))
 		bubble.centre = start + Vector2(randf_range(-4, 4), randf_range(-4, 4))
 		# Fan out from the start point: first to the upper left, last to the upper right.
 		var angle := PI + (i + 0.5) / count * PI
@@ -152,6 +157,7 @@ func _move(bubble: OptionBubble, delta: float) -> void:
 		var moved := bubble.centre - before
 		# Remember how fast it's moving, so letting go throws it.
 		bubble.velocity = bubble.velocity.lerp(moved / maxf(delta, 0.001), 0.35).limit_length(_style.max_throw_speed)
+		bubble.set_over_target(_is_over_her(get_global_mouse_position()))
 		_trail_distance += moved.length()
 		if _trail_distance >= _style.trail_spacing:
 			_trail_distance = 0.0
@@ -253,6 +259,15 @@ func _drop_trail_icon(bubble: OptionBubble) -> void:
 		.set_ease(Tween.EASE_OUT)
 	tween.tween_property(icon, "modulate:a", 0.0, _style.trail_seconds).set_ease(Tween.EASE_IN)
 	tween.chain().tween_callback(icon.queue_free)
+
+
+func _on_dropped(index: int) -> void:
+	if _is_over_her(get_global_mouse_position()):
+		_pick(index)
+
+
+func _is_over_her(point: Vector2) -> bool:
+	return _style.drop_on_her_picks and drop_target != null and drop_target.is_point_on_her(point)
 
 
 func _pick(index: int) -> void:
