@@ -6,9 +6,9 @@
 [resource]
 script = ExtResource("1_action")
 title = "Boss"
-description = "Not built yet: on to the next chapter"
 icon = ExtResource("2_icon")
-kind = 3
 days = 1
 weight = 0.0
 dialogue_title = "boss"
+description = "Not built yet: on to the next chapter"
+ends_chapter = true

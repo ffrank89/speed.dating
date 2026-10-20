@@ -52,7 +52,7 @@ func days_until_boss() -> int:
 
 ## Whether `action` fits: everything but the boss has to be done before the boss day.
 func fits(action: DayAction) -> bool:
-	if action.kind == DayAction.Kind.BOSS:
+	if action.ends_chapter:
 		return true
 	return today + action.days - 1 < rules.days_per_chapter
 

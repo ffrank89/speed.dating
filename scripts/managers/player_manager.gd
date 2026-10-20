@@ -96,10 +96,11 @@ func ensure_player() -> PlayerCharacter:
 	return player
 
 
-# The run's calendar, planned from data/calendar_rules.tres the first time it's needed.
-func get_calendar() -> RunCalendar:
+# The run's calendar, planned the first time it's needed from `rules` (empty =
+# data/calendar_rules.tres). After that the run keeps the same one.
+func get_calendar(rules: CalendarRules = null) -> RunCalendar:
 	if not calendar:
-		calendar = RunCalendar.new(load(CALENDAR_RULES))
+		calendar = RunCalendar.new(rules if rules else load(CALENDAR_RULES))
 	return calendar
 
 # Get the full inventory

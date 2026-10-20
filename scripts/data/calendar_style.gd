@@ -2,32 +2,52 @@ class_name CalendarStyle
 extends Resource
 ## How the calendar looks and sounds. Its boxes, font and name tabs come from Box Style,
 ## a dialogue-box style like a girl's (data/dialogue_styles/calendar.tres), so the
-## calendar matches the dialogue boxes. This file sets the rest.
+## calendar matches the dialogue boxes. This file sets the rest: words, sizes, which
+## parts show, and sounds. Where the parts sit is in the scenes: scenes/Calendar/
+## calendar.tscn, DayBox.tscn (one day) and DayChoice.tscn (one of today's choices).
 ## One file: data/calendar_style.tres. Full guide: docs/guides/the-calendar.md
 
 ## The boxes, font, colours and name tabs (a dialogue-box style).
 @export var box_style: DialogueBoxStyle
 
 @export_group("Words")
-## On the tab above the days. %d = the chapter.
-@export var chapter_text: String = "CHAPTER %d"
-## Next to it. %d = days left before the boss.
-@export var days_left_text: String = "%d days to the boss"
+## The words can fill in blanks: {chapter}, {days} (days left, or days a choice takes),
+## {weekday} and {day} (the day's number in the run).
+## On the tab above the days.
+@export var chapter_text: String = "CHAPTER {chapter}"
+## Next to it.
+@export var days_left_text: String = "{days} days to the boss"
 @export var boss_today_text: String = "Boss day"
-## On the tab above today's choices. %s = the weekday, %d = the day.
-@export var today_text: String = "TODAY · %s %d"
+## On the tab above today's choices.
+@export var today_text: String = "TODAY · {weekday}"
 ## Opens the whole calendar, and closes it again.
 @export var expand_text: String = "See the whole month ▾"
 @export var collapse_text: String = "Just this week ▴"
 ## Under each choice: how many days it uses.
 @export var one_day_text: String = "1 day"
-@export var many_days_text: String = "%d days"
+@export var many_days_text: String = "{days} days"
 ## On a choice that doesn't fit before the boss.
 @export var not_enough_days_text: String = "Not enough days left"
 ## On the boss day's box.
 @export var boss_text: String = "BOSS"
 ## The weekdays, starting with day 1.
 @export var weekdays: PackedStringArray = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+
+@export_group("What Shows")
+## Each day's number on its box (off = just the weekday).
+@export var show_day_numbers: bool = false
+## Each day's weekday on its tab.
+@export var show_weekdays: bool = true
+## The little pictures of what each day offers.
+@export var show_offers: bool = true
+## The text that pops up when the mouse rests on a day (what it offers).
+@export var show_tooltips: bool = true
+## "6 days to the boss" above the days.
+@export var show_days_left: bool = true
+## The "See the whole month" button.
+@export var show_expand_button: bool = true
+## The line under each choice's title (its description and how many days).
+@export var show_details: bool = true
 
 @export_group("Days")
 ## Size of each day's box, in pixels.
@@ -78,3 +98,13 @@ extends Resource
 ## A day being crossed off.
 @export var day_done_sound: AudioStream
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0
+
+
+## The weekday of a calendar day (1 = the first of Weekdays).
+func weekday(day_number: int) -> String:
+	return weekdays[(day_number - 1) % weekdays.size()] if not weekdays.is_empty() else ""
+
+
+## Fills in the blanks in one of the words above, e.g. words(chapter_text, {"chapter": 2}).
+func words(text: String, blanks: Dictionary) -> String:
+	return text.format(blanks)

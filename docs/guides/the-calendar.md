@@ -7,15 +7,14 @@ so it matches the dialogue boxes: boxes, outlines, font, and name tabs.
 
 ```
 ┌ CHAPTER 1 ──────────────────────────────────────────────┐
-│ 6 days to the boss                See the whole month ▾ │
+│ 5 days to the boss                See the whole month ▾ │
 │  MON    TUE    WED    THU    FRI    SAT    SUN          │
 │ ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌────┐        │
-│ │ 1 │  │ 2 │  │ 3 │  │ 4 │  │ 5 │  │ 6 │  │ 7  │        │
 │ │ ✓ │  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │BOSS│        │
 │ └───┘  └───┘  └───┘  └───┘  └───┘  └───┘  └────┘        │
 └─────────────────────────────────────────────────────────┘
 
-┌ TODAY · TUE 2 ──────────────────────────────────────────┐
+┌ TODAY · TUE ────────────────────────────────────────────┐
 │ [1] ♥ Date            [2] Train Culture   [3] Rest      │
 │     2 days · Swipe…       1 day · +5…         1 day · … │
 └─────────────────────────────────────────────────────────┘
@@ -39,6 +38,8 @@ so it matches the dialogue boxes: boxes, outlines, font, and name tabs.
   - **Boss** (the last day): for now a line, then the next chapter starts.
   A choice that doesn't fit before the boss day (a 2-day date on the day
   before it) is faded and says **Not enough days left**.
+- Days have **no numbers**, just their weekday (**What Shows → Show Day
+  Numbers** brings them back).
 - **C** opens your [Contacts](contacts.md), as before.
 
 The run starts here: after the intro questions, the game opens the calendar.
@@ -64,30 +65,46 @@ offer the same days.
 
 ## Each action: `data/day_actions/`
 
-One file each. Click one:
+One file each. An action is **made of parts, all optional**, so a new one
+needs no code. When it's picked, in this order:
+
+1. **Attributes:** it changes the player's attributes.
+2. **Message:** a line from `dialogue/calendar.dialogue` plays.
+3. Its **days** are used up, or with **Ends Chapter** the next chapter starts.
+4. **Opens:** it opens a screen like an app.
+
+The date, the trainings, rest and the boss are just different mixes:
+
+| | Days | Attributes | Message | Ends Chapter | Opens |
+|---|---|---|---|---|---|
+| Date | 2 | | | | the dating app |
+| Train Culture | 1 | Culture +5 | `train` | | |
+| Rest | 1 | | `rest` | | |
+| Boss | 1 | | `boss` | on | (the boss fight, later) |
 
 | Setting | What it does |
 |---|---|
 | **Title** | Its name on the calendar ("Date", "Train Culture") |
-| **Description** | The line under it on today's choices |
+| **Description** | The line under it on today's choices. Empty = what it changes ("Culture +5") |
 | **Icon** | Its picture (on its day, and on today's choice) |
-| **Kind** | What it does: Date, Train, Rest or Boss |
 | **Days** | How many days it uses up |
 | **Weight** | How often it's offered compared to the others (the date is 3, the rest are 1). 0 = never |
-| **Date → App Name / Scene** | The app and screen a date opens (the dating app) |
-| **Train → Attribute / Amount** | Which attribute goes up, and by how much |
-| **Message → Dialogue Title** | Which title in `dialogue/calendar.dialogue` plays when you pick it |
+| **Attributes → Culture / Intellect / Seduction / Heart** | How much it changes each one. 0 = no change; below 0 lowers it |
+| **Message → Dialogue Title** | Which title in `dialogue/calendar.dialogue` plays. Empty = none |
+| **Chapter → Ends Chapter** | For the boss day: the next chapter starts instead of using up days. Put that action in the rules' **Boss** slot |
+| **Opens → Scene / App Name** | A screen it opens afterwards, and which app (in `data/apps/`) it opens like. Empty = it stays on the calendar |
 
-**A new action** (e.g. "Go to a gig", +8 Culture, 2 days): duplicate
-`train_culture.tres`, change its settings, and add it to **Actions** in
-`data/calendar_rules.tres`.
+**A new action** (e.g. "Go to a gig": 2 days, Culture +3, Heart +2, a
+line): duplicate `train_culture.tres`, change its settings, and add it to
+**Actions** in `data/calendar_rules.tres`. Nothing else.
 
 ## What the calendar says: `dialogue/calendar.dialogue`
 
 The lines for training, resting and the boss. **Placeholder** lines now.
 They play in the calendar's box, where today's choices were. Click or press
 Space to go on. Lines without a `Name:` have no name tab. They can use
-`{{action}}` (Train Culture), `{{attribute}}` (Culture) and `{{amount}}` (5):
+`{{action}}` (its title), `{{changes}}` ("Culture +3, Heart +2"), and
+`{{attribute}}` / `{{amount}}` (the first thing it changes: Culture, 3):
 
 ```
 ~ train
@@ -109,15 +126,25 @@ the default style.
 
 | Section | What's in it |
 |---|---|
-| Words | "CHAPTER %d", "%d days to the boss", "TODAY · %s %d", "See the whole month ▾", "1 day" / "%d days", "Not enough days left", "BOSS", and the weekdays |
+| Words | "CHAPTER {chapter}", "{days} days to the boss", "TODAY · {weekday}", "See the whole month ▾", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run). Leave a blank out and it's just not shown |
+| What Shows | Switch parts on and off: **Show Day Numbers** (off), weekdays, the little offer pictures, the pop-up text over a day, "days to the boss", the "See the whole month" button, the line under each choice |
 | Days | Each day's size, the gap between them, the padding inside, number and weekday sizes, picture sizes, how faded past days are, today's growth and highlight colour, the **Hidden Mark** (the X, now the X art from `assets/x1/`), how fast the weeks pop in |
 | Today's Choices | Picture, title and detail sizes; show the 1/2/3 keys or not |
 | Sounds | Hover, pick, blocked, opening the whole month, a day being crossed off. Kenney stand-ins for now. |
 
-**Where things sit:** open `calendar.tscn`. **Top** holds the days (it's
-centred in the space above today's choices). **TodayPanel** is where today's
-choices are; the **DialogueBox** for the calendar's lines sits in the same
-spot.
+**Where things sit:** three scenes, each with its parts as nodes you can
+move, resize or reorder:
+
+| Scene | What's in it |
+|---|---|
+| `scenes/Calendar/calendar.tscn` | The whole screen. **Top** holds the days (centred in the space above today's choices); **TodayPanel** is today's choices; the **DialogueBox** for the calendar's lines sits in the same spot |
+| `scenes/Calendar/DayBox.tscn` | One day: **Tab** (weekday), **Box**, and inside it **Number**, **Offers** (the little pictures), **Picture** (what a past day was spent on, or the boss), **BossLabel**, **HiddenMark** / **HiddenText** (the X) |
+| `scenes/Calendar/DayChoice.tscn` | One of today's choices: **Key** (1/2/3), **Icon**, **Title**, **Detail** |
+
+**Your own design:** duplicate `DayBox.tscn` (or `DayChoice.tscn`), change
+it (keep the node names), then click the calendar's top node and drop it
+into **Day Scene** (or **Choice Scene**). The calendar's **Rules**,
+**Style** and **Messages** slots swap the other files the same way.
 
 ## Something's wrong
 
@@ -143,12 +170,15 @@ yet).
   `calendar_today()`, `day_at(number)`, `is_revealed(number)`,
   `is_boss(number)`. Each chapter's days are planned the first time
   they're needed. `RunCalendar.Day`: `options`, `spent_on`, `continued`.
-- `DayAction` (`scripts/data/day_action.gd`), `CalendarRules`,
-  `CalendarStyle`.
-- `CalendarScene` (`scenes/Calendar/calendar.gd`) builds `DayBox`es and
-  `DayChoice`s (`scenes/Calendar/`). A date spends its days, then
-  `AppLauncher.open_scene(action.app_name, action.scene)`. The date scene
-  comes back with `AppLauncher.open_scene("calendar", ...)`.
+- `DayAction` (`scripts/data/day_action.gd`): parts, applied by
+  `CalendarScene._on_picked` in order (`attribute_changes()`, the message,
+  `spend()` or `next_chapter()`, then `AppLauncher.open_scene(app_name,
+  scene)`). `CalendarRules`, `CalendarStyle` (`words(text, blanks)`,
+  `weekday(n)`).
+- `CalendarScene` (`scenes/Calendar/calendar.gd`) instances `day_scene`
+  (`DayBox`) and `choice_scene` (`DayChoice`), adds them, then calls their
+  `setup()`. The date scene comes back with
+  `AppLauncher.open_scene("calendar", ...)`. `PlayerManager.get_calendar(rules)`.
 - `PlayerManager.ensure_player()` makes a player with 50s when there isn't
   one. The old `current_day` / `advance_day()` / `calendar_action()` are
   gone.

@@ -6,11 +6,8 @@
 [resource]
 script = ExtResource("1_action")
 title = "Train Culture"
-description = "+5 Culture"
 icon = ExtResource("2_icon")
-kind = 1
 days = 1
 weight = 1.0
-attribute = 0
-amount = 5
 dialogue_title = "train"
+culture = 5

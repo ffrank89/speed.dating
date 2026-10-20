@@ -6,20 +6,27 @@ extends Control
 ## is highlighted, days gone are faded, and the boss sits on the last day. "See the
 ## whole month" opens up the rest of the calendar; days past this chapter show an X
 ## (data/calendar_rules.tres → Foresight Days lets you see further).
-## At the bottom: today's 2-3 choices. Click one (or press 1-3) and it uses up its days:
-##   a date opens the dating app (2 days),
-##   training raises an attribute and a rest day passes, each with a line from
-##     dialogue/calendar.dialogue,
-##   the boss day (placeholder) says so and starts the next chapter.
+## At the bottom: today's 2-3 choices. Click one (or press 1-3) and it does what its
+## action file says (data/day_actions/): changes attributes, plays a line from
+## dialogue/calendar.dialogue, uses up its days (or ends the chapter), and opens a
+## screen (a date opens the dating app).
 ## Press C for your Contacts.
 ##
-## Look and words: data/calendar_style.tres. What's offered: data/calendar_rules.tres
-## and data/day_actions/. Full guide: docs/guides/the-calendar.md
+## Every part is swappable: the layout is this scene, one day is Day Scene
+## (DayBox.tscn), one choice is Choice Scene (DayChoice.tscn); words, sizes, which parts
+## show and sounds are Style; what's offered is Rules. Full guide: docs/guides/the-calendar.md
 
-## The look, words and sounds (data/calendar_style.tres).
+## The look, words, which parts show, and sounds (data/calendar_style.tres).
 @export var style: CalendarStyle
-## The lines for training, rest and the boss (dialogue/calendar.dialogue).
+## How the calendar runs and what it offers (data/calendar_rules.tres). Used when the run
+## starts; after that the run keeps its calendar (PlayerManager.get_calendar()).
+@export var rules: CalendarRules
+## The lines actions can play (dialogue/calendar.dialogue).
 @export var messages: DialogueResource
+## One day on the calendar. Make your own design from DayBox.tscn and drop it here.
+@export var day_scene: PackedScene = preload("res://scenes/Calendar/DayBox.tscn")
+## One of today's choices. Make your own design from DayChoice.tscn and drop it here.
+@export var choice_scene: PackedScene = preload("res://scenes/Calendar/DayChoice.tscn")
 
 var _calendar: RunCalendar
 var _expanded := false
@@ -50,7 +57,7 @@ func _ready() -> void:
 		style = CalendarStyle.new()
 	if not style.box_style:
 		style.box_style = DialogueBoxStyle.new()
-	_calendar = PlayerManager.get_calendar()
+	_calendar = PlayerManager.get_calendar(rules)
 	dialogue_box.default_style = style.box_style
 	_top_bottom = top.offset_bottom
 	expand_button.gui_input.connect(_on_expand_input)
@@ -60,12 +67,21 @@ func _ready() -> void:
 
 ## Rebuilds the days and today's choices from the run's calendar.
 func _refresh() -> void:
-	chapter_label.text = style.chapter_text % _calendar.chapter
-	days_left.text = style.boss_today_text if _calendar.is_boss_day() else style.days_left_text % _calendar.days_until_boss()
+	var today_number := _calendar.calendar_today()
+	var blanks := {
+		"chapter": _calendar.chapter,
+		"days": _calendar.days_until_boss(),
+		"weekday": style.weekday(today_number),
+		"day": today_number,
+	}
+	chapter_label.text = style.words(style.chapter_text, blanks)
+	days_left.text = style.boss_today_text if _calendar.is_boss_day() else style.words(style.days_left_text, blanks)
+	days_left.visible = style.show_days_left
 	expand_button.text = style.collapse_text if _expanded else style.expand_text
+	expand_button.visible = style.show_expand_button
+	today_label.text = style.words(style.today_text, blanks)
 	_build_days()
 	_build_choices()
-	today_label.text = style.today_text % [_weekday(_calendar.calendar_today()), _calendar.calendar_today()]
 
 
 func _build_days() -> void:
@@ -89,9 +105,9 @@ func _build_days() -> void:
 			look = DayBox.Look.TODAY
 		elif not _calendar.is_revealed(number):
 			look = DayBox.Look.HIDDEN
-		var day_box := DayBox.new()
-		day_box.setup(style, number, _calendar.day_at(number), look, _calendar.is_boss(number))
+		var day_box := day_scene.instantiate() as DayBox
 		days_grid.add_child(day_box)
+		day_box.setup(style, number, _calendar.day_at(number), look, _calendar.is_boss(number))
 
 
 func _build_choices() -> void:
@@ -101,11 +117,11 @@ func _build_choices() -> void:
 	_choices.clear()
 	var options := _calendar.today_day().options
 	for i in options.size():
-		var choice := DayChoice.new()
+		var choice := choice_scene.instantiate() as DayChoice
+		choices_row.add_child(choice)
 		choice.setup(style, options[i], i + 1, _calendar.fits(options[i]))
 		choice.picked.connect(_on_picked)
 		choice.blocked.connect(func(_choice: DayChoice) -> void: _play(style.blocked_sound))
-		choices_row.add_child(choice)
 		_choices.append(choice)
 
 
@@ -115,24 +131,21 @@ func _on_picked(choice: DayChoice) -> void:
 	_busy = true
 	_play(style.pick_sound)
 	var action := choice.action
-	match action.kind:
-		DayAction.Kind.DATE:
-			# The date's days are used up now; the date scene comes back to the calendar.
-			_calendar.spend(action)
-			AppLauncher.open_scene(action.app_name, action.scene, choice.get_global_rect())
-			return
-		DayAction.Kind.TRAIN:
-			var player := PlayerManager.ensure_player()
-			player.increase_skill(Attr.display_name(action.attribute), action.amount)
-			await _say(action)
-			_calendar.spend(action)
-		DayAction.Kind.REST:
-			await _say(action)
-			_calendar.spend(action)
-		DayAction.Kind.BOSS:
-			# Placeholder until the boss fight exists: on to the next chapter.
-			await _say(action)
-			_calendar.next_chapter()
+	# The action's parts, in order (each one only if the action has it).
+	var changes := action.attribute_changes()
+	if not changes.is_empty():
+		var player := PlayerManager.ensure_player()
+		for attr in changes:
+			player.increase_skill(Attr.display_name(attr), changes[attr])
+	await _say(action)
+	if action.ends_chapter:
+		_calendar.next_chapter()
+	else:
+		_calendar.spend(action)
+	if not action.scene.is_empty():
+		# Its days are already used up; the screen it opens comes back to the calendar.
+		AppLauncher.open_scene(action.app_name if not action.app_name.is_empty() else "calendar", action.scene, choice.get_global_rect())
+		return
 	_play(style.day_done_sound)
 	_refresh()
 	await _pop_in_today()
@@ -140,14 +153,17 @@ func _on_picked(choice: DayChoice) -> void:
 
 
 # A line from dialogue/calendar.dialogue in the calendar's box, where today's choices
-# were. The lines can use {{action}}, {{attribute}} and {{amount}}.
+# were. The lines can use {{action}}, {{changes}}, {{attribute}} and {{amount}}.
 func _say(action: DayAction) -> void:
 	if not messages or action.dialogue_title.is_empty() or not messages.get_titles().has(action.dialogue_title):
 		return
+	var changes := action.attribute_changes()
+	var first: int = changes.keys()[0] if not changes.is_empty() else -1
 	var details := {
 		"action": action.title,
-		"attribute": Attr.display_name(action.attribute),
-		"amount": action.amount,
+		"changes": action.changes_text(),
+		"attribute": Attr.display_name(first) if first >= 0 else "",
+		"amount": changes[first] if first >= 0 else 0,
 	}
 	today_panel.visible = false
 	dialogue_box.start(messages, action.dialogue_title, [], [details])
@@ -229,12 +245,6 @@ func _apply_style() -> void:
 			var outline := box.make_outline()
 			if outline:
 				panel.draw_style_box(outline, Rect2(Vector2.ZERO, panel.size)))
-
-
-func _weekday(number: int) -> String:
-	if style.weekdays.is_empty():
-		return ""
-	return style.weekdays[(number - 1) % style.weekdays.size()]
 
 
 func _font(label: Label, font: Font, font_size: int, color: Color) -> void:

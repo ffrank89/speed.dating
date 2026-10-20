@@ -6,10 +6,9 @@
 [resource]
 script = ExtResource("1_action")
 title = "Date"
-description = "Swipe for someone new"
 icon = ExtResource("2_icon")
-kind = 0
 days = 2
 weight = 3.0
-app_name = "dating_app"
+description = "Swipe for someone new"
 scene = "res://scenes/Tinder/Screen.tscn"
+app_name = "dating_app"

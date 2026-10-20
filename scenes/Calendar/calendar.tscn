@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=8 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_calendar"]
 [ext_resource type="PackedScene" uid="uid://dshri7i831rjb" path="res://spritebackground.tscn" id="2_background"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://dialogue/calendar.dialogue" id="4_lines"]
 [ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="5_box"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/Contacts/ContactsApp.tscn" id="6_contacts"]
+[ext_resource type="Resource" path="res://data/calendar_rules.tres" id="7_rules"]
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3
@@ -16,6 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_calendar")
 style = ExtResource("3_style")
+rules = ExtResource("7_rules")
 messages = ExtResource("4_lines")
 
 [node name="Background" parent="." instance=ExtResource("2_background")]
@@ -125,7 +127,7 @@ mouse_filter = 2
 [node name="TodayLabel" type="Label" parent="TodayPanel/Column/PlateRow/TodayPlate"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "TODAY · MON 1"
+text = "TODAY · MON"
 
 [node name="TodayBox" type="PanelContainer" parent="TodayPanel/Column"]
 unique_name_in_owner = true
