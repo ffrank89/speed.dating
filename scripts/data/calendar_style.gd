@@ -39,6 +39,31 @@ extends Resource
 ## Laid over Background Image, to help the calendar stand out. A = how strong.
 @export var background_dim: Color = Color(0, 0, 0, 0.2)
 
+@export_group("Calendar Art")
+## A picture for the calendar itself: the page the days sit on (e.g. a paper calendar).
+## Empty = the calendar's box style. Drop finished calendar art in here, like the
+## iPhone frame. Try pictures in scenes/Calendar/CalendarTest.tscn.
+@export var page_image: Texture2D
+## How many pixels in from each edge of Page Image are frame that never stretches
+## (e.g. a spiral binding along the top). 0 = the whole picture stretches to fit.
+@export_range(0, 2048) var page_image_margin: int = 0
+## Space between the page's edges and what's on it, in pixels (with Page Image).
+@export_subgroup("Page Padding")
+@export_range(0, 1000) var page_padding_left: int = 70
+@export_range(0, 1000) var page_padding_top: int = 70
+@export_range(0, 1000) var page_padding_right: int = 70
+@export_range(0, 1000) var page_padding_bottom: int = 70
+@export_subgroup("")
+## Colour of the words on the page ("6 days to the boss", "See the whole month") with
+## Page Image.
+@export var page_text_color: Color = Color(0.1, 0.1, 0.12)
+## A picture for each day's box. Empty = the calendar's box style.
+@export var day_image: Texture2D
+## How many pixels in from each edge of Day Image never stretch. 0 = it all stretches.
+@export_range(0, 1024) var day_image_margin: int = 0
+## Colour of the words on a day (its number, BOSS, the ✕) with Day Image.
+@export var day_text_color: Color = Color(0.1, 0.1, 0.12)
+
 @export_group("What Shows")
 ## The "CHAPTER 1" tab above the days.
 @export var show_chapter: bool = false
@@ -120,3 +145,32 @@ func weekday(day_number: int) -> String:
 ## Fills in the blanks in one of the words above, e.g. words(chapter_text, {"chapter": 2}).
 func words(text: String, blanks: Dictionary) -> String:
 	return text.format(blanks)
+
+
+## The calendar's page drawn with Page Image, or null when there isn't one.
+func make_page_box() -> StyleBox:
+	if not page_image:
+		return null
+	var page := _picture_box(page_image, page_image_margin)
+	page.content_margin_left = page_padding_left
+	page.content_margin_top = page_padding_top
+	page.content_margin_right = page_padding_right
+	page.content_margin_bottom = page_padding_bottom
+	return page
+
+
+## A day's box drawn with Day Image, or null when there isn't one.
+func make_day_box() -> StyleBox:
+	if not day_image:
+		return null
+	var day := _picture_box(day_image, day_image_margin)
+	day.set_content_margin_all(day_padding)
+	return day
+
+
+# A picture stretched like a frame: `margin` pixels at each edge stay sharp.
+func _picture_box(texture: Texture2D, margin: int) -> StyleBoxTexture:
+	var box := StyleBoxTexture.new()
+	box.texture = texture
+	box.set_texture_margin_all(margin)
+	return box

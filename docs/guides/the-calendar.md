@@ -47,18 +47,23 @@ The run starts here: after the intro questions, the game opens the calendar.
 ## Try it
 
 **The test bench:** open `scenes/Calendar/CalendarTest.tscn` and press
-**F6**. It's the calendar with a bar across the top:
+**F6**. It's for trying **art on the calendar itself**, the way the iPhone
+frame will be tried. Two bars across the top:
 
 | | |
 |---|---|
-| **◀ ▶** | Flip through picture backgrounds behind the calendar (and **Pattern**, the animated one). The pictures are the test bench's **Backgrounds** list: click its top node and **Add Element** to try more. |
+| **Page ◀ ▶** | Pictures for the calendar's page, the thing the days sit on (**Page Images**: the old January desk calendar, a blank white page, the Godot logo, the poster). **None** = the box style. |
+| **Days ◀ ▶** | Pictures for each day's box (**Day Images**). **None** = the box style. |
+| **Scene ◀ ▶** | Pictures behind the whole screen (**Scene Backgrounds**). **None** = the animated pattern. |
 | **New calendar** | A new run's calendar, with new random choices |
 | **Skip day** | Uses up today without doing anything |
 | **Boss day** | Jumps to the boss day |
 | **Foresight** | How many days past this chapter you can see. Open the whole month to see them. |
 
-**F1** hides the bar. Nothing on the test bench is saved: the files keep
-their settings.
+To try your own pictures: click the test bench's top node and **Add
+Element** to its lists. **F1** hides the bars. Nothing on the test bench is
+saved: to keep a picture, put it in `data/calendar_style.tres` → **Calendar
+Art** (or **Background**).
 
 **On its own:** open `scenes/Calendar/calendar.tscn` and press **F6**.
 (Played without the intro, your attributes start at 50 each.)
@@ -141,7 +146,8 @@ the default style.
 | Section | What's in it |
 |---|---|
 | Words | "CHAPTER {chapter}", "{days} days to the boss", "TODAY · {weekday}", "See the whole month ▾", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run). Leave a blank out and it's just not shown |
-| Background | **Background Image**: a picture behind the calendar (empty = the animated pattern), and **Background Dim** over it so the calendar stands out |
+| Background | **Background Image**: a picture behind the whole screen (empty = the animated pattern), and **Background Dim** over it so the calendar stands out |
+| Calendar Art | Art for the calendar itself, like the iPhone frame. **Page Image**: the page the days sit on (empty = the box style). **Page Image Margin**: pixels at each edge that never stretch (a spiral binding, a border); 0 = the whole picture stretches. **Page Padding**: where the days sit on the page (left, top, right, bottom). **Page Text Color**: the words on the page. **Day Image** / **Day Image Margin** / **Day Text Color**: the same for each day's box |
 | What Shows | Switch parts on and off: the **CHAPTER 1** tab (off), **Show Day Numbers** (off), the **BOSS** caption (off), weekdays, the offer pictures, the pop-up text over a day, "days to the boss", the "See the whole month" button, the line under each choice |
 | Days | Each day's size (**Day Size** 330×300, and **Month Day Size** 300×250 when the whole month is open so it fits), the gap between them, the padding inside, number and weekday sizes, picture sizes (**Offer Icon Size** 84, **Spent Icon Size** 150 for a spent day, the boss and the X), how faded past days are, today's growth and highlight colour, the **Hidden Mark** (the X, now the X art from `assets/x1/`), how fast the weeks pop in |
 | Today's Choices | Picture, title and detail sizes; show the 1/2/3 keys or not |

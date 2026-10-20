@@ -21,6 +21,7 @@ thing. **No code needed.**
 | **Contacts app icon** | Godot logo | `data/apps/contacts.tres` → **Icon** | The app that opens at the end of a date, and your Contacts (C on the calendar) |
 | **Calendar action icons** | Our icons (love react, culturestat, lovestat, sleepy, sword stat); **Godot logo** for Train Intellect and Train Seduction | Each file in `data/day_actions/` → **Icon** | The pictures on each day and on today's choices. See [the calendar](the-calendar.md). |
 | **Calendar sounds** | Kenney stand-ins (`click_003`, `confirmation_001`, `error_006`, `scroll_001`, `drop_002`) | `data/calendar_style.tres` → **Sounds** | Hovering and picking a choice, a blocked choice, opening the whole month, a day crossed off |
+| **Calendar art** | none (the calendar's box style) | `data/calendar_style.tres` → **Calendar Art → Page Image** (and **Day Image**) | The calendar's page and day boxes, like the iPhone frame. Try pictures in `scenes/Calendar/CalendarTest.tscn`. |
 | **Calendar lines** | Placeholder writing | `dialogue/calendar.dialogue` | What the calendar says when you train, rest or reach the boss |
 | **The cursor** | `assets/placeholders/godot_logo.svg` | `data/cursors/default.tres` → **Pointer → Image** (set **Hotspot** to the clicking pixel) | The player's mouse cursor everywhere. See [the cursor guide](cursor.md). |
 | **The fly** (stage hazard) | `assets/placeholders/godot_logo.svg` | `scenes/Hazards/Fly/Fly.tscn` → **Body → Sprite** → Texture (or swap for an AnimatedSprite2D) | The fly that buzzes around her. Draw it facing right. |

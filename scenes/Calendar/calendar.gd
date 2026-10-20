@@ -240,7 +240,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _apply_style() -> void:
 	var box := style.box_style
-	month_box.add_theme_stylebox_override("panel", box.make_box())
+	# The calendar's page: Page Image (calendar art) or the box style.
+	var page := style.make_page_box()
+	month_box.add_theme_stylebox_override("panel", page if page else box.make_box())
 	today_box.add_theme_stylebox_override("panel", box.make_box())
 	for plate: PanelContainer in [chapter_plate, today_plate]:
 		plate.add_theme_stylebox_override("panel", box.make_name_plate())
@@ -254,17 +256,20 @@ func _apply_style() -> void:
 	background.visible = style.background_image == null
 	for label: Label in [chapter_label, today_label]:
 		_font(label, box.name_font if box.name_font else box.text_font(), box.name_font_size, box.name_color)
-	_font(days_left, box.text_font(), style.choice_detail_size, box.text_color)
-	# The accent colour of the box's "next" arrow, which is made to show up on the box.
-	_font(expand_button, box.text_font(), style.choice_detail_size, box.next_arrow_color)
+	# On a page picture, Page Text Color; on the box, the box's text and accent colours
+	# (the "next" arrow's colour is made to show up on the box).
+	_font(days_left, box.text_font(), style.choice_detail_size, style.page_text_color if page else box.text_color)
+	_font(expand_button, box.text_font(), style.choice_detail_size, style.page_text_color if page else box.next_arrow_color)
 	expand_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	expand_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	month_box.queue_redraw()
 	today_box.queue_redraw()
 
 
-# The outline over a picture box, like a dialogue box's.
+# The outline over a picture box, like a dialogue box's (not over calendar art).
 func _draw_outline(panel: PanelContainer) -> void:
+	if panel == month_box and style.page_image:
+		return
 	var outline := style.box_style.make_outline()
 	if outline:
 		panel.draw_style_box(outline, Rect2(Vector2.ZERO, panel.size))

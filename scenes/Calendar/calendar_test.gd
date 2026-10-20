@@ -1,34 +1,35 @@
 extends Control
-## Test bench for the calendar over picture backgrounds. Open CalendarTest.tscn and press
-## F6. The bar at the top:
-##   ◀ ▶        flip through Backgrounds (and "Pattern": the animated one)
-##   New        a new calendar (new random choices)
-##   Skip day   uses up today without doing anything
-##   Boss day   jumps to the boss day
-##   Foresight  how many days past this chapter you can see (open the whole month)
-## F1 hides the bar. Nothing here is saved: the files keep their settings.
+## Test bench for the calendar's art. Open CalendarTest.tscn and press F6.
+##
+## Top row, the calendar itself (try art the way the iPhone frame will be tried):
+##   Page ◀ ▶   pictures for the calendar's page (Page Images; "None" = the box style)
+##   Days ◀ ▶   pictures for each day's box (Day Images; "None" = the box style)
+##   Scene ◀ ▶  pictures behind the whole screen (Scene Backgrounds; "None" = the pattern)
+## Second row, the run:
+##   New calendar, Skip day, Boss day, Foresight (open the whole month to see it)
+## F1 hides the bars. Nothing here is saved: the files keep their settings. To keep a
+## picture, put it in data/calendar_style.tres → Calendar Art (or Background).
 
-## The pictures to try behind the calendar. Add more with Add Element.
-@export var backgrounds: Array[Texture2D] = []
-## Which one to start on. -1 = the animated pattern.
-@export var start_background: int = 0
+## Pictures to try as the calendar's page. Add more with Add Element.
+@export var page_images: Array[Texture2D] = []
+## Pictures to try as each day's box.
+@export var day_images: Array[Texture2D] = []
+## Pictures to try behind the whole screen.
+@export var scene_backgrounds: Array[Texture2D] = []
 
-# Static, so the picked background stays when New restarts the scene.
-static var _background := -2
+# Which picture each flipper is on (-1 = none). Static, so New calendar keeps them.
+static var _picks := {"page": 0, "day": -1, "scene": -1}
 
 @onready var calendar: CalendarScene = $Calendar
-@onready var bar: Control = %Bar
-@onready var background_label: Label = %BackgroundLabel
+@onready var bars: Control = %Bars
 @onready var foresight_label: Label = %ForesightLabel
 @onready var foresight: HSlider = %Foresight
 
 
 func _ready() -> void:
-	if _background == -2:
-		_background = start_background
-	%Previous.pressed.connect(_flip.bind(-1))
-	%Next.pressed.connect(_flip.bind(1))
-	%Pattern.pressed.connect(_show_background.bind(-1))
+	_hook_flipper("page", %PagePrevious, %PageNext, %PageLabel)
+	_hook_flipper("day", %DayPrevious, %DayNext, %DayLabel)
+	_hook_flipper("scene", %ScenePrevious, %SceneNext, %SceneLabel)
 	%NewCalendar.pressed.connect(func() -> void:
 		PlayerManager.calendar = null
 		get_tree().reload_current_scene())
@@ -40,21 +41,44 @@ func _ready() -> void:
 	foresight.value = PlayerManager.get_calendar().rules.foresight_days
 	foresight.value_changed.connect(_on_foresight)
 	_on_foresight(foresight.value)
-	_show_background(_background)
+	_apply_art()
 
 
-func _flip(step: int) -> void:
-	if backgrounds.is_empty():
-		return
-	# -1 (the pattern) is part of the loop, before the first picture.
-	_show_background(posmod(_background + 1 + step, backgrounds.size() + 1) - 1)
+func _hook_flipper(slot: String, previous: Button, next: Button, label: Label) -> void:
+	previous.pressed.connect(_flip.bind(slot, -1))
+	next.pressed.connect(_flip.bind(slot, 1))
+	label.set_meta("slot", slot)
 
 
-func _show_background(index: int) -> void:
-	_background = clampi(index, -1, backgrounds.size() - 1)
-	var picture: Texture2D = backgrounds[_background] if _background >= 0 else null
-	calendar.style.background_image = picture
-	background_label.text = picture.resource_path.get_file() if picture else "Pattern"
+func _pictures(slot: String) -> Array[Texture2D]:
+	match slot:
+		"page":
+			return page_images
+		"day":
+			return day_images
+	return scene_backgrounds
+
+
+# Steps through the pictures, with "None" (-1) before the first one.
+func _flip(slot: String, step: int) -> void:
+	var count := _pictures(slot).size()
+	_picks[slot] = posmod(_picks[slot] + 1 + step, count + 1) - 1
+	_apply_art()
+
+
+func _picked(slot: String) -> Texture2D:
+	var pictures := _pictures(slot)
+	var index: int = _picks[slot]
+	return pictures[index] if index >= 0 and index < pictures.size() else null
+
+
+func _apply_art() -> void:
+	calendar.style.page_image = _picked("page")
+	calendar.style.day_image = _picked("day")
+	calendar.style.background_image = _picked("scene")
+	for label: Label in [%PageLabel, %DayLabel, %SceneLabel]:
+		var picture := _picked(label.get_meta("slot"))
+		label.text = picture.resource_path.get_file() if picture else "None"
 	calendar.refresh_look()
 
 
@@ -77,4 +101,4 @@ func _on_foresight(value: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F1:
-		bar.visible = not bar.visible
+		bars.visible = not bars.visible

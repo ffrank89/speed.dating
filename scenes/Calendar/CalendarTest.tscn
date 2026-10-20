@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scenes/Calendar/calendar_test.gd" id="1_test"]
 [ext_resource type="PackedScene" uid="uid://bgn2jmt66pr2e" path="res://scenes/Calendar/calendar.tscn" id="2_calendar"]
@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://dyy6auoljp58h" path="res://assets/bedroom2.png" id="7_bedroom2"]
 [ext_resource type="Texture2D" uid="uid://cxkebojyvyjxq" path="res://assets/background_L.jpg" id="8_room"]
 [ext_resource type="Texture2D" uid="uid://5eqdwurmyynf" path="res://assets/background/background3.png" id="9_pattern"]
+[ext_resource type="Texture2D" uid="uid://cxa5t06lb1mcg" path="res://assets/january.png" id="10_january"]
+[ext_resource type="Texture2D" uid="uid://cl7rghmc7q5w3" path="res://assets/blank_white_1920_1080.jpg" id="11_paper"]
+[ext_resource type="Texture2D" uid="uid://bkmrtqmpbs54s" path="res://assets/placeholders/godot_logo.svg" id="12_logo"]
+[ext_resource type="Texture2D" uid="uid://bstl3rydu05li" path="res://assets/sexpistols.png" id="13_poster"]
 
 [sub_resource type="Theme" id="Theme_bar"]
 default_font_size = 30
@@ -21,86 +25,143 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_test")
-backgrounds = Array[Texture2D]([ExtResource("3_dusk"), ExtResource("4_day"), ExtResource("5_picnic"), ExtResource("6_bedroom1"), ExtResource("7_bedroom2"), ExtResource("8_room"), ExtResource("9_pattern")])
+page_images = Array[Texture2D]([ExtResource("10_january"), ExtResource("11_paper"), ExtResource("12_logo"), ExtResource("13_poster")])
+day_images = Array[Texture2D]([ExtResource("11_paper"), ExtResource("12_logo"), ExtResource("10_january")])
+scene_backgrounds = Array[Texture2D]([ExtResource("3_dusk"), ExtResource("4_day"), ExtResource("5_picnic"), ExtResource("6_bedroom1"), ExtResource("7_bedroom2"), ExtResource("8_room"), ExtResource("9_pattern")])
 
 [node name="Calendar" parent="." instance=ExtResource("2_calendar")]
 layout_mode = 1
 
-[node name="Bar" type="PanelContainer" parent="."]
+[node name="Bars" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 30.0
-offset_top = 16.0
+offset_top = 12.0
 offset_right = -30.0
-offset_bottom = 86.0
+offset_bottom = 132.0
 grow_horizontal = 2
 theme = SubResource("Theme_bar")
+theme_override_constants/separation = 4
 
-[node name="Row" type="HBoxContainer" parent="Bar"]
+[node name="ArtBar" type="PanelContainer" parent="Bars"]
 layout_mode = 2
-theme_override_constants/separation = 16
 
-[node name="Title" type="Label" parent="Bar/Row"]
+[node name="Row" type="HBoxContainer" parent="Bars/ArtBar"]
 layout_mode = 2
-text = "CALENDAR TEST (F1 hides)"
+theme_override_constants/separation = 12
 
-[node name="Previous" type="Button" parent="Bar/Row"]
+[node name="Title" type="Label" parent="Bars/ArtBar/Row"]
+layout_mode = 2
+text = "CALENDAR TEST (F1 hides)   "
+
+[node name="PageTitle" type="Label" parent="Bars/ArtBar/Row"]
+layout_mode = 2
+text = "Page"
+
+[node name="PagePrevious" type="Button" parent="Bars/ArtBar/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "  ◀  "
+text = " ◀ "
 
-[node name="BackgroundLabel" type="Label" parent="Bar/Row"]
+[node name="PageLabel" type="Label" parent="Bars/ArtBar/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(320, 0)
+custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
-text = "Pattern"
+text = "None"
 horizontal_alignment = 1
+clip_text = true
 
-[node name="Next" type="Button" parent="Bar/Row"]
+[node name="PageNext" type="Button" parent="Bars/ArtBar/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "  ▶  "
+text = " ▶ "
 
-[node name="Pattern" type="Button" parent="Bar/Row"]
+[node name="DayTitle" type="Label" parent="Bars/ArtBar/Row"]
+layout_mode = 2
+text = "   Days"
+
+[node name="DayPrevious" type="Button" parent="Bars/ArtBar/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "Pattern"
+text = " ◀ "
 
-[node name="Gap" type="Control" parent="Bar/Row"]
+[node name="DayLabel" type="Label" parent="Bars/ArtBar/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+text = "None"
+horizontal_alignment = 1
+clip_text = true
 
-[node name="NewCalendar" type="Button" parent="Bar/Row"]
+[node name="DayNext" type="Button" parent="Bars/ArtBar/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = " ▶ "
+
+[node name="SceneTitle" type="Label" parent="Bars/ArtBar/Row"]
+layout_mode = 2
+text = "   Scene"
+
+[node name="ScenePrevious" type="Button" parent="Bars/ArtBar/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = " ◀ "
+
+[node name="SceneLabel" type="Label" parent="Bars/ArtBar/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+text = "None"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="SceneNext" type="Button" parent="Bars/ArtBar/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = " ▶ "
+
+[node name="RunBar" type="PanelContainer" parent="Bars"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Row" type="HBoxContainer" parent="Bars/RunBar"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NewCalendar" type="Button" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "New calendar"
 
-[node name="SkipDay" type="Button" parent="Bar/Row"]
+[node name="SkipDay" type="Button" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Skip day"
 
-[node name="BossDay" type="Button" parent="Bar/Row"]
+[node name="BossDay" type="Button" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Boss day"
 
-[node name="ForesightLabel" type="Label" parent="Bar/Row"]
+[node name="ForesightLabel" type="Label" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Foresight: 0 days"
 horizontal_alignment = 2
 
-[node name="Foresight" type="HSlider" parent="Bar/Row"]
+[node name="Foresight" type="HSlider" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2

@@ -64,16 +64,20 @@ func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look
 	_font(weekday_label, _box_style.name_font if _box_style.name_font else _box_style.text_font(), style.weekday_size, _box_style.name_color)
 
 	box.custom_minimum_size = box_size
-	var panel := _box_style.make_box()
-	panel.set_content_margin_all(style.day_padding)
+	# Day Image (calendar art) or the box style.
+	var panel := style.make_day_box()
+	if not panel:
+		panel = _box_style.make_box()
+		panel.set_content_margin_all(style.day_padding)
 	box.add_theme_stylebox_override("panel", panel)
+	var ink := style.day_text_color if style.day_image else _box_style.text_color
 
 	number_label.text = str(day_number)
 	number_label.visible = style.show_day_numbers
-	_font(number_label, _box_style.text_font(), style.day_number_size, _box_style.text_color)
-	_font(boss_label, _box_style.text_font(), style.weekday_size, _box_style.text_color)
+	_font(number_label, _box_style.text_font(), style.day_number_size, ink)
+	_font(boss_label, _box_style.text_font(), style.weekday_size, ink)
 	boss_label.text = style.boss_text
-	_font(hidden_text, _box_style.text_font(), style.spent_icon_size, Color(_box_style.text_color, 0.6))
+	_font(hidden_text, _box_style.text_font(), style.spent_icon_size, Color(ink, 0.6))
 	for part: Control in [picture, hidden_mark]:
 		part.custom_minimum_size = Vector2.ONE * style.spent_icon_size
 
@@ -131,7 +135,7 @@ func _fit_inner() -> void:
 func _draw_box_extras() -> void:
 	if not _box_style:
 		return
-	var outline := _box_style.make_outline()
+	var outline := _box_style.make_outline() if not _style.day_image else null
 	if outline:
 		box.draw_style_box(outline, Rect2(Vector2.ZERO, box.size))
 	if look == Look.TODAY and _style.today_outline_width > 0:
