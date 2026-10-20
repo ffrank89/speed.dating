@@ -11,7 +11,7 @@ A date ends by opening **Contacts** like an app on an iPhone-style **New Contact
 - **Number At Hearts** (1) or more: she types her name, a ❤️ after it at **Heart Emoji At Hearts** (3) or more, then her phone number and address (her girl file → Contact Card), and taps Done.
 - Fewer: she types her name, deletes it, and taps Cancel (a Style toggle can skip the typing).
 
-Right under her name (above her number and address), her **traits** (type, tags, abilities: `GirlTrait` rows in her girl file) have empty fields from the start and pop into them one by one once her name is written (boop, boop, boop, each a little higher), and the card's middle scrolls to make room for any number of them. The heart after her name can be the emoji, a still picture or an animated icon (a SpriteFrames, e.g. `data/reactions.tres`).
+Right under her name (above her number and address), her **traits** (type, tags, abilities: `GirlTrait` rows in her girl file) have empty fields from the start and pop into them one by one once her name is written (boop, boop, boop, each a little higher). Without the heart she keeps her tags to herself: their fields say "you dont know me like that!" (Secret Kinds / Secret Text in the style), and the card's middle scrolls to make room for any number of them. The heart after her name can be the emoji, a still picture or an animated icon (a SpriteFrames, e.g. `data/reactions.tres`).
 
 Hearts are how many of her Affection Thresholds the date score reached (`DateScorer.hearts()`). Look, words, typing speed and sounds are in `data/contact_card_style.tres`; the thresholds in `data/date_rules.tres` → Result.
 

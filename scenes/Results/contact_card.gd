@@ -111,10 +111,11 @@ func play(hearts: int, rules: DateRules = null) -> bool:
 	var gives_number := hearts >= rules.number_at_hearts
 	if gives_number:
 		await _type_into(first_name, _girl.display_name)
-		if hearts >= rules.heart_emoji_at_hearts:
+		var earned_heart := hearts >= rules.heart_emoji_at_hearts
+		if earned_heart:
 			await _add_heart()
 		caret.visible = false
-		await _show_traits()
+		await _show_traits(earned_heart)
 		await _next_field()
 		await _type_into(phone, _girl.phone_number)
 		await _next_field()
@@ -149,7 +150,9 @@ func _process(delta: float) -> void:
 	var top := (_typing.size.y - line_height * lines.size()) / 2.0
 	caret.size = Vector2(5, line_height * 0.85)
 	caret.position = _typing.global_position + Vector2(width + 4.0, top + (lines.size() - 1) * line_height + line_height * 0.075)
-	caret.modulate.a = 1.0 if fmod(_time, 1.0) < 0.6 else 0.0
+	# Blink, and stay hidden while the field is scrolled out of view (the caret isn't clipped).
+	var in_view := scroll.get_global_rect().has_point(caret.position + caret.size / 2.0)
+	caret.modulate.a = 1.0 if in_view and fmod(_time, 1.0) < 0.6 else 0.0
 
 
 func _type_into(label: Label, words: String) -> void:
@@ -233,7 +236,9 @@ func _build_traits() -> void:
 			picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			picture.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			picture.modulate.a = 0.0
 			row.add_child(picture)
+			row.set_meta("icon", picture)
 		var kind := Label.new()
 		kind.text = info.kind
 		kind.custom_minimum_size = Vector2(170, 0)
@@ -253,6 +258,7 @@ func _build_traits() -> void:
 			description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_font(description, her_font, style.trait_description_size, Color(_box.text_color, 0.7))
 			words.add_child(description)
+			row.set_meta("description", description)
 		row.set_meta("trait", info)
 		row.set_meta("title_label", title_label)
 		row.set_meta("words", words)
@@ -264,8 +270,9 @@ func _build_traits() -> void:
 
 
 # Her traits pop into their fields one after another, each boop a little higher than
-# the last (or she types them), the card scrolling to follow.
-func _show_traits() -> void:
+# the last (or she types them), the card scrolling to follow. Without the heart, the
+# kinds in Secret Kinds (her tags) show Secret Text instead of the real thing.
+func _show_traits(earned_heart: bool) -> void:
 	if not traits_group.visible:
 		return
 	await _wait(style.trait_reveal_seconds)
@@ -276,12 +283,19 @@ func _show_traits() -> void:
 		_follow(child)
 		var info: GirlTrait = child.get_meta("trait")
 		var words: Control = child.get_meta("words")
+		var secret := not earned_heart and info.kind in style.secret_kinds
+		var shown_title := style.secret_text if secret else info.title
+		var title_label: Label = child.get_meta("title_label")
+		title_label.text = shown_title
+		if child.has_meta("description"):
+			child.get_meta("description").visible = not secret
+		if child.has_meta("icon") and not secret:
+			child.get_meta("icon").modulate.a = 1.0
 		if style.type_traits:
 			words.modulate.a = 1.0
-			var title_label: Label = child.get_meta("title_label")
 			_hints[title_label] = ""
 			_typed[title_label] = ""
-			await _type_into(title_label, info.title)
+			await _type_into(title_label, shown_title)
 			caret.visible = false
 			await _wait(style.pause_between_fields * 0.5)
 		else:

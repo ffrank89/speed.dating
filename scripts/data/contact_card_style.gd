@@ -77,6 +77,11 @@ extends Resource
 ## Each pop's sound plays this much higher than the last (boop, boop, boop going up).
 ## 0 = all the same pitch.
 @export_range(0.0, 0.5, 0.01) var trait_pitch_step: float = 0.12
+## The kinds of trait she keeps to herself unless you earned the heart (see
+## data/date_rules.tres → Heart Emoji At Hearts). Their field shows Secret Text instead.
+@export var secret_kinds: PackedStringArray = PackedStringArray(["tag"])
+## What a secret trait's field says when you didn't earn the heart.
+@export var secret_text: String = "you dont know me like that!"
 ## Size of a trait's description line.
 @export_range(8, 200) var trait_description_size: int = 38
 ## Size of a trait's icon, in pixels.
