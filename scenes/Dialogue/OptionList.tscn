@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://jo0wuneeg2qu"]
 
-[ext_resource type="Script" path="res://scenes/Dialogue/option_list.gd" id="1_list"]
+[ext_resource type="Script" uid="uid://bd8u4y7ajahdf" path="res://scenes/Dialogue/option_list.gd" id="1_list"]
 [ext_resource type="Resource" path="res://data/option_styles/default.tres" id="2_style"]
 
 [node name="OptionList" type="Control"]

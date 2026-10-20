@@ -12,32 +12,32 @@
 
 ~ start
 
-Split Ends: [#pose=reach] Okay. Speed round. My dad's boat has a name. Guess it.
-- Guess "The Unsinkable II". [#check=culture:40, #value=2]
+Split Ends: [#pose=reach] So when did you move here...?
+- I'm from the city. [#check=culture:40, #value=2]
 	if hit
-		Split Ends: [#pose=point, #react=exclamation] HOW did you know there was a first one?!
+		Split Ends: [#pose=point, #react=exclamation] Omg what high school did u go to?
 	else
-		Split Ends: [#pose=parker, #react=question] ...There wasn't a first one. Now I'm sad.
-- Guess "Boat". [#value=1]
-	Split Ends: [#pose=hunched] Honestly? Respect.
-- Ask if she'll take you out on it sometime. [#check=seduction:70, #value=3]
+		Split Ends: [#pose=parker, #react=question] Weird I've never seen you around...
+- Couple years ago. [#value=1]
+	Split Ends: [#pose=hunched] Oh yeah lotta ppl did around then.
+- Yesterday. Show me around? [#check=seduction:70, #value=3]
 	if hit
 		Split Ends: [#pose=earring, #react=heart] ...Yeah. Okay. I'd like that.
 	else
-		Split Ends: [#pose=backshot, #react=anger] Whoa. Buy me a drink first, sailor.
+		Split Ends: [#pose=backshot, #react=anger] Uhhh we just met.
 
-Split Ends: [#pose=cig] Next question. Are birds real?
-- Explain the government drone theory in detail. [#check=intellect:60, #value=3]
+Split Ends: [#pose=cig] Next question. What's in this for me?
+- Describe the female anatomy in detail. [#check=intellect:60, #value=3]
 	if hit
-		Split Ends: [#pose=point, #react=heart] Oh my GOD. You've read the zine.
+		Split Ends: [#pose=point, #react=heart] Oh my GOD. I'm trying you out.
 	else
-		Split Ends: [#pose=parker, #react=question] That's... not how batteries work.
-- Say you just think they're neat. [#check=heart:20, #value=2]
+		Split Ends: [#pose=parker, #react=question] There's... one butthole.
+- Trips to the farmers market. White picket fence. Whole shabang. [#check=heart:20, #value=2]
 	if hit
-		Split Ends: [#pose=reach] That's actually really sweet. Wrong, but sweet.
+		Split Ends: [#pose=reach] Ok that's actually really sweet.
 	else
-		Split Ends: [#pose=hunched] Cool. Cool cool cool.
-- Say "Who cares?" [#value=-2]
+		Split Ends: [#pose=hunched] You know thats not everyone's thing.
+- Who cares? [#value=-2]
 	Split Ends: [#pose=backshot, #react=anger] I care. Obviously.
 
 Split Ends: [#pose=reach] That's the end of the test lines. Press Restart to go again.

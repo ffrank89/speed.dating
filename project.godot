@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="speed dating"
-run/main_scene="res://scenes/Intro/IntroQuestions.tscn"
+run/main_scene="uid://ckpg8pvesqt83"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
