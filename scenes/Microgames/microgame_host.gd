@@ -22,6 +22,7 @@ signal ended(game: Microgame, passed: bool)
 @export var default_app: AppInfo
 
 var _game: Microgame
+var _active := false
 var _running := false
 var _total := 0.0
 var _low := false
@@ -50,6 +51,11 @@ func _ready() -> void:
 	dim.visible = false
 
 
+## True from the moment play() starts until the date is back (stage hazards freeze meanwhile).
+func is_active() -> bool:
+	return _active
+
+
 ## True if the library has a microgame with this name.
 func has_game(game_name: String) -> bool:
 	return library != null and library.has_game(game_name)
@@ -70,6 +76,7 @@ func play(game_name: String, difficulty: float, modifiers: Dictionary = {}, from
 	var app := game.app if game.app else default_app
 	game.visible = false
 	game_slot.add_child(game)
+	_active = true
 
 	var show_game := func() -> void:
 		dim.visible = true
@@ -101,6 +108,7 @@ func play(game_name: String, difficulty: float, modifiers: Dictionary = {}, from
 		await fade_out.finished
 		hide_game.call()
 	game.queue_free()
+	_active = false
 	return passed
 
 

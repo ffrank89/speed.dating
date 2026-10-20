@@ -53,6 +53,7 @@
 | `DialogueBox` + `VoicePlayer` | **Built (M1).** `scenes/Dialogue/DialogueBox.tscn`. Typewriter via the addon's `DialogueLabel`; restyles per speaker from her `DialogueBoxStyle` (box colour/outline or a 9-slice picture, font, name plate, next arrow). `VoicePlayer` plays a letter sound on each `spoke` signal. `GirlVoice`: `letter_sounds_folder`, `pitch`, `pitch_variance`, `seconds_per_letter`, `letters_per_sound`, `volume_db`. Guide: [dialogue-box.md](../guides/dialogue-box.md). |
 | Microgame framework | **Built (M3 setup).** Opens like an iPhone app from the picked bubble ([0049](../decisions/0049-open-like-an-iphone-app.md)). `Microgame` base (`scenes/Microgames/microgame.gd`), `MicrogameHost` overlay (dim, banner, timer bar, NICE/OOPS stamp; look in `data/microgame_style.tres`), library `data/microgames.tres` (name → scene), `microgame_press` / `microgame_up…right` input actions and a keyboard-steerable `pointer`, F6 plays one alone on a loop. `OptionList` plays an option's microgame instead of the roll; `DateScorer.difficulty_of()` / `resolve_microgame()`. Template: `scenes/Microgames/_template/` (CATCH IT!). Guide: [making-a-microgame.md](../guides/making-a-microgame.md). |
 | Microgames ×3 for v1 | Each its own scene extending `Microgame`, built by hand. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
+| `StageHazard` + `StageHazards` | **Built.** Things that turn up mid-date; dealing with one earns points and a reaction. First: the **fly** (`scenes/Hazards/Fly/`), which follows a random drawn path and is shooed off screen with the mouse. When it appears (after N answers, repeat, delay, chance) and the reward are Inspector settings. Guide: [stage-hazards.md](../guides/stage-hazards.md), decision [0050](../decisions/0050-stage-hazards.md). |
 | Item reactions | Show an item → her reaction from `GirlData.item_reactions`. Flavor only in the first build. |
 | Turn count | Shared constant or per date type (first vs follow-up). TBD. |
 
@@ -82,6 +83,7 @@ the timer).
 | Score pop / Affection meter | `ScoreDisplay`, compatibility meter | Placeholder exists |
 | Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
+| Stage hazard art: the fly (and wing-flap frames), a buzz loop | `Fly.tscn` → Body/Sprite, Sounds → Buzz Sound | Not made. Godot logo placeholder. |
 | Date-end summary card (Affection hearts 0–3, gains, perks) | End of date, before returning to calendar | TBD |
 
 ## Systems it's part of

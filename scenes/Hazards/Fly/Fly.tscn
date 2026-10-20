@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scenes/Hazards/Fly/fly.gd" id="1_fly"]
+[ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
+[ext_resource type="Texture2D" path="res://assets/bedroom1.png" id="3_room"]
+[ext_resource type="Texture2D" path="res://assets/splitends/splitends_reach_update.png" id="4_her"]
+
+[sub_resource type="Curve2D" id="Curve2D_head"]
+_data = {
+"points": PackedVector2Array(0, 170, 0, -170, 1120, 600, -200, 0, 200, 0, 1480, 300, 0, -170, 0, 170, 1840, 600, 200, 0, -200, 0, 1480, 900, 0, 170, 0, -170, 1120, 600)
+}
+point_count = 5
+
+[sub_resource type="Curve2D" id="Curve2D_swoop"]
+_data = {
+"points": PackedVector2Array(0, 0, 300, -400, 450, 950, -450, 0, 450, 0, 1500, 320, -300, -400, 0, 0, 2550, 900)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_zigzag"]
+_data = {
+"points": PackedVector2Array(0, 0, 150, 150, 600, 260, -150, 0, 150, 0, 1050, 650, -150, 0, 150, 0, 1500, 260, -150, 0, 150, 0, 1950, 650, -150, 150, 0, 0, 2400, 260)
+}
+point_count = 5
+
+[node name="Fly" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fly")
+
+[node name="DrawingGuide" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Room" type="TextureRect" parent="DrawingGuide"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_room")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Her" type="TextureRect" parent="DrawingGuide"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -650.0
+offset_top = -1600.0
+offset_right = 650.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("4_her")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Paths" type="Node2D" parent="."]
+
+[node name="AroundHerHead" type="Path2D" parent="Paths"]
+curve = SubResource("Curve2D_head")
+
+[node name="Swoop" type="Path2D" parent="Paths"]
+curve = SubResource("Curve2D_swoop")
+
+[node name="Zigzag" type="Path2D" parent="Paths"]
+curve = SubResource("Curve2D_zigzag")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite2D" parent="Body"]
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_logo")
+
+[node name="Buzz" type="AudioStreamPlayer" parent="."]

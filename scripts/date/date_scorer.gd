@@ -89,6 +89,12 @@ func resolve_microgame(option: DateOption, passed: bool) -> Result:
 	return result
 
 
+## Adds points from outside the options (e.g. shooing a stage hazard away). Returns them.
+func add_bonus(points: float) -> float:
+	score += points
+	return points
+
+
 func _add_points(result: Result) -> void:
 	var earned := points_if_hit(result.option)
 	result.points = earned if result.hit else -maxf(absf(earned) * rules.miss_penalty, rules.min_miss_cost)

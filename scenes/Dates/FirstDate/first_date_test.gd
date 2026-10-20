@@ -34,12 +34,16 @@ var _state := DateState.new()
 @onready var sliders: VBoxContainer = %Sliders
 @onready var pose_button: Button = %PoseButton
 @onready var restart_button: Button = %RestartButton
+@onready var hazard_button: Button = %HazardButton
+@onready var stage_hazards: StageHazards = $StageHazards
 
 
 func _ready() -> void:
 	_build_sliders()
 	pose_button.pressed.connect(_next_pose)
 	restart_button.pressed.connect(get_tree().reload_current_scene)
+	hazard_button.pressed.connect(stage_hazards.appear_all)
+	stage_hazards.hazard_cleared.connect(_on_hazard_cleared)
 	dialogue_box.pose_requested.connect(_on_pose_requested)
 	dialogue_box.reaction_requested.connect(_on_reaction_requested)
 	dialogue_box.responses_ready.connect(func(responses: Array) -> void: option_list.show_options(responses, _scorer, girl.option_style))
@@ -74,6 +78,19 @@ func _on_option_resolved(response: DialogueResponse, result: DateScorer.Result) 
 		roll = "microgame %s" % ("passed" if result.hit else "failed")
 	score_label.text = "Date score: %.1f   (last: %+.1f, %s)" % [_scorer.score, result.points, roll]
 	dialogue_box.choose(response)
+
+
+# The player dealt with a stage hazard (e.g. shooed the fly away): points and her reaction.
+func _on_hazard_cleared(hazard: StageHazard) -> void:
+	if not _scorer:
+		return
+	_scorer.add_bonus(hazard.points)
+	_state.score = _scorer.score
+	if not hazard.reaction.is_empty():
+		reaction_icon.show_reaction(hazard.reaction)
+	if not hazard.pose.is_empty():
+		_show_pose(hazard.pose)
+	score_label.text = "Date score: %.1f   (last: %+.1f, %s cleared)" % [_scorer.score, hazard.points, hazard.name]
 
 
 func _build_sliders() -> void:

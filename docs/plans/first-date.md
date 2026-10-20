@@ -151,6 +151,15 @@ and the score moves correctly (checked with the debug sliders).
 **Done when:** both microgames are fun in isolation, readable within half
 a second of starting, and feed pass/fail into the date score.
 
+### Extra: stage hazards ✅ Built (2026-10-20)
+
+Things that turn up mid-date and get in the way; dealing with one earns
+points and a reaction. First one: a **fly** that follows a random drawn path
+and is shooed off screen with the mouse (+1, heart). It turns up after 1
+answer in the test scene (Inspector setting). Guide:
+[stage-hazards.md](../guides/stage-hazards.md). Art needed: the fly (and
+wing frames), a buzz loop.
+
 ### M4: The full date
 
 | Code | Art | Writing / audio |
