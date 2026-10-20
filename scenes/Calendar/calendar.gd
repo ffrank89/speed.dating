@@ -35,6 +35,9 @@ var _choices: Array[DayChoice] = []
 # Top's bottom edge with today's choices showing (the whole calendar takes their room).
 var _top_bottom := 0.0
 
+@onready var background: Control = $Background
+@onready var background_image: TextureRect = %BackgroundImage
+@onready var background_dim: ColorRect = %BackgroundDim
 @onready var top: Control = $Top
 @onready var month_box: PanelContainer = %MonthBox
 @onready var chapter_plate: PanelContainer = %ChapterPlate
@@ -61,6 +64,14 @@ func _ready() -> void:
 	dialogue_box.default_style = style.box_style
 	_top_bottom = top.offset_bottom
 	expand_button.gui_input.connect(_on_expand_input)
+	for panel: PanelContainer in [month_box, today_box]:
+		panel.draw.connect(_draw_outline.bind(panel))
+	_apply_style()
+	_refresh()
+
+
+## Re-reads Style and rebuilds everything (e.g. after changing the style while playing).
+func refresh_look() -> void:
 	_apply_style()
 	_refresh()
 
@@ -107,7 +118,8 @@ func _build_days() -> void:
 			look = DayBox.Look.HIDDEN
 		var day_box := day_scene.instantiate() as DayBox
 		days_grid.add_child(day_box)
-		day_box.setup(style, number, _calendar.day_at(number), look, _calendar.is_boss(number))
+		day_box.setup(style, number, _calendar.day_at(number), look, _calendar.is_boss(number),
+			style.month_day_size if _expanded else style.day_size)
 
 
 func _build_choices() -> void:
@@ -233,6 +245,13 @@ func _apply_style() -> void:
 	for plate: PanelContainer in [chapter_plate, today_plate]:
 		plate.add_theme_stylebox_override("panel", box.make_name_plate())
 		plate.visible = box.show_name_plate
+	chapter_plate.visible = box.show_name_plate and style.show_chapter
+	# A picture behind everything, or the animated pattern.
+	background_image.texture = style.background_image
+	background_image.visible = style.background_image != null
+	background_dim.color = style.background_dim
+	background_dim.visible = style.background_image != null
+	background.visible = style.background_image == null
 	for label: Label in [chapter_label, today_label]:
 		_font(label, box.name_font if box.name_font else box.text_font(), box.name_font_size, box.name_color)
 	_font(days_left, box.text_font(), style.choice_detail_size, box.text_color)
@@ -240,11 +259,15 @@ func _apply_style() -> void:
 	_font(expand_button, box.text_font(), style.choice_detail_size, box.next_arrow_color)
 	expand_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	expand_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	for panel: PanelContainer in [month_box, today_box]:
-		panel.draw.connect(func() -> void:
-			var outline := box.make_outline()
-			if outline:
-				panel.draw_style_box(outline, Rect2(Vector2.ZERO, panel.size)))
+	month_box.queue_redraw()
+	today_box.queue_redraw()
+
+
+# The outline over a picture box, like a dialogue box's.
+func _draw_outline(panel: PanelContainer) -> void:
+	var outline := style.box_style.make_outline()
+	if outline:
+		panel.draw_style_box(outline, Rect2(Vector2.ZERO, panel.size))
 
 
 func _font(label: Label, font: Font, font_size: int, color: Color) -> void:

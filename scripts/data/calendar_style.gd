@@ -13,7 +13,7 @@ extends Resource
 @export_group("Words")
 ## The words can fill in blanks: {chapter}, {days} (days left, or days a choice takes),
 ## {weekday} and {day} (the day's number in the run).
-## On the tab above the days.
+## On the tab above the days (What Shows → Show Chapter).
 @export var chapter_text: String = "CHAPTER {chapter}"
 ## Next to it.
 @export var days_left_text: String = "{days} days to the boss"
@@ -28,14 +28,24 @@ extends Resource
 @export var many_days_text: String = "{days} days"
 ## On a choice that doesn't fit before the boss.
 @export var not_enough_days_text: String = "Not enough days left"
-## On the boss day's box.
+## Under the boss day's picture (What Shows → Show Boss Text).
 @export var boss_text: String = "BOSS"
 ## The weekdays, starting with day 1.
 @export var weekdays: PackedStringArray = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
 
+@export_group("Background")
+## A picture behind the calendar, filling the screen. Empty = the animated pattern.
+@export var background_image: Texture2D
+## Laid over Background Image, to help the calendar stand out. A = how strong.
+@export var background_dim: Color = Color(0, 0, 0, 0.2)
+
 @export_group("What Shows")
+## The "CHAPTER 1" tab above the days.
+@export var show_chapter: bool = false
 ## Each day's number on its box (off = just the weekday).
 @export var show_day_numbers: bool = false
+## The "BOSS" caption under the boss day's picture.
+@export var show_boss_text: bool = false
 ## Each day's weekday on its tab.
 @export var show_weekdays: bool = true
 ## The little pictures of what each day offers.
@@ -51,9 +61,11 @@ extends Resource
 
 @export_group("Days")
 ## Size of each day's box, in pixels.
-@export var day_size: Vector2 = Vector2(250, 220)
+@export var day_size: Vector2 = Vector2(330, 300)
+## Size of each day's box when the whole month is open (smaller, so it all fits).
+@export var month_day_size: Vector2 = Vector2(300, 250)
 ## Space between the days, in pixels.
-@export_range(0, 100) var day_gap: int = 22
+@export_range(0, 100) var day_gap: int = 26
 ## Space inside each day's box, between its edge and what's in it (the dialogue boxes'
 ## Padding is too roomy for a box this small).
 @export_range(0, 100) var day_padding: int = 16
@@ -61,10 +73,10 @@ extends Resource
 @export_range(8, 200) var day_number_size: int = 64
 ## Size of the weekday on each day's tab.
 @export_range(8, 120) var weekday_size: int = 30
-## Size of the little pictures of what a day offers.
-@export_range(16, 200) var offer_icon_size: int = 52
-## Size of the picture on a day that's been spent (or the boss day).
-@export_range(16, 300) var spent_icon_size: int = 96
+## Size of the pictures of what a day offers.
+@export_range(16, 200) var offer_icon_size: int = 84
+## Size of the picture on a day that's been spent, the boss day, and the X.
+@export_range(16, 300) var spent_icon_size: int = 150
 ## Days already gone fade to this (1 = not faded).
 @export_range(0.0, 1.0, 0.05) var past_alpha: float = 0.45
 ## Today's box grows by this much, and gets this outline.

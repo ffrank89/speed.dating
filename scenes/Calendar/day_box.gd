@@ -49,8 +49,9 @@ func _ready() -> void:
 	box.draw.connect(_draw_box_extras)
 
 
-## Fills the day in. Call it once it's in the scene. `day` = what's on it.
-func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look: Look, boss_day: bool) -> void:
+## Fills the day in. Call it once it's in the scene. `day` = what's on it; `box_size` =
+## the box's size (Day Size, or Month Day Size when the whole month is open).
+func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look: Look, boss_day: bool, box_size: Vector2) -> void:
 	_style = style
 	_box_style = style.box_style if style.box_style else DialogueBoxStyle.new()
 	number = day_number
@@ -62,7 +63,7 @@ func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look
 	weekday_label.text = style.weekday(day_number)
 	_font(weekday_label, _box_style.name_font if _box_style.name_font else _box_style.text_font(), style.weekday_size, _box_style.name_color)
 
-	box.custom_minimum_size = style.day_size
+	box.custom_minimum_size = box_size
 	var panel := _box_style.make_box()
 	panel.set_content_margin_all(style.day_padding)
 	box.add_theme_stylebox_override("panel", panel)
@@ -98,7 +99,7 @@ func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look
 			if boss_day and not day.options.is_empty():
 				picture.texture = day.options[0].icon
 				picture.visible = day.options[0].icon != null
-				boss_label.visible = true
+				boss_label.visible = style.show_boss_text
 			else:
 				offers.visible = style.show_offers
 				for action in day.options:

@@ -6,11 +6,11 @@ The calendar is the run's hub. It's drawn in its own **dialogue-box style**,
 so it matches the dialogue boxes: boxes, outlines, font, and name tabs.
 
 ```
-┌ CHAPTER 1 ──────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────┐
 │ 5 days to the boss                See the whole month ▾ │
 │  MON    TUE    WED    THU    FRI    SAT    SUN          │
 │ ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌────┐        │
-│ │ ✓ │  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │BOSS│        │
+│ │ ✓ │  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │ ⚔  │        │
 │ └───┘  └───┘  └───┘  └───┘  └───┘  └───┘  └────┘        │
 └─────────────────────────────────────────────────────────┘
 
@@ -46,8 +46,22 @@ The run starts here: after the intro questions, the game opens the calendar.
 
 ## Try it
 
-Open `scenes/Calendar/calendar.tscn` and press **F6**. (Played on its own,
-your attributes start at 50 each.)
+**The test bench:** open `scenes/Calendar/CalendarTest.tscn` and press
+**F6**. It's the calendar with a bar across the top:
+
+| | |
+|---|---|
+| **◀ ▶** | Flip through picture backgrounds behind the calendar (and **Pattern**, the animated one). The pictures are the test bench's **Backgrounds** list: click its top node and **Add Element** to try more. |
+| **New calendar** | A new run's calendar, with new random choices |
+| **Skip day** | Uses up today without doing anything |
+| **Boss day** | Jumps to the boss day |
+| **Foresight** | How many days past this chapter you can see. Open the whole month to see them. |
+
+**F1** hides the bar. Nothing on the test bench is saved: the files keep
+their settings.
+
+**On its own:** open `scenes/Calendar/calendar.tscn` and press **F6**.
+(Played without the intro, your attributes start at 50 each.)
 
 ## What's offered: `data/calendar_rules.tres`
 
@@ -127,8 +141,9 @@ the default style.
 | Section | What's in it |
 |---|---|
 | Words | "CHAPTER {chapter}", "{days} days to the boss", "TODAY · {weekday}", "See the whole month ▾", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run). Leave a blank out and it's just not shown |
-| What Shows | Switch parts on and off: **Show Day Numbers** (off), weekdays, the little offer pictures, the pop-up text over a day, "days to the boss", the "See the whole month" button, the line under each choice |
-| Days | Each day's size, the gap between them, the padding inside, number and weekday sizes, picture sizes, how faded past days are, today's growth and highlight colour, the **Hidden Mark** (the X, now the X art from `assets/x1/`), how fast the weeks pop in |
+| Background | **Background Image**: a picture behind the calendar (empty = the animated pattern), and **Background Dim** over it so the calendar stands out |
+| What Shows | Switch parts on and off: the **CHAPTER 1** tab (off), **Show Day Numbers** (off), the **BOSS** caption (off), weekdays, the offer pictures, the pop-up text over a day, "days to the boss", the "See the whole month" button, the line under each choice |
+| Days | Each day's size (**Day Size** 330×300, and **Month Day Size** 300×250 when the whole month is open so it fits), the gap between them, the padding inside, number and weekday sizes, picture sizes (**Offer Icon Size** 84, **Spent Icon Size** 150 for a spent day, the boss and the X), how faded past days are, today's growth and highlight colour, the **Hidden Mark** (the X, now the X art from `assets/x1/`), how fast the weeks pop in |
 | Today's Choices | Picture, title and detail sizes; show the 1/2/3 keys or not |
 | Sounds | Hover, pick, blocked, opening the whole month, a day being crossed off. Kenney stand-ins for now. |
 
@@ -137,7 +152,7 @@ move, resize or reorder:
 
 | Scene | What's in it |
 |---|---|
-| `scenes/Calendar/calendar.tscn` | The whole screen. **Top** holds the days (centred in the space above today's choices); **TodayPanel** is today's choices; the **DialogueBox** for the calendar's lines sits in the same spot |
+| `scenes/Calendar/calendar.tscn` | The whole screen. **Background** (the pattern) / **BackgroundImage** / **BackgroundDim** behind. **Top** holds the days (centred in the space above today's choices); **TodayPanel** is today's choices; the **DialogueBox** for the calendar's lines sits in the same spot |
 | `scenes/Calendar/DayBox.tscn` | One day: **Tab** (weekday), **Box**, and inside it **Number**, **Offers** (the little pictures), **Picture** (what a past day was spent on, or the boss), **BossLabel**, **HiddenMark** / **HiddenText** (the X) |
 | `scenes/Calendar/DayChoice.tscn` | One of today's choices: **Key** (1/2/3), **Icon**, **Title**, **Detail** |
 
