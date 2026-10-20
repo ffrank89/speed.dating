@@ -1,10 +1,12 @@
 class_name ContactsApp
 extends CanvasLayer
 ## Your party, as the Contacts on your phone: every girl who gave you her number is
-## saved here. Press C (the open_contacts action) and the list slides up over the screen.
+## saved here. Press C (the open_contacts action) and it opens over the screen like an
+## iPhone app, the same way a microgame opens over the date (data/apps/contacts.tres),
+## growing from the bottom middle of the screen (or a click from a moment ago).
 ## Click a girl to open her contact (her card as she filled it in on the date: what your
 ## hearts unlocked, her number and address); "‹ Contacts" goes back. C again, Escape or
-## the bar at the bottom slides it away.
+## the bar at the bottom closes it back into where it came from.
 ##
 ## C works on any screen that has this scene in it. For now that's only the calendar.
 ##
@@ -15,12 +17,14 @@ extends CanvasLayer
 
 ## A girl's contact was opened.
 signal contact_opened(member: PartyMember)
-## The list slid away.
+## Contacts closed.
 signal closed
 
 ## The key that opens and closes Contacts: an action in Project Settings → Input Map
 ## (open_contacts = C).
 @export var open_action: StringName = &"open_contacts"
+## The app it opens as (its icon and launch screen): a file name in data/apps/.
+@export var app_name: String = "contacts"
 ## How the list and the cards look and sound (data/contact_card_style.tres).
 @export var style: ContactCardStyle
 ## Which hearts unlock what on her card (data/date_rules.tres → Result).
@@ -36,6 +40,8 @@ var _members: Array[PartyMember] = []
 # Played on its own (F6): the test contacts, shown instead of your party.
 var _test_members: Array[PartyMember] = []
 var _busy := false
+# Where it opened from, so it closes back into the same place.
+var _from := Rect2()
 
 @onready var dim: ColorRect = %Dim
 @onready var sheet: Panel = %Sheet
@@ -68,20 +74,33 @@ func _ready() -> void:
 		visible = false
 
 
-## Slides the list up from the bottom of the screen. Use with await to wait for it.
+## Opens Contacts like an iPhone app (Style → Open As App), or slides it up from the
+## bottom. Use with await to wait for it.
 func open() -> void:
 	if visible or _busy or AppLauncher.is_busy():
 		return
-	show_list()
-	await _slide_sheet(true)
+	_busy = true
+	if style.open_as_app:
+		_from = AppLauncher.origin_rect()
+		await AppLauncher.open(app_name, show_list, _from)
+	else:
+		show_list()
+		await _slide_sheet(true)
+	_busy = false
 
 
-## Slides the list (and her card, if it's open) back down.
+## Closes Contacts (and her card, if it's open) back into where it opened from, or
+## slides it back down.
 func close() -> void:
-	if not visible or _busy:
+	if not visible or _busy or AppLauncher.is_busy():
 		return
-	await _slide_sheet(false)
-	hide_list()
+	_busy = true
+	if style.open_as_app:
+		await AppLauncher.close(app_name, hide_list, _from)
+	else:
+		await _slide_sheet(false)
+		hide_list()
+	_busy = false
 	closed.emit()
 
 
@@ -257,6 +276,7 @@ func _back_to_list() -> void:
 	card.visible = false
 
 
+# Her card sliding in over the list (or back out).
 func _slide(opening: bool) -> void:
 	_busy = true
 	var push := sheet.size.x * 0.25
@@ -272,9 +292,9 @@ func _slide(opening: bool) -> void:
 	_busy = false
 
 
-# Up from below the screen (opening) or back down (closing), with the dim fading.
+# With Open As App off: up from below the screen (opening) or back down (closing),
+# with the dim fading.
 func _slide_sheet(opening: bool) -> void:
-	_busy = true
 	var rest := _sheet_y()
 	var away := sheet.get_parent_area_size().y + 40.0
 	if opening:
@@ -288,7 +308,6 @@ func _slide_sheet(opening: bool) -> void:
 		slide.tween_property(card, "offset:y", away - rest, style.open_seconds)
 	await slide.finished
 	card.offset.y = 0.0
-	_busy = false
 
 
 # Where the sheet sits when nothing has pushed it aside.

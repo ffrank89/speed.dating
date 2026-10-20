@@ -88,7 +88,11 @@ extends Resource
 @export_range(16, 200) var trait_icon_size: int = 64
 
 @export_group("Contacts App")
-## Seconds for the list to slide up when you press C (and back down).
+## On = pressing C opens your Contacts like an iPhone app, the same way a microgame opens
+## over the date, and closes it back (its icon and launch screen: data/apps/contacts.tres;
+## the feel: data/app_transition_style.tres). Off = it slides up from the bottom.
+@export var open_as_app: bool = true
+## Only used with Open As App off: seconds to slide up (and back down).
 @export_range(0.0, 1.0, 0.05) var open_seconds: float = 0.35
 ## The big title at the top of the list.
 @export var list_title: String = "Contacts"

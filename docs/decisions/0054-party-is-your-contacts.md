@@ -6,7 +6,7 @@
 
 ## Decision
 
-The party is shown as **contacts in your phone** (`scenes/Phone/Contacts/ContactsApp.tscn`). Every girl who gave you her number is a contact; that's your party. **Press C** (the `open_contacts` input action) and the list slides up over the screen; C, Escape or the bar at the bottom slides it away. For now it's only on the calendar.
+The party is shown as **contacts in your phone** (`scenes/Phone/Contacts/ContactsApp.tscn`). Every girl who gave you her number is a contact; that's your party. **Press C** (the `open_contacts` input action) and it opens over the screen like an iPhone app, exactly the way a microgame opens over the date (`data/apps/contacts.tres`, growing from the bottom middle of the screen); C, Escape or the bar at the bottom closes it back. For now it's only on the calendar.
 
 - **The list:** A to Z under letter headers, each girl in her own dialogue-box style and font, with her initials (or contact photo) and a heart if her card got one, and a count underneath ("3 Contacts").
 - **Her contact:** clicking her slides in her saved card, the same card she filled in at the end of the date, already filled in with what her hearts unlocked (type, tags or "you dont know me like that!", the heart), her number and address. "‹ Contacts" goes back.
@@ -14,7 +14,7 @@ The party is shown as **contacts in your phone** (`scenes/Phone/Contacts/Contact
 
 This makes the party screen from [0037](0037-phone-app-overlays.md) your Contacts.
 
-**Changed the same day:** at first Contacts opened from an app icon on the calendar. Frank: "It doesnt make much sense for contacts to appear as an app on the calendar when the calendar itself is an 'App'. For now lets just make it so anytime someone presses C they can view contacts. They can check this only during the calendar at this point." So: no icon, the C key, and a sheet that slides up instead of the open-app animation.
+**Changed the same day:** at first Contacts opened from an app icon on the calendar. Frank: "It doesnt make much sense for contacts to appear as an app on the calendar when the calendar itself is an 'App'. For now lets just make it so anytime someone presses C they can view contacts. They can check this only during the calendar at this point." So: no icon, and the C key. Then: "Contacts should appear over the calendar in the same exact fashion a microgame appears over the date", so it opens with the open-app animation over the calendar (a slide-up stays as an option: Contact Card Style → Contacts App → Open As App off).
 
 ## Why
 

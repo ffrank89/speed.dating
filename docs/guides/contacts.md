@@ -12,7 +12,8 @@ Date ends ─► she types her number into a New Contact (or doesn't)
                ├─ got her number → saved in Contacts, with the hearts she gave you
                └─ failed date    → gone for the run
 
-Calendar ─► press C ─► the list slides up over the calendar
+Calendar ─► press C ─► Contacts opens over the calendar like an iPhone app
+               │         (the same way a microgame opens over the date)
                │
                ├─ the list: A to Z under letter headers, each girl in her own box and
                │  font, her initials (or photo), a heart if she gave you one;
@@ -20,7 +21,7 @@ Calendar ─► press C ─► the list slides up over the calendar
                ├─ click a girl ─► her saved card slides in: what your hearts unlocked
                │                  on her date, her number and address
                │                  "‹ Contacts" (or Escape) goes back
-               └─ C again, Escape, or the bar at the bottom slides it away
+               └─ C again, Escape, or the bar at the bottom closes it back
 ```
 
 A girl in your contacts doesn't show up in the dating app any more:
@@ -63,7 +64,8 @@ A saved card doesn't show the empty **Last name** and **Company** rows, the
 
 | Setting | Now | What it does |
 |---|---|---|
-| **Open Seconds** | 0.35 | How long the list takes to slide up (and back down) |
+| **Open As App** | on | On = it opens like an iPhone app, the same as a microgame over the date. Off = it slides up from the bottom instead. |
+| **Open Seconds** | 0.35 | With Open As App off: how long it takes to slide up (and back down) |
 | **List Title** | Contacts | The big title at the top |
 | **Back Text** | ‹ Contacts | Top left of her saved card |
 | **No Contacts Text** | No Contacts | The list when your party is empty |
@@ -84,6 +86,14 @@ file → **Contact Card → Contact Photo** (empty = her initials).
 
 **Where things sit:** open `ContactsApp.tscn` and move or resize **Sheet**,
 or the rows under **Sheet → Margin → Column**.
+
+**How it opens:** the same open-app animation as a microgame and every
+other app. Its icon and launch screen are `data/apps/contacts.tres` (the
+Godot logo on the iPhone grey for now); the feel (timing, zoom, dim) is
+`data/app_transition_style.tres`. A key press has no click to grow from, so
+it grows from **Default Origin** there (the middle of the bottom, like the
+iPhone's dock), or from where you clicked if that was a moment ago, and it
+closes back into the same spot. See [phone apps](phone-apps.md).
 
 ## Changing the key
 
@@ -121,7 +131,8 @@ synergy report.
   The date scene calls `add_party_member` when she gives her number.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
   layer 19): listens for `open_action` (`open_contacts`) in
-  `_unhandled_input`; `open()` / `close()` slide the sheet,
+  `_unhandled_input`; `open()` / `close()` use `AppLauncher.open/close`
+  (from `AppLauncher.origin_rect()`, kept to close back into) or slide the sheet,
   `show_list(members)` / `hide_list()` show it at once; signals
   `contact_opened(member)`, `closed`. It holds a
   `ContactCard` (layer 20) and calls `ContactCard.show_saved(girl, hearts,

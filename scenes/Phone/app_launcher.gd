@@ -213,6 +213,12 @@ func _screenshot() -> Texture2D:
 	return ImageTexture.create_from_image(image) if image else null
 
 
+## Where an app opens from when it isn't given a rectangle: a recent click, or Default
+## Origin (e.g. after a key press). Keep it to close the app back into the same place.
+func origin_rect() -> Rect2:
+	return _tap_rect()
+
+
 # Where an app opens from with no rectangle given: a recent click, or Default Origin.
 func _tap_rect() -> Rect2:
 	var recent := Time.get_ticks_msec() / 1000.0 - _last_tap_time <= style.tap_memory_seconds
