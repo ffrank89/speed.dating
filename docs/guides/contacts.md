@@ -2,8 +2,9 @@
 
 For writers, artists and designers. **No code needed.**
 
-Your party is the **Contacts** app on your phone. Every girl who gave you her
-number on a date is saved there. That's who's in your party.
+Your party is the **Contacts** on your phone. Every girl who gave you her
+number on a date is saved there. That's who's in your party. Press **C** on
+the calendar to see them.
 
 ```
 Date ends ─► she types her number into a New Contact (or doesn't)
@@ -11,7 +12,7 @@ Date ends ─► she types her number into a New Contact (or doesn't)
                ├─ got her number → saved in Contacts, with the hearts she gave you
                └─ failed date    → gone for the run
 
-Calendar ─► Contacts icon (bottom right) ─► the app opens like an iPhone app
+Calendar ─► press C ─► the list slides up over the calendar
                │
                ├─ the list: A to Z under letter headers, each girl in her own box and
                │  font, her initials (or photo), a heart if she gave you one;
@@ -19,7 +20,7 @@ Calendar ─► Contacts icon (bottom right) ─► the app opens like an iPhone
                ├─ click a girl ─► her saved card slides in: what your hearts unlocked
                │                  on her date, her number and address
                │                  "‹ Contacts" (or Escape) goes back
-               └─ the bar at the bottom (or Escape) closes the app
+               └─ C again, Escape, or the bar at the bottom slides it away
 ```
 
 A girl in your contacts doesn't show up in the dating app any more:
@@ -30,10 +31,13 @@ she's taken.
 - **On its own:** open `scenes/Phone/Contacts/ContactsApp.tscn` and press
   **F6**. Click the top node → **Testing (F6)**: **Test Contacts** is who's
   in the list (Split Ends now; add girl files with **Add Element**), **Test
-  Hearts** is the hearts they each got. Close it and it opens again a second
-  later.
+  Hearts** is the hearts they each got. Press **C** to put it away and bring
+  it back.
 - **In the game:** play a date to the end and get her number. Back on the
-  calendar, click **Contacts** (bottom right).
+  calendar, press **C**.
+
+**Only on the calendar, for now.** C works on any screen that has
+`ContactsApp.tscn` in it, and right now that's only the calendar.
 
 ## What her saved card shows
 
@@ -59,6 +63,7 @@ A saved card doesn't show the empty **Last name** and **Company** rows, the
 
 | Setting | Now | What it does |
 |---|---|---|
+| **Open Seconds** | 0.35 | How long the list takes to slide up (and back down) |
 | **List Title** | Contacts | The big title at the top |
 | **Back Text** | ‹ Contacts | Top left of her saved card |
 | **No Contacts Text** | No Contacts | The list when your party is empty |
@@ -78,29 +83,25 @@ so changing her dialogue box changes her contact too. Her photo is her girl
 file → **Contact Card → Contact Photo** (empty = her initials).
 
 **Where things sit:** open `ContactsApp.tscn` and move or resize **Sheet**,
-or the rows under **Sheet → Margin → Column**. The Contacts icon on the
-calendar is **ContactsIcon** in `scenes/Calendar/calendar.tscn`: drag it to
-move it.
+or the rows under **Sheet → Margin → Column**.
 
-**The app icon and its launch screen** are `data/apps/contacts.tres` (the
-Godot logo for now). See [phone apps](phone-apps.md).
+## Changing the key
 
-## Putting Contacts on another screen
+**Project → Project Settings → Input Map** → `open_contacts` (C now). Add
+or change keys there; nothing else needs to change. (The ContactsApp node's
+**Open Action** names which action it listens for.)
 
-1. Drag `scenes/Phone/Contacts/ContactsApp.tscn` into the scene.
-2. Add an icon: a **Control** node with the script `scenes/Phone/app_icon.gd`,
-   and drag `data/apps/contacts.tres` onto its **App** slot.
-3. Click the ContactsApp node and pick the icon in its **Icon** slot.
+## Letting C work on another screen
 
-That's all: clicking the icon opens the app from it, and closing shrinks it
-back.
+Drag `scenes/Phone/Contacts/ContactsApp.tscn` into that screen's scene.
+That's all.
 
 ## Something's wrong
 
 | Problem | Fix |
 |---|---|
 | She's not in the list | She didn't give her number (a failed date), or the date was on the test bench (F5), which doesn't save anyone. Play it from the dating app. |
-| The icon does nothing | Click the ContactsApp node and check its **Icon** slot points at the icon. |
+| C does nothing | You're not on the calendar (only screens with `ContactsApp.tscn` in them), or `open_contacts` is missing from the Input Map (Godot prints a warning). |
 | Her row looks like the dark default box | She has no **Dialogue Style** in her girl file. |
 | Smokey shows up as Split Ends | Smokey has no girl file yet, so her date uses Split Ends'. |
 
@@ -119,7 +120,9 @@ synergy report.
   she's already there), `is_in_party(date_name)`, signal `party_changed`.
   The date scene calls `add_party_member` when she gives her number.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
-  layer 19): `open(from_rect)`, `close()`, `show_list(members)`,
-  `hide_app()`; signals `contact_opened(member)`, `closed`. It holds a
+  layer 19): listens for `open_action` (`open_contacts`) in
+  `_unhandled_input`; `open()` / `close()` slide the sheet,
+  `show_list(members)` / `hide_list()` show it at once; signals
+  `contact_opened(member)`, `closed`. It holds a
   `ContactCard` (layer 20) and calls `ContactCard.show_saved(girl, hearts,
   rules)`, which sends `back_pressed`.

@@ -57,4 +57,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0051](0051-player-cursor.md) | The player's cursor is a swappable style (Godot logo placeholder) | Accepted |
 | [0052](0052-result-is-her-contact-card.md) | The date's result is her filling in your Contacts (or not) | Accepted |
 | [0053](0053-full-date-flow.md) | A first date: opener, 5 exchanges (2 microgames), one of 3 closers; then party or gone, and back to the calendar | Accepted |
-| [0054](0054-party-is-your-contacts.md) | Your party is your phone's Contacts | Accepted |
+| [0054](0054-party-is-your-contacts.md) | Your party is your phone's Contacts (press C on the calendar) | Accepted |

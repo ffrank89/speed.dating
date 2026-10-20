@@ -1,13 +1,12 @@
 class_name ContactsApp
 extends CanvasLayer
-## Your party, as the Contacts app on your phone: every girl who gave you her number is
-## saved here. Click her to open her contact (her card as she filled it in on the date:
-## what your hearts unlocked, her number and address); "‹ Contacts" goes back. Click
-## the bar at the bottom (or press Escape) to close the app.
+## Your party, as the Contacts on your phone: every girl who gave you her number is
+## saved here. Press C (the open_contacts action) and the list slides up over the screen.
+## Click a girl to open her contact (her card as she filled it in on the date: what your
+## hearts unlocked, her number and address); "‹ Contacts" goes back. C again, Escape or
+## the bar at the bottom slides it away.
 ##
-## Drop this scene into any screen and point Icon at an AppIcon there: clicking the icon
-## opens the app like an iPhone app, growing from the icon (data/apps/contacts.tres), and
-## closing shrinks it back. The calendar has one.
+## C works on any screen that has this scene in it. For now that's only the calendar.
 ##
 ## The look, words and sounds are data/contact_card_style.tres → Contacts App; each row
 ## and her card use her dialogue style. Move or resize the list in this scene.
@@ -16,13 +15,12 @@ extends CanvasLayer
 
 ## A girl's contact was opened.
 signal contact_opened(member: PartyMember)
-## The app closed.
+## The list slid away.
 signal closed
 
-## The icon that opens the app (an AppIcon in the same scene). Optional: from code, call open().
-@export var icon: AppIcon
-## The app's file name in data/apps/ (its icon and launch screen).
-@export var app_name: String = "contacts"
+## The key that opens and closes Contacts: an action in Project Settings → Input Map
+## (open_contacts = C).
+@export var open_action: StringName = &"open_contacts"
 ## How the list and the cards look and sound (data/contact_card_style.tres).
 @export var style: ContactCardStyle
 ## Which hearts unlock what on her card (data/date_rules.tres → Result).
@@ -37,7 +35,6 @@ signal closed
 var _members: Array[PartyMember] = []
 # Played on its own (F6): the test contacts, shown instead of your party.
 var _test_members: Array[PartyMember] = []
-var _from := Rect2()
 var _busy := false
 
 @onready var dim: ColorRect = %Dim
@@ -63,32 +60,28 @@ func _ready() -> void:
 	card.dim.visible = false
 	card.back_pressed.connect(_back_to_list)
 	home_bar.gui_input.connect(_on_home_bar_input)
-	if icon:
-		icon.pressed.connect(func() -> void: open(icon.tile_rect()))
+	if not InputMap.has_action(open_action):
+		push_warning("ContactsApp: no input action \"%s\" (Project Settings → Input Map)." % open_action)
 	if get_parent() == get_tree().root:
 		_play_alone.call_deferred()
 	else:
 		visible = false
 
 
-## Opens the app like an iPhone app, growing from `from` (screen pixels; empty = where
-## the player clicked). Use with await to wait for the animation.
-func open(from := Rect2()) -> void:
+## Slides the list up from the bottom of the screen. Use with await to wait for it.
+func open() -> void:
 	if visible or _busy or AppLauncher.is_busy():
 		return
-	_busy = true
-	_from = from
-	await AppLauncher.open(app_name, show_list, from)
-	_busy = false
+	show_list()
+	await _slide_sheet(true)
 
 
-## Closes the app, shrinking it back into where it opened from.
+## Slides the list (and her card, if it's open) back down.
 func close() -> void:
-	if not visible or _busy or AppLauncher.is_busy():
+	if not visible or _busy:
 		return
-	_busy = true
-	await AppLauncher.close(app_name, hide_app, _from)
-	_busy = false
+	await _slide_sheet(false)
+	hide_list()
 	closed.emit()
 
 
@@ -101,14 +94,15 @@ func show_list(members: Array[PartyMember] = []) -> void:
 	_apply_style()
 	_build_rows()
 	card.visible = false
-	sheet.position.x = _sheet_x()
+	sheet.position = Vector2(_sheet_x(), _sheet_y())
 	sheet.modulate = Color.WHITE
+	dim.modulate.a = 1.0
 	scroll.scroll_vertical = 0
 	visible = true
 
 
-## Hides the app at once, without the close animation.
-func hide_app() -> void:
+## Hides the list (and her card) at once, without sliding.
+func hide_list() -> void:
 	card.visible = false
 	visible = false
 
@@ -278,9 +272,32 @@ func _slide(opening: bool) -> void:
 	_busy = false
 
 
+# Up from below the screen (opening) or back down (closing), with the dim fading.
+func _slide_sheet(opening: bool) -> void:
+	_busy = true
+	var rest := _sheet_y()
+	var away := sheet.get_parent_area_size().y + 40.0
+	if opening:
+		sheet.position.y = away
+		dim.modulate.a = 0.0
+	var slide := create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC) \
+		.set_ease(Tween.EASE_OUT if opening else Tween.EASE_IN)
+	slide.tween_property(sheet, "position:y", rest if opening else away, style.open_seconds)
+	slide.tween_property(dim, "modulate:a", 1.0 if opening else 0.0, style.open_seconds)
+	if card.visible and not opening:
+		slide.tween_property(card, "offset:y", away - rest, style.open_seconds)
+	await slide.finished
+	card.offset.y = 0.0
+	_busy = false
+
+
 # Where the sheet sits when nothing has pushed it aside.
 func _sheet_x() -> float:
 	return sheet.get_parent_area_size().x * sheet.anchor_left + sheet.offset_left
+
+
+func _sheet_y() -> float:
+	return sheet.get_parent_area_size().y * sheet.anchor_top + sheet.offset_top
 
 
 func _on_home_bar_input(event: InputEvent) -> void:
@@ -289,8 +306,14 @@ func _on_home_bar_input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Escape on her card goes back (the card handles it); on the list it closes the app.
-	if visible and not card.visible and event.is_action_pressed("ui_cancel"):
+	if InputMap.has_action(open_action) and event.is_action_pressed(open_action):
+		get_viewport().set_input_as_handled()
+		if visible:
+			close()
+		else:
+			open()
+	# Escape on her card goes back (the card handles it); on the list it slides it away.
+	elif visible and not card.visible and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		close()
 
@@ -310,14 +333,11 @@ func _play(stream: AudioStream) -> void:
 		sound.play()
 
 
-# F6: the test contacts; closing the app opens it again a second later.
+# F6: the test contacts slide up; press C to put them away and bring them back.
 func _play_alone() -> void:
 	for girl in test_contacts:
 		if girl:
 			_test_members.append(PartyMember.new(girl, test_hearts))
 	if _test_members.is_empty():
 		push_warning("ContactsApp: no Testing → Test Contacts, so the list shows your (empty) party.")
-	show_list()
-	closed.connect(func() -> void:
-		await get_tree().create_timer(1.0).timeout
-		open())
+	open()

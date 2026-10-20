@@ -18,7 +18,7 @@ thing. **No code needed.**
 | **App icons** (calendar, dating app, date, boss, microgame) | Our existing icons: `assets/january.png`, `lovestat gif/lovestat.png`, `love stat/love react1.png`, `sword stat/sword stat.png`, `exclamation point gif/surprise1.png` | Each file in `data/apps/` → **Icon** (and **Launch Image**) | The tile that grows into the screen when an app opens. See [phone apps](phone-apps.md). |
 | **Contact card typing sounds** | Kenney stand-ins (`click_002`, `click_005`, `switch_002`, `drop_003`, `confirmation_003`, `minimize_002`) | `data/contact_card_style.tres` → **Sounds** | The key clicks as she types her number |
 | **Contacts app taps** | Kenney stand-ins (`select_001`, `back_001`) | `data/contact_card_style.tres` → **Sounds → Open Contact Sound / Back Sound** | Opening a girl's contact in your Contacts, and going back to the list |
-| **Contacts app icon** | Godot logo | `data/apps/contacts.tres` → **Icon** | Your party (the Contacts app on the calendar), and the app that opens at the end of a date |
+| **Contacts app icon** | Godot logo | `data/apps/contacts.tres` → **Icon** | The app that opens at the end of a date |
 | **The cursor** | `assets/placeholders/godot_logo.svg` | `data/cursors/default.tres` → **Pointer → Image** (set **Hotspot** to the clicking pixel) | The player's mouse cursor everywhere. See [the cursor guide](cursor.md). |
 | **The fly** (stage hazard) | `assets/placeholders/godot_logo.svg` | `scenes/Hazards/Fly/Fly.tscn` → **Body → Sprite** → Texture (or swap for an AnimatedSprite2D) | The fly that buzzes around her. Draw it facing right. |
 | **Fly buzz** | none (silent) | `Fly.tscn` → top node → **Sounds → Buzz Sound** | A looping buzz while it's on screen |

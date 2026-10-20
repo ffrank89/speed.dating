@@ -112,8 +112,8 @@ Keep any new sound's licence next to it, and add a line to `CREDITS.md`.
 ## The Contacts app
 
 The card opens and closes like an app: `data/apps/contacts.tres`, with the
-Godot logo as a placeholder icon. See [phone apps](phone-apps.md). The same app
-holds your party: [contacts.md](contacts.md).
+Godot logo as a placeholder icon. See [phone apps](phone-apps.md). Your party is
+saved in your Contacts (press C on the calendar): [contacts.md](contacts.md).
 
 ## Something's wrong
 

@@ -2,8 +2,9 @@
 class_name ContactCardStyle
 extends Resource
 ## How the phone's Contacts look, type and sound: the end-of-date card (the iPhone "New
-## Contact" screen where she types in, or doesn't, her name, number and address), and the
-## Contacts app where your party is saved (the list, and each girl's saved card).
+## Contact" screen where she types in, or doesn't, her name, number and address), and
+## your Contacts, where your party is saved (press C on the calendar: the list, and each
+## girl's saved card).
 ## The boxes, her font and text colour come from HER dialogue style; this file sets
 ## everything else. One file: data/contact_card_style.tres.
 ## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
@@ -87,6 +88,8 @@ extends Resource
 @export_range(16, 200) var trait_icon_size: int = 64
 
 @export_group("Contacts App")
+## Seconds for the list to slide up when you press C (and back down).
+@export_range(0.0, 1.0, 0.05) var open_seconds: float = 0.35
 ## The big title at the top of the list.
 @export var list_title: String = "Contacts"
 ## Top left of a saved contact: goes back to the list.
@@ -118,8 +121,8 @@ extends Resource
 @export var done_sound: AudioStream
 ## Tapping Cancel (she didn't).
 @export var cancel_sound: AudioStream
-## Contacts app: tapping a girl in the list to open her contact.
+## Your Contacts: tapping a girl in the list to open her contact.
 @export var open_contact_sound: AudioStream
-## Contacts app: tapping "‹ Contacts" to go back to the list.
+## Your Contacts: tapping "‹ Contacts" to go back to the list.
 @export var back_sound: AudioStream
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0

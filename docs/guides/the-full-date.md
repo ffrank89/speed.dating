@@ -108,7 +108,7 @@ shows on the card is in [result-screen.md](result-screen.md).
 
 | How it went | What happens |
 |---|---|
-| She gave her number (0 hearts or more) | She's saved in your **Contacts**: that's your party ([contacts.md](contacts.md)). The dating app stops offering her. |
+| She gave her number (0 hearts or more) | She's saved in your **Contacts** (press C on the calendar): that's your party ([contacts.md](contacts.md)). The dating app stops offering her. |
 | Failed (no number) | She's **gone for the run**: the dating app skips her from now on. If no one's left, it says "No one left to swipe on." |
 
 Then the game goes back to the calendar, which opens like an app

@@ -16,7 +16,7 @@
   | Boss           | Forced on the last day                     | Contacts (pick the lineup) → Boss Scene  |
 - **Which actions appear on which days is generated per run**, so no two
   chapters play the same.
-- The calendar also opens your **Contacts** (the party screen,
+- On the calendar, **press C** for your **Contacts** (the party screen,
   [0054](../decisions/0054-party-is-your-contacts.md)): every girl who gave
   you her number, and her saved card. **Built:** the list and her card.
   Still to come there: the synergy report, breaking up with someone, and
@@ -48,7 +48,7 @@
 | `DayAction` (`Resource`)                                     | `kind` (date / follow_up / train / event / boss), `icon`, payload. Replaces the `{"action_name", "scene", "icon"}` dicts.                                                 |
 | Day selection rule                                               | New Dates take 2 or more days. Training takes 1.  Breakups take 1 day but Breakups + New Date take as much as a New Date does.                                                 |
 | `TinderScreen`                                                 | Exists (`scenes/Tinder`). Shows `GirlPool.offer(2–3)` with name, bio, interests, **tags**. Skip option.<br />Is a Phone App Screen. Overlays on top of the calendar. |
-| `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, opened from the **Contacts** icon on the calendar like an app. Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
+| `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, pulled up with **C** on the calendar (slides up over it). Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
 | Training screen                                                  | TBD. Pick an attribute; how many points?                                                                                                                                        |
 | Event pool                                                       | TBD. Random events and their rewards.                                                                                                                                           |
 | Month/chapter display                                            | Today uses`assets/january.png`. Chapters may not map to months; TBD.                                                                                                          |
@@ -63,7 +63,7 @@
 | Boss preview card                                                           | Calendar header from day 1        | TBD                                                                                      |
 | Tinder profile card + swipe UI                                              | `TinderScreen`                  | Exists (placeholder)                                                                     |
 | Tag icons                                                                   | Tinder card, Contacts (her card)  | TBD (shared with[girls.md](girls.md))                                                     |
-| Contacts app icon; lineup slots                                             | `data/apps/contacts.tres`, `ContactsApp` | Icon: Godot logo placeholder. The list needs no art. Lineup slots TBD. |
+| Lineup slots                                                                | `ContactsApp`                   | The list needs no art. Lineup slots TBD. |
 
 ## Systems it's part of
 
