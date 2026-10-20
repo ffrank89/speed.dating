@@ -141,7 +141,7 @@ a second of starting, and feed pass/fail into the date score.
 |---|---|---|
 | Date flow: opener, then 5 exchanges drawn from her pool with no repeats, then a closer chosen by how it went. | **Result card**: 0–3 hearts, and "she's in" or "she's gone" | **Split Ends first-date pool** (below) |
 | Hearts from `score_to_affection(score, thresholds)`; emits a `DateResult`. | Hearts: empty and full | Date music loop (pick from `assets/audio/loops`) |
-| Retire the old date path: `DialogueManager`, `ScoreCalculator`, the JSON dialogue, `DialogueDataUI`. | Background: pick one (`bedroom1.png` today) | |
+| ~~Retire the old date path: `DialogueManager`, `ScoreCalculator`, the JSON dialogue, `DialogueDataUI`.~~ ✅ Done early (branch `remove-legacy-code`): the old date scene, `DatePresenter`, the old dialogue system and `ScoreCalculator` are removed; the Tinder screen now starts dates in `FirstDateTest`. | Background: pick one (`bedroom1.png` today) | |
 | Hook `FirstDateTest` and the real flow (`dating_scene`) to the same date scene. | | |
 
 **Done when:** a full date plays start to finish in about 3–4 minutes, two
