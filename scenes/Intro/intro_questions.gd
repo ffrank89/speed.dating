@@ -1,7 +1,6 @@
 extends Control
 
 # Path to your main scene
-const MAIN_SCENE_PATH = "res://scenes/Dates/BaseDate/dating_scene.tscn"
 const DATING_SITE_PATH = "res://scenes/Tinder/Screen.tscn"
 # Track player stats
 var player_stats = {
