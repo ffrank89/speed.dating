@@ -54,3 +54,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0048](0048-microgame-framework.md) | How the microgame framework works (library, difficulty, frame, input, F6) | Accepted |
 | [0049](0049-open-like-an-iphone-app.md) | Screens open like iPhone apps (one shared, modular animation) | Accepted |
 | [0050](0050-stage-hazards.md) | Stage hazards: things that turn up mid-date (the fly) | Accepted |
+| [0051](0051-player-cursor.md) | The player's cursor is a swappable style (Godot logo placeholder) | Accepted |

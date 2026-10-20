@@ -16,6 +16,7 @@ thing. **No code needed.**
 | **Intellect icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Intellect Icon** | The little picture on options that check Intellect |
 | **Seduction icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Seduction Icon** | The little picture on options that check Seduction |
 | **App icons** (calendar, dating app, date, boss, microgame) | Our existing icons: `assets/january.png`, `lovestat gif/lovestat.png`, `love stat/love react1.png`, `sword stat/sword stat.png`, `exclamation point gif/surprise1.png` | Each file in `data/apps/` → **Icon** (and **Launch Image**) | The tile that grows into the screen when an app opens. See [phone apps](phone-apps.md). |
+| **The cursor** | `assets/placeholders/godot_logo.svg` | `data/cursors/default.tres` → **Pointer → Image** (set **Hotspot** to the clicking pixel) | The player's mouse cursor everywhere. See [the cursor guide](cursor.md). |
 | **The fly** (stage hazard) | `assets/placeholders/godot_logo.svg` | `scenes/Hazards/Fly/Fly.tscn` → **Body → Sprite** → Texture (or swap for an AnimatedSprite2D) | The fly that buzzes around her. Draw it facing right. |
 | **Fly buzz** | none (silent) | `Fly.tscn` → top node → **Sounds → Buzz Sound** | A looping buzz while it's on screen |
 | **iPhone frame** | none (nothing drawn) | `data/app_transition_style.tres` → **Screen → Device Frame** | Phone art drawn over the screen while apps open and close |

@@ -179,6 +179,7 @@ func _gui_input(event: InputEvent) -> void:
 			_held = false
 			if dragging:
 				dragging = false
+				mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 				ignore_hover = true
 				release_focus()
 				set_over_target(false)
@@ -189,6 +190,7 @@ func _gui_input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion and _held and not dragging:
 		if event.global_position.distance_to(_pressed_at) > DRAG_THRESHOLD:
 			dragging = true
+			mouse_default_cursor_shape = Control.CURSOR_DRAG
 			move_to_front()
 			set_highlight(true)
 	elif event.is_action_pressed("ui_accept"):

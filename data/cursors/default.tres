@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CursorStyle" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/cursor_style.gd" id="1_cursor"]
+[ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
+
+[resource]
+script = ExtResource("1_cursor")
+image = ExtResource("2_logo")
+hotspot = Vector2(64, 64)
+size = 0.5
