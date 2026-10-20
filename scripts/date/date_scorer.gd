@@ -89,6 +89,11 @@ func resolve_microgame(option: DateOption, passed: bool) -> Result:
 	return result
 
 
+## True if the score reached her Number Threshold (she gives you her number).
+func gives_number() -> bool:
+	return score >= girl.number_threshold
+
+
 ## 0-3 hearts: how many of her Affection Thresholds the score has reached.
 func hearts() -> int:
 	var count := 0

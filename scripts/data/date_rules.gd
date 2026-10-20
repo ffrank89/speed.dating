@@ -21,10 +21,13 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var unchecked_difficulty: float = 0.5
 
 @export_group("Result")
-## She gives you her number at the end of the date at this many hearts or more.
-## Hearts (0-3) come from her score and her Affection Thresholds (her girl file).
-@export_range(0, 3) var number_at_hearts: int = 1
-## She types a heart emoji next to her name at this many hearts or more.
+## On her end-of-date contact card: which kinds of trait show, and how many hearts each
+## needs. Hearts (0-3) come from the score and her Affection Thresholds (her girl file);
+## a date below her Number Threshold failed and shows nothing.
+## Below a kind's hearts its field says "you dont know me like that!".
+## Kinds not listed (e.g. ability, for now) don't show at all.
+@export var trait_hearts: Dictionary[String, int] = {"type": 0, "tag": 1}
+## She types a heart emoji next to her name at this many hearts or more. 4 = never.
 @export_range(0, 4) var heart_emoji_at_hearts: int = 3
 
 @export_group("Points")

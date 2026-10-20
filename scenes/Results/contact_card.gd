@@ -1,19 +1,21 @@
 class_name ContactCard
 extends CanvasLayer
 ## The end-of-date result: an iPhone "New Contact" screen.
-## If the date went well, she types her name (in her font), her number and her address,
-## adds a heart after her name on a really good date (an emoji, a picture or an animated
-## icon), her type, tags and abilities pop into their fields under her name one after
-## another (boop, boop, boop), and she taps Done. If not, she types her name,
-## deletes it, and taps Cancel. The middle scrolls to follow her, so there's room for
-## any number of traits.
+##   Failed date: she types "not a chance!" as her name and taps Cancel. Nothing else.
+##   Otherwise: she types her name (in her font); her traits pop into their fields under
+##   it (boop, boop, boop); she types her number and address and taps Done. Which traits
+##   show, and how many hearts each kind needs (type at 0, tags at 1), is
+##   data/date_rules.tres → Result; below that a field says "you dont know me like that!".
+##   A heart after her name at Heart Emoji At Hearts (3).
+## The middle scrolls to follow her, so there's room for any number of traits.
 ##
 ## The boxes, her font and text colour come from her dialogue style; everything else is
-## Style (data/contact_card_style.tres). Her name, number and address come from her girl
-## file (Contact Card); how many hearts each ending takes is data/date_rules.tres → Result.
+## Style (data/contact_card_style.tres). Her name, number, address and traits come from
+## her girl file (Contact Card); her Number Threshold (Dating) decides a failed date.
 ## Move or resize the rows in this scene. Press F6 to watch it with the Testing settings.
 ##
-## From code: show_card(girl), then var got_number: bool = await play(hearts, rules)
+## From code: show_card(girl, rules), then var got_number: bool = await play(hearts)
+## (hearts = -1 for a failed date).
 ## Full guide: docs/guides/result-screen.md
 
 ## Sent when she's done (true = she gave you her number).
@@ -27,10 +29,12 @@ const DEFAULT_BOX_STYLE := "res://data/dialogue_styles/default.tres"
 @export_group("Testing (F6)")
 ## The girl shown when you play this scene on its own.
 @export var test_girl: GirlData
-## The hearts (0-3) the pretend date ended on. 3 = number and heart emoji, 0 = no number.
-@export_range(0, 3) var test_hearts: int = 3
+## The hearts the pretend date ended on. -1 = a failed date (no number), 0 = number and
+## type, 1 = number, type and tags, 3 = all that and the heart emoji.
+@export_range(-1, 3) var test_hearts: int = 1
 
 var _girl: GirlData
+var _rules: DateRules
 var _box: DialogueBoxStyle
 var _typing: Label
 var _typed := {}
@@ -85,9 +89,10 @@ func _ready() -> void:
 		visible = false
 
 
-## Sets the card up, blank, for `girl` and shows it.
-func show_card(girl: GirlData) -> void:
+## Sets the card up, blank, for `girl` and shows it. `rules` = the date's DateRules.
+func show_card(girl: GirlData, rules: DateRules = null) -> void:
 	_girl = girl
+	_rules = rules if rules else DateRules.new()
 	_box = girl.dialogue_style if girl.dialogue_style else load(DEFAULT_BOX_STYLE)
 	_apply_style()
 	for label: Label in [first_name, last_name, company, phone, address]:
@@ -104,18 +109,16 @@ func show_card(girl: GirlData) -> void:
 	visible = true
 
 
-## She fills it in, or doesn't. Returns true if she gave you her number. Use with await.
-func play(hearts: int, rules: DateRules = null) -> bool:
-	if not rules:
-		rules = DateRules.new()
-	var gives_number := hearts >= rules.number_at_hearts
+## She fills it in, or doesn't. `hearts` = how the date went: -1 = failed (no number),
+## 0-3 = hearts earned. Returns true if she gave you her number. Use with await.
+func play(hearts: int) -> bool:
+	var gives_number := hearts >= 0
 	if gives_number:
 		await _type_into(first_name, _girl.display_name)
-		var earned_heart := hearts >= rules.heart_emoji_at_hearts
-		if earned_heart:
+		if hearts >= _rules.heart_emoji_at_hearts:
 			await _add_heart()
 		caret.visible = false
-		await _show_traits(earned_heart)
+		await _show_traits(hearts)
 		await _next_field()
 		await _type_into(phone, _girl.phone_number)
 		await _next_field()
@@ -125,10 +128,8 @@ func play(hearts: int, rules: DateRules = null) -> bool:
 		await _tap(done, style.done_sound)
 		result.text = style.got_number_text
 	else:
-		if style.type_then_delete_when_no:
-			await _type_into(first_name, _girl.display_name)
-			await _wait(0.7)
-			await _delete_all(first_name)
+		# A failed date: "not a chance!" where her name would go, and that's it.
+		await _type_into(first_name, style.failed_name_text)
 		caret.visible = false
 		await _tap(cancel, style.cancel_sound)
 		result.text = style.no_number_text
@@ -164,15 +165,6 @@ func _type_into(label: Label, words: String) -> void:
 		_play(style.space_sound if character == " " else style.key_sound)
 		_time = 0.0
 		await _wait(randf_range(style.min_seconds_per_key, style.max_seconds_per_key))
-
-
-func _delete_all(label: Label) -> void:
-	_typing = label
-	while not String(_typed[label]).is_empty():
-		_set_typed(label, String(_typed[label]).left(-1))
-		_play(style.delete_sound)
-		_time = 0.0
-		await _wait(style.min_seconds_per_key)
 
 
 func _add_heart() -> void:
@@ -218,7 +210,8 @@ func _build_traits() -> void:
 	var her_font := _her_font()
 	for i in _girl.traits.size():
 		var info: GirlTrait = _girl.traits[i]
-		if not info:
+		# Only kinds listed in the rules' Trait Hearts show (abilities aren't, yet).
+		if not info or not _rules.trait_hearts.has(info.kind):
 			continue
 		if trait_rows.get_child_count() > 0:
 			var line := ColorRect.new()
@@ -270,9 +263,9 @@ func _build_traits() -> void:
 
 
 # Her traits pop into their fields one after another, each boop a little higher than
-# the last (or she types them), the card scrolling to follow. Without the heart, the
-# kinds in Secret Kinds (her tags) show Secret Text instead of the real thing.
-func _show_traits(earned_heart: bool) -> void:
+# the last (or she types them), the card scrolling to follow. A kind that needs more
+# hearts than the date earned (Trait Hearts) shows Secret Text instead.
+func _show_traits(hearts: int) -> void:
 	if not traits_group.visible:
 		return
 	await _wait(style.trait_reveal_seconds)
@@ -283,7 +276,7 @@ func _show_traits(earned_heart: bool) -> void:
 		_follow(child)
 		var info: GirlTrait = child.get_meta("trait")
 		var words: Control = child.get_meta("words")
-		var secret := not earned_heart and info.kind in style.secret_kinds
+		var secret := hearts < int(_rules.trait_hearts.get(info.kind, 0))
 		var shown_title := style.secret_text if secret else info.title
 		var title_label: Label = child.get_meta("title_label")
 		title_label.text = shown_title
@@ -477,6 +470,6 @@ func _play_alone() -> void:
 	if not test_girl:
 		push_warning("ContactCard: set Testing → Test Girl to play it on its own.")
 		return
-	show_card(test_girl)
-	var got_number := await play(test_hearts, DateRules.new())
-	print("ContactCard: %d hearts -> %s" % [test_hearts, "got her number" if got_number else "no number"])
+	show_card(test_girl, DateRules.new())
+	var got_number := await play(test_hearts)
+	print("ContactCard: %s -> %s" % ["failed date" if test_hearts < 0 else "%d hearts" % test_hearts, "got her number" if got_number else "no number"])

@@ -52,6 +52,9 @@ extends Resource
 @export_group("Dating")
 ## Microgame scenes that can happen on her dates.
 @export var microgames: Array[PackedScene] = []
+## Date score she needs to give you her number at all. Below it the date failed: she
+## types "not a chance!" on the contact card and that's it.
+@export var number_threshold: int = 0
 ## Date score needed for 1, 2 and 3 hearts. Placeholder until scoring is tuned.
 @export var affection_thresholds: Array[int] = [3, 6, 9]
 

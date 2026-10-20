@@ -60,9 +60,9 @@ extends Resource
 @export var heart_animation_name: String = "heart"
 ## How big the heart picture or animation is, in pixels.
 @export_range(16, 300) var heart_size: int = 72
-## On a bad date she types her name, thinks better of it, deletes it and taps Cancel.
-## Off = the card just closes with nothing typed.
-@export var type_then_delete_when_no: bool = true
+## On a failed date she types this where her name would go, then taps Cancel.
+## Empty = she types nothing.
+@export var failed_name_text: String = "not a chance!"
 ## How long the finished card stays up, in seconds.
 @export_range(0.0, 10.0, 0.1) var end_hold_seconds: float = 2.0
 
@@ -77,10 +77,8 @@ extends Resource
 ## Each pop's sound plays this much higher than the last (boop, boop, boop going up).
 ## 0 = all the same pitch.
 @export_range(0.0, 0.5, 0.01) var trait_pitch_step: float = 0.12
-## The kinds of trait she keeps to herself unless you earned the heart (see
-## data/date_rules.tres → Heart Emoji At Hearts). Their field shows Secret Text instead.
-@export var secret_kinds: PackedStringArray = PackedStringArray(["tag"])
-## What a secret trait's field says when you didn't earn the heart.
+## What a trait's field says when the date didn't earn enough hearts for that kind
+## (data/date_rules.tres → Result → Trait Hearts: tags need 1).
 @export var secret_text: String = "you dont know me like that!"
 ## Size of a trait's description line.
 @export_range(8, 200) var trait_description_size: int = 38
@@ -92,8 +90,6 @@ extends Resource
 @export var key_sound: AudioStream
 ## The space bar.
 @export var space_sound: AudioStream
-## Each letter she deletes.
-@export var delete_sound: AudioStream
 ## Moving to the next box.
 @export var next_field_sound: AudioStream
 ## Each trait popping into its field (the "boop").

@@ -8,9 +8,12 @@ screen, and she fills it in:
 
 | How the date went | What she does |
 |---|---|
-| **Really well** (3 hearts) | Types her name and a heart after it. Then her **type, tags and abilities** pop into their fields under her name, one after another: *boop, boop, boop*, each a little higher. Then she types her number and address and taps **Done**. "You got her number!" |
-| **Well enough** (1–2 hearts) | The same, without the heart, and she keeps her **tags** to herself: their fields say *"you dont know me like that!"* (her type and ability still show) |
-| **Badly** (0 hearts) | Types her name, thinks better of it, deletes it letter by letter, and taps **Cancel**. "She didn't give you her number." |
+| **Failed** (below her Number Threshold) | Types **"not a chance!"** where her name would go and taps **Cancel**. No number, no info. "She didn't give you her number." |
+| **0 hearts** | Types her name. Her **type** pops into its field, but her **tags** say *"you dont know me like that!"*. Then her number and address, and **Done**. |
+| **1 heart or more** | The same, with her real **tags**: *boop, boop, boop*, each a little higher |
+| **3 hearts** | All that, plus a heart after her name |
+
+Abilities don't show yet: they're not listed in **Trait Hearts** (below).
 
 Every letter types out one at a time with a key-click sound, in **her
 font**. The boxes look like **her dialogue box**: same colour, outline,
@@ -39,17 +42,21 @@ Her girl file (`data/girls/split_ends.tres`) → **Contact Card**:
 Her name is her **Display Name**. Her box, font and colours are her
 **Dialogue Style**, so changing her dialogue box changes her card too.
 
-## How many hearts each ending takes
+## What each ending takes
+
+**A failed date:** her girl file → Dating → **Number Threshold** (now 0).
+A date score below it fails (she won't give her number), so a date that ends
+in minus points fails.
+
+**Hearts** (0–3) are how many of her **Affection Thresholds** (her girl file →
+Dating, now 3 / 6 / 9 points) the date score reached.
 
 `data/date_rules.tres` → **Result**:
 
 | Setting | Now | What it does |
 |---|---|---|
-| **Number At Hearts** | 1 | She gives you her number at this many hearts or more |
-| **Heart Emoji At Hearts** | 3 | She adds the ❤️ at this many hearts or more |
-
-Hearts (0–3) are how many of her **Affection Thresholds** (her girl file →
-Dating, now 3 / 6 / 9 points) the date score reached.
+| **Trait Hearts** | type: 0, tag: 1 | Which kinds of trait show, and how many hearts each needs. Below that, the field says *"you dont know me like that!"*. Kinds not listed (ability, for now) don't show at all. Add `ability` with a number when abilities exist. |
+| **Heart Emoji At Hearts** | 3 | She adds the heart after her name at this many hearts or more. 4 = never. |
 
 ## The card's look, typing and sounds
 
@@ -60,8 +67,8 @@ Dating, now 3 / 6 / 9 points) the date score reached.
 | Sheet | The phone screen's colour (iPhone grey) and corners, the dim behind it, and the font, size and colour for the iPhone's own words |
 | Words | "New Contact", "Cancel", "Done", "Add Photo", the grey hints ("First name"…), "mobile", "home", and the two endings' messages |
 | Fields | The size of what she types, and how faint the grey hints are |
-| Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and whether a bad date types then deletes |
-| Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); **Secret Kinds** (which kinds she hides without the heart: `tag`) and **Secret Text** (*"you dont know me like that!"*); description and icon sizes |
+| Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and **Failed Name Text** (*"not a chance!"*), what she types on a failed date |
+| Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); **Secret Text** (*"you dont know me like that!"*); description and icon sizes |
 | Sounds | Key, space, delete, next box, Done and Cancel |
 
 **Where things sit on the card:** open `ContactCard.tscn`. Drag the rows in
@@ -94,7 +101,6 @@ other sounds, drag them onto the **Sounds** slots:
 | Key Sound | `click_002.wav` |
 | Trait Sound (the boop) | `drop_003.wav` |
 | Space Sound | `click_005.wav` |
-| Delete Sound | `back_003.wav` |
 | Next Field Sound | `switch_002.wav` |
 | Done Sound | `confirmation_003.wav` |
 | Cancel Sound | `minimize_002.wav` |
@@ -113,7 +119,7 @@ claddagh ring as a placeholder icon. See [phone apps](phone-apps.md).
 | A square box or a plain black heart instead of ❤️ | That computer has no colour emoji font, or **Emoji Font** is set to a font without one. Use **Heart Image**. |
 | Her number or address is blank | Fill in her girl file → **Contact Card**. |
 | The boxes look like the dark default | She has no **Dialogue Style**; the card uses the same fallback as her dialogue box. |
-| She never gives her number | Check **Number At Hearts**, her **Affection Thresholds**, and the score (debug panel). |
+| She never gives her number | The score is below her **Number Threshold** (girl file → Dating). Check the score in the debug panel. |
 
 ## For programmers
 

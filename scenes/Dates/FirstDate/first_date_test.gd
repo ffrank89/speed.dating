@@ -89,12 +89,14 @@ func _end_date() -> void:
 	if _ended or not _scorer:
 		return
 	_ended = true
-	var hearts := _scorer.hearts()
-	status_label.text = "Date over: %d of 3 hearts" % hearts
-	await AppLauncher.open("contacts", contact_card.show_card.bind(girl))
-	var got_number := await contact_card.play(hearts, rules)
+	# -1 = a failed date (below her Number Threshold); otherwise the hearts earned.
+	var hearts := _scorer.hearts() if _scorer.gives_number() else -1
+	var how := "failed" if hearts < 0 else "%d of 3 hearts" % hearts
+	status_label.text = "Date over: %s" % how
+	await AppLauncher.open("contacts", contact_card.show_card.bind(girl, rules if rules else DateRules.new()))
+	await contact_card.play(hearts)
 	await AppLauncher.close("contacts", func() -> void: contact_card.visible = false)
-	status_label.text = "Date over: %d of 3 hearts, %s. Press Restart." % [hearts, "got her number" if got_number else "no number"]
+	status_label.text = "Date over: %s. Press Restart." % how
 
 
 # The player dealt with a stage hazard (e.g. shooed the fly away): points and her reaction.
