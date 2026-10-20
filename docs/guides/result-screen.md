@@ -8,7 +8,7 @@ screen, and she fills it in:
 
 | How the date went | What she does |
 |---|---|
-| **Really well** (3 hearts) | Types her name, then a ❤️ after it, then her number and address, and taps **Done**. "You got her number!" |
+| **Really well** (3 hearts) | Types her name, then a heart after it, then her number and address. Her **traits** pop in underneath, and she taps **Done**. "You got her number!" |
 | **Well enough** (1–2 hearts) | The same, without the heart |
 | **Badly** (0 hearts) | Types her name, thinks better of it, deletes it letter by letter, and taps **Cancel**. "She didn't give you her number." |
 
@@ -34,6 +34,7 @@ Her girl file (`data/girls/split_ends.tres`) → **Contact Card**:
 | **Phone Number** | What she types as her number. Split Ends' is a made-up 555 number. |
 | **Address** | What she types as her address. Press Enter in the box for a second line. |
 | **Contact Photo** | Optional round photo. Empty = her initials in a circle in her name-plate colour. |
+| **Traits** | Her type, tags, abilities… one row each under her address. Add one: **Traits** → **Add Element** → **New GirlTrait**. Each has a **Kind** (the small coloured word, e.g. `type`, `tag`, `ability`), a **Title**, an optional **Description** and an optional **Icon**. Split Ends has four placeholder ones. |
 
 Her name is her **Display Name**. Her box, font and colours are her
 **Dialogue Style**, so changing her dialogue box changes her card too.
@@ -59,16 +60,28 @@ Dating, now 3 / 6 / 9 points) the date score reached.
 | Sheet | The phone screen's colour (iPhone grey) and corners, the dim behind it, and the font, size and colour for the iPhone's own words |
 | Words | "New Contact", "Cancel", "Done", "Add Photo", the grey hints ("First name"…), "mobile", "home", and the two endings' messages |
 | Fields | The size of what she types, and how faint the grey hints are |
-| Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, **Heart Text** (❤️) and its **Emoji Font**, an optional **Heart Image** instead of the emoji, and whether a bad date types then deletes |
+| Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and whether a bad date types then deletes |
+| Traits | Show them or not; pop in one by one or have her **type** them; the wait between them; description and icon sizes |
 | Sounds | Key, space, delete, next box, Done and Cancel |
 
 **Where things sit on the card:** open `ContactCard.tscn`. Drag the rows in
 **Sheet → Margin → Column**, or resize **Sheet**.
 
-**The heart emoji** is drawn with the computer's colour emoji font: Apple's
-on a Mac, Noto on Linux, Segoe on Windows. It doesn't use her font, because
-many fonts have a plain black heart that would win. For the same heart on
-every computer, drop a picture into **Typing → Heart Image**.
+**The heart** after her name can be one of three things. The first one
+that's set wins:
+
+1. **Heart Animation:** an animated icon, from a SpriteFrames file. For
+   example, drag in `data/reactions.tres`. **Heart Animation Name** picks the
+   animation (`heart`), and **Heart Size** sets its size. It pops in, then
+   loops.
+2. **Heart Image:** a still picture at **Heart Size**.
+3. **Heart Text:** the ❤️ emoji (the default). It uses the computer's
+   colour emoji font (Apple's on a Mac), not her font, because many fonts
+   have a plain black heart that would win.
+
+**Room for more:** the middle of the card scrolls, like a phone. As she
+types and her traits appear, it follows her down, and it ends scrolled to
+the bottom. Add as many traits as you like.
 
 ## The typing sounds
 

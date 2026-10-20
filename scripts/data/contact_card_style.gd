@@ -45,6 +45,7 @@ extends Resource
 ## Pause before she moves to the next box, in seconds.
 @export_range(0.0, 3.0, 0.05) var pause_between_fields: float = 0.5
 ## Typed after her name on a really good date (see data/date_rules.tres → Result).
+## Used when there's no Heart Animation or Heart Image.
 @export var heart_text: String = "❤️"
 ## Font for Heart Text. Empty = the computer's colour emoji font (Apple's on a Mac,
 ## Noto on Linux, Segoe on Windows). Her own font isn't used: many fonts have a plain
@@ -52,11 +53,30 @@ extends Resource
 @export var emoji_font: Font
 ## Optional: a picture to show instead of Heart Text (looks the same on every computer).
 @export var heart_image: Texture2D
+## Optional: an animated heart instead (a SpriteFrames file, e.g. data/reactions.tres).
+## Wins over Heart Image and Heart Text.
+@export var heart_animation: SpriteFrames
+## Which animation in Heart Animation to play. Empty = its first one.
+@export var heart_animation_name: String = "heart"
+## How big the heart picture or animation is, in pixels.
+@export_range(16, 300) var heart_size: int = 72
 ## On a bad date she types her name, thinks better of it, deletes it and taps Cancel.
 ## Off = the card just closes with nothing typed.
 @export var type_then_delete_when_no: bool = true
 ## How long the finished card stays up, in seconds.
 @export_range(0.0, 10.0, 0.1) var end_hold_seconds: float = 2.0
+
+@export_group("Traits")
+## Show her traits (her girl file → Contact Card → Traits) under her address.
+@export var show_traits: bool = true
+## Off = each trait pops in, one after another. On = she types each one.
+@export var type_traits: bool = false
+## Seconds between traits popping in.
+@export_range(0.0, 3.0, 0.05) var trait_reveal_seconds: float = 0.35
+## Size of a trait's description line.
+@export_range(8, 200) var trait_description_size: int = 38
+## Size of a trait's icon, in pixels.
+@export_range(16, 200) var trait_icon_size: int = 64
 
 @export_group("Sounds")
 ## Each letter or number she types.
@@ -67,6 +87,8 @@ extends Resource
 @export var delete_sound: AudioStream
 ## Moving to the next box.
 @export var next_field_sound: AudioStream
+## Each trait popping in.
+@export var trait_sound: AudioStream
 ## Tapping Done (she gave you her number).
 @export var done_sound: AudioStream
 ## Tapping Cancel (she didn't).

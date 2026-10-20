@@ -47,6 +47,7 @@
 | Dating | `likes_culture` … `likes_heart` (0–1), `microgames: Array[PackedScene]`, `item_reactions`, `affection_thresholds: Array[int]` | Date Scene, Synergy |
 | Battle | `hp`, `attack`, `type: GirlType`, `barks` (per boss: crit and fumble lines) | Boss Scene |
 | Synergy | `tags: Array[TagData]` | Synergy |
+| Contact card | **Built:** `phone_number`, `address`, optional `contact_photo`, `traits: Array[GirlTrait]` (kind, title, description, icon; placeholder until tags and type exist as data) | End-of-date contact card ([result-screen.md](../guides/result-screen.md)) |
 
 **`PartyMember` fields:** `girl: GirlData`, `affection: int (0–3)`,
 `current_hp`, `buffs: Array`, `follow_ups_done: int`.

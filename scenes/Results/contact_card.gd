@@ -2,8 +2,10 @@ class_name ContactCard
 extends CanvasLayer
 ## The end-of-date result: an iPhone "New Contact" screen.
 ## If the date went well, she types her name (in her font), her number and her address,
-## adds a heart emoji after her name on a really good date, and taps Done. If not, she
-## types her name, deletes it, and taps Cancel.
+## adds a heart after her name on a really good date (an emoji, a picture or an animated
+## icon), her traits pop in underneath, and she taps Done. If not, she types her name,
+## deletes it, and taps Cancel. The middle scrolls to follow her, so there's room for
+## any number of traits.
 ##
 ## The boxes, her font and text colour come from her dialogue style; everything else is
 ## Style (data/contact_card_style.tres). Her name, number and address come from her girl
@@ -49,6 +51,11 @@ var _time := 0.0
 @onready var first_name: Label = %FirstName
 @onready var heart: TextureRect = %Heart
 @onready var heart_text: Label = %HeartText
+@onready var heart_icon: Control = %HeartIcon
+@onready var heart_sprite: AnimatedSprite2D = %HeartSprite
+@onready var scroll: ScrollContainer = %Scroll
+@onready var traits_group: PanelContainer = %TraitsGroup
+@onready var trait_rows: VBoxContainer = %TraitRows
 @onready var last_name: Label = %LastName
 @onready var company: Label = %Company
 @onready var phone_kind: Label = %PhoneKind
@@ -66,7 +73,7 @@ func _ready() -> void:
 	sound.max_polyphony = 4
 	caret.visible = false
 	# Her box style can keep its outline over a picture box, like her dialogue box does.
-	for group: PanelContainer in [name_group, phone_group, address_group]:
+	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.draw.connect(_draw_outline.bind(group))
 	if get_parent() == get_tree().root:
 		_play_alone.call_deferred()
@@ -83,8 +90,12 @@ func show_card(girl: GirlData) -> void:
 		_set_typed(label, "")
 	heart.visible = false
 	heart_text.visible = false
+	heart_icon.visible = false
+	heart_sprite.stop()
 	result.visible = false
 	caret.visible = false
+	_build_traits()
+	scroll.scroll_vertical = 0
 	visible = true
 
 
@@ -102,6 +113,7 @@ func play(hearts: int, rules: DateRules = null) -> bool:
 		await _next_field()
 		await _type_into(address, _girl.address)
 		caret.visible = false
+		await _show_traits()
 		await _tap(done, style.done_sound)
 		result.text = style.got_number_text
 	else:
@@ -137,6 +149,7 @@ func _process(delta: float) -> void:
 func _type_into(label: Label, words: String) -> void:
 	_typing = label
 	caret.visible = true
+	_follow(label)
 	for character in words:
 		_set_typed(label, _typed[label] + character)
 		_play(style.space_sound if character == " " else style.key_sound)
@@ -157,13 +170,154 @@ func _add_heart() -> void:
 	_play(style.space_sound)
 	await _wait(style.max_seconds_per_key * 2.0)
 	_play(style.key_sound)
-	if style.heart_image:
+	if style.heart_animation:
+		_show_animated_heart()
+	elif style.heart_image:
+		heart.custom_minimum_size = Vector2(style.heart_size, style.heart_size)
 		heart.texture = style.heart_image
 		heart.visible = true
+		_pop(heart)
 	else:
 		heart_text.text = style.heart_text
 		heart_text.visible = true
 	await _wait(style.max_seconds_per_key)
+
+
+func _show_animated_heart() -> void:
+	var frames := style.heart_animation
+	var animation := StringName(style.heart_animation_name)
+	if animation.is_empty() or not frames.has_animation(animation):
+		animation = frames.get_animation_names()[0]
+	heart_icon.custom_minimum_size = Vector2(style.heart_size, style.heart_size)
+	heart_icon.visible = true
+	heart_sprite.sprite_frames = frames
+	heart_sprite.play(animation)
+	heart_sprite.position = heart_icon.custom_minimum_size / 2.0
+	var picture := frames.get_frame_texture(animation, 0)
+	var fit := style.heart_size / maxf(picture.get_width(), picture.get_height()) if picture else 1.0
+	heart_sprite.scale = Vector2.ZERO
+	create_tween().tween_property(heart_sprite, "scale", Vector2(fit, fit), 0.25) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+# One row per trait in her girl file, hidden until she gets to them.
+func _build_traits() -> void:
+	for child in trait_rows.get_children():
+		trait_rows.remove_child(child)
+		child.queue_free()
+	var accent := _box.name_plate_color
+	var her_font := _her_font()
+	for i in _girl.traits.size():
+		var info: GirlTrait = _girl.traits[i]
+		if not info:
+			continue
+		if trait_rows.get_child_count() > 0:
+			var line := ColorRect.new()
+			line.custom_minimum_size.y = 3
+			line.color = Color(_box.text_color, 0.18)
+			line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			trait_rows.add_child(line)
+		var row := HBoxContainer.new()
+		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_theme_constant_override("separation", 30)
+		if info.icon:
+			var picture := TextureRect.new()
+			picture.texture = info.icon
+			picture.custom_minimum_size = Vector2(style.trait_icon_size, style.trait_icon_size)
+			picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			picture.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			row.add_child(picture)
+		var kind := Label.new()
+		kind.text = info.kind
+		kind.custom_minimum_size = Vector2(170, 0)
+		_font(kind, style.ui_font, style.ui_font_size, accent)
+		row.add_child(kind)
+		var words := VBoxContainer.new()
+		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		words.add_theme_constant_override("separation", 2)
+		row.add_child(words)
+		var title_label := Label.new()
+		_font(title_label, her_font, style.field_font_size, _box.text_color)
+		title_label.text = "" if style.type_traits else info.title
+		words.add_child(title_label)
+		if not info.description.is_empty():
+			var description := Label.new()
+			description.text = info.description
+			description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_font(description, her_font, style.trait_description_size, Color(_box.text_color, 0.7))
+			words.add_child(description)
+		row.set_meta("trait", info)
+		row.set_meta("title_label", title_label)
+		row.modulate.a = 0.0
+		trait_rows.add_child(row)
+	# The box stays hidden until her traits appear (it never does on a bad date).
+	traits_group.visible = false
+	for child in trait_rows.get_children():
+		child.modulate.a = 0.0
+
+
+# Her traits appear one after another (or she types them), the card scrolling to follow.
+func _show_traits() -> void:
+	if not style.show_traits or trait_rows.get_child_count() == 0:
+		return
+	traits_group.visible = true
+	await _wait(style.pause_between_fields)
+	for child in trait_rows.get_children():
+		if not child.has_meta("trait"):
+			child.modulate.a = 1.0
+			continue
+		_follow(child)
+		var info: GirlTrait = child.get_meta("trait")
+		if style.type_traits:
+			child.modulate.a = 1.0
+			var title_label: Label = child.get_meta("title_label")
+			_hints[title_label] = ""
+			_typed[title_label] = ""
+			await _type_into(title_label, info.title)
+			caret.visible = false
+			await _wait(style.pause_between_fields * 0.5)
+		else:
+			_play(style.trait_sound)
+			create_tween().tween_property(child, "modulate:a", 1.0, 0.2)
+			await _wait(style.trait_reveal_seconds)
+	_scroll_to_end()
+
+
+# Scrolls all the way down, so the last trait's description is in view too.
+func _scroll_to_end() -> void:
+	# Wrapped descriptions settle a few frames after they appear.
+	for i in 3:
+		await get_tree().process_frame
+	var end := int(scroll.get_v_scroll_bar().max_value - scroll.size.y)
+	if end > scroll.scroll_vertical:
+		var slide := create_tween()
+		slide.tween_property(scroll, "scroll_vertical", end, 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		await slide.finished
+	scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value - scroll.size.y)
+
+
+# Scrolls the card so `node` is in view, the way a phone follows what you're typing.
+func _follow(node: Control) -> void:
+	for i in 2:
+		await get_tree().process_frame
+	var view := scroll.get_global_rect()
+	var bottom := node.get_global_rect().end.y + 40.0
+	var top := node.get_global_rect().position.y - 40.0
+	var target := scroll.scroll_vertical
+	if bottom > view.end.y:
+		target += int(bottom - view.end.y)
+	elif top < view.position.y:
+		target -= int(view.position.y - top)
+	if target != scroll.scroll_vertical:
+		create_tween().tween_property(scroll, "scroll_vertical", target, 0.3) \
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+func _pop(node: Control) -> void:
+	node.pivot_offset = node.custom_minimum_size / 2.0
+	node.scale = Vector2.ZERO
+	create_tween().tween_property(node, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _next_field() -> void:
@@ -194,7 +348,7 @@ func _set_typed(label: Label, words: String) -> void:
 
 func _apply_style() -> void:
 	var accent := _box.name_plate_color
-	var her_font: Font = _box.font if _box.font else (load(DEFAULT_BOX_STYLE) as DialogueBoxStyle).font
+	var her_font := _her_font()
 
 	dim.color = style.behind_dim
 	var sheet_box := StyleBoxFlat.new()
@@ -203,7 +357,7 @@ func _apply_style() -> void:
 	sheet_box.anti_aliasing = true
 	sheet.add_theme_stylebox_override("panel", sheet_box)
 
-	for group: PanelContainer in [name_group, phone_group, address_group]:
+	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.add_theme_stylebox_override("panel", _box.make_box())
 		group.queue_redraw()
 	for line: ColorRect in [%Line1, %Line2]:
@@ -239,6 +393,10 @@ func _apply_style() -> void:
 	photo.texture = _girl.contact_photo
 	photo.visible = _girl.contact_photo != null
 	initials.visible = _girl.contact_photo == null
+
+
+func _her_font() -> Font:
+	return _box.font if _box.font else (load(DEFAULT_BOX_STYLE) as DialogueBoxStyle).font
 
 
 func _draw_outline(group: PanelContainer) -> void:

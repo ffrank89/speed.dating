@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ContactCardStyle" load_steps=9 format=3]
+[gd_resource type="Resource" script_class="ContactCardStyle" load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/contact_card_style.gd" id="1_style"]
 [ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="2_font"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/switch_002.wav" id="6_next"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/confirmation_003.wav" id="7_done"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/minimize_002.wav" id="8_cancel"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/pluck_001.wav" id="9_trait"]
 
 [resource]
 script = ExtResource("1_style")
@@ -18,3 +19,4 @@ delete_sound = ExtResource("5_delete")
 next_field_sound = ExtResource("6_next")
 done_sound = ExtResource("7_done")
 cancel_sound = ExtResource("8_cancel")
+trait_sound = ExtResource("9_trait")
