@@ -17,6 +17,14 @@ extends Resource
 ## Shown on her dating profile.
 @export var interests: Array[String] = []
 
+@export_group("Contact Card")
+## What she types as her phone number when she gives it to you at the end of a date.
+@export var phone_number: String
+## What she types as her address. Press Enter in the box for a second line.
+@export_multiline var address: String
+## Optional: the round photo on her contact card. Empty = her initials in a circle.
+@export var contact_photo: Texture2D
+
 @export_group("Art")
 ## Her full-art poses. Each entry is a name and a pose (picture, size, nudge, flip).
 ## A dialogue line switches pose with a tag, e.g. "Split Ends: [#pose=cig] Got a light?"

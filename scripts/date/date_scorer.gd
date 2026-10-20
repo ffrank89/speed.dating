@@ -89,6 +89,15 @@ func resolve_microgame(option: DateOption, passed: bool) -> Result:
 	return result
 
 
+## 0-3 hearts: how many of her Affection Thresholds the score has reached.
+func hearts() -> int:
+	var count := 0
+	for threshold in girl.affection_thresholds:
+		if score >= threshold:
+			count += 1
+	return count
+
+
 ## Adds points from outside the options (e.g. shooing a stage hazard away). Returns them.
 func add_bonus(points: float) -> float:
 	score += points

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AppInfo" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/app_info.gd" id="1_app"]
+[ext_resource type="Texture2D" path="res://assets/claddagh.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_app")
+app_name = "Contacts"
+icon = ExtResource("2_icon")
+icon_padding = 0.14
+launch_color = Color(0.949, 0.949, 0.969, 1)
+launch_icon_size = 300

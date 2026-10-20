@@ -20,6 +20,13 @@ extends Resource
 ## How hard it is for an option with a microgame but no #check.
 @export_range(0.0, 1.0, 0.05) var unchecked_difficulty: float = 0.5
 
+@export_group("Result")
+## She gives you her number at the end of the date at this many hearts or more.
+## Hearts (0-3) come from her score and her Affection Thresholds (her girl file).
+@export_range(0, 3) var number_at_hearts: int = 1
+## She types a heart emoji next to her name at this many hearts or more.
+@export_range(0, 4) var heart_emoji_at_hearts: int = 3
+
 @export_group("Points")
 ## How much her likes boost an option's points. An option is worth
 ## value × (1 + her like for that attribute × Likes Weight).

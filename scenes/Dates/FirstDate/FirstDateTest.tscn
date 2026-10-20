@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckpg8pvesqt83"]
+[gd_scene load_steps=15 format=3 uid="uid://ckpg8pvesqt83"]
 
 [ext_resource type="Script" uid="uid://bmj2168xc1mnx" path="res://scenes/Dates/FirstDate/first_date_test.gd" id="1_test"]
 [ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="2_girl"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/Microgames/MicrogameHost.tscn" id="10_microgames"]
 [ext_resource type="Script" path="res://scenes/Hazards/stage_hazards.gd" id="11_hazards"]
 [ext_resource type="PackedScene" path="res://scenes/Hazards/Fly/Fly.tscn" id="12_fly"]
+[ext_resource type="PackedScene" path="res://scenes/Results/ContactCard.tscn" id="13_card"]
 
 [sub_resource type="Theme" id="Theme_debug"]
 default_font_size = 32
@@ -146,6 +147,12 @@ layout_mode = 2
 focus_mode = 0
 text = "Stage hazards now"
 
+[node name="EndDateButton" type="Button" parent="DebugPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "End date now"
+
 [node name="ScoreLabel" type="Label" parent="DebugPanel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -153,3 +160,5 @@ theme_override_font_sizes/font_size = 24
 text = "Date score: 0"
 
 [node name="MicrogameHost" parent="." instance=ExtResource("10_microgames")]
+
+[node name="ContactCard" parent="." instance=ExtResource("13_card")]

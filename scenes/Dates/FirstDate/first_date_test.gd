@@ -22,6 +22,7 @@ var _pose_names: Array[String] = []
 var _pose_index := 0
 var _scorer: DateScorer
 var _state := DateState.new()
+var _ended := false
 
 @onready var background: TextureRect = $Background
 @onready var portrait: GirlPortrait = $Portrait
@@ -36,6 +37,8 @@ var _state := DateState.new()
 @onready var restart_button: Button = %RestartButton
 @onready var hazard_button: Button = %HazardButton
 @onready var stage_hazards: StageHazards = $StageHazards
+@onready var contact_card: ContactCard = $ContactCard
+@onready var end_date_button: Button = %EndDateButton
 
 
 func _ready() -> void:
@@ -48,7 +51,8 @@ func _ready() -> void:
 	dialogue_box.reaction_requested.connect(_on_reaction_requested)
 	dialogue_box.responses_ready.connect(func(responses: Array) -> void: option_list.show_options(responses, _scorer, girl.option_style))
 	option_list.option_resolved.connect(_on_option_resolved)
-	dialogue_box.finished.connect(func() -> void: status_label.text = "Dialogue finished. Press Restart.")
+	dialogue_box.finished.connect(_end_date)
+	end_date_button.pressed.connect(_end_date)
 
 	if not girl:
 		girl_label.text = "No girl: drop a GirlData into the 'girl' slot"
@@ -78,6 +82,19 @@ func _on_option_resolved(response: DialogueResponse, result: DateScorer.Result) 
 		roll = "microgame %s" % ("passed" if result.hit else "failed")
 	score_label.text = "Date score: %.1f   (last: %+.1f, %s)" % [_scorer.score, result.points, roll]
 	dialogue_box.choose(response)
+
+
+# The date's over: open Contacts like an app, and she types in her number (or doesn't).
+func _end_date() -> void:
+	if _ended or not _scorer:
+		return
+	_ended = true
+	var hearts := _scorer.hearts()
+	status_label.text = "Date over: %d of 3 hearts" % hearts
+	await AppLauncher.open("contacts", contact_card.show_card.bind(girl))
+	var got_number := await contact_card.play(hearts, rules)
+	await AppLauncher.close("contacts", func() -> void: contact_card.visible = false)
+	status_label.text = "Date over: %d of 3 hearts, %s. Press Restart." % [hearts, "got her number" if got_number else "no number"]
 
 
 # The player dealt with a stage hazard (e.g. shooed the fly away): points and her reaction.

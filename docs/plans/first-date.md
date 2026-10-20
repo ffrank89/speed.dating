@@ -164,7 +164,7 @@ wing frames), a buzz loop.
 
 | Code | Art | Writing / audio |
 |---|---|---|
-| Date flow: opener, then 5 exchanges drawn from her pool with no repeats, then a closer chosen by how it went. | **Result card**: 0–3 hearts, and "she's in" or "she's gone" | **Split Ends first-date pool** (below) |
+| Date flow: opener, then 5 exchanges drawn from her pool with no repeats, then a closer chosen by how it went. | ~~Result card~~ **Built differently:** the [contact card](../guides/result-screen.md) (she types her number, or doesn't). Art: optional contact photos, a heart image, the Contacts app icon. | **Split Ends first-date pool** (below) |
 | Hearts from `score_to_affection(score, thresholds)`; emits a `DateResult`. | Hearts: empty and full | Date music loop (pick from `assets/audio/loops`) |
 | ~~Retire the old date path: `DialogueManager`, `ScoreCalculator`, the JSON dialogue, `DialogueDataUI`.~~ ✅ Done early (branch `remove-legacy-code`): the old date scene, `DatePresenter`, the old dialogue system and `ScoreCalculator` are removed; the Tinder screen now starts dates in `FirstDateTest`. | Background: pick one (`bedroom1.png` today) | |
 | Hook `FirstDateTest` and the real flow (`dating_scene`) to the same date scene. | | |
@@ -234,7 +234,7 @@ Split Ends: [#pose=point] Okay so my dad's boat. It has a name. Guess it.
 | 10 | Lighter + flame (3–4 frames) + cigarette + ember | M3 | Lighter and cig yes; flame no |
 | 11 | Split Ends close-up: lighting the cig | M3 | No (can crop the `cig` pose) |
 | 12 | Split Ends close-up face + eye-glance frames | M3 | No |
-| 13 | Result card + hearts (empty and full) | M4 | No |
+| 13 | Contact card: optional contact photo per girl, optional heart image, Contacts app icon (the card itself needs no art) | M4 | Placeholder icon |
 | 14 | Split Ends poses ×5 and a background | — | **Yes** |
 | 15 | Reaction icons (exclamation, question, heart, anger) | — | Mostly (heart?) |
 

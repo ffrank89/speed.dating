@@ -30,7 +30,7 @@ Third-party fonts, sounds and code are listed with their licences in [`CREDITS.m
 |---|---|
 | [`design/core-loop.md`](design/core-loop.md) | **Start here.** The run from start to finish, how every module feeds the others, and the shared code all modules use. |
 | `design/<module>.md` | One file per module, all with the same four sections (below). |
-| [`guides/`](guides/) | How-tos for artists and writers, no code needed (except writing a microgame's game code). [Dialogue box, fonts, voices and poses](guides/dialogue-box.md); [options, odds and scoring](guides/options-and-scoring.md); [making a microgame](guides/making-a-microgame.md); [phone apps and the open-app animation](guides/phone-apps.md); [stage hazards (the fly)](guides/stage-hazards.md); [the player's cursor](guides/cursor.md); [replacing placeholders](guides/replacing-placeholders.md). |
+| [`guides/`](guides/) | How-tos for artists and writers, no code needed (except writing a microgame's game code). [Dialogue box, fonts, voices and poses](guides/dialogue-box.md); [options, odds and scoring](guides/options-and-scoring.md); [making a microgame](guides/making-a-microgame.md); [phone apps and the open-app animation](guides/phone-apps.md); [stage hazards (the fly)](guides/stage-hazards.md); [the player's cursor](guides/cursor.md); [the result screen (getting her number)](guides/result-screen.md); [replacing placeholders](guides/replacing-placeholders.md). |
 | [`plans/`](plans/) | Build plans for what we're working on now. Current: [first date](plans/first-date.md). |
 | [`decisions/`](decisions/) | One short record per settled decision: what we chose, why, what we didn't pick, and when to revisit it. |
 
