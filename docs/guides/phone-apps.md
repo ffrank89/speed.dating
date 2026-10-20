@@ -16,6 +16,8 @@ animation (`AppLauncher`), used by:
 | A new date (Start on a profile) | `data/apps/date.tres` | The **Start** button |
 | A microgame | the microgame's **App**, or `data/apps/microgame.tres` | The picked option bubble, and closes back into it |
 | The boss fight | `data/apps/boss.tres` | Ready for when the boss scene exists (see below) |
+| Her contact card at the end of a date | `data/apps/contacts.tres` | Where the player clicked |
+| Your **Contacts** (the party) | `data/apps/contacts.tres` | The **Contacts** icon on the calendar, and closes back into it ([contacts.md](contacts.md)) |
 
 ## Try it
 
@@ -30,7 +32,7 @@ Click its file in `data/apps/`:
 | Setting | What it does |
 |---|---|
 | **App Name** | Shown under the icon on a home screen |
-| **Icon → Icon** | The icon art. Placeholders now (our existing icons: the January calendar, the winged heart, the red heart, the sword, the exclamation mark). |
+| **Icon → Icon** | The icon art. Placeholders now (our existing icons: the January calendar, the winged heart, the red heart, the sword, the exclamation mark; the Godot logo for Contacts). |
 | **Icon → Icon Background** | The rounded tile behind the art |
 | **Icon → Icon Padding** | How far the art sits in from the tile's edge. **0** for finished app-icon art that has its own background. |
 | **Launch Screen → Launch Color** | The colour that fills the screen while it opens |

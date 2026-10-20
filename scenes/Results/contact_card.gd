@@ -16,10 +16,14 @@ extends CanvasLayer
 ##
 ## From code: show_card(girl, rules), then var got_number: bool = await play(hearts)
 ## (hearts = -1 for a failed date).
-## Full guide: docs/guides/result-screen.md
+## Her saved contact in the Contacts app: show_saved(girl, hearts, rules) fills it in at
+## once, with "‹ Contacts" to go back (back_pressed).
+## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
 
 ## Sent when she's done (true = she gave you her number).
 signal finished(got_number: bool)
+## Her saved contact's "‹ Contacts" was clicked (or Escape pressed).
+signal back_pressed
 
 const DEFAULT_BOX_STYLE := "res://data/dialogue_styles/default.tres"
 
@@ -40,6 +44,7 @@ var _typing: Label
 var _typed := {}
 var _hints := {}
 var _time := 0.0
+var _saved := false
 # Trait pops get their own player, so their rising pitch doesn't bend the key clicks.
 var _boop := AudioStreamPlayer.new()
 
@@ -83,6 +88,7 @@ func _ready() -> void:
 	# Her box style can keep its outline over a picture box, like her dialogue box does.
 	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.draw.connect(_draw_outline.bind(group))
+	cancel.gui_input.connect(_on_cancel_input)
 	if get_parent() == get_tree().root:
 		_play_alone.call_deferred()
 	else:
@@ -93,7 +99,8 @@ func _ready() -> void:
 func show_card(girl: GirlData, rules: DateRules = null) -> void:
 	_girl = girl
 	_rules = rules if rules else DateRules.new()
-	_box = girl.dialogue_style if girl.dialogue_style else load(DEFAULT_BOX_STYLE)
+	_box = box_style_of(girl)
+	_set_saved(false)
 	_apply_style()
 	for label: Label in [first_name, last_name, company, phone, address]:
 		_set_typed(label, "")
@@ -107,6 +114,23 @@ func show_card(girl: GirlData, rules: DateRules = null) -> void:
 	_build_traits()
 	scroll.scroll_vertical = 0
 	visible = true
+
+
+## Her saved contact, filled in at once: what `hearts` unlocked on her date (her type,
+## her tags or "you dont know me like that!", the heart), her number and address.
+## "‹ Contacts" (top left) sends back_pressed.
+func show_saved(girl: GirlData, hearts: int, rules: DateRules = null) -> void:
+	show_card(girl, rules)
+	_set_saved(true)
+	_set_typed(first_name, girl.display_name)
+	_set_typed(phone, girl.phone_number)
+	_set_typed(address, girl.address)
+	if hearts >= _rules.heart_emoji_at_hearts:
+		_place_heart()
+	for child in trait_rows.get_children():
+		if child.has_meta("trait"):
+			_fill_trait(child, hearts)
+			child.get_meta("words").modulate.a = 1.0
 
 
 ## She fills it in, or doesn't. `hearts` = how the date went: -1 = failed (no number),
@@ -171,17 +195,23 @@ func _add_heart() -> void:
 	_play(style.space_sound)
 	await _wait(style.max_seconds_per_key * 2.0)
 	_play(style.key_sound)
+	_place_heart()
+	if heart.visible:
+		_pop(heart)
+	await _wait(style.max_seconds_per_key)
+
+
+# The heart after her name: her animation, picture, or emoji (the first that's set).
+func _place_heart() -> void:
 	if style.heart_animation:
 		_show_animated_heart()
 	elif style.heart_image:
 		heart.custom_minimum_size = Vector2(style.heart_size, style.heart_size)
 		heart.texture = style.heart_image
 		heart.visible = true
-		_pop(heart)
 	else:
 		heart_text.text = style.heart_text
 		heart_text.visible = true
-	await _wait(style.max_seconds_per_key)
 
 
 func _show_animated_heart() -> void:
@@ -274,16 +304,9 @@ func _show_traits(hearts: int) -> void:
 		if not child.has_meta("trait"):
 			continue
 		_follow(child)
-		var info: GirlTrait = child.get_meta("trait")
 		var words: Control = child.get_meta("words")
-		var secret := hearts < int(_rules.trait_hearts.get(info.kind, 0))
-		var shown_title := style.secret_text if secret else info.title
+		var shown_title := _fill_trait(child, hearts)
 		var title_label: Label = child.get_meta("title_label")
-		title_label.text = shown_title
-		if child.has_meta("description"):
-			child.get_meta("description").visible = not secret
-		if child.has_meta("icon") and not secret:
-			child.get_meta("icon").modulate.a = 1.0
 		if style.type_traits:
 			words.modulate.a = 1.0
 			_hints[title_label] = ""
@@ -300,6 +323,20 @@ func _show_traits(hearts: int) -> void:
 			create_tween().tween_property(words, "scale", Vector2.ONE, 0.18) \
 				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			await _wait(style.trait_reveal_seconds)
+
+
+# Fills a trait's row for a date that earned `hearts`: its title, or Secret Text when
+# its kind needs more hearts (Trait Hearts). Returns what the field says.
+func _fill_trait(row: Control, hearts: int) -> String:
+	var info: GirlTrait = row.get_meta("trait")
+	var secret := hearts < int(_rules.trait_hearts.get(info.kind, 0))
+	var shown_title := style.secret_text if secret else info.title
+	row.get_meta("title_label").text = shown_title
+	if row.has_meta("description"):
+		row.get_meta("description").visible = not secret
+	if row.has_meta("icon") and not secret:
+		row.get_meta("icon").modulate.a = 1.0
+	return shown_title
 
 
 func _boop_at(pitch: float) -> void:
@@ -364,6 +401,41 @@ func _tap(label: Label, tap_sound: AudioStream) -> void:
 	await press.finished
 
 
+# A saved contact (in the Contacts app) or a new one (the end of a date): the header,
+# and the empty rows a saved contact doesn't show.
+func _set_saved(saved: bool) -> void:
+	_saved = saved
+	cancel.text = style.back_text if saved else style.cancel_text
+	title.visible = not saved
+	done.visible = not saved
+	add_photo.visible = not saved
+	result.visible = not saved
+	for node: Control in [%Line1, last_name, %Line2, company]:
+		node.visible = not saved
+	cancel.mouse_filter = Control.MOUSE_FILTER_STOP if saved else Control.MOUSE_FILTER_IGNORE
+	cancel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if saved else Control.CURSOR_ARROW
+
+
+func _on_cancel_input(event: InputEvent) -> void:
+	if _saved and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		_go_back()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _saved and visible and event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_go_back()
+
+
+func _go_back() -> void:
+	_play(style.back_sound)
+	cancel.pivot_offset = cancel.size / 2.0
+	var press := create_tween()
+	press.tween_property(cancel, "scale", Vector2(1.15, 1.15), 0.06)
+	press.tween_property(cancel, "scale", Vector2.ONE, 0.1)
+	back_pressed.emit()
+
+
 # Shows what's been typed, or the grey hint when nothing has.
 func _set_typed(label: Label, words: String) -> void:
 	_typed[label] = words
@@ -409,7 +481,7 @@ func _apply_style() -> void:
 	phone_kind.text = style.phone_kind
 	address_kind.text = style.address_kind
 	caret.color = accent
-	_font(heart_text, style.emoji_font if style.emoji_font else _emoji_font(), style.field_font_size, Color.WHITE)
+	_font(heart_text, style.emoji_font if style.emoji_font else emoji_font(), style.field_font_size, Color.WHITE)
 
 	var round_box := StyleBoxFlat.new()
 	round_box.bg_color = accent
@@ -417,14 +489,24 @@ func _apply_style() -> void:
 	round_box.anti_aliasing = true
 	circle.add_theme_stylebox_override("panel", round_box)
 	_font(initials, her_font, 120, _box.name_color)
-	initials.text = _initials(_girl.display_name)
+	initials.text = initials_of(_girl.display_name)
 	photo.texture = _girl.contact_photo
 	photo.visible = _girl.contact_photo != null
 	initials.visible = _girl.contact_photo == null
 
 
 func _her_font() -> Font:
-	return _box.font if _box.font else (load(DEFAULT_BOX_STYLE) as DialogueBoxStyle).font
+	return font_of(_box)
+
+
+## Her dialogue box style (the default one if she has none): her card's boxes and font.
+static func box_style_of(girl: GirlData) -> DialogueBoxStyle:
+	return girl.dialogue_style if girl and girl.dialogue_style else load(DEFAULT_BOX_STYLE)
+
+
+## The font for a box style (the default style's font if it has none).
+static func font_of(box: DialogueBoxStyle) -> Font:
+	return box.font if box.font else (load(DEFAULT_BOX_STYLE) as DialogueBoxStyle).font
 
 
 func _draw_outline(group: PanelContainer) -> void:
@@ -440,14 +522,15 @@ func _font(label: Label, font: Font, font_size: int, color: Color) -> void:
 	label.add_theme_color_override("font_color", color)
 
 
-# The computer's colour emoji font.
-func _emoji_font() -> Font:
+## The computer's colour emoji font.
+static func emoji_font() -> Font:
 	var emoji := SystemFont.new()
 	emoji.font_names = PackedStringArray(["Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji"])
 	return emoji
 
 
-func _initials(full_name: String) -> String:
+## "Split Ends" → "SE": shown in the circle when she has no contact photo.
+static func initials_of(full_name: String) -> String:
 	var letters := ""
 	for word in full_name.split(" ", false):
 		letters += word.left(1).to_upper()

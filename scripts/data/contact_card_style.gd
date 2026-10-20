@@ -1,11 +1,12 @@
 @tool
 class_name ContactCardStyle
 extends Resource
-## How the end-of-date contact card looks, types and sounds: the iPhone "New Contact"
-## screen where she types in (or doesn't) her name, number and address.
+## How the phone's Contacts look, type and sound: the end-of-date card (the iPhone "New
+## Contact" screen where she types in, or doesn't, her name, number and address), and the
+## Contacts app where your party is saved (the list, and each girl's saved card).
 ## The boxes, her font and text colour come from HER dialogue style; this file sets
 ## everything else. One file: data/contact_card_style.tres.
-## Full guide: docs/guides/result-screen.md
+## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
 
 @export_group("Sheet")
 ## The phone screen's background (iPhone's light grey).
@@ -85,6 +86,25 @@ extends Resource
 ## Size of a trait's icon, in pixels.
 @export_range(16, 200) var trait_icon_size: int = 64
 
+@export_group("Contacts App")
+## The big title at the top of the list.
+@export var list_title: String = "Contacts"
+## Top left of a saved contact: goes back to the list.
+@export var back_text: String = "‹ Contacts"
+## The list when your party is empty.
+@export var no_contacts_text: String = "No Contacts"
+## Under the list: how many contacts you have. %d = the number.
+@export var one_contact_text: String = "1 Contact"
+@export var many_contacts_text: String = "%d Contacts"
+## Letter headers (S, T...) above the names, like a phone's contacts.
+@export var section_letters: bool = true
+## Size of each girl's name in the list (in her font).
+@export_range(8, 200) var row_font_size: int = 60
+## Size of the round photo (or initials) next to her name in the list, in pixels.
+@export_range(40, 300) var row_photo_size: int = 120
+## Seconds for a saved contact to slide in over the list (and back out).
+@export_range(0.0, 1.0, 0.05) var slide_seconds: float = 0.25
+
 @export_group("Sounds")
 ## Each letter or number she types.
 @export var key_sound: AudioStream
@@ -98,4 +118,8 @@ extends Resource
 @export var done_sound: AudioStream
 ## Tapping Cancel (she didn't).
 @export var cancel_sound: AudioStream
+## Contacts app: tapping a girl in the list to open her contact.
+@export var open_contact_sound: AudioStream
+## Contacts app: tapping "‹ Contacts" to go back to the list.
+@export var back_sound: AudioStream
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0

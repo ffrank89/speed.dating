@@ -10,7 +10,7 @@ Hover over any setting to see what it does.
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
 | `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
 | `date_rules.tres` | How a date runs and scores: how many exchanges (and how many are microgames), the opener and closer names, odds limits, how much her likes matter, what a miss costs, how hard microgames get, and what her contact card shows. |
-| `contact_card_style.tres` | The end-of-date contact card: its words, typing speed, heart emoji and key sounds. Her boxes and font come from her dialogue style. |
+| `contact_card_style.tres` | The phone's Contacts: the end-of-date contact card (its words, typing speed, heart emoji and key sounds) and the Contacts app where your party is saved (the list's words, sizes and sounds). Her boxes and font come from her dialogue style. |
 | `cursors/` | The player's cursor: picture, clicking spot, size, and optional hover, pressed and drag pictures. `default.tres` is the one the game uses. |
 | `apps/` | One file per phone app (calendar, dating app, date, boss, microgame): its icon, tile colour, launch screen and sounds for the iPhone-style open animation. |
 | `app_transition_style.tres` | How every app opens and closes: timing, motion, icon size and roundness, the screen behind, optional phone frame. |

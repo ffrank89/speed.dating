@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=13 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_rtpg6"]
 [ext_resource type="PackedScene" uid="uid://dshri7i831rjb" path="res://spritebackground.tscn" id="2_b2xyy"]
@@ -9,6 +9,9 @@
 [ext_resource type="Script" uid="uid://bh4m8vn3cntfa" path="res://scenes/Calendar/DayButtonContainer.gd" id="5_mte6u"]
 [ext_resource type="PackedScene" uid="uid://de7jnh7bcf5yi" path="res://icon_scenes/calendar_icon/CalendarIcon.tscn" id="8_2lb33"]
 [ext_resource type="Script" uid="uid://cawaor0covsla" path="res://icon_scenes/calendar_icon/calendar_icon.gd" id="9_bl5eu"]
+[ext_resource type="Script" uid="uid://dbk25guguktt0" path="res://scenes/Phone/app_icon.gd" id="10_app_icon"]
+[ext_resource type="Resource" path="res://data/apps/contacts.tres" id="11_contacts_app"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/Contacts/ContactsApp.tscn" id="12_contacts"]
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3
@@ -230,3 +233,22 @@ offset_bottom = 8.0
 [node name="CalendarIcon" parent="GridContainer/Day_2" instance=ExtResource("8_2lb33")]
 animation = &"culture"
 script = ExtResource("9_bl5eu")
+
+[node name="ContactsIcon" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -420.0
+offset_right = -80.0
+offset_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("10_app_icon")
+app = ExtResource("11_contacts_app")
+
+[node name="ContactsApp" parent="." node_paths=PackedStringArray("icon") instance=ExtResource("12_contacts")]
+icon = NodePath("../ContactsIcon")

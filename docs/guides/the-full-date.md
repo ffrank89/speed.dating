@@ -13,7 +13,7 @@ Dating app: Start ─► her room opens like an app
                       ├─ one closer, picked by how it went
                       └─ her contact card (she gives you her number, or doesn't)
                            │
-                           ├─ got her number → she's in your party
+                           ├─ got her number → saved in your Contacts (your party)
                            └─ failed date    → she's gone for the run
                                                 (the dating app stops showing her)
                       ─► back to the calendar
@@ -108,7 +108,7 @@ shows on the card is in [result-screen.md](result-screen.md).
 
 | How it went | What happens |
 |---|---|
-| She gave her number (0 hearts or more) | She joins your party. |
+| She gave her number (0 hearts or more) | She's saved in your **Contacts**: that's your party ([contacts.md](contacts.md)). The dating app stops offering her. |
 | Failed (no number) | She's **gone for the run**: the dating app skips her from now on. If no one's left, it says "No one left to swipe on." |
 
 Then the game goes back to the calendar, which opens like an app
@@ -151,7 +151,7 @@ file with **girl_data_path**. Smokey has none yet.
   (`_plan_titles()`), plays each with `DialogueBox.start()` and moves on when
   `finished` fires; then the closer (`_closer_title()`), then `_end_date()`:
   `AppLauncher.open("contacts")`, `ContactCard.play(hearts)`, a `DateResult`
-  (`got_number`, `affection`, `score`), `PlayerManager.add_date()` or
+  (`got_number`, `affection`, `score`), `PlayerManager.add_party_member()` or
   `mark_gone()`, `AppLauncher.close`, `date_finished(result)`, and
   `AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)` when **Go To
   Calendar** is on.

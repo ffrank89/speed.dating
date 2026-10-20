@@ -168,7 +168,7 @@ with the debug panel). A date plays `~ opener`, then **5 exchanges** drawn
 with no repeats (**2** from `~ microgame_...` titles, 3 from `~ exchange_...`
 titles, shuffled), then **one of 3 closers** (`closer_failed`,
 `closer_no_hearts`, `closer_hearts`), then her contact card. Got her number
-→ she joins the party; a failed date → she's **gone for the run** (the
+→ she's saved in your Contacts (the party, [0054](../decisions/0054-party-is-your-contacts.md)); a failed date → she's **gone for the run** (the
 dating app skips her). Then **back to the calendar**. Counts and title names:
 `data/date_rules.tres` → Flow. Split Ends' `first_date.dialogue` is a **test
 pool** (7 exchanges, placeholder lines) until her real pool is written.

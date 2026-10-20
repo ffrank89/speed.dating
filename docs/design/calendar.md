@@ -1,4 +1,4 @@
-# Calendar Scene (incl. Tinder screen and Party screen)
+# Calendar Scene (incl. Tinder screen and the Contacts app, your party)
 
 ## Concept
 
@@ -13,11 +13,14 @@
   | Follow-up date | Date a party member to raise her Affection | Date Scene                  |
   | Train          | Add points to one attribute                | *animation* Back to calendar        |
   | Rest / event   | A perk, an item or a random event          | *animation* Back to calendar            |
-  | Boss           | Forced on the last day                     | Party screen → Boss Scene  |
+  | Boss           | Forced on the last day                     | Contacts (pick the lineup) → Boss Scene  |
 - **Which actions appear on which days is generated per run**, so no two
   chapters play the same.
-- The calendar also opens the **party screen**: see your girls, the synergy
-  report, break up with someone, and pick the 3 for the boss.
+- The calendar also opens your **Contacts** (the party screen,
+  [0054](../decisions/0054-party-is-your-contacts.md)): every girl who gave
+  you her number, and her saved card. **Built:** the list and her card.
+  Still to come there: the synergy report, breaking up with someone, and
+  picking the 3 for the boss.
 
 ## Code needed
 
@@ -32,7 +35,7 @@
 ### Shared objects it inherits or holds
 
 - `RunState` (day, chapter, schedule, party)
-- `GirlData` pool (Tinder offers), `PartyMember` (follow-ups, party screen)
+- `GirlData` pool (Tinder offers), `PartyMember` (follow-ups, Contacts)
 - `BossData` (shown from day 1)
 - `SynergyReport` (party screen)
 
@@ -45,7 +48,7 @@
 | `DayAction` (`Resource`)                                     | `kind` (date / follow_up / train / event / boss), `icon`, payload. Replaces the `{"action_name", "scene", "icon"}` dicts.                                                 |
 | Day selection rule                                               | New Dates take 2 or more days. Training takes 1.  Breakups take 1 day but Breakups + New Date take as much as a New Date does.                                                 |
 | `TinderScreen`                                                 | Exists (`scenes/Tinder`). Shows `GirlPool.offer(2–3)` with name, bio, interests, **tags**. Skip option.<br />Is a Phone App Screen. Overlays on top of the calendar. |
-| `PartyScreen`                                                  | Phone App Screen. Overlay on top of the Calendar.                                                                                                                               |
+| `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, opened from the **Contacts** icon on the calendar like an app. Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
 | Training screen                                                  | TBD. Pick an attribute; how many points?                                                                                                                                        |
 | Event pool                                                       | TBD. Random events and their rewards.                                                                                                                                           |
 | Month/chapter display                                            | Today uses`assets/january.png`. Chapters may not map to months; TBD.                                                                                                          |
@@ -59,12 +62,12 @@
 | "Day done" X                                                                | `DayButtonContainer`            | Exists (`x1`)                                                                          |
 | Boss preview card                                                           | Calendar header from day 1        | TBD                                                                                      |
 | Tinder profile card + swipe UI                                              | `TinderScreen`                  | Exists (placeholder)                                                                     |
-| Tag icons                                                                   | Tinder card, party screen         | TBD (shared with[girls.md](girls.md))                                                     |
-| Party screen layout, lineup slots                                           | `PartyScreen`                   | TBD                                                                                      |
+| Tag icons                                                                   | Tinder card, Contacts (her card)  | TBD (shared with[girls.md](girls.md))                                                     |
+| Contacts app icon; lineup slots                                             | `data/apps/contacts.tres`, `ContactsApp` | Icon: Godot logo placeholder. The list needs no art. Lineup slots TBD. |
 
 ## Systems it's part of
 
 - **Run Loop**: owns days and chapters, triggers the boss.
 - **Relationships**: where you choose first dates, follow-ups and break-ups.
-- **Build**: training, events and the party screen.
+- **Build**: training, events and your Contacts (the party).
 - **Combat**: the lineup pick happens here, just before the fight.

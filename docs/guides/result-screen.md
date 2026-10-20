@@ -112,7 +112,8 @@ Keep any new sound's licence next to it, and add a line to `CREDITS.md`.
 ## The Contacts app
 
 The card opens and closes like an app: `data/apps/contacts.tres`, with the
-claddagh ring as a placeholder icon. See [phone apps](phone-apps.md).
+Godot logo as a placeholder icon. See [phone apps](phone-apps.md). The same app
+holds your party: [contacts.md](contacts.md).
 
 ## Something's wrong
 
@@ -128,6 +129,7 @@ claddagh ring as a placeholder icon. See [phone apps](phone-apps.md).
 `ContactCard` (`scenes/Results/contact_card.gd`, a CanvasLayer on layer 20):
 
 - `show_card(girl, rules)`
+- `show_saved(girl, hearts, rules)`: her saved contact, filled in at once, with "‹ Contacts" (`back_pressed`). Used by the Contacts app.
 - `await play(hearts) -> bool` (hearts -1 = a failed date), which also emits `finished(got_number)`
 
 The boxes use `DialogueBoxStyle.make_box()` and `make_outline()` (drawn on
@@ -136,5 +138,5 @@ The date scene's `_end_date()` (`scenes/Dates/Date/date_scene.gd`) runs, in orde
 
 1. `AppLauncher.open("contacts", show_card)`
 2. `play()`
-3. `PlayerManager.add_date()` or `mark_gone()`
+3. `PlayerManager.add_party_member()` or `mark_gone()`
 4. `AppLauncher.close`

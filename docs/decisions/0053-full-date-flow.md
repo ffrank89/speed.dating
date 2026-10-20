@@ -15,7 +15,7 @@ It runs from the girl's first-date `.dialogue` file, found by title names:
 3. **One of 3 closers**, by how it went: `~ closer_failed` (score below her Number Threshold), `~ closer_no_hearts` (number, no hearts), `~ closer_hearts` (1 heart or more).
 4. Her contact card ([0052](0052-result-is-her-contact-card.md)).
 
-After the card: if she gave her number she **joins the party**; a failed date means she's **gone for the run** (the dating app skips her). Then the game goes **back to the calendar**.
+After the card: if she gave her number she **joins the party** (saved in your Contacts: [0054](0054-party-is-your-contacts.md)); a failed date means she's **gone for the run** (the dating app skips her). Then the game goes **back to the calendar**.
 
 The counts and title names are in `data/date_rules.tres` → Flow.
 

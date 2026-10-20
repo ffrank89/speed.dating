@@ -5,7 +5,8 @@
 - A first date is an **opener, 5 exchanges (2 with a microgame) and a
   closer** (tunable in `data/date_rules.tres` → Flow). It ends with her
   contact card: **Affection 0–3 hearts**, or a **failed** date. If she gives
-  you her number (0 hearts or more) she joins the party; a failed first date
+  you her number (0 hearts or more) she joins the party (saved in your
+  Contacts); a failed first date
   means **she's gone for the run**. Then it's back to the calendar.
 - **Each turn:**
   1. She says a line and changes pose. Letters type out one at a time, each

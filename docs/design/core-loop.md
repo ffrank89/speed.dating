@@ -25,7 +25,7 @@ flowchart LR
     Date -->|DateResult| Cal
     Train --> Cal
     Event --> Cal
-    Cal -->|Last day of chapter| Pick[Party screen<br/>pick up to 3 + order<br/>see synergy]
+    Cal -->|Last day of chapter| Pick[Contacts app = party screen<br/>pick up to 3 + order<br/>see synergy]
     Pick --> Boss[Boss Scene<br/>autobattle]
     Boss -->|Win| Next{More chapters?}
     Next -->|Yes| Cal
@@ -86,7 +86,8 @@ means she's gone for the run, so risk has a real cost
 
 ### 5. The party is the build
 
-Each recruited girl becomes a `PartyMember` in `RunState`. The **Synergy
+Each recruited girl becomes a `PartyMember` in `RunState`, saved as a
+contact in your phone's **Contacts** app. The **Synergy
 System** reads the whole party and works out:
 
 - **Girl–girl synergy**: shared tags hitting thresholds (2 Artsy girls? Their damage heir Xdamage is increase).
@@ -180,7 +181,7 @@ Every module builds on this layer. Nothing here is written yet. The
 | `SceneRouter`   | `Node` (autoload)                    | Scene changes and fade transitions, so`RunState` stays pure data. **The transition half exists:** `AppLauncher` (iPhone-style open/close, [phone-apps.md](../guides/phone-apps.md)).                                                                                                             | `PlayerManager` (scene-change half)                            |
 | `PlayerData`    | `Resource` (runtime)                 | Four attributes (Culture, Intellect, Seduction, Heart, 0–100).                                                                                                                 | `PlayerCharacter`                                              |
 | `GirlData`      | `Resource` (`.tres`, one per girl) | Everything about a girl that's the same every run. See[girls.md](girls.md).                                                                                                      | `DateCharacter` + `SmokeyCharacter` / `SplitEndsCharacter` |
-| `PartyMember`   | `Resource` (runtime)                 | A girl in *this* run: `GirlData` ref, Affection, current HP, buffs.                                                                                                         | `party` array of `DateCharacter` nodes                       |
+| `PartyMember`   | `Resource` (runtime)                 | A girl in *this* run: `GirlData` ref, Affection, current HP, buffs. **Started:** `scripts/data/party_member.gd` (`girl`, `affection`, `profile`); shown as your Contacts ([0054](../decisions/0054-party-is-your-contacts.md)). HP and buffs to come. | `PlayerManager.party` is now `Array[PartyMember]` |
 | `PerkData`      | `Resource` (`.tres`)               | A perk's name, art and hook functions. See [perks.md](perks.md).                                                                                                                | `Perk`, `Inebriated`, `Sleepy`                             |
 | `TagData`       | `Resource` (`.tres`)               | A tag's name, icon, thresholds and bonus per threshold.                                                                                                                         | —                                                               |
 | `BossData`      | `Resource` (`.tres`)               | Life event, type, stats, abilities, art.                                                                                                                                        | —                                                               |
@@ -196,8 +197,8 @@ Every module builds on this layer. Nothing here is written yet. The
 | --------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----------------------------------- |
 | `RunState.start_run(seed)`                                                                                                | RunState             | Intro                               |
 | `RunState.apply_date_result(result: DateResult)`                                                                          | RunState             | Dates                               |
-| `RunState.add_party_member(girl: GirlData, affection: int)`                                                               | RunState             | Dates (via`apply_date_result`)    |
-| `RunState.break_up(member: PartyMember)`                                                                                  | RunState             | Calendar (party screen)             |
+| `RunState.add_party_member(girl: GirlData, affection: int)` (built on `PlayerManager` for now)                            | RunState             | Dates (via`apply_date_result`)    |
+| `RunState.break_up(member: PartyMember)`                                                                                  | RunState             | Calendar (Contacts app)             |
 | `RunState.add_perk(perk: PerkData)` / `add_item(item)`                                                                  | RunState             | Calendar events, Dates              |
 | `RunState.advance_day()`                                                                                                  | RunState             | Calendar                            |
 | `RunState.get_attribute(a: Attr)` / `raise_attribute(a, amount)`                                                        | RunState             | Dates, Calendar (training), Synergy |

@@ -96,8 +96,9 @@ func load_characters():
 	for char_class in character_classes:
 		print("load_characters char_class", char_class)
 		var character = char_class.create_default()
-		# A girl whose first date failed is gone for the run.
-		if get_node("/root/PlayerManager").is_gone(character.name):
+		# A girl whose first date failed is gone for the run; one in your contacts is taken.
+		var player_manager = get_node("/root/PlayerManager")
+		if player_manager.is_gone(character.name) or player_manager.is_in_party(character.name):
 			continue
 		# Add default interests and other fields if they're not set
 		if character.interests.is_empty():

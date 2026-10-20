@@ -4,12 +4,16 @@ signal item_selected(item)
 signal date_selected(date)
 signal day_advanced(new_day, new_month)
 signal perk_added(perk)
+## A girl joined your party (her contact was saved), or her hearts changed.
+signal party_changed
 
 var player: PlayerCharacter
 var current_date: DateCharacter
 
 var inventory: Array = []
-var party: Array = []
+## Your party: the girls who gave you their number, saved as contacts in your phone
+## (the Contacts app, scenes/Phone/Contacts/). One PartyMember each.
+var party: Array[PartyMember] = []
 ## Girls whose first date failed: they're gone for the rest of the run.
 var gone_for_run: Array = []
 
@@ -44,14 +48,26 @@ func add_item(item: InventoryItem) -> bool:
 		return true
 	return false
 
-# Add date to party
-func add_date(date: DateCharacter) -> bool:
-	if date and not date in party:
-		party.append(date)
-		print("Added date to party: ", date.name)
-		return true
-	return false
-	
+# She gave you her number: she's saved in your contacts with the hearts she gave you.
+# Already there = her hearts go up if this date went better.
+func add_party_member(girl: GirlData, affection: int, profile: DateCharacter = null) -> PartyMember:
+	for member in party:
+		if member.girl == girl:
+			member.affection = maxi(member.affection, affection)
+			party_changed.emit()
+			return member
+	var member := PartyMember.new(girl, affection, profile)
+	party.append(member)
+	print("Added to party (saved in contacts): ", member.display_name())
+	party_changed.emit()
+	return member
+
+
+# True if the girl with this dating-app name is in your party.
+func is_in_party(date_name: String) -> bool:
+	return party.any(func(member: PartyMember) -> bool: return member.profile and member.profile.name == date_name)
+
+
 # A failed first date: she's gone for the rest of the run (the dating app skips her).
 func mark_gone(date: DateCharacter) -> void:
 	if date and not date in gone_for_run:
@@ -102,8 +118,8 @@ func initialize_inventory():
 	add_item(cigs)
 	add_item(lighter)
 
-func get_party() -> Array:
-	return party  
+func get_party() -> Array[PartyMember]:
+	return party
 
 func initialize_party():
 	#TODO this is a beta system -Clear any existing dates

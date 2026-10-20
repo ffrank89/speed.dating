@@ -11,8 +11,8 @@ extends Control
 ##   one closer, picked by how it went: ~ closer_failed (below her Number Threshold),
 ##     ~ closer_no_hearts, or ~ closer_hearts (1 heart or more)
 ##   her contact card
-## Then she's in your party if she gave you her number, or gone for the run if the date
-## failed, and the game goes back to the calendar.
+## Then she's saved in your contacts (your party) if she gave you her number, or gone
+## for the run if the date failed, and the game goes back to the calendar.
 ##
 ## The game opens this scene from the dating app, with the girl picked there. To test,
 ## press F5: scenes/Dates/FirstDate/FirstDateTest.tscn wraps this with a debug panel.
@@ -205,13 +205,14 @@ func _end_date() -> void:
 		AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)
 
 
-# She's in your party if she gave you her number; a failed date means she's gone.
+# She gave you her number: she's saved in your contacts (your party), with her hearts.
+# A failed date means she's gone for the run.
 func _apply_to_run(result: DateResult) -> void:
 	var picked: DateCharacter = PlayerManager.current_date
 	if not picked:
 		return
 	if result.got_number:
-		PlayerManager.add_date(picked)
+		PlayerManager.add_party_member(girl, result.affection, picked)
 	else:
 		PlayerManager.mark_gone(picked)
 
