@@ -69,10 +69,14 @@ extends Resource
 @export_group("Traits")
 ## Show her traits (her girl file → Contact Card → Traits) under her name, before her number.
 @export var show_traits: bool = true
-## Off = each trait pops in, one after another. On = she types each one.
+## Off = once her name is written, each trait pops into its field: boop, boop, boop.
+## On = she types each one.
 @export var type_traits: bool = false
 ## Seconds between traits popping in.
-@export_range(0.0, 3.0, 0.05) var trait_reveal_seconds: float = 0.35
+@export_range(0.0, 3.0, 0.05) var trait_reveal_seconds: float = 0.2
+## Each pop's sound plays this much higher than the last (boop, boop, boop going up).
+## 0 = all the same pitch.
+@export_range(0.0, 0.5, 0.01) var trait_pitch_step: float = 0.12
 ## Size of a trait's description line.
 @export_range(8, 200) var trait_description_size: int = 38
 ## Size of a trait's icon, in pixels.
@@ -87,7 +91,7 @@ extends Resource
 @export var delete_sound: AudioStream
 ## Moving to the next box.
 @export var next_field_sound: AudioStream
-## Each trait popping in.
+## Each trait popping into its field (the "boop").
 @export var trait_sound: AudioStream
 ## Tapping Done (she gave you her number).
 @export var done_sound: AudioStream

@@ -8,7 +8,7 @@ screen, and she fills it in:
 
 | How the date went | What she does |
 |---|---|
-| **Really well** (3 hearts) | Types her name and a heart after it. Her **traits** (type, tags, abilities) pop in under her name. Then she types her number and address and taps **Done**. "You got her number!" |
+| **Really well** (3 hearts) | Types her name and a heart after it. Then her **type, tags and abilities** pop into their fields under her name, one after another: *boop, boop, boop*, each a little higher. Then she types her number and address and taps **Done**. "You got her number!" |
 | **Well enough** (1–2 hearts) | The same, without the heart |
 | **Badly** (0 hearts) | Types her name, thinks better of it, deletes it letter by letter, and taps **Cancel**. "She didn't give you her number." |
 
@@ -61,7 +61,7 @@ Dating, now 3 / 6 / 9 points) the date score reached.
 | Words | "New Contact", "Cancel", "Done", "Add Photo", the grey hints ("First name"…), "mobile", "home", and the two endings' messages |
 | Fields | The size of what she types, and how faint the grey hints are |
 | Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and whether a bad date types then deletes |
-| Traits | Show them or not; pop in one by one or have her **type** them; the wait between them; description and icon sizes |
+| Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); description and icon sizes |
 | Sounds | Key, space, delete, next box, Done and Cancel |
 
 **Where things sit on the card:** open `ContactCard.tscn`. Drag the rows in
@@ -92,6 +92,7 @@ other sounds, drag them onto the **Sounds** slots:
 | Slot | Now |
 |---|---|
 | Key Sound | `click_002.wav` |
+| Trait Sound (the boop) | `drop_003.wav` |
 | Space Sound | `click_005.wav` |
 | Delete Sound | `back_003.wav` |
 | Next Field Sound | `switch_002.wav` |

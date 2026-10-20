@@ -3,7 +3,8 @@ extends CanvasLayer
 ## The end-of-date result: an iPhone "New Contact" screen.
 ## If the date went well, she types her name (in her font), her number and her address,
 ## adds a heart after her name on a really good date (an emoji, a picture or an animated
-## icon), her traits pop in under her name, and she taps Done. If not, she types her name,
+## icon), her type, tags and abilities pop into their fields under her name one after
+## another (boop, boop, boop), and she taps Done. If not, she types her name,
 ## deletes it, and taps Cancel. The middle scrolls to follow her, so there's room for
 ## any number of traits.
 ##
@@ -35,6 +36,8 @@ var _typing: Label
 var _typed := {}
 var _hints := {}
 var _time := 0.0
+# Trait pops get their own player, so their rising pitch doesn't bend the key clicks.
+var _boop := AudioStreamPlayer.new()
 
 @onready var dim: ColorRect = %Dim
 @onready var sheet: Panel = %Sheet
@@ -71,6 +74,7 @@ func _ready() -> void:
 	if not style:
 		style = ContactCardStyle.new()
 	sound.max_polyphony = 4
+	add_child(_boop)
 	caret.visible = false
 	# Her box style can keep its outline over a picture box, like her dialogue box does.
 	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
@@ -251,28 +255,29 @@ func _build_traits() -> void:
 			words.add_child(description)
 		row.set_meta("trait", info)
 		row.set_meta("title_label", title_label)
-		row.modulate.a = 0.0
+		row.set_meta("words", words)
+		# The fields and their labels ("type", "tag"...) are there from the start, empty,
+		# like "mobile" and "home"; what's in them pops in once her name is written.
+		words.modulate.a = 0.0
 		trait_rows.add_child(row)
-	# The box stays hidden until her traits appear (it never does on a bad date).
-	traits_group.visible = false
-	for child in trait_rows.get_children():
-		child.modulate.a = 0.0
+	traits_group.visible = style.show_traits and trait_rows.get_child_count() > 0
 
 
-# Her traits appear one after another (or she types them), the card scrolling to follow.
+# Her traits pop into their fields one after another, each boop a little higher than
+# the last (or she types them), the card scrolling to follow.
 func _show_traits() -> void:
-	if not style.show_traits or trait_rows.get_child_count() == 0:
+	if not traits_group.visible:
 		return
-	traits_group.visible = true
-	await _wait(style.pause_between_fields)
+	await _wait(style.trait_reveal_seconds)
+	var pitch := 1.0
 	for child in trait_rows.get_children():
 		if not child.has_meta("trait"):
-			child.modulate.a = 1.0
 			continue
 		_follow(child)
 		var info: GirlTrait = child.get_meta("trait")
+		var words: Control = child.get_meta("words")
 		if style.type_traits:
-			child.modulate.a = 1.0
+			words.modulate.a = 1.0
 			var title_label: Label = child.get_meta("title_label")
 			_hints[title_label] = ""
 			_typed[title_label] = ""
@@ -280,9 +285,22 @@ func _show_traits() -> void:
 			caret.visible = false
 			await _wait(style.pause_between_fields * 0.5)
 		else:
-			_play(style.trait_sound)
-			create_tween().tween_property(child, "modulate:a", 1.0, 0.2)
+			_boop_at(pitch)
+			pitch += style.trait_pitch_step
+			words.pivot_offset = Vector2(0.0, words.size.y / 2.0)
+			words.scale = Vector2(0.4, 0.4)
+			words.modulate.a = 1.0
+			create_tween().tween_property(words, "scale", Vector2.ONE, 0.18) \
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			await _wait(style.trait_reveal_seconds)
+
+
+func _boop_at(pitch: float) -> void:
+	if style.trait_sound:
+		_boop.stream = style.trait_sound
+		_boop.volume_db = style.volume_db
+		_boop.pitch_scale = pitch
+		_boop.play()
 
 
 # Scrolls all the way down, so the whole card is in view when she's done.

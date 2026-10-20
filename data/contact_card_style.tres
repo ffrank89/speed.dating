@@ -8,7 +8,7 @@
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/switch_002.wav" id="6_next"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/confirmation_003.wav" id="7_done"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/minimize_002.wav" id="8_cancel"]
-[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/pluck_001.wav" id="9_trait"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/drop_003.wav" id="9_trait"]
 
 [resource]
 script = ExtResource("1_style")
