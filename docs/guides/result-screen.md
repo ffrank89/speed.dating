@@ -8,7 +8,7 @@ screen, and she fills it in:
 
 | How the date went | What she does |
 |---|---|
-| **Really well** (3 hearts) | Types her name, then a heart after it, then her number and address. Her **traits** pop in underneath, and she taps **Done**. "You got her number!" |
+| **Really well** (3 hearts) | Types her name and a heart after it. Her **traits** (type, tags, abilities) pop in under her name. Then she types her number and address and taps **Done**. "You got her number!" |
 | **Well enough** (1–2 hearts) | The same, without the heart |
 | **Badly** (0 hearts) | Types her name, thinks better of it, deletes it letter by letter, and taps **Cancel**. "She didn't give you her number." |
 
@@ -34,7 +34,7 @@ Her girl file (`data/girls/split_ends.tres`) → **Contact Card**:
 | **Phone Number** | What she types as her number. Split Ends' is a made-up 555 number. |
 | **Address** | What she types as her address. Press Enter in the box for a second line. |
 | **Contact Photo** | Optional round photo. Empty = her initials in a circle in her name-plate colour. |
-| **Traits** | Her type, tags, abilities… one row each under her address. Add one: **Traits** → **Add Element** → **New GirlTrait**. Each has a **Kind** (the small coloured word, e.g. `type`, `tag`, `ability`), a **Title**, an optional **Description** and an optional **Icon**. Split Ends has four placeholder ones. |
+| **Traits** | Her type, tags, abilities… one row each, right under her name (above her number and address). Add one: **Traits** → **Add Element** → **New GirlTrait**. Each has a **Kind** (the small coloured word, e.g. `type`, `tag`, `ability`), a **Title**, an optional **Description** and an optional **Icon**. Split Ends has four placeholder ones. |
 
 Her name is her **Display Name**. Her box, font and colours are her
 **Dialogue Style**, so changing her dialogue box changes her card too.

@@ -3,7 +3,7 @@ extends CanvasLayer
 ## The end-of-date result: an iPhone "New Contact" screen.
 ## If the date went well, she types her name (in her font), her number and her address,
 ## adds a heart after her name on a really good date (an emoji, a picture or an animated
-## icon), her traits pop in underneath, and she taps Done. If not, she types her name,
+## icon), her traits pop in under her name, and she taps Done. If not, she types her name,
 ## deletes it, and taps Cancel. The middle scrolls to follow her, so there's room for
 ## any number of traits.
 ##
@@ -92,7 +92,8 @@ func show_card(girl: GirlData) -> void:
 	heart_text.visible = false
 	heart_icon.visible = false
 	heart_sprite.stop()
-	result.visible = false
+	# The result line keeps its space from the start, so the card doesn't jump when it appears.
+	result.text = ""
 	caret.visible = false
 	_build_traits()
 	scroll.scroll_vertical = 0
@@ -108,12 +109,14 @@ func play(hearts: int, rules: DateRules = null) -> bool:
 		await _type_into(first_name, _girl.display_name)
 		if hearts >= rules.heart_emoji_at_hearts:
 			await _add_heart()
+		caret.visible = false
+		await _show_traits()
 		await _next_field()
 		await _type_into(phone, _girl.phone_number)
 		await _next_field()
 		await _type_into(address, _girl.address)
 		caret.visible = false
-		await _show_traits()
+		await _scroll_to_end()
 		await _tap(done, style.done_sound)
 		result.text = style.got_number_text
 	else:
@@ -124,7 +127,6 @@ func play(hearts: int, rules: DateRules = null) -> bool:
 		caret.visible = false
 		await _tap(cancel, style.cancel_sound)
 		result.text = style.no_number_text
-	result.visible = true
 	await _wait(style.end_hold_seconds)
 	finished.emit(gives_number)
 	return gives_number
@@ -281,10 +283,9 @@ func _show_traits() -> void:
 			_play(style.trait_sound)
 			create_tween().tween_property(child, "modulate:a", 1.0, 0.2)
 			await _wait(style.trait_reveal_seconds)
-	_scroll_to_end()
 
 
-# Scrolls all the way down, so the last trait's description is in view too.
+# Scrolls all the way down, so the whole card is in view when she's done.
 func _scroll_to_end() -> void:
 	# Wrapped descriptions settle a few frames after they appear.
 	for i in 3:
@@ -299,7 +300,8 @@ func _scroll_to_end() -> void:
 
 # Scrolls the card so `node` is in view, the way a phone follows what you're typing.
 func _follow(node: Control) -> void:
-	for i in 2:
+	# Wrapped descriptions settle a few frames after they appear.
+	for i in 3:
 		await get_tree().process_frame
 	var view := scroll.get_global_rect()
 	var bottom := node.get_global_rect().end.y + 40.0
@@ -372,6 +374,7 @@ func _apply_style() -> void:
 
 	_font(title, style.ui_font, style.ui_font_size, style.ui_text_color)
 	_font(result, style.ui_font, style.ui_font_size, style.ui_text_color)
+	result.custom_minimum_size.y = style.ui_font_size * 1.6
 	for label: Label in [cancel, done, add_photo, phone_kind, address_kind]:
 		_font(label, style.ui_font, style.ui_font_size, accent)
 	title.text = style.title

@@ -67,7 +67,7 @@ extends Resource
 @export_range(0.0, 10.0, 0.1) var end_hold_seconds: float = 2.0
 
 @export_group("Traits")
-## Show her traits (her girl file → Contact Card → Traits) under her address.
+## Show her traits (her girl file → Contact Card → Traits) under her name, before her number.
 @export var show_traits: bool = true
 ## Off = each trait pops in, one after another. On = she types each one.
 @export var type_traits: bool = false

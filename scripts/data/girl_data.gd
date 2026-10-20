@@ -24,7 +24,7 @@ extends Resource
 @export_multiline var address: String
 ## Optional: the round photo on her contact card. Empty = her initials in a circle.
 @export var contact_photo: Texture2D
-## Her type, tags, abilities... listed on her contact card under her address.
+## Her type, tags, abilities... listed on her contact card under her name.
 ## Each is a kind ("type", "tag", "ability"), a title, an optional description and icon.
 @export var traits: Array[GirlTrait] = []
 
