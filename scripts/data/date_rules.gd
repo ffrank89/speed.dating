@@ -11,6 +11,15 @@ extends Resource
 ## (At or above the requirement there's no roll: it always lands.)
 @export_range(0, 100) var max_chance: int = 95
 
+@export_group("Microgames")
+## How hard an option's microgame is (0 = easiest, 1 = hardest) when the player meets
+## its requirement. Below the requirement it gets harder, up to Max Difficulty.
+@export_range(0.0, 1.0, 0.05) var min_difficulty: float = 0.2
+## How hard it is when the player has none of the attribute.
+@export_range(0.0, 1.0, 0.05) var max_difficulty: float = 1.0
+## How hard it is for an option with a microgame but no #check.
+@export_range(0.0, 1.0, 0.05) var unchecked_difficulty: float = 0.5
+
 @export_group("Points")
 ## How much her likes boost an option's points. An option is worth
 ## value × (1 + her like for that attribute × Likes Weight).

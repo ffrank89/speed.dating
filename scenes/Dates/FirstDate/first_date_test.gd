@@ -70,6 +70,8 @@ func _on_option_resolved(response: DialogueResponse, result: DateScorer.Result) 
 	_state.last_points = result.points
 	_state.score = _scorer.score
 	var roll := "rolled %d vs %d%%, %s" % [result.roll, result.chance, "hit" if result.hit else "miss"] if result.rolled else "no roll"
+	if result.played:
+		roll = "microgame %s" % ("passed" if result.hit else "failed")
 	score_label.text = "Date score: %.1f   (last: %+.1f, %s)" % [_scorer.score, result.points, roll]
 	dialogue_box.choose(response)
 

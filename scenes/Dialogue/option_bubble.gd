@@ -47,7 +47,8 @@ var _scale_tween: Tween
 
 
 ## Builds the bubble's contents. `index` is its 0-based place (key 1 = index 0).
-func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle) -> void:
+## `game` = picking it plays a microgame, so the badge says so instead of showing a %.
+func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle, game := false) -> void:
 	option = p_option
 	_style = style
 	var risky := chance < 100
@@ -91,12 +92,13 @@ func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle
 	header.add_child(gap)
 	badge = PanelContainer.new()
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	badge.add_theme_stylebox_override("panel", style.make_badge(style.badge_color))
-	badge_label = _label("%d%%" % chance, style.badge_text_color)
+	badge.add_theme_stylebox_override("panel", style.make_badge(style.game_badge_color if game else style.badge_color))
+	badge_label = _label(style.game_badge_text if game else "%d%%" % chance,
+		style.game_badge_text_color if game else style.badge_text_color)
 	badge.add_child(badge_label)
-	badge.visible = risky
+	badge.visible = risky or game
 	header.add_child(badge)
-	header.visible = icon != null or option.has_check() or risky
+	header.visible = icon != null or option.has_check() or badge.visible
 
 	# The key number, then the option's words, wrapped once they reach the bubble's widest.
 	var words := HBoxContainer.new()

@@ -51,6 +51,7 @@ Split Ends: My dad's boat has a name. Guess it.
 | `#value=2` | What it's worth if it lands, from **−3** (rude) to **+3** (perfect). Leave it out and it's worth 0. |
 | `if hit` / `else` | Her reply when the option lands / misses. Indent with **Tab**. Options without a check always "hit". |
 | `if missed` | The same as `else`, if it reads better. |
+| `#microgame=light_cigarette` | Picking it plays that microgame instead of the roll: pass = hit, fail = miss. `#check` then sets how hard it is. The bubble says **PLAY**. See [making a microgame](making-a-microgame.md). |
 | `[#react=heart]` | A reaction pops up above her: `exclamation`, `question`, `anger` or `heart`. |
 | `[#pose=cig]` | She changes pose (see the [dialogue box guide](dialogue-box.md)). |
 
@@ -158,6 +159,7 @@ picture frame, with the outline kept or dropped.
 | Floating | **Drift Speed** (how slowly they float), **Burst Speed** (how fast they pop out of her head), **Settle** (how soon they slow down), **Wander** (straight lines or lazy curves) |
 | Text | Font, size, colours, letter outline, whether to show the 1–4 key numbers |
 | Risky Options | The outline and % badge colours for options the player might miss |
+| Microgame Options | The badge on options that play a microgame (**PLAY**) and its colours |
 | Roll | How long the numbers spin, the hit and miss colours, and the words (HIT / MISS) |
 | Attribute Icons | The small picture for each attribute, and its size. The drag trail uses these too. |
 | Dragging | Trail icon size, **Trail Spacing** (lower = more icons), how long each lasts, the icon for options with no attribute, how hard a bubble can be thrown, and **Drop On Her Picks** with its glow colour |

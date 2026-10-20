@@ -7,6 +7,8 @@ extends RefCounted
 ##   chance             = 100% at or above the requirement, else
 ##                        attribute ÷ requirement, clamped to min/max chance
 ##   points if it misses = −max(points × miss_penalty, min_miss_cost)
+##   microgame difficulty = min_difficulty at or above the requirement, rising to
+##                          max_difficulty at 0 of the attribute
 
 ## What happened when an option was picked.
 class Result:
@@ -18,6 +20,8 @@ class Result:
 	## 1-100. What was rolled; the option lands if roll <= chance.
 	var roll := 0
 	var hit := true
+	## True when a microgame decided it instead of a roll (then hit = passed).
+	var played := false
 	var points := 0.0
 
 var rules: DateRules
@@ -52,6 +56,15 @@ func points_if_hit(option: DateOption) -> float:
 	return option.value * (1.0 + like * rules.likes_weight)
 
 
+## 0-1: how hard this option's microgame should be. 0 = easiest, 1 = hardest.
+func difficulty_of(option: DateOption) -> float:
+	if not option.has_check() or option.requirement <= 0:
+		return rules.unchecked_difficulty
+	var have: int = attributes.get(option.attribute, 0)
+	var short_by := clampf(1.0 - float(have) / option.requirement, 0.0, 1.0)
+	return lerpf(rules.min_difficulty, rules.max_difficulty, short_by)
+
+
 ## Picks the option: rolls if needed, adds the points to the score, and says what happened.
 func resolve(option: DateOption) -> Result:
 	var result := Result.new()
@@ -61,7 +74,22 @@ func resolve(option: DateOption) -> Result:
 	if result.rolled:
 		result.roll = rng.randi_range(1, 100)
 		result.hit = result.roll <= result.chance
-	var earned := points_if_hit(option)
+	_add_points(result)
+	return result
+
+
+## Picks an option whose microgame was played: passing is a hit, failing a miss.
+func resolve_microgame(option: DateOption, passed: bool) -> Result:
+	var result := Result.new()
+	result.option = option
+	result.chance = chance_of(option)
+	result.played = true
+	result.hit = passed
+	_add_points(result)
+	return result
+
+
+func _add_points(result: Result) -> void:
+	var earned := points_if_hit(result.option)
 	result.points = earned if result.hit else -maxf(absf(earned) * rules.miss_penalty, rules.min_miss_cost)
 	score += result.points
-	return result

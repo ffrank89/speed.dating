@@ -120,6 +120,16 @@ and the score moves correctly (checked with the debug sliders).
 > (her, the room and the dialogue stay underneath), not a separate scene
 > the game switches to. See [decision 0045](../decisions/0045-microgames-overlay-handmade.md).
 >
+> **Set up 2026-10-20 (at Frank's request):** everything except the
+> microgames themselves is built: the `Microgame` base, the `MicrogameHost`
+> frame (dim, banner, timer bar, NICE/OOPS stamp, styled by
+> `data/microgame_style.tres`), the library `data/microgames.tres`, shared
+> mouse-and-keyboard input, F6 test mode, the hookup to options and scoring,
+> a working template (`scenes/Microgames/_template/`, CATCH IT!) and test
+> lines (`m3_test.dialogue`, now played by the test scene). Guide:
+> [making-a-microgame.md](../guides/making-a-microgame.md). See
+> [decision 0048](../decisions/0048-microgame-framework.md).
+>
 > Settled with Frank: **Light her cigarette** first. A microgame **replaces
 > the % roll** for its option (pass = hit, fail = miss; the attribute sets
 > difficulty instead of odds). Each lasts **5 seconds**. **Mouse and keyboard

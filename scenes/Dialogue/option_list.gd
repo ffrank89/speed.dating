@@ -14,7 +14,7 @@ extends Control
 ## (data/option_styles/default.tres), or the girl's own Option Style if she has one.
 ## From code: show_options(responses, scorer, her_style). Full guide: docs/guides/options-and-scoring.md
 
-## Sent after the roll animation finishes. The dialogue should continue down `response`.
+## Sent after the roll (or the option's microgame) finishes. The dialogue should continue down `response`.
 signal option_resolved(response: DialogueResponse, result: DateScorer.Result)
 
 ## The shared look, motion and sounds (data/option_styles/default.tres).
@@ -26,6 +26,9 @@ signal option_resolved(response: DialogueResponse, result: DateScorer.Result)
 ## Her portrait. Dropping a bubble onto her picks it (turn this off with the style's
 ## Drop On Her Picks). Empty = dropping never picks.
 @export var drop_target: GirlPortrait
+## Plays the microgame of an option tagged [#microgame=name], instead of the roll.
+## Empty, or a name missing from data/microgames.tres = the option rolls as usual.
+@export var microgame_host: MicrogameHost
 ## Seconds after the options appear before a pick counts, so a player mashing
 ## Space to skip her text doesn't pick an option by accident.
 @export_range(0.0, 2.0, 0.05) var input_delay: float = 0.35
@@ -37,6 +40,8 @@ const MAX_TRAIL_ICONS := 80
 var _scorer: DateScorer
 var _style: OptionListStyle
 var _options: Array[DateOption] = []
+# Per option: true when it plays a microgame instead of rolling.
+var _games: Array[bool] = []
 var _bubbles: Array[OptionBubble] = []
 var _hovered: OptionBubble
 var _busy := false
@@ -76,8 +81,10 @@ func show_options(responses: Array, scorer: DateScorer, look: OptionListStyle = 
 	for i in count:
 		var option := DateOption.from_response(responses[i])
 		_options.append(option)
+		var game := _has_microgame(option)
+		_games.append(game)
 		var bubble := OptionBubble.new()
-		bubble.setup(option, i, _scorer.chance_of(option), _style)
+		bubble.setup(option, i, _scorer.chance_of(option), _style, game)
 		bubble.picked.connect(_pick.bind(i))
 		bubble.dropped.connect(_on_dropped.bind(i))
 		bubble.centre = start + Vector2(randf_range(-4, 4), randf_range(-4, 4))
@@ -274,18 +281,25 @@ func _pick(index: int) -> void:
 	if _busy or Time.get_ticks_msec() / 1000.0 - _shown_at < input_delay:
 		return
 	_busy = true
-	var result := _scorer.resolve(_options[index])
+	var option := _options[index]
 	_play(_style.select_sound)
 	for i in _bubbles.size():
 		_bubbles[i].locked = true
-		if i != index:
+		if i != index or _games[index]:
 			create_tween().tween_property(_bubbles[i], "modulate:a", 0.0, 0.2)
 
-	if result.rolled:
-		await _play_roll(index, result)
+	var result: DateScorer.Result
+	if _games[index]:
+		# The microgame replaces the roll: passing is a hit, failing a miss.
+		var passed: bool = await microgame_host.play(option.microgame, _scorer.difficulty_of(option))
+		result = _scorer.resolve_microgame(option, passed)
 	else:
-		_bubbles[index].flash(_style.hit_color)
-		await get_tree().create_timer(0.35).timeout
+		result = _scorer.resolve(option)
+		if result.rolled:
+			await _play_roll(index, result)
+		else:
+			_bubbles[index].flash(_style.hit_color)
+			await get_tree().create_timer(0.35).timeout
 
 	hide()
 	_clear()
@@ -314,6 +328,15 @@ func _play_roll(index: int, result: DateScorer.Result) -> void:
 	await get_tree().create_timer(0.8).timeout
 
 
+func _has_microgame(option: DateOption) -> bool:
+	if option.microgame.is_empty():
+		return false
+	if microgame_host and microgame_host.has_game(option.microgame):
+		return true
+	push_warning("Option \"%s\": no microgame named \"%s\" in data/microgames.tres (or OptionList has no Microgame Host), so it rolls instead." % [option.text, option.microgame])
+	return false
+
+
 func _start_point() -> Vector2:
 	if start_at:
 		return get_global_transform().affine_inverse() * start_at.global_position
@@ -335,6 +358,7 @@ func _clear() -> void:
 		for child in layer.get_children():
 			child.queue_free()
 	_options.clear()
+	_games.clear()
 	_bubbles.clear()
 	_hovered = null
 	_trail_distance = 0.0

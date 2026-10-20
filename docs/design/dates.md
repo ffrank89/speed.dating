@@ -28,7 +28,7 @@
 - `RunState.apply_date_result(result)`
 - `SceneRouter.go_to(:calendar)`
 - Perk hooks: `modify_options`, `modify_microgame`, `modify_score`
-- `Microgame.start(difficulty, modifiers)` / `finished(success)`
+- `Microgame.start(difficulty, modifiers)` / `finished(passed)`; `MicrogameHost.play(name, difficulty, modifiers)`
 
 ### Shared objects it inherits or holds
 
@@ -51,7 +51,8 @@
 | `DialogueHistory` | Exists (`scenes/Dates/BaseDate/dialogue_history.gd`), kept for the M4 scroll-back log. The old `DialogueOptionUI` / `DialogueDataUI` were removed: `OptionList` and `DialogueBox` replace them. |
 | Dialogue Manager integration | **v3.10.5** (the Godot 4.4 version). Lines and options in `.dialogue` files. Tags: `[#pose=cig]`, `[#react=heart]` on her lines; `[#check=culture:40, #value=2, #microgame=light_cigarette]` on options. |
 | `DialogueBox` + `VoicePlayer` | **Built (M1).** `scenes/Dialogue/DialogueBox.tscn`. Typewriter via the addon's `DialogueLabel`; restyles per speaker from her `DialogueBoxStyle` (box colour/outline or a 9-slice picture, font, name plate, next arrow). `VoicePlayer` plays a letter sound on each `spoke` signal. `GirlVoice`: `letter_sounds_folder`, `pitch`, `pitch_variance`, `seconds_per_letter`, `letters_per_sound`, `volume_db`. Guide: [dialogue-box.md](../guides/dialogue-box.md). |
-| Microgames ×3 for v1 | Each its own scene extending `Microgame`, playable alone via F6. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
+| Microgame framework | **Built (M3 setup).** `Microgame` base (`scenes/Microgames/microgame.gd`), `MicrogameHost` overlay (dim, banner, timer bar, NICE/OOPS stamp; look in `data/microgame_style.tres`), library `data/microgames.tres` (name → scene), `microgame_press` / `microgame_up…right` input actions and a keyboard-steerable `pointer`, F6 plays one alone on a loop. `OptionList` plays an option's microgame instead of the roll; `DateScorer.difficulty_of()` / `resolve_microgame()`. Template: `scenes/Microgames/_template/` (CATCH IT!). Guide: [making-a-microgame.md](../guides/making-a-microgame.md). |
+| Microgames ×3 for v1 | Each its own scene extending `Microgame`, built by hand. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
 | Item reactions | Show an item → her reaction from `GirlData.item_reactions`. Flavor only in the first build. |
 | Turn count | Shared constant or per date type (first vs follow-up). TBD. |
 
@@ -59,12 +60,17 @@
 
 ```gdscript
 class_name Microgame extends Control
-signal finished(success: bool)
-func start(difficulty: float, modifiers: Dictionary) -> void: pass
+signal finished(passed: bool)
+func start(difficulty: float, modifiers: Dictionary) -> void  # override: set up
+func win() / lose()                                          # end it
+var pointer: Vector2         # mouse, or arrow keys / WASD
+func is_pointing_at(node: Control) -> bool
 ```
 
-`modifiers` comes from perks (e.g. Sleepy: `{"extra_time": 1.5}`) and
-attributes.
+`difficulty` (0–1) comes from the player's attribute against the option's
+requirement (`date_rules.tres` → Microgames). `modifiers` comes from perks
+(e.g. Sleepy: `{"extra_time": 1.5}`; the host already adds `extra_time` to
+the timer).
 
 ## Art needed
 
@@ -74,6 +80,7 @@ attributes.
 | Reaction icons (exclamation, question, heart, anger…) | `DatePresenter.show_reaction` | Some exist: `exclamation point gif`, `question mark gif`, `anger icon` |
 | Option buttons with attribute icon and risk tint | `DialogueOptionUI` | TBD (needs a "risky" look) |
 | Score pop / Affection meter | `ScoreDisplay`, compatibility meter | Placeholder exists |
+| Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
 | Date-end summary card (Affection hearts 0–3, gains, perks) | End of date, before returning to calendar | TBD |
 

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MicrogameStyle" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/microgame_style.gd" id="1_style"]
+[ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="2_font"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/maximize_006.wav" id="3_start"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/tick_002.wav" id="4_tick"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/confirmation_002.wav" id="5_pass"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/error_008.wav" id="6_fail"]
+
+[resource]
+script = ExtResource("1_style")
+banner_font = ExtResource("2_font")
+start_sound = ExtResource("3_start")
+tick_sound = ExtResource("4_tick")
+pass_sound = ExtResource("5_pass")
+fail_sound = ExtResource("6_fail")

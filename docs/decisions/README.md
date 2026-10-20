@@ -51,3 +51,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0045](0045-microgames-overlay-handmade.md) | Microgames are overlays on the date, built by hand | Accepted |
 | [0046](0046-microgame-replaces-roll.md) | A microgame replaces the roll | Accepted |
 | [0047](0047-floating-option-bubbles.md) | Options are floating bubbles that pop out above her head | Accepted |
+| [0048](0048-microgame-framework.md) | How the microgame framework works (library, difficulty, frame, input, F6) | Accepted |

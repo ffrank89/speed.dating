@@ -78,6 +78,12 @@ extends Resource
 ## Colour of the % text on the badge.
 @export var badge_text_color: Color = Color("#2a1a05")
 
+@export_group("Microgame Options")
+## Badge on an option that plays a microgame (instead of the % chance).
+@export var game_badge_text: String = "PLAY"
+@export var game_badge_color: Color = Color("#7ec8ff")
+@export var game_badge_text_color: Color = Color("#08243a")
+
 @export_group("Roll")
 ## How long the numbers spin before landing, in seconds.
 @export_range(0.2, 4.0, 0.1) var roll_seconds: float = 1.1
