@@ -1,12 +1,13 @@
 class_name MicrogameHost
 extends CanvasLayer
-## Plays microgames over the date, inside the shared frame: dims the date, shows the
-## microgame with its banner ("LIGHT IT!"), runs the timer bar, freezes it on a win or
-## loss, stamps NICE/OOPS, then fades back to the date.
+## Plays microgames over the date, inside the shared frame: opens the microgame like an
+## iPhone app (AppLauncher, from the option the player picked), shows its banner
+## ("LIGHT IT!"), runs the timer bar, freezes it on a win or loss, stamps NICE/OOPS,
+## then closes it back into its icon.
 ##
 ## Its look and sounds come from Style (data/microgame_style.tres). Where the banner,
 ## timer bar and stamp sit is set in this scene: click them and move them.
-## From code: var passed: bool = await host.play("light_cigarette", difficulty)
+## From code: var passed: bool = await host.play("light_cigarette", difficulty, {}, from_rect)
 ## Full guide: docs/guides/making-a-microgame.md
 
 ## Sent when a microgame's timer starts, and when it's won or lost.
@@ -17,6 +18,8 @@ signal ended(game: Microgame, passed: bool)
 @export var library: MicrogameLibrary
 ## The frame's look and sounds (data/microgame_style.tres).
 @export var style: MicrogameStyle
+## The app a microgame opens as when it doesn't name its own (icon, launch screen).
+@export var default_app: AppInfo
 
 var _game: Microgame
 var _running := false
@@ -54,7 +57,9 @@ func has_game(game_name: String) -> bool:
 
 ## Plays the named microgame over the date and returns whether the player passed.
 ## Use with await. An unknown name counts as a fail (with a warning).
-func play(game_name: String, difficulty: float, modifiers: Dictionary = {}) -> bool:
+## `from` = where it opens from and closes back into, in screen pixels (e.g. the
+## picked option). Empty = where the player last clicked.
+func play(game_name: String, difficulty: float, modifiers: Dictionary = {}, from := Rect2()) -> bool:
 	if not has_game(game_name):
 		push_warning("MicrogameHost: no microgame named \"%s\" in data/microgames.tres." % game_name)
 		return false
@@ -62,24 +67,40 @@ func play(game_name: String, difficulty: float, modifiers: Dictionary = {}) -> b
 	if not game:
 		push_error("MicrogameHost: the scene for \"%s\" doesn't use a Microgame script." % game_name)
 		return false
+	var app := game.app if game.app else default_app
+	game.visible = false
 	game_slot.add_child(game)
 
-	dim.visible = true
-	dim.modulate.a = 0.0
-	game.modulate.a = 0.0
-	var fade_in := create_tween().set_parallel()
-	fade_in.tween_property(dim, "modulate:a", 1.0, style.fade_seconds)
-	fade_in.tween_property(game, "modulate:a", 1.0, style.fade_seconds)
+	var show_game := func() -> void:
+		dim.visible = true
+		dim.modulate.a = 1.0
+		game.visible = true
+		game.modulate.a = 1.0
+	if style.open_as_app:
+		await AppLauncher.open(app, show_game, from)
+	else:
+		show_game.call()
+		dim.modulate.a = 0.0
+		game.modulate.a = 0.0
+		var fade_in := create_tween().set_parallel()
+		fade_in.tween_property(dim, "modulate:a", 1.0, style.fade_seconds)
+		fade_in.tween_property(game, "modulate:a", 1.0, style.fade_seconds)
 
 	var passed := await run(game, difficulty, modifiers)
 
-	var fade_out := create_tween().set_parallel()
-	for part: CanvasItem in [dim, game, stamp, timer_bar]:
-		fade_out.tween_property(part, "modulate:a", 0.0, style.fade_seconds)
-	await fade_out.finished
+	var hide_game := func() -> void:
+		game.visible = false
+		dim.visible = false
+		_hide_frame()
+	if style.open_as_app:
+		await AppLauncher.close(app, hide_game, from)
+	else:
+		var fade_out := create_tween().set_parallel()
+		for part: CanvasItem in [dim, game, stamp, timer_bar]:
+			fade_out.tween_property(part, "modulate:a", 0.0, style.fade_seconds)
+		await fade_out.finished
+		hide_game.call()
 	game.queue_free()
-	dim.visible = false
-	_hide_frame()
 	return passed
 
 

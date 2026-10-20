@@ -43,12 +43,14 @@ func generate_available_actions():
 			available_actions[i] = [{
 				"action_name": "stat_increase_culture",
 				"scene": "res://scenes/Calendar/calendar.tscn",
+				"app": "calendar",
 				"icon": "culture"
 			}]
 		else:
 			available_actions[i] = [{
 				"action_name": "return_to_start",
 				"scene": "res://scenes/Tinder/Screen.tscn",
+				"app": "dating_app",
 				"icon": "girl"
 			}]
 			

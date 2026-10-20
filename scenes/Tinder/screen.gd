@@ -152,12 +152,5 @@ func _on_start_pressed():
 	var player_manager = get_node("/root/PlayerManager")
 	player_manager.select_date(characters[self.current_profile_index])
 	
-	# Animate transition to dating scene
-	var fade_panel = ColorRect.new()
-	fade_panel.color = Color(0, 0, 0, 0)
-	fade_panel.anchors_preset = Control.PRESET_FULL_RECT
-	add_child(fade_panel)
-	var tween = create_tween()
-	tween.tween_property(fade_panel, "color", Color(0, 0, 0, 1), 1.0)
-	print("In _on_start_pressed")
-	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.current_date.first_date_path))
+	# Open the date like an app, growing from the Start button (data/apps/date.tres)
+	AppLauncher.open_scene("date", player_manager.current_date.first_date_path, start_button.get_global_rect())

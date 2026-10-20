@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 PlayerManager="*res://scripts/managers/player_manager.gd"
 MusicManager="*res://scripts/managers/music_manager.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+AppLauncher="*res://scenes/Phone/AppLauncher.tscn"
 
 [display]
 

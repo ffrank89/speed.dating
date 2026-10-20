@@ -1,14 +1,16 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/Microgames/microgame_host.gd" id="1_host"]
 [ext_resource type="Resource" path="res://data/microgames.tres" id="2_library"]
 [ext_resource type="Resource" path="res://data/microgame_style.tres" id="3_style"]
+[ext_resource type="Resource" path="res://data/apps/microgame.tres" id="4_app"]
 
 [node name="MicrogameHost" type="CanvasLayer"]
 layer = 10
 script = ExtResource("1_host")
 library = ExtResource("2_library")
 style = ExtResource("3_style")
+default_app = ExtResource("4_app")
 
 [node name="Dim" type="ColorRect" parent="."]
 anchors_preset = 15

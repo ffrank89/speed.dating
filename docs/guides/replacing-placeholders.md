@@ -15,6 +15,8 @@ thing. **No code needed.**
 |---|---|---|---|
 | **Intellect icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Intellect Icon** | The little picture on options that check Intellect |
 | **Seduction icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Seduction Icon** | The little picture on options that check Seduction |
+| **App icons** (calendar, dating app, date, boss, microgame) | Our existing icons: `assets/january.png`, `lovestat gif/lovestat.png`, `love stat/love react1.png`, `sword stat/sword stat.png`, `exclamation point gif/surprise1.png` | Each file in `data/apps/` → **Icon** (and **Launch Image**) | The tile that grows into the screen when an app opens. See [phone apps](phone-apps.md). |
+| **iPhone frame** | none (nothing drawn) | `data/app_transition_style.tres` → **Screen → Device Frame** | Phone art drawn over the screen while apps open and close |
 | **Template microgame target** | `assets/placeholders/godot_logo.svg` | `scenes/Microgames/_template/TemplateMicrogame.tscn` → **PlayArea/Target** | The thing you catch in the example microgame. Copies of the template start with it too. |
 | **Trail fallback icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Dragging → Trail Fallback Icon** | The little icons dropped when dragging an option with no attribute check |
 | **Letter sounds** (her voice) | `assets/audio/voice/default/a.wav` … `z.wav` (26 files) | Each girl's file → **Dialogue → Voice → Letter Sounds Folder** | One short sound per letter as her text types out |

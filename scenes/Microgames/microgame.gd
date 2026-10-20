@@ -30,6 +30,9 @@ const HOST_SCENE := "res://scenes/Microgames/MicrogameHost.tscn"
 ## What running out of time means. Off = it's a fail (do something in time).
 ## On = it's a pass (survive / keep it up until time runs out).
 @export var pass_when_time_runs_out: bool = false
+## The app this microgame opens as: its icon and launch screen (a file from data/apps/).
+## Empty = data/apps/microgame.tres.
+@export var app: AppInfo
 
 @export_group("Testing (F6)")
 ## The difficulty used when you play this scene on its own with F6. 0 = easiest, 1 = hardest.

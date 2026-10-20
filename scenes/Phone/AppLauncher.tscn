@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/Phone/app_launcher.gd" id="1_launcher"]
+[ext_resource type="Resource" path="res://data/app_transition_style.tres" id="2_style"]
+
+[node name="AppLauncher" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_launcher")
+style = ExtResource("2_style")
+
+[node name="Blocker" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Behind" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Tile" type="Panel" parent="."]
+clip_children = 2
+offset_right = 220.0
+offset_bottom = 220.0
+mouse_filter = 2
+
+[node name="Content" type="TextureRect" parent="Tile"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Icon" type="TextureRect" parent="Tile"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 160.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]

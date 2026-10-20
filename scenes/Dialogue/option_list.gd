@@ -285,13 +285,15 @@ func _pick(index: int) -> void:
 	_play(_style.select_sound)
 	for i in _bubbles.size():
 		_bubbles[i].locked = true
-		if i != index or _games[index]:
+		if i != index:
 			create_tween().tween_property(_bubbles[i], "modulate:a", 0.0, 0.2)
 
 	var result: DateScorer.Result
 	if _games[index]:
 		# The microgame replaces the roll: passing is a hit, failing a miss.
-		var passed: bool = await microgame_host.play(option.microgame, _scorer.difficulty_of(option))
+		# It opens like an app from the picked bubble, and closes back into it.
+		var from := _bubbles[index].get_global_rect()
+		var passed: bool = await microgame_host.play(option.microgame, _scorer.difficulty_of(option), {}, from)
 		result = _scorer.resolve_microgame(option, passed)
 	else:
 		result = _scorer.resolve(option)

@@ -200,6 +200,5 @@ func _on_start_dating_pressed():
 
 
 	#change to main scene
-	var tween = create_tween()
-	tween.tween_callback(func(): get_tree().change_scene_to_file(DATING_SITE_PATH))
+	AppLauncher.open_scene("dating_app", DATING_SITE_PATH)
 	

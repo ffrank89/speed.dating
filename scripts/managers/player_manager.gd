@@ -132,6 +132,8 @@ func calendar_action(action):
 	# Advance the day for the next time the calendar is opened
 	advance_day()
 	
-	# Change to the action scene (rest days have no scene, so stay on the calendar)
+	# Open the action's scene like a phone app (rest days have no scene, so reopen the
+	# calendar). The app is its file name in data/apps/.
 	var scene_path = action[0].scene if action[0].scene != "" else CALENDAR
-	get_tree().change_scene_to_file(scene_path)
+	var app_name = action[0].get("app", "calendar") if action[0].scene != "" else "calendar"
+	AppLauncher.open_scene(app_name, scene_path)

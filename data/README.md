@@ -10,6 +10,8 @@ Hover over any setting to see what it does.
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
 | `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
 | `date_rules.tres` | The scoring numbers: odds limits, how much her likes matter, what a miss costs, and how hard microgames get. |
+| `apps/` | One file per phone app (calendar, dating app, date, boss, microgame): its icon, tile colour, launch screen and sounds for the iPhone-style open animation. |
+| `app_transition_style.tres` | How every app opens and closes: timing, motion, icon size and roundness, the screen behind, optional phone frame. |
 | `microgames.tres` | Every microgame by the name writers use: `[#microgame=light_cigarette]`. Add one like a pose: Add Key/Value Pair. |
 | `microgame_style.tres` | How the frame around every microgame looks and sounds: dim, banner, timer bar, NICE/OOPS stamp. |
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AppInfo" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/app_info.gd" id="1_app"]
+[ext_resource type="Texture2D" path="res://assets/lovestat gif/lovestat.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_app")
+app_name = "Dating"
+icon = ExtResource("2_icon")
+icon_background = Color(0.494, 0.937, 0.6, 1)
+icon_padding = 0.0
+launch_color = Color(1, 0.36, 0.55, 1)
+launch_icon_size = 360

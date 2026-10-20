@@ -9,11 +9,18 @@ extends Resource
 ## (click Banner, TimerBar or Stamp there and move it). Each microgame sets its own banner
 ## words and length. Full guide: docs/guides/making-a-microgame.md
 
+@export_group("Opening")
+## Open microgames like an iPhone app: the picked option grows into the microgame, and
+## it shrinks back afterwards (the same animation as the calendar and the dating app;
+## its feel is in data/app_transition_style.tres, its icon in the microgame's App).
+## Off = a plain fade.
+@export var open_as_app: bool = true
+## Only used with Open As App off: seconds the dim and the microgame take to fade in and out.
+@export_range(0.0, 2.0, 0.05) var fade_seconds: float = 0.2
+
 @export_group("Dim")
 ## Colour laid over the date while a microgame plays. Lower the A (alpha) to see more of the date.
 @export var dim_color: Color = Color(0.03, 0.02, 0.06, 0.72)
-## Seconds the dim and the microgame take to fade in and out.
-@export_range(0.0, 2.0, 0.05) var fade_seconds: float = 0.2
 
 @export_group("Banner")
 ## How long the instruction (e.g. "LIGHT IT!") shows before play starts, in seconds.

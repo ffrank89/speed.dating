@@ -12,12 +12,12 @@ Writer tags an option        - Light it for her. [#check=seduction:50, #value=2,
         │
 Player picks it              the bubble says PLAY instead of a % chance
         │
-MicrogameHost                dims the date, puts your scene on top,
+MicrogameHost                opens it like an iPhone app from the picked bubble,
                              shows your banner ("LIGHT IT!"), starts the timer bar
         │
 YOUR SCENE                   plays until it calls win() or lose(), or time runs out
         │
-MicrogameHost                freezes it, stamps NICE! or OOPS!, fades back to the date
+MicrogameHost                freezes it, stamps NICE! or OOPS!, closes it back into the bubble
         │
 DateScorer                   pass = hit, fail = miss (points as usual)
         │
@@ -79,6 +79,7 @@ Click the top node. Under **Frame**:
 | **Banner Text** | `LIGHT IT!` |
 | **Seconds** | `5` |
 | **Pass When Time Runs Out** | off (the player has to *do* something in time) |
+| **App** | optional: its own app file (icon and launch screen for the open animation). Duplicate `data/apps/microgame.tres`, set the lighter as its icon, and drag it here. |
 
 ### 3. Put it on the list
 
@@ -197,6 +198,7 @@ and size.
 
 | Section | What's in it |
 |---|---|
+| Opening | **Open As App**: the picked option grows into the microgame like an iPhone app opening, and it shrinks back after (on by default; see [phone apps](phone-apps.md)). Off = a plain fade. |
 | Dim | The colour laid over the date, and how fast it fades |
 | Banner | How long it shows before play starts (0.8 s), font, size, colours, outline, optional picture behind it |
 | Timer Bar | Colours (normal and the last seconds), outline, corners, optional pictures, when it turns "low" |
