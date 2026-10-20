@@ -57,6 +57,11 @@ extends Resource
 ## Size of her name.
 @export_range(8, 200) var name_font_size: int = 40
 
+@export_group("Heart Meter")
+## On her dates: the colour the heart meter's rings fill with (top right of the screen).
+## The rest of the meter's look is data/heart_meter_style.tres.
+@export var meter_color: Color = Color(1.0, 0.35, 0.5)
+
 @export_group("Next Arrow")
 ## The small marker that bobs in the corner once her line has finished typing.
 ## Leave empty to show a ▼ in the arrow colour.

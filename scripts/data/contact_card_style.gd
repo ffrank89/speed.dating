@@ -65,7 +65,7 @@ extends Resource
 ## On a failed date she types this where her name would go, then taps Cancel.
 ## Empty = she types nothing.
 @export var failed_name_text: String = "not a chance!"
-## How long the finished card stays up, in seconds.
+## With Close By Hand off: how long the finished card stays up, in seconds.
 @export_range(0.0, 10.0, 0.1) var end_hold_seconds: float = 2.0
 
 @export_group("Traits")
@@ -86,6 +86,26 @@ extends Resource
 @export_range(8, 200) var trait_description_size: int = 38
 ## Size of a trait's icon, in pixels.
 @export_range(16, 200) var trait_icon_size: int = 64
+
+@export_group("Closing")
+## On = when she's done, the card stays until the player clicks the ✕ (top right of the
+## card) or presses Escape. Off = it closes by itself after End Hold Seconds.
+@export var close_by_hand: bool = true
+## The ✕ picture.
+@export var close_image: Texture2D
+## Optional: an animated ✕ that plays once when it appears (e.g. the X drawing itself,
+## icons/x/x.tres). Wins over Close Image while it plays, then stays on its last frame.
+@export var close_animation: SpriteFrames
+## Which animation in Close Animation. Empty = its first one.
+@export var close_animation_name: String = ""
+## Size of the ✕, in pixels.
+@export_range(16, 400) var close_size: int = 130
+## A round button behind the ✕ so it shows up on anything. A = how solid; 0 = none.
+@export var close_backing_color: Color = Color(1, 1, 1, 0.95)
+## The line around that round button. A = 0 for none.
+@export var close_backing_outline: Color = Color(0, 0, 0, 0.25)
+## Clicking the ✕ (or Escape).
+@export var close_sound: AudioStream
 
 @export_group("Contacts App")
 ## On = pressing C opens your Contacts like an iPhone app, the same way a microgame opens

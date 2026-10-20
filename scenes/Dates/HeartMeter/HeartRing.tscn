@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/Dates/HeartMeter/heart_ring.gd" id="1_ring"]
+
+[node name="HeartRing" type="Control"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 150.0
+offset_bottom = 150.0
+mouse_filter = 2
+script = ExtResource("1_ring")
+
+[node name="Heart" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 37.0
+offset_top = 37.0
+offset_right = 113.0
+offset_bottom = 113.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

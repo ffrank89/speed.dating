@@ -22,3 +22,4 @@ name_plate_outline_color = Color(0.945098, 0.960784, 0.823529, 1)
 name_color = Color(1, 0.964706, 0.917647, 1)
 name_font_size = 48
 next_arrow_color = Color(0.847059, 0.207843, 0.168627, 1)
+meter_color = Color(0.847059, 0.207843, 0.168627, 1)

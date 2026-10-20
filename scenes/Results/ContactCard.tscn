@@ -277,3 +277,43 @@ mouse_filter = 2
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+
+[node name="Close" type="Control" parent="Sheet"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -95.0
+offset_top = -35.0
+offset_right = 35.0
+offset_bottom = 95.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+
+[node name="CloseBacking" type="Panel" parent="Sheet/Close"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CloseImage" type="TextureRect" parent="Sheet/Close"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CloseSprite" type="AnimatedSprite2D" parent="Sheet/Close"]
+unique_name_in_owner = true
+position = Vector2(65, 65)

@@ -15,6 +15,15 @@ screen, and she fills it in:
 
 Abilities don't show yet: they're not listed in **Trait Hearts** (below).
 
+**Then it waits for you.** When she's done, your **✕** (the X art, drawing
+itself in) appears at the card's top-right corner. Click it, or press
+**Escape**, to close the app and go back to the calendar. (Contact card
+style → **Closing → Close By Hand** off = it closes by itself after **End
+Hold Seconds**, like before.)
+
+During the date, the [heart meter](heart-meter.md) in the top right shows
+the hearts she'd give you so far.
+
 Every letter types out one at a time with a key-click sound, in **her
 font**. The boxes look like **her dialogue box**: same colour, outline,
 corners, or picture. Split Ends' card is cream with a red outline and
@@ -70,6 +79,7 @@ Dating, now 3 / 6 / 9 points) the date score reached.
 | Words | "New Contact", "Cancel", "Done", "Add Photo", the grey hints ("First name"…), "mobile", "home", and the two endings' messages |
 | Fields | The size of what she types, and how faint the grey hints are |
 | Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and **Failed Name Text** (*"not a chance!"*), what she types on a failed date |
+| Closing | **Close By Hand** (on: wait for the player's ✕ or Escape), **Close Image** (`assets/x1/x1_7.png`), **Close Animation** (`icons/x/x.tres`, the X drawing itself; plays once), **Close Size**, **Close Sound** (Kenney `close_002` for now) |
 | Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); **Secret Text** (*"you dont know me like that!"*); description and icon sizes |
 | Sounds | Key, space, delete, next box, Done and Cancel |
 
@@ -130,7 +140,7 @@ saved in your Contacts (press C on the calendar): [contacts.md](contacts.md).
 
 - `show_card(girl, rules)`
 - `show_saved(girl, hearts, rules)`: her saved contact, filled in at once, with "‹ Contacts" (`back_pressed`). Used by the Contacts app.
-- `await play(hearts) -> bool` (hearts -1 = a failed date), which also emits `finished(got_number)`
+- `await play(hearts) -> bool` (hearts -1 = a failed date), which also emits `finished(got_number)`. With Close By Hand it returns once the player closes the card (`closed_by_player`).
 
 The boxes use `DialogueBoxStyle.make_box()` and `make_outline()` (drawn on
 each group's `draw` signal). `DateScorer.hearts()` counts reached thresholds.

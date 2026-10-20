@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/Dates/HeartMeter/heart_meter.gd" id="1_meter"]
+[ext_resource type="Resource" path="res://data/heart_meter_style.tres" id="2_style"]
+[ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="3_girl"]
+
+[node name="HeartMeter" type="HBoxContainer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -560.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = 200.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 18
+alignment = 2
+script = ExtResource("1_meter")
+style = ExtResource("2_style")
+test_girl = ExtResource("3_girl")
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true

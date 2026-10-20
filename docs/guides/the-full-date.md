@@ -19,7 +19,9 @@ Dating app: Start ─► her room opens like an app
                       ─► back to the calendar
 ```
 
-The fly and the other stage hazards can turn up during any exchange.
+The fly and the other stage hazards can turn up during any exchange. The
+[heart meter](heart-meter.md) in the top right fills as the score climbs:
+one ring per heart.
 
 ## Try it
 
@@ -105,6 +107,9 @@ Dating (**Number Threshold**, **Affection Thresholds**); what each ending
 shows on the card is in [result-screen.md](result-screen.md).
 
 ## After the date
+
+Her contact card stays up until you close it: click the **✕** on its corner
+or press **Escape** ([result-screen.md](result-screen.md)). Then:
 
 | How it went | What happens |
 |---|---|
