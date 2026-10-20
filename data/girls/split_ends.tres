@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GirlData" load_steps=21 format=3 uid="uid://dglthbg00jke5"]
+[gd_resource type="Resource" script_class="GirlData" load_steps=27 format=3 uid="uid://dglthbg00jke5"]
 
 [ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="1_wf6us"]
 [ext_resource type="Resource" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://vdrxxjegvc2r" path="res://assets/splitends/splitends_reach_update.png" id="10_l7u0l"]
 [ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="11_v70mn"]
 [ext_resource type="Script" uid="uid://yvy4bgbrod73" path="res://scripts/data/girl_voice.gd" id="12_13src"]
+[ext_resource type="Script" path="res://scripts/data/girl_trait.gd" id="13_trait"]
+[ext_resource type="Resource" path="res://dialogue/split_ends/first_date.dialogue" id="14_first_date"]
 
 [sub_resource type="Resource" id="Resource_qbi5r"]
 script = ExtResource("3_hgqhe")
@@ -71,11 +73,38 @@ seconds_per_letter = 0.035
 letters_per_sound = 2
 volume_db = -6.0
 
+[sub_resource type="Resource" id="Trait_type"]
+script = ExtResource("13_trait")
+kind = "type"
+title = "Wild"
+description = "Placeholder type: decides her crits and fumbles against bosses."
+
+[sub_resource type="Resource" id="Trait_punk"]
+script = ExtResource("13_trait")
+kind = "tag"
+title = "Punk"
+description = "Placeholder tag: stacks with other punks in your party."
+
+[sub_resource type="Resource" id="Trait_smoker"]
+script = ExtResource("13_trait")
+kind = "tag"
+title = "Smoker"
+description = ""
+
+[sub_resource type="Resource" id="Trait_ability"]
+script = ExtResource("13_trait")
+kind = "ability"
+title = "Coming later"
+description = "Abilities aren't in the first build."
+
 [resource]
 script = ExtResource("11_v70mn")
 id = &"split_ends"
 display_name = "Split Ends"
 age = 24
+phone_number = "(310) 555-0147"
+address = "Flat 2B, 14 Safety Pin Lane"
+traits = Array[ExtResource("13_trait")]([SubResource("Trait_type"), SubResource("Trait_punk"), SubResource("Trait_smoker"), SubResource("Trait_ability")])
 bio = "(pretending to be) reading books lol"
 interests = Array[String](["yapping", "birds are NOT real!!!", "Vintage shopping", "fixing up my dads boat ;P"])
 poses = Dictionary[String, ExtResource("3_hgqhe")]({
@@ -91,6 +120,7 @@ default_pose = "reach"
 date_background = ExtResource("1_wf6us")
 dialogue_style = ExtResource("2_mpoun")
 voice = SubResource("Resource_s0o2p")
+first_date_dialogue = ExtResource("14_first_date")
 microgames = Array[PackedScene]([])
 affection_thresholds = Array[int]([3, 6, 9])
 likes_culture = 0.2

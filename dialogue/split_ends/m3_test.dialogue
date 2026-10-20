@@ -1,0 +1,28 @@
+# Test lines for microgames (milestone M3). Not her real first date.
+#
+# [#microgame=name] plays that microgame instead of the % roll:
+# passing counts as a hit, failing as a miss. Names come from data/microgames.tres.
+#   example          the template microgame (CATCH IT!)
+#   light_cigarette  yours to build. Until it's in data/microgames.tres, this option
+#                    rolls like a normal option (Godot's Output panel says so).
+# The #check sets how hard the microgame is instead of the odds.
+
+~ start
+
+Split Ends: [#pose=cig] Got a light?
+- Light it for her. [#check=seduction:50, #value=2, #microgame=light_cigarette]
+	if hit
+		Split Ends: [#pose=cig, #react=heart] ...Smooth.
+	else
+		Split Ends: [#pose=hunched, #react=anger] You almost torched my bangs.
+- Catch the lighter she tosses you. [#check=culture:40, #value=2, #microgame=example]
+	if hit
+		Split Ends: [#pose=point, #react=exclamation] Nice hands.
+	else
+		Split Ends: [#pose=parker, #react=question] ...It's on the floor now.
+- I don't smoke. [#value=0]
+	Split Ends: [#pose=backshot] Cool. More for me.
+
+Split Ends: [#pose=reach] That's the end of the microgame test. Press Restart to go again.
+
+=> END

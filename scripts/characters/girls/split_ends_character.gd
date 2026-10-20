@@ -24,7 +24,8 @@ func _init():
 		"Vintage shopping",
 		"fixing up my dads boat ;P"
 	]
-	self.first_date_path = "res://scenes/Dates/FirstDate/FirstDateTest.tscn"
+	self.first_date_path = "res://scenes/Dates/Date/Date.tscn"
+	self.girl_data_path = "res://data/girls/split_ends.tres"
 	self.first_date_background = "res://assets/bedroom1.png"
 	# Set personality traits
 	self.personality_traits = {

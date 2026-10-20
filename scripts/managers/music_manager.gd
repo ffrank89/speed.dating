@@ -6,6 +6,7 @@ var music_player: AudioStreamPlayer
 # Maps scene paths to music tracks
 var scene_music_map = {
 	"res://scenes/Dates/FirstDate/FirstDateTest.tscn": "res://assets/audio/loops/second ss free loop.ogg",
+	"res://scenes/Dates/Date/Date.tscn": "res://assets/audio/loops/second ss free loop.ogg",
 	"res://scenes/Calendar/calendar.tscn": "res://assets/audio/loops/second ss free loop.ogg",
 	"res://scenes/Tinder/Screen.tscn": "res://assets/audio/loops/(FREE) 2hollis  Snow Strippers type beat keflavik.mp3"
 }

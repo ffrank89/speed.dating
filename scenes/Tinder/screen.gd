@@ -96,6 +96,10 @@ func load_characters():
 	for char_class in character_classes:
 		print("load_characters char_class", char_class)
 		var character = char_class.create_default()
+		# A girl whose first date failed is gone for the run; one in your contacts is taken.
+		var player_manager = get_node("/root/PlayerManager")
+		if player_manager.is_gone(character.name) or player_manager.is_in_party(character.name):
+			continue
 		# Add default interests and other fields if they're not set
 		if character.interests.is_empty():
 			set_default_character_data(character)
@@ -106,6 +110,12 @@ func set_default_character_data(character):
 	print("NO CHARACTER DATA")
 	
 func update_display():
+	if characters.is_empty():
+		# Everyone's taken or gone: Start goes back to the calendar instead.
+		info_panel.update_text("[center]No one left to swipe on.[/center]")
+		start_button.text = "Back to the calendar"
+		next_button.disabled = true
+		return
 	var character = self.characters[current_profile_index]
 	
 	# Update the icon
@@ -148,16 +158,12 @@ func _on_next_pressed():
 	tween.parallel().tween_property(info_panel, "modulate", Color(1,1,1,1), 0.3)
 
 func _on_start_pressed():
-	# Store selected character in PlayerManager
 	var player_manager = get_node("/root/PlayerManager")
+	if characters.is_empty():
+		AppLauncher.open_scene("calendar", player_manager.CALENDAR, start_button.get_global_rect())
+		return
+	# Store selected character in PlayerManager
 	player_manager.select_date(characters[self.current_profile_index])
 	
-	# Animate transition to dating scene
-	var fade_panel = ColorRect.new()
-	fade_panel.color = Color(0, 0, 0, 0)
-	fade_panel.anchors_preset = Control.PRESET_FULL_RECT
-	add_child(fade_panel)
-	var tween = create_tween()
-	tween.tween_property(fade_panel, "color", Color(0, 0, 0, 1), 1.0)
-	print("In _on_start_pressed")
-	tween.tween_callback(func(): get_tree().change_scene_to_file(player_manager.current_date.first_date_path))
+	# Open the date like an app, growing from the Start button (data/apps/date.tres)
+	AppLauncher.open_scene("date", player_manager.current_date.first_date_path, start_button.get_global_rect())

@@ -3,6 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-10-13
 - **Affects:** [calendar.md](../design/calendar.md)
+- **See also:** [0054](0054-party-is-your-contacts.md): the party screen is the Contacts app.
 
 ## Decision
 

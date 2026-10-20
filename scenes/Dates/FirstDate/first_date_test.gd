@@ -1,13 +1,16 @@
 extends Control
-## Test bench for the first date: pick a girl in the Inspector, press F6.
-## The sliders stand in for the player's attributes until RunState exists.
+## Test bench for a date: the real date scene (the Date node, scenes/Dates/Date/Date.tscn)
+## plus a debug panel. Press F5 (it's the main scene) or F6 here.
+## The sliders stand in for the player's attributes. The date stays here when it's over
+## instead of going to the calendar; press Restart to play another.
 
 @export var girl: GirlData
 ## The dialogue to play. Empty = the girl's First Date Dialogue.
 @export var dialogue: DialogueResource
-## Where in the dialogue file to start (the name after "~").
-@export var start_title: String = "start"
-## The scoring numbers (data/date_rules.tres).
+## Empty = the whole date (opener, 5 exchanges, closer, contact card).
+## A title (e.g. "start" in the m2/m3 test files) = play just that one, then the card.
+@export var start_title: String = ""
+## The scoring and flow numbers (data/date_rules.tres).
 @export var rules: DateRules
 
 # Static so the sliders keep their values when the date restarts.
@@ -18,60 +21,41 @@ static var attributes := {
 	Attr.Id.HEART: 50,
 }
 
-var _pose_names: Array[String] = []
-var _pose_index := 0
-var _scorer: DateScorer
-var _state := DateState.new()
-
-@onready var background: TextureRect = $Background
-@onready var portrait: GirlPortrait = $Portrait
-@onready var reaction_icon: ReactionIcon = $ReactionIcon
-@onready var dialogue_box: DialogueBox = $DialogueBox
-@onready var option_list: OptionList = $OptionList
+@onready var date: DateScene = $Date
 @onready var girl_label: Label = %GirlLabel
 @onready var status_label: Label = %StatusLabel
 @onready var score_label: Label = %ScoreLabel
 @onready var sliders: VBoxContainer = %Sliders
 @onready var pose_button: Button = %PoseButton
 @onready var restart_button: Button = %RestartButton
+@onready var hazard_button: Button = %HazardButton
+@onready var end_date_button: Button = %EndDateButton
 
 
 func _ready() -> void:
 	_build_sliders()
-	pose_button.pressed.connect(_next_pose)
 	restart_button.pressed.connect(get_tree().reload_current_scene)
-	dialogue_box.pose_requested.connect(_on_pose_requested)
-	dialogue_box.reaction_requested.connect(_on_reaction_requested)
-	dialogue_box.responses_ready.connect(func(responses: Array) -> void: option_list.show_options(responses, _scorer))
-	option_list.option_resolved.connect(_on_option_resolved)
-	dialogue_box.finished.connect(func() -> void: status_label.text = "Dialogue finished. Press Restart.")
+	date.status_changed.connect(func(text: String) -> void: status_label.text = text)
+	date.score_changed.connect(func(text: String) -> void: score_label.text = text)
 
-	if not girl:
-		girl_label.text = "No girl: drop a GirlData into the 'girl' slot"
+	if girl:
+		date.girl = girl
+	if dialogue:
+		date.dialogue = dialogue
+	if rules:
+		date.rules = rules
+	date.only_title = start_title
+	date.attributes = attributes
+	date.begin()
+	if not date.girl:
 		pose_button.disabled = true
 		return
 
-	girl_label.text = "%s, %d" % [girl.display_name, girl.age]
-	background.texture = girl.date_background
-	_pose_names.assign(girl.poses.keys())
-	_show_pose(girl.default_pose)
-	_scorer = DateScorer.new(rules if rules else DateRules.new(), girl, attributes)
-
-	var lines := dialogue if dialogue else girl.first_date_dialogue
-	if lines:
-		status_label.text = "Click the box or press Space. Pick with 1-4."
-		dialogue_box.start(lines, start_title, [girl], [_state])
-	else:
-		status_label.text = "No dialogue: set 'dialogue' here or her First Date Dialogue"
-
-
-func _on_option_resolved(response: DialogueResponse, result: DateScorer.Result) -> void:
-	_state.hit = result.hit
-	_state.last_points = result.points
-	_state.score = _scorer.score
-	var roll := "rolled %d vs %d%%, %s" % [result.roll, result.chance, "hit" if result.hit else "miss"] if result.rolled else "no roll"
-	score_label.text = "Date score: %.1f   (last: %+.1f, %s)" % [_scorer.score, result.points, roll]
-	dialogue_box.choose(response)
+	girl_label.text = "%s, %d" % [date.girl.display_name, date.girl.age]
+	pose_button.text = "Pose: %s  (next)" % date.girl.default_pose
+	pose_button.pressed.connect(func() -> void: pose_button.text = "Pose: %s  (next)" % date.next_pose())
+	hazard_button.pressed.connect(date.stage_hazards.appear_all)
+	end_date_button.pressed.connect(date.end_now)
 
 
 func _build_sliders() -> void:
@@ -99,23 +83,3 @@ func _build_sliders() -> void:
 
 func _slider_text(attr: Attr.Id) -> String:
 	return "%s  %d" % [Attr.display_name(attr), attributes[attr]]
-
-
-func _next_pose() -> void:
-	_show_pose(_pose_names[(_pose_index + 1) % _pose_names.size()])
-
-
-func _show_pose(pose_name: String) -> void:
-	portrait.show_pose(girl.get_pose(pose_name))
-	_pose_index = maxi(_pose_names.find(pose_name), 0)
-	pose_button.text = "Pose: %s  (next)" % pose_name
-
-
-func _on_pose_requested(speaker: GirlData, pose_name: String) -> void:
-	if speaker == girl:
-		_show_pose(pose_name)
-
-
-func _on_reaction_requested(speaker: GirlData, reaction_name: String) -> void:
-	if speaker == girl:
-		reaction_icon.show_reaction(reaction_name)

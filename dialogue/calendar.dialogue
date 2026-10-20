@@ -1,0 +1,24 @@
+# The calendar's lines: what it says when you train, rest, or reach the boss.
+# PLACEHOLDER lines until the real ones are written.
+#
+# They play in the calendar's own box (data/dialogue_styles/calendar.tres), where today's
+# choices were. Each title is a Day Action's Dialogue Title (data/day_actions/...).
+# Lines without a "Name:" are narration: no name tab.
+# Lines can use {{action}} (its title, e.g. Train Culture), {{changes}} (Culture +5, or more than
+# one: Culture +3, Heart +2), and {{attribute}} (Culture) / {{amount}} (5): the first thing it changes.
+
+~ train
+
+You spend the day on your {{attribute}}.
+{{attribute}} +{{amount}}.
+=> END
+
+~ rest
+
+You sleep in. Nothing happens. It's nice.
+=> END
+
+~ boss
+
+Boss day! The boss fight isn't built yet, so you skip ahead to the next chapter.
+=> END

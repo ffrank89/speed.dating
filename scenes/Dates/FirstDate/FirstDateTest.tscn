@@ -1,14 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://ckpg8pvesqt83"]
+[gd_scene load_steps=6 format=3 uid="uid://ckpg8pvesqt83"]
 
 [ext_resource type="Script" uid="uid://bmj2168xc1mnx" path="res://scenes/Dates/FirstDate/first_date_test.gd" id="1_test"]
 [ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="2_girl"]
-[ext_resource type="Resource" uid="uid://bpy4g2spqgjbi" path="res://dialogue/split_ends/m2_test.dialogue" id="3_lines"]
-[ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="4_box"]
-[ext_resource type="Script" uid="uid://cx3an5smygw6u" path="res://scenes/Dates/Portrait/girl_portrait.gd" id="5_portrait"]
 [ext_resource type="Resource" path="res://data/date_rules.tres" id="6_rules"]
-[ext_resource type="PackedScene" uid="uid://jo0wuneeg2qu" path="res://scenes/Dialogue/OptionList.tscn" id="7_options"]
-[ext_resource type="Script" uid="uid://dx2okv54iogi3" path="res://scenes/Dates/Reaction/reaction_icon.gd" id="8_reaction"]
-[ext_resource type="SpriteFrames" path="res://data/reactions.tres" id="9_reactions"]
+[ext_resource type="PackedScene" path="res://scenes/Dates/Date/Date.tscn" id="14_date"]
 
 [sub_resource type="Theme" id="Theme_debug"]
 default_font_size = 32
@@ -22,53 +17,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_test")
 girl = ExtResource("2_girl")
-dialogue = ExtResource("3_lines")
 rules = ExtResource("6_rules")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Date" parent="." instance=ExtResource("14_date")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Portrait" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -650.0
-offset_top = -1600.0
-offset_right = 650.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-script = ExtResource("5_portrait")
-
-[node name="ReactionIcon" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 250.0
-offset_top = 180.0
-offset_right = 450.0
-offset_bottom = 380.0
-grow_horizontal = 2
-mouse_filter = 2
-script = ExtResource("8_reaction")
-reactions = ExtResource("9_reactions")
-
-[node name="DialogueBox" parent="." instance=ExtResource("4_box")]
-layout_mode = 1
-
-[node name="OptionList" parent="." instance=ExtResource("7_options")]
-layout_mode = 1
+auto_start = false
+go_to_calendar = false
 
 [node name="DebugPanel" type="PanelContainer" parent="."]
 layout_mode = 0
@@ -116,6 +70,18 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Restart date"
+
+[node name="HazardButton" type="Button" parent="DebugPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Stage hazards now"
+
+[node name="EndDateButton" type="Button" parent="DebugPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "End date now"
 
 [node name="ScoreLabel" type="Label" parent="DebugPanel/Margin/VBox"]
 unique_name_in_owner = true

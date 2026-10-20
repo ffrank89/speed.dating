@@ -17,6 +17,17 @@ extends Resource
 ## Shown on her dating profile.
 @export var interests: Array[String] = []
 
+@export_group("Contact Card")
+## What she types as her phone number when she gives it to you at the end of a date.
+@export var phone_number: String
+## What she types as her address. Press Enter in the box for a second line.
+@export_multiline var address: String
+## Optional: the round photo on her contact card. Empty = her initials in a circle.
+@export var contact_photo: Texture2D
+## Her type, tags, abilities... listed on her contact card under her name.
+## Each is a kind ("type", "tag", "ability"), a title, an optional description and icon.
+@export var traits: Array[GirlTrait] = []
+
 @export_group("Art")
 ## Her full-art poses. Each entry is a name and a pose (picture, size, nudge, flip).
 ## A dialogue line switches pose with a tag, e.g. "Split Ends: [#pose=cig] Got a light?"
@@ -30,6 +41,9 @@ extends Resource
 ## How her dialogue box looks: colours, outline, font, name plate.
 ## Drag a file from data/dialogue_styles/ here. Empty = the default style.
 @export var dialogue_style: DialogueBoxStyle
+## Optional: how the player's choice bubbles look on her dates.
+## Drag a file from data/option_styles/ here. Empty = the shared default.
+@export var option_style: OptionListStyle
 ## How she sounds while her text types out: pitch, speed, which letter sounds.
 @export var voice: GirlVoice
 ## Her first-date script (a .dialogue file).
@@ -38,6 +52,9 @@ extends Resource
 @export_group("Dating")
 ## Microgame scenes that can happen on her dates.
 @export var microgames: Array[PackedScene] = []
+## Date score she needs to give you her number at all. Below it the date failed: she
+## types "not a chance!" on the contact card and that's it.
+@export var number_threshold: int = 0
 ## Date score needed for 1, 2 and 3 hearts. Placeholder until scoring is tuned.
 @export var affection_thresholds: Array[int] = [3, 6, 9]
 

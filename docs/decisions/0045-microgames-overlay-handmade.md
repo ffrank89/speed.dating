@@ -1,6 +1,6 @@
 # 0045: Microgames are overlays on the date, built by hand
 
-- **Status:** Accepted
+- **Status:** Accepted. The shared framework was then built by Claude on request ([0048](0048-microgame-framework.md)); the microgames themselves are still hand-made.
 - **Date:** 2026-10-19
 - **Affects:** [dates.md](../design/dates.md), [plans/first-date.md](../plans/first-date.md)
 

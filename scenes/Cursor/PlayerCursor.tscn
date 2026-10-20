@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/Cursor/player_cursor.gd" id="1_cursor"]
+[ext_resource type="Resource" path="res://data/cursors/default.tres" id="2_style"]
+
+[node name="PlayerCursor" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_cursor")
+style = ExtResource("2_style")

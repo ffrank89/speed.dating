@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AppInfo" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/app_info.gd" id="1_app"]
+[ext_resource type="Texture2D" path="res://assets/exclamation point gif/surprise1.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_app")
+app_name = "Microgame"
+icon = ExtResource("2_icon")
+icon_background = Color(1, 0.84, 0.25, 1)
+icon_padding = 0.1
+launch_color = Color(1, 0.84, 0.25, 1)
+launch_icon_size = 300

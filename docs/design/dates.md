@@ -2,9 +2,12 @@
 
 ## Concept
 
-- A date is a **fixed number of turns** (10 today, to tune) that ends with
-  one number: **Affection 0–3**. Affection 1+ means she joins the party; 0 on
-  a first date means **she's gone for the run**.
+- A first date is an **opener, 5 exchanges (2 with a microgame) and a
+  closer** (tunable in `data/date_rules.tres` → Flow). It ends with her
+  contact card: **Affection 0–3 hearts**, or a **failed** date. If she gives
+  you her number (0 hearts or more) she joins the party (saved in your
+  Contacts); a failed first date
+  means **she's gone for the run**. Then it's back to the calendar.
 - **Each turn:**
   1. She says a line and changes pose. Letters type out one at a time, each
      with a little sound in **her voice** (Animalese-style).
@@ -28,7 +31,7 @@
 - `RunState.apply_date_result(result)`
 - `SceneRouter.go_to(:calendar)`
 - Perk hooks: `modify_options`, `modify_microgame`, `modify_score`
-- `Microgame.start(difficulty, modifiers)` / `finished(success)`
+- `Microgame.start(difficulty, modifiers)` / `finished(passed)`; `MicrogameHost.play(name, difficulty, modifiers)`
 
 ### Shared objects it inherits or holds
 
@@ -42,29 +45,37 @@
 
 | Thing | Notes |
 |---|---|
-| `DateScene` (root `Control`) | Owns the turn loop. Replaces `dating_scene.gd`. |
+| `DateScene` (root `Control`) | **Built (M4).** `scenes/Dates/Date/Date.tscn` + `date_scene.gd`. Plans the date from her first-date file's titles (`~ opener`, 5 of `~ exchange_…` / `~ microgame_…` with 2 microgame ones, no repeats, then `~ closer_failed` / `~ closer_no_hearts` / `~ closer_hearts`), ends on her contact card, emits `DateResult` (`got_number`, `affection`), puts her in the party or marks her gone for the run (`PlayerManager.mark_gone`, the dating app skips her), and opens the calendar. Opened by the dating app; the test bench `FirstDateTest.tscn` wraps it with debug sliders. Guide: [the-full-date.md](../guides/the-full-date.md), decision [0053](../decisions/0053-full-date-flow.md). |
 | `DateScorer` | **Built (M2).** One score per date (`scripts/date/date_scorer.gd`): `chance_of`, `points_if_hit`, `resolve`. Points = value × (1 + her like × likes_weight); miss = −max(points × miss_penalty, min_miss_cost). Numbers in `data/date_rules.tres` (`DateRules`). Perks' `modify_score` hook still to come. |
 | Odds | **Built (M2).** At or above the requirement: no roll. Below: `chance = attribute ÷ requirement`, clamped 5–95%, shown on the button. |
-| `OptionList` + `DateOption` + `DateState` | **Built (M2).** Options parsed from response tags (`#check`, `#value`, `#microgame`); buttons styled by `OptionListStyle` (`data/option_styles/default.tres`); roll animation; `if hit` / `else` in dialogue via `DateState`. `ReactionIcon` plays `[#react=…]` from `data/reactions.tres`. Guide: [options-and-scoring.md](../guides/options-and-scoring.md). |
-| `score_to_affection(score, thresholds) -> int` | 0–3. |
+| `OptionList` + `DateOption` + `DateState` | **Built (M2).** Options parsed from response tags (`#check`, `#value`, `#microgame`); shown as floating bubbles (`OptionBubble`) that pop out above her head, drift, and can be dragged to drop a trail of attribute icons; dropping one on her picks it; styled by `OptionListStyle` (`data/option_styles/default.tres`, or her own **Option Style**), which has the same box options as her dialogue style; roll animation; `if hit` / `else` in dialogue via `DateState`. `ReactionIcon` plays `[#react=…]` from `data/reactions.tres`. Guide: [options-and-scoring.md](../guides/options-and-scoring.md). |
+| `DateScorer.hearts()` | **Built.** 0–3: how many of her Affection Thresholds the score reached. |
+| `ContactCard` (result screen) | **Built.** The date ends on an iPhone New Contact screen in her dialogue style: she types her name (❤️ on a great date), number and address, or types and deletes her name. Opens like an app (`data/apps/contacts.tres`). Guide: [result-screen.md](../guides/result-screen.md), decision [0052](../decisions/0052-result-is-her-contact-card.md). |
 | `GirlPortrait` | **Built.** `scenes/Dates/Portrait/girl_portrait.gd`. Shows a `GirlPose` with its own scale (from her feet), offset and flip. Together with `ReactionIcon` it replaced the old `DatePresenter` (removed). |
 | `DialogueHistory` | Exists (`scenes/Dates/BaseDate/dialogue_history.gd`), kept for the M4 scroll-back log. The old `DialogueOptionUI` / `DialogueDataUI` were removed: `OptionList` and `DialogueBox` replace them. |
 | Dialogue Manager integration | **v3.10.5** (the Godot 4.4 version). Lines and options in `.dialogue` files. Tags: `[#pose=cig]`, `[#react=heart]` on her lines; `[#check=culture:40, #value=2, #microgame=light_cigarette]` on options. |
 | `DialogueBox` + `VoicePlayer` | **Built (M1).** `scenes/Dialogue/DialogueBox.tscn`. Typewriter via the addon's `DialogueLabel`; restyles per speaker from her `DialogueBoxStyle` (box colour/outline or a 9-slice picture, font, name plate, next arrow). `VoicePlayer` plays a letter sound on each `spoke` signal. `GirlVoice`: `letter_sounds_folder`, `pitch`, `pitch_variance`, `seconds_per_letter`, `letters_per_sound`, `volume_db`. Guide: [dialogue-box.md](../guides/dialogue-box.md). |
-| Microgames ×3 for v1 | Each its own scene extending `Microgame`, playable alone via F6. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
+| Microgame framework | **Built (M3 setup).** Opens like an iPhone app from the picked bubble ([0049](../decisions/0049-open-like-an-iphone-app.md)). `Microgame` base (`scenes/Microgames/microgame.gd`), `MicrogameHost` overlay (dim, banner, timer bar, NICE/OOPS stamp; look in `data/microgame_style.tres`), library `data/microgames.tres` (name → scene), `microgame_press` / `microgame_up…right` input actions and a keyboard-steerable `pointer`, F6 plays one alone on a loop. `OptionList` plays an option's microgame instead of the roll; `DateScorer.difficulty_of()` / `resolve_microgame()`. Template: `scenes/Microgames/_template/` (CATCH IT!). Guide: [making-a-microgame.md](../guides/making-a-microgame.md). |
+| Microgames ×3 for v1 | Each its own scene extending `Microgame`, built by hand. **Light her cigarette** and **Hold eye contact**; the third is TBD. |
+| `StageHazard` + `StageHazards` | **Built.** Things that turn up mid-date; dealing with one earns points and a reaction. First: the **fly** (`scenes/Hazards/Fly/`), which follows a random drawn path and is shooed off screen with the mouse. When it appears (after N answers, repeat, delay, chance) and the reward are Inspector settings. Guide: [stage-hazards.md](../guides/stage-hazards.md), decision [0050](../decisions/0050-stage-hazards.md). |
 | Item reactions | Show an item → her reaction from `GirlData.item_reactions`. Flavor only in the first build. |
-| Turn count | Shared constant or per date type (first vs follow-up). TBD. |
+| Turn count | First dates: `DateRules.exchanges` (5) and `microgame_exchanges` (2). Follow-ups TBD. |
 
 **Microgame contract**
 
 ```gdscript
 class_name Microgame extends Control
-signal finished(success: bool)
-func start(difficulty: float, modifiers: Dictionary) -> void: pass
+signal finished(passed: bool)
+func start(difficulty: float, modifiers: Dictionary) -> void  # override: set up
+func win() / lose()                                          # end it
+var pointer: Vector2         # mouse, or arrow keys / WASD
+func is_pointing_at(node: Control) -> bool
 ```
 
-`modifiers` comes from perks (e.g. Sleepy: `{"extra_time": 1.5}`) and
-attributes.
+`difficulty` (0–1) comes from the player's attribute against the option's
+requirement (`date_rules.tres` → Microgames). `modifiers` comes from perks
+(e.g. Sleepy: `{"extra_time": 1.5}`; the host already adds `extra_time` to
+the timer).
 
 ## Art needed
 
@@ -74,8 +85,10 @@ attributes.
 | Reaction icons (exclamation, question, heart, anger…) | `DatePresenter.show_reaction` | Some exist: `exclamation point gif`, `question mark gif`, `anger icon` |
 | Option buttons with attribute icon and risk tint | `DialogueOptionUI` | TBD (needs a "risky" look) |
 | Score pop / Affection meter | `ScoreDisplay`, compatibility meter | Placeholder exists |
+| Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
-| Date-end summary card (Affection hearts 0–3, gains, perks) | End of date, before returning to calendar | TBD |
+| Stage hazard art: the fly (and wing-flap frames), a buzz loop | `Fly.tscn` → Body/Sprite, Sounds → Buzz Sound | Not made. Godot logo placeholder. |
+| ~~Date-end summary card~~ Her contact card ([0052](../decisions/0052-result-is-her-contact-card.md)): optional contact photo per girl, optional heart image | `ContactCard` | Works without art. Gains and perks: TBD |
 
 ## Systems it's part of
 

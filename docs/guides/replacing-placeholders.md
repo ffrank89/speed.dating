@@ -15,6 +15,20 @@ thing. **No code needed.**
 |---|---|---|---|
 | **Intellect icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Intellect Icon** | The little picture on options that check Intellect |
 | **Seduction icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Seduction Icon** | The little picture on options that check Seduction |
+| **App icons** (calendar, dating app, date, boss, microgame) | Our existing icons: `assets/january.png`, `lovestat gif/lovestat.png`, `love stat/love react1.png`, `sword stat/sword stat.png`, `exclamation point gif/surprise1.png` | Each file in `data/apps/` → **Icon** (and **Launch Image**) | The tile that grows into the screen when an app opens. See [phone apps](phone-apps.md). |
+| **Contact card typing sounds** | Kenney stand-ins (`click_002`, `click_005`, `switch_002`, `drop_003`, `confirmation_003`, `minimize_002`) | `data/contact_card_style.tres` → **Sounds** | The key clicks as she types her number |
+| **Contacts app taps** | Kenney stand-ins (`select_001`, `back_001`) | `data/contact_card_style.tres` → **Sounds → Open Contact Sound / Back Sound** | Opening a girl's contact in your Contacts, and going back to the list |
+| **Contacts app icon** | Godot logo | `data/apps/contacts.tres` → **Icon** | The app that opens at the end of a date, and your Contacts (C on the calendar) |
+| **Calendar action icons** | Our icons (love react, culturestat, lovestat, sleepy, sword stat); **Godot logo** for Train Intellect and Train Seduction | Each file in `data/day_actions/` → **Icon** | The pictures on each day and on today's choices. See [the calendar](the-calendar.md). |
+| **Calendar sounds** | Kenney stand-ins (`click_003`, `confirmation_001`, `error_006`, `scroll_001`, `drop_002`) | `data/calendar_style.tres` → **Sounds** | Hovering and picking a choice, a blocked choice, opening the whole month, a day crossed off |
+| **Calendar art** | none (the calendar's box style) | `data/calendar_style.tres` → **Calendar Art → Page Image** (and **Day Image**) | The calendar's page and day boxes, like the iPhone frame. Try pictures in `scenes/Calendar/CalendarTest.tscn`. |
+| **Calendar lines** | Placeholder writing | `dialogue/calendar.dialogue` | What the calendar says when you train, rest or reach the boss |
+| **The cursor** | `assets/placeholders/godot_logo.svg` | `data/cursors/default.tres` → **Pointer → Image** (set **Hotspot** to the clicking pixel) | The player's mouse cursor everywhere. See [the cursor guide](cursor.md). |
+| **The fly** (stage hazard) | `assets/placeholders/godot_logo.svg` | `scenes/Hazards/Fly/Fly.tscn` → **Body → Sprite** → Texture (or swap for an AnimatedSprite2D) | The fly that buzzes around her. Draw it facing right. |
+| **Fly buzz** | none (silent) | `Fly.tscn` → top node → **Sounds → Buzz Sound** | A looping buzz while it's on screen |
+| **iPhone frame** | none (nothing drawn) | `data/app_transition_style.tres` → **Screen → Device Frame** | Phone art drawn over the screen while apps open and close |
+| **Template microgame target** | `assets/placeholders/godot_logo.svg` | `scenes/Microgames/_template/TemplateMicrogame.tscn` → **PlayArea/Target** | The thing you catch in the example microgame. Copies of the template start with it too. |
+| **Trail fallback icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Dragging → Trail Fallback Icon** | The little icons dropped when dragging an option with no attribute check |
 | **Letter sounds** (her voice) | `assets/audio/voice/default/a.wav` … `z.wav` (26 files) | Each girl's file → **Dialogue → Voice → Letter Sounds Folder** | One short sound per letter as her text types out |
 Not placeholders: the option **select** click
 (`assets/audio/clicks/clickApr42025.ogg`), the Culture and Heart icons, the
@@ -50,7 +64,7 @@ when you want to keep the placeholder around.
    `data/option_styles/default.tres`.
 3. In the Inspector, open the section (e.g. **Sounds**) and drag your file
    from FileSystem onto the slot (e.g. **Hit Sound**).
-4. Press **F6** in `scenes/Dates/FirstDate/FirstDateTest.tscn` to hear or see it.
+4. Press **F5** (the date test bench) to hear or see it.
 
 ---
 

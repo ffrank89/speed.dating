@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/Calendar/day_choice.gd" id="1_choice"]
+
+[node name="DayChoice" type="PanelContainer"]
+offset_right = 760.0
+offset_bottom = 300.0
+size_flags_horizontal = 3
+script = ExtResource("1_choice")
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+
+[node name="Key" type="PanelContainer" parent="Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="KeyLabel" type="Label" parent="Row/Key"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Words" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Row/Words"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Date"
+
+[node name="Detail" type="Label" parent="Row/Words"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "2 days · Swipe for someone new"
+autowrap_mode = 3

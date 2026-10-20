@@ -2,30 +2,30 @@ extends Node
 
 signal item_selected(item)
 signal date_selected(date)
-signal day_advanced(new_day, new_month)
 signal perk_added(perk)
+## A girl joined your party (her contact was saved), or her hearts changed.
+signal party_changed
 
 var player: PlayerCharacter
 var current_date: DateCharacter
 
 var inventory: Array = []
-var party: Array = []
+## Your party: the girls who gave you their number, saved as contacts in your phone
+## (the Contacts app, scenes/Phone/Contacts/). One PartyMember each.
+var party: Array[PartyMember] = []
+## Girls whose first date failed: they're gone for the rest of the run.
+var gone_for_run: Array = []
 
 var perks: Array = []
 
 var DATE_SELECT = "res://scenes/Tinder/Screen.tscn"
 var STATS_SELECT = "res://scenes/Intro/IntroQuestions.tscn"
 var CALENDAR = "res://scenes/Calendar/calendar.tscn"
+const CALENDAR_RULES := "res://data/calendar_rules.tres"
 
+## The run's calendar: chapter, today, and what each day offers. Use get_calendar().
+var calendar: RunCalendar
 
-# Calendar state
-var current_day: int = 1
-var current_month: int = 1
-var days_in_month = 30  # Simplified - all months have 30 days
-var month_names = ["January", "February", "March", "April", "May", "June", 
-"July", "August", "September", "October", "November", "December"]
-
-var available_actions = {}
 var perk_viewport
 
 
@@ -42,14 +42,37 @@ func add_item(item: InventoryItem) -> bool:
 		return true
 	return false
 
-# Add date to party
-func add_date(date: DateCharacter) -> bool:
-	if date and not date in party:
-		party.append(date)
-		print("Added date to party: ", date.name)
-		return true
-	return false
-	
+# She gave you her number: she's saved in your contacts with the hearts she gave you.
+# Already there = her hearts go up if this date went better.
+func add_party_member(girl: GirlData, affection: int, profile: DateCharacter = null) -> PartyMember:
+	for member in party:
+		if member.girl == girl:
+			member.affection = maxi(member.affection, affection)
+			party_changed.emit()
+			return member
+	var member := PartyMember.new(girl, affection, profile)
+	party.append(member)
+	print("Added to party (saved in contacts): ", member.display_name())
+	party_changed.emit()
+	return member
+
+
+# True if the girl with this dating-app name is in your party.
+func is_in_party(date_name: String) -> bool:
+	return party.any(func(member: PartyMember) -> bool: return member.profile and member.profile.name == date_name)
+
+
+# A failed first date: she's gone for the rest of the run (the dating app skips her).
+func mark_gone(date: DateCharacter) -> void:
+	if date and not date in gone_for_run:
+		gone_for_run.append(date)
+		print("Gone for the run: ", date.name)
+
+
+func is_gone(date_name: String) -> bool:
+	return gone_for_run.any(func(date: DateCharacter) -> bool: return date.name == date_name)
+
+
 func add_perk(perk):
 	if perk:
 		perks.append(perk)
@@ -61,6 +84,24 @@ func set_player(new_player: PlayerCharacter):
 	
 func get_player() -> PlayerCharacter:
 	return player
+
+
+# The player, made with 50 in every attribute if there isn't one yet (e.g. when a
+# screen is played on its own with F6, without the intro).
+func ensure_player() -> PlayerCharacter:
+	if not player:
+		player = PlayerCharacter.new("Me!")
+		for skill in player.skills:
+			player.skills[skill] = 50
+	return player
+
+
+# The run's calendar, planned the first time it's needed from `rules` (empty =
+# data/calendar_rules.tres). After that the run keeps the same one.
+func get_calendar(rules: CalendarRules = null) -> RunCalendar:
+	if not calendar:
+		calendar = RunCalendar.new(rules if rules else load(CALENDAR_RULES))
+	return calendar
 
 # Get the full inventory
 func get_inventory() -> Array:
@@ -89,8 +130,8 @@ func initialize_inventory():
 	add_item(cigs)
 	add_item(lighter)
 
-func get_party() -> Array:
-	return party  
+func get_party() -> Array[PartyMember]:
+	return party
 
 func initialize_party():
 	#TODO this is a beta system -Clear any existing dates
@@ -109,29 +150,3 @@ func initialize_perks():
 func add_player_perk(perk_data: Perk):
 	perks.append(perk_data)
 	emit_signal("perk_added", perk_data)
-	
-func advance_day():
-	current_day += 1
-	print("current_day: ", current_day)
-	# Check if we need to move to the next month
-	if current_day > days_in_month:
-		current_day = 1
-		current_month += 1
-		
-		# Wrap to January if we go past December
-		if current_month > 12:
-			current_month = 1
-	
-	print("Day advanced to", current_day, "of", month_names[current_month - 1])
-	emit_signal("day_advanced", current_day, current_month)
-
-# Handle action selected from calendar
-func calendar_action(action):
-	print("action", action)
-	
-	# Advance the day for the next time the calendar is opened
-	advance_day()
-	
-	# Change to the action scene (rest days have no scene, so stay on the calendar)
-	var scene_path = action[0].scene if action[0].scene != "" else CALENDAR
-	get_tree().change_scene_to_file(scene_path)

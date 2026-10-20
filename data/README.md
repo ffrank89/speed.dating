@@ -6,13 +6,22 @@ Hover over any setting to see what it does.
 
 | Folder | What's in it |
 |---|---|
-| `girls/` | One file per girl: name, bio, poses (each with its own size, nudge and flip), background, dialogue style, voice and lines. |
+| `girls/` | One file per girl: name, bio, poses (each with its own size, nudge and flip), background, dialogue style, option style (optional), voice and lines. |
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
-| `option_styles/` | How the player's choice buttons look and sound, including the roll. |
-| `date_rules.tres` | The scoring numbers: odds limits, how much her likes matter, what a miss costs. |
+| `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
+| `date_rules.tres` | How a date runs and scores: how many exchanges (and how many are microgames), the opener and closer names, odds limits, how much her likes matter, what a miss costs, how hard microgames get, and what her contact card shows. |
+| `contact_card_style.tres` | The phone's Contacts: the end-of-date contact card (its words, typing speed, heart emoji and key sounds) and the Contacts app where your party is saved (the list's words, sizes and sounds). Her boxes and font come from her dialogue style. |
+| `cursors/` | The player's cursor: picture, clicking spot, size, and optional hover, pressed and drag pictures. `default.tres` is the one the game uses. |
+| `apps/` | One file per phone app (calendar, dating app, date, boss, microgame): its icon, tile colour, launch screen and sounds for the iPhone-style open animation. |
+| `app_transition_style.tres` | How every app opens and closes: timing, motion, icon size and roundness, the screen behind, optional phone frame. |
+| `microgames.tres` | Every microgame by the name writers use: `[#microgame=light_cigarette]`. Add one like a pose: Add Key/Value Pair. |
+| `microgame_style.tres` | How the frame around every microgame looks and sounds: dim, banner, timer bar, NICE/OOPS stamp. |
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |
+| `calendar_rules.tres` | How the calendar runs: days per chapter, the boss day, what each day can offer and how many choices, how much of the whole calendar shows, and how far ahead you can see. |
+| `day_actions/` | One file per thing you can spend a day on (date, training, rest, boss): its name, picture, how many days it takes, how often it's offered, and what it does. |
+| `calendar_style.tres` | How the calendar looks and sounds: its words, day sizes, today's highlight, the X on days you can't see. Its boxes and font are `dialogue_styles/calendar.tres`. |
 
-**Try your change:** open `scenes/Dates/FirstDate/FirstDateTest.tscn` and press **F6**.
+**Try your change:** press **F5**. It plays a whole date on the test bench (`scenes/Dates/FirstDate/FirstDateTest.tscn`) with sliders for the player's attributes.
 
 **Step-by-step guides** in the project folder (or on GitHub):
 - `docs/guides/dialogue-box.md`: box colours, picture boxes, fonts, voices,

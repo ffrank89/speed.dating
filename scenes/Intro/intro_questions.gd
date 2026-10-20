@@ -199,7 +199,6 @@ func _on_start_dating_pressed():
 
 
 
-	#change to main scene
-	var tween = create_tween()
-	tween.tween_callback(func(): get_tree().change_scene_to_file(DATING_SITE_PATH))
+	# The run starts on the calendar (a date day opens the dating app from there).
+	AppLauncher.open_scene("calendar", player_manager.CALENDAR)
 	

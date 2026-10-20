@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MicrogameLibrary" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/microgame_library.gd" id="1_library"]
+[ext_resource type="PackedScene" path="res://scenes/Microgames/_template/TemplateMicrogame.tscn" id="2_example"]
+
+[resource]
+script = ExtResource("1_library")
+games = Dictionary[String, PackedScene]({
+"example": ExtResource("2_example")
+})

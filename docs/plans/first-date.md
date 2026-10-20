@@ -95,6 +95,12 @@ via `DateState`, and `[#react=…]` reactions (`ReactionIcon`,
 Seduction icons (Godot logo). Option sounds: Kenney Interface Sounds (CC0).
 Guide: [options-and-scoring.md](../guides/options-and-scoring.md).
 
+**Changed 2026-10-20:** options are now floating bubbles that pop out above
+her head and drift; click or drop one on her to pick, drag to throw them
+and drop a trail of attribute icons. Bubbles take the same box options as the dialogue box
+(picture, keep/drop outline, text outline), and a girl can have her own
+option style ([0047](../decisions/0047-floating-option-bubbles.md)).
+
 | Code | Art | Writing / audio |
 |---|---|---|
 | `OptionList` scene: 2–4 buttons, keys 1–4 or mouse, hover lift and highlight, focus for keyboard. | **Option button**: normal, hover, pressed, disabled | Option hover tick and select click (`clickApr42025.ogg` exists) |
@@ -113,6 +119,16 @@ and the score moves correctly (checked with the debug sliders).
 > microgame code. A microgame is an **overlay on top of the date scene**
 > (her, the room and the dialogue stay underneath), not a separate scene
 > the game switches to. See [decision 0045](../decisions/0045-microgames-overlay-handmade.md).
+>
+> **Set up 2026-10-20 (at Frank's request):** everything except the
+> microgames themselves is built: the `Microgame` base, the `MicrogameHost`
+> frame (dim, banner, timer bar, NICE/OOPS stamp, styled by
+> `data/microgame_style.tres`), the library `data/microgames.tres`, shared
+> mouse-and-keyboard input, F6 test mode, the hookup to options and scoring,
+> a working template (`scenes/Microgames/_template/`, CATCH IT!) and test
+> lines (`m3_test.dialogue`, now played by the test scene). Guide:
+> [making-a-microgame.md](../guides/making-a-microgame.md). See
+> [decision 0048](../decisions/0048-microgame-framework.md).
 >
 > Settled with Frank: **Light her cigarette** first. A microgame **replaces
 > the % roll** for its option (pass = hit, fail = miss; the attribute sets
@@ -135,14 +151,40 @@ and the score moves correctly (checked with the debug sliders).
 **Done when:** both microgames are fun in isolation, readable within half
 a second of starting, and feed pass/fail into the date score.
 
-### M4: The full date
+### Extra: stage hazards ✅ Built (2026-10-20)
+
+Things that turn up mid-date and get in the way; dealing with one earns
+points and a reaction. First one: a **fly** that follows a random drawn path
+and is shooed off screen with the mouse (+1, heart). It turns up after 1
+answer in the test scene (Inspector setting). Guide:
+[stage-hazards.md](../guides/stage-hazards.md). Art needed: the fly (and
+wing frames), a buzz loop.
+
+### M4: The full date ✅ Built (2026-10-20)
+
+Built: the real date scene `scenes/Dates/Date/Date.tscn` (`DateScene`), used
+by both the dating app and the test bench (`FirstDateTest.tscn` now wraps it
+with the debug panel). A date plays `~ opener`, then **5 exchanges** drawn
+with no repeats (**2** from `~ microgame_...` titles, 3 from `~ exchange_...`
+titles, shuffled), then **one of 3 closers** (`closer_failed`,
+`closer_no_hearts`, `closer_hearts`), then her contact card. Got her number
+→ she's saved in your Contacts (the party, [0054](../decisions/0054-party-is-your-contacts.md)); a failed date → she's **gone for the run** (the
+dating app skips her). Then **back to the calendar**. Counts and title names:
+`data/date_rules.tres` → Flow. Split Ends' `first_date.dialogue` is a **test
+pool** (7 exchanges, placeholder lines) until her real pool is written.
+Guide: [the-full-date.md](../guides/the-full-date.md). Decision:
+[0053](../decisions/0053-full-date-flow.md).
+
+Still to do: her real first-date pool (below); a date music loop
+(`MusicManager` is switched off); a girl file for Smokey (her date uses
+Split Ends until then); the scroll-back history log.
 
 | Code | Art | Writing / audio |
 |---|---|---|
-| Date flow: opener, then 5 exchanges drawn from her pool with no repeats, then a closer chosen by how it went. | **Result card**: 0–3 hearts, and "she's in" or "she's gone" | **Split Ends first-date pool** (below) |
-| Hearts from `score_to_affection(score, thresholds)`; emits a `DateResult`. | Hearts: empty and full | Date music loop (pick from `assets/audio/loops`) |
-| ~~Retire the old date path: `DialogueManager`, `ScoreCalculator`, the JSON dialogue, `DialogueDataUI`.~~ ✅ Done early (branch `remove-legacy-code`): the old date scene, `DatePresenter`, the old dialogue system and `ScoreCalculator` are removed; the Tinder screen now starts dates in `FirstDateTest`. | Background: pick one (`bedroom1.png` today) | |
-| Hook `FirstDateTest` and the real flow (`dating_scene`) to the same date scene. | | |
+| ✅ Date flow: opener, then 5 exchanges drawn from her pool with no repeats (2 microgame ones), then a closer chosen by how it went. | ~~Result card~~ **Built differently:** the [contact card](../guides/result-screen.md) (she types her number, or doesn't). Art: optional contact photos, a heart image, the Contacts app icon. | **Split Ends first-date pool** (below) |
+| ✅ Hearts from `DateScorer.hearts()`; emits a `DateResult` (`got_number`, `affection`, `score`). | Hearts: empty and full | Date music loop (pick from `assets/audio/loops`) |
+| ~~Retire the old date path: `DialogueManager`, `ScoreCalculator`, the JSON dialogue, `DialogueDataUI`.~~ ✅ Done early (branch `remove-legacy-code`): the old date scene, `DatePresenter`, the old dialogue system and `ScoreCalculator` are removed; the Tinder screen now starts dates in the date scene. | Background: pick one (`bedroom1.png` today) | |
+| ✅ Hook the test bench and the real flow (dating app) to the same date scene, `Date.tscn`. | | |
 
 **Done when:** a full date plays start to finish in about 3–4 minutes, two
 playthroughs feel different, and the result is right.
@@ -160,14 +202,15 @@ playthroughs feel different, and the result is right.
 ## Writing needed: Split Ends' first-date pool
 
 Written in Dialogue Manager's plain-text format (`.dialogue`), one file:
-`dialogue/split_ends/first_date.dialogue`.
+`dialogue/split_ends/first_date.dialogue` (a test pool is there now: replace
+its lines). Format: [the-full-date.md](../guides/the-full-date.md).
 
 | Piece | How many | Notes |
 |---|---|---|
-| **Opener** | 1 | She arrives and says hi. 1–2 lines, then 2–3 options. |
-| **Exchanges** | **12** (we draw 5 per date) | Each: 1–3 of her lines, then **2–4 options**. Each option has an attribute check (`culture`, `intellect`, `seduction`, `heart` + requirement) and a value (−3 to +3). Each needs her **reply to a hit** and **reply to a miss**. |
-| …of which trigger a microgame | 2–3 | e.g. she pulls out a cigarette → "Light it for her"; she gets awkward → "Hold her gaze" |
-| **Closers** | 3 | Good (2–3 hearts), meh (1 heart), bad (0 hearts). |
+| **Opener** | 1 | `~ opener`. She arrives and says hi. 1–2 lines, then 2–3 options. |
+| **Exchanges** | **12** (we draw 5 per date), titled `~ exchange_...` | Each: 1–3 of her lines, then **2–4 options**. Each option has an attribute check (`culture`, `intellect`, `seduction`, `heart` + requirement) and a value (−3 to +3). Each needs her **reply to a hit** and **reply to a miss**. |
+| …of which trigger a microgame | 2–3, titled `~ microgame_...` (2 play per date) | e.g. she pulls out a cigarette → "Light it for her"; she gets awkward → "Hold her gaze" |
+| **Closers** | 3 | `~ closer_hearts` (1+ hearts), `~ closer_no_hearts` (she gives her number, no hearts), `~ closer_failed` (no number; she's gone). |
 | **Pose and reaction tags** | on every line | `[#pose=cig]`, `[#react=heart]`, so the writer directs her acting |
 
 Her preferences (current values, change freely): Culture 0.2,
@@ -176,7 +219,7 @@ Intellect 0.3, Seduction 0.3, Heart 0.2 (from `SplitEndsCharacter`).
 **Example exchange (format only, not final writing):**
 
 ```
-~ boat
+~ exchange_boat
 Split Ends: [#pose=point] Okay so my dad's boat. It has a name. Guess it.
 - "The Unsinkable II" [#check=culture:30, #value=2]
 	Split Ends: [#pose=reach, #react=heart] HOW did you know there was a first one
@@ -209,7 +252,7 @@ Split Ends: [#pose=point] Okay so my dad's boat. It has a name. Guess it.
 | 10 | Lighter + flame (3–4 frames) + cigarette + ember | M3 | Lighter and cig yes; flame no |
 | 11 | Split Ends close-up: lighting the cig | M3 | No (can crop the `cig` pose) |
 | 12 | Split Ends close-up face + eye-glance frames | M3 | No |
-| 13 | Result card + hearts (empty and full) | M4 | No |
+| 13 | Contact card: optional contact photo per girl, optional heart image, Contacts app icon (the card itself needs no art) | M4 | Placeholder icon |
 | 14 | Split Ends poses ×5 and a background | — | **Yes** |
 | 15 | Reaction icons (exclamation, question, heart, anger) | — | Mostly (heart?) |
 

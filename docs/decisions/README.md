@@ -46,7 +46,16 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0040](0040-risk-shown-chance.md) | Options above your attribute show a % chance | Accepted |
 | [0041](0041-split-ends-first.md) | Split Ends is the first girl built | Accepted |
 | [0042](0042-per-girl-dialogue-style.md) | Each girl styles her own dialogue box | Accepted |
-| [0043](0043-shared-option-style.md) | The player's options share one look | Accepted |
+| [0043](0043-shared-option-style.md) | The player's options share one look | Amended by 0047 |
 | [0044](0044-date-scoring-formula.md) | How options score | Accepted |
 | [0045](0045-microgames-overlay-handmade.md) | Microgames are overlays on the date, built by hand | Accepted |
 | [0046](0046-microgame-replaces-roll.md) | A microgame replaces the roll | Accepted |
+| [0047](0047-floating-option-bubbles.md) | Options are floating bubbles that pop out above her head | Accepted |
+| [0048](0048-microgame-framework.md) | How the microgame framework works (library, difficulty, frame, input, F6) | Accepted |
+| [0049](0049-open-like-an-iphone-app.md) | Screens open like iPhone apps (one shared, modular animation) | Accepted |
+| [0050](0050-stage-hazards.md) | Stage hazards: things that turn up mid-date (the fly) | Accepted |
+| [0051](0051-player-cursor.md) | The player's cursor is a swappable style (Godot logo placeholder) | Accepted |
+| [0052](0052-result-is-her-contact-card.md) | The date's result is her filling in your Contacts (or not) | Accepted |
+| [0053](0053-full-date-flow.md) | A first date: opener, 5 exchanges (2 microgames), one of 3 closers; then party or gone, and back to the calendar | Accepted |
+| [0054](0054-party-is-your-contacts.md) | Your party is your phone's Contacts (press C on the calendar) | Accepted |
+| [0055](0055-calendar-revamp.md) | The calendar: a chapter strip in dialogue-box style, today's choices, the rest X'd out | Accepted |

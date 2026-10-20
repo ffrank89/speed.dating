@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AppInfo" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/app_info.gd" id="1_app"]
+[ext_resource type="Texture2D" path="res://assets/love stat/love react1.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_app")
+app_name = "Date"
+icon = ExtResource("2_icon")
+icon_background = Color(0.945, 0.961, 0.824, 1)
+icon_padding = 0.14
+launch_color = Color(0.945, 0.961, 0.824, 1)
+launch_icon_size = 320

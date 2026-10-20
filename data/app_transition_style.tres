@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AppTransitionStyle" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/app_transition_style.gd" id="1_style"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/maximize_003.wav" id="2_open"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/minimize_003.wav" id="3_close"]
+
+[resource]
+script = ExtResource("1_style")
+open_sound = ExtResource("2_open")
+close_sound = ExtResource("3_close")

@@ -1,6 +1,6 @@
 # 0043: The player's options share one look
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0047](0047-floating-option-bubbles.md) (a girl may override it)
 - **Date:** 2026-10-19
 - **Affects:** [dates.md](../design/dates.md)
 

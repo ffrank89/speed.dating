@@ -5,8 +5,8 @@
 - Each girl is **two objects**:
   - `GirlData`: a `.tres` resource, the same in every run, editable in the
     Godot Inspector, so **a new girl needs no code**.
-  - `PartyMember`: created for *this run* when her date succeeds. It holds
-    her Affection, HP and buffs.
+  - `PartyMember`: created for *this run* when her date succeeds (she's
+    saved in your Contacts). It holds her Affection, HP and buffs.
 - Girls carry **tags** (e.g. stoner, artsy, chaotic) that drive girl–girl
   synergy, and **preferences** (which attributes she likes) that drive
   player–girl synergy and date scoring.
@@ -47,9 +47,13 @@
 | Dating | `likes_culture` … `likes_heart` (0–1), `microgames: Array[PackedScene]`, `item_reactions`, `affection_thresholds: Array[int]` | Date Scene, Synergy |
 | Battle | `hp`, `attack`, `type: GirlType`, `barks` (per boss: crit and fumble lines) | Boss Scene |
 | Synergy | `tags: Array[TagData]` | Synergy |
+| Contact card | **Built:** `phone_number`, `address`, optional `contact_photo`, `traits: Array[GirlTrait]` (kind, title, description, icon; placeholder until tags and type exist as data) | End-of-date contact card ([result-screen.md](../guides/result-screen.md)) |
 
 **`PartyMember` fields:** `girl: GirlData`, `affection: int (0–3)`,
-`current_hp`, `buffs: Array`, `follow_ups_done: int`.
+`current_hp`, `buffs: Array`, `follow_ups_done: int`. **Started**
+(`scripts/data/party_member.gd`): `girl`, `affection`, and `profile` (her
+dating-app entry). Each one is a contact in your phone's Contacts app
+([contacts.md](../guides/contacts.md)).
 
 | Function | Notes |
 |---|---|

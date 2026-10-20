@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CalendarStyle" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/calendar_style.gd" id="1_style"]
+[ext_resource type="Resource" path="res://data/dialogue_styles/calendar.tres" id="2_box"]
+[ext_resource type="Texture2D" path="res://assets/x1/x1_7.png" id="3_x"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/click_003.wav" id="4_hover"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/confirmation_001.wav" id="5_pick"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/error_006.wav" id="6_blocked"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/scroll_001.wav" id="7_expand"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/drop_002.wav" id="8_done"]
+
+[resource]
+script = ExtResource("1_style")
+box_style = ExtResource("2_box")
+hidden_mark = ExtResource("3_x")
+hover_sound = ExtResource("4_hover")
+pick_sound = ExtResource("5_pick")
+blocked_sound = ExtResource("6_blocked")
+expand_sound = ExtResource("7_expand")
+day_done_sound = ExtResource("8_done")
