@@ -42,7 +42,7 @@ func _ready() -> void:
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	dialogue_box.pose_requested.connect(_on_pose_requested)
 	dialogue_box.reaction_requested.connect(_on_reaction_requested)
-	dialogue_box.responses_ready.connect(func(responses: Array) -> void: option_list.show_options(responses, _scorer))
+	dialogue_box.responses_ready.connect(func(responses: Array) -> void: option_list.show_options(responses, _scorer, girl.option_style))
 	option_list.option_resolved.connect(_on_option_resolved)
 	dialogue_box.finished.connect(func() -> void: status_label.text = "Dialogue finished. Press Restart.")
 

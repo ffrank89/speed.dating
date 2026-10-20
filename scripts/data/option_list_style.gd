@@ -1,29 +1,59 @@
 @tool
 class_name OptionListStyle
 extends Resource
-## How the player's choice buttons look and sound, including the roll for risky options.
-## One shared file: data/option_styles/default.tres. Hover any setting to see what it does.
+## How the player's choice bubbles look, float and sound, including the roll for risky options.
+## Works like a girl's dialogue style: a flat colour box or a picture, with or without an
+## outline, plus fonts and colours. The shared file is data/option_styles/default.tres;
+## a girl can have her own in her GirlData's "Option Style" slot.
+## Hover any setting to see what it does.
 ## Full guide: docs/guides/options-and-scoring.md
 
-@export_group("Buttons")
-## Fill colour of a choice button.
-@export var button_color: Color = Color(0.07, 0.08, 0.1, 0.9)
-## Fill colour while the mouse is over it (or it's selected with the arrow keys).
+@export_group("Bubbles")
+## A bubble's fill colour. Lower the A (alpha) value to let the scene show through.
+@export var background_color: Color = Color(0.07, 0.08, 0.1, 0.9)
+## Fill colour while the mouse is over it, it's being dragged, or it's selected with the arrow keys.
 @export var hover_color: Color = Color(0.16, 0.18, 0.24, 0.95)
-## Colour of the line around a button.
+## Optional: a picture to use as the bubble instead of the flat colour and outline.
+## It stretches like a picture frame: the corners stay sharp and the middle stretches.
+@export var background_image: Texture2D
+## Optional: the picture to use while the mouse is over a bubble. Empty = Background Image.
+@export var hover_image: Texture2D
+## Only used with Background Image: how many pixels in from each edge of the picture
+## are "frame" that must never stretch. Raise it if the corners look squashed.
+@export_range(0, 512) var image_corner_size: int = 32
+## Only used with Background Image: also draw the outline (colours, width and corner
+## radius below) on top of the picture. Off = the picture is the whole bubble, and
+## risky options are marked by their % badge only.
+@export var keep_outline_with_image: bool = false
+## Colour of the line around a bubble.
 @export var outline_color: Color = Color(1, 1, 1, 0.7)
-## Colour of the line around a button while the mouse is over it.
+## Colour of the line around a bubble while the mouse is over it.
 @export var hover_outline_color: Color = Color.WHITE
-## Thickness of the line around a button, in pixels.
+## Thickness of the line around a bubble, in pixels. 0 = no outline.
 @export_range(0, 20) var outline_width: int = 3
-## How rounded the corners are, in pixels.
+## How rounded the corners are, in pixels. 0 = square corners.
+## With a picture bubble and Keep Outline With Image, match this to the picture's corners.
 @export_range(0, 100) var corner_radius: int = 18
-## Space between the button's edge and its contents, in pixels.
+## Empty space between the edge of the bubble and its contents, in pixels.
 @export_range(0, 80) var padding: int = 22
-## Space between buttons, in pixels.
+## Widest a bubble gets, in pixels. Longer options wrap onto more lines.
+@export_range(200, 2000) var bubble_max_width: int = 760
+## Least space kept between two bubbles, in pixels. They nudge each other apart.
 @export_range(0, 80) var spacing: int = 16
-## How far a button slides left when the mouse is over it, in pixels. 0 = no slide.
-@export_range(0, 60) var hover_slide: int = 18
+## How much a bubble grows while the mouse is over it. 1.0 = no change.
+@export_range(1.0, 1.5, 0.01) var hover_grow: float = 1.06
+
+@export_group("Floating")
+## How fast the bubbles drift once they've settled, in pixels per second.
+## They stop while the mouse is over one, so they're easy to click.
+@export_range(0.0, 400.0, 5.0) var drift_speed: float = 45.0
+## How fast they fly out from the start point (above her head) when they appear.
+@export_range(0.0, 3000.0, 50.0) var burst_speed: float = 650.0
+## How quickly they slow from the burst (or a throw) down to the drift speed.
+## Higher = they settle sooner.
+@export_range(0.1, 10.0, 0.1) var settle: float = 1.5
+## How much they curve while drifting. 0 = straight lines, 1 = lazy loops.
+@export_range(0.0, 3.0, 0.05) var wander: float = 0.6
 
 @export_group("Text")
 ## Font for the choices. Leave empty to use Godot's default font.
@@ -32,7 +62,11 @@ extends Resource
 @export var text_color: Color = Color.WHITE
 ## Colour of the attribute name and requirement, e.g. "Culture 40".
 @export var check_color: Color = Color(1, 1, 1, 0.65)
-## Show 1, 2, 3, 4 on the buttons so players know they can press those keys.
+## Optional outline around each letter, which helps text read over busy pictures. 0 = none.
+@export_range(0, 20) var text_outline_width: int = 0
+## Colour of the outline around each letter.
+@export var text_outline_color: Color = Color.BLACK
+## Show 1, 2, 3, 4 on the bubbles so players know they can press those keys.
 @export var show_number_keys: bool = true
 @export var number_key_color: Color = Color(1, 1, 1, 0.45)
 
@@ -65,8 +99,21 @@ extends Resource
 ## Size of the attribute icons, in pixels.
 @export_range(16, 200) var icon_size: int = 64
 
+@export_group("Dragging")
+## Size of the little icons a bubble drops while it's dragged, in pixels.
+## Each bubble drops its attribute icon (see Attribute Icons above).
+@export_range(8, 200) var trail_icon_size: int = 44
+## Distance the mouse moves between two trail icons, in pixels. Lower = more icons.
+@export_range(10, 400) var trail_spacing: int = 60
+## How long each trail icon lasts before it fades away, in seconds.
+@export_range(0.1, 5.0, 0.05) var trail_seconds: float = 0.9
+## Icon dropped by options with no attribute check.
+@export var trail_fallback_icon: Texture2D
+## Fastest a bubble can be thrown when it's let go, in pixels per second. 0 = no throwing.
+@export_range(0.0, 5000.0, 50.0) var max_throw_speed: float = 1400.0
+
 @export_group("Sounds")
-## Played when the mouse moves onto a choice.
+## Played when the mouse moves onto a bubble.
 @export var hover_sound: AudioStream
 ## Played when a choice is picked.
 @export var select_sound: AudioStream
@@ -92,16 +139,32 @@ func icon_for(attribute: int) -> Texture2D:
 	return null
 
 
-## A button background in the given fill and outline colours.
-func make_button(fill: Color, line: Color) -> StyleBoxFlat:
-	var box := StyleBoxFlat.new()
-	box.bg_color = fill
-	box.border_color = line
-	box.set_border_width_all(outline_width)
-	box.set_corner_radius_all(corner_radius)
-	box.set_content_margin_all(padding)
-	box.anti_aliasing = true
-	return box
+## A bubble's background: her picture if one is set, otherwise the flat colour with
+## its outline in `line`. `hovered` picks the hover colour or hover picture.
+func make_bubble(hovered: bool, line: Color) -> StyleBox:
+	var picture := hover_image if hovered and hover_image else background_image
+	if picture:
+		var box := StyleBoxTexture.new()
+		box.texture = picture
+		box.set_texture_margin_all(image_corner_size)
+		box.set_content_margin_all(padding)
+		return box
+	var flat := _flat(hover_color if hovered else background_color, line, outline_width)
+	flat.set_content_margin_all(padding)
+	return flat
+
+
+## The outline drawn on top of a picture bubble, or null when there shouldn't be one.
+## (A flat bubble already includes its outline.)
+func make_outline(line: Color) -> StyleBox:
+	if not background_image or not keep_outline_with_image or outline_width == 0:
+		return null
+	return _flat(Color.TRANSPARENT, line, outline_width)
+
+
+## The thick line in the hit or miss colour drawn around the picked bubble.
+func make_result_outline(color: Color) -> StyleBox:
+	return _flat(Color.TRANSPARENT, color, maxi(outline_width, 3) * 2)
 
 
 ## The small rounded badge that shows a risky option's %.
@@ -113,4 +176,15 @@ func make_badge(fill: Color) -> StyleBoxFlat:
 	box.content_margin_right = 16
 	box.content_margin_top = 2
 	box.content_margin_bottom = 4
+	return box
+
+
+func _flat(fill: Color, line: Color, width: int) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.draw_center = fill.a > 0.0
+	box.border_color = line
+	box.set_border_width_all(width)
+	box.set_corner_radius_all(corner_radius)
+	box.anti_aliasing = true
 	return box

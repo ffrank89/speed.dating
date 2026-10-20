@@ -46,7 +46,8 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0040](0040-risk-shown-chance.md) | Options above your attribute show a % chance | Accepted |
 | [0041](0041-split-ends-first.md) | Split Ends is the first girl built | Accepted |
 | [0042](0042-per-girl-dialogue-style.md) | Each girl styles her own dialogue box | Accepted |
-| [0043](0043-shared-option-style.md) | The player's options share one look | Accepted |
+| [0043](0043-shared-option-style.md) | The player's options share one look | Amended by 0047 |
 | [0044](0044-date-scoring-formula.md) | How options score | Accepted |
 | [0045](0045-microgames-overlay-handmade.md) | Microgames are overlays on the date, built by hand | Accepted |
 | [0046](0046-microgame-replaces-roll.md) | A microgame replaces the roll | Accepted |
+| [0047](0047-floating-option-bubbles.md) | Options are floating bubbles that pop out above her head | Accepted |

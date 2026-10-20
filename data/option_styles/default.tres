@@ -13,7 +13,7 @@
 
 [resource]
 script = ExtResource("9_jpbsd")
-button_color = Color(0.07, 0.08, 0.1, 0.9)
+background_color = Color(0.07, 0.08, 0.1, 0.9)
 hover_color = Color(0.16, 0.18, 0.24, 0.95)
 outline_color = Color(1, 1, 1, 0.7)
 hover_outline_color = Color(1, 1, 1, 1)
@@ -21,7 +21,6 @@ outline_width = 3
 corner_radius = 18
 padding = 22
 spacing = 16
-hover_slide = 18
 font = ExtResource("2_en2jh")
 font_size = 38
 text_color = Color(1, 1, 1, 1)
@@ -41,6 +40,7 @@ intellect_icon = ExtResource("6_x8ou3")
 seduction_icon = ExtResource("6_x8ou3")
 heart_icon = ExtResource("3_cgiyp")
 icon_size = 64
+trail_fallback_icon = ExtResource("6_x8ou3")
 hover_sound = ExtResource("5_vxsn7")
 select_sound = ExtResource("11_5idl3")
 roll_tick_sound = ExtResource("8_vcr8x")

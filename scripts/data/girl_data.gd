@@ -30,6 +30,9 @@ extends Resource
 ## How her dialogue box looks: colours, outline, font, name plate.
 ## Drag a file from data/dialogue_styles/ here. Empty = the default style.
 @export var dialogue_style: DialogueBoxStyle
+## Optional: how the player's choice bubbles look on her dates.
+## Drag a file from data/option_styles/ here. Empty = the shared default.
+@export var option_style: OptionListStyle
 ## How she sounds while her text types out: pitch, speed, which letter sounds.
 @export var voice: GirlVoice
 ## Her first-date script (a .dialogue file).

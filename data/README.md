@@ -6,9 +6,9 @@ Hover over any setting to see what it does.
 
 | Folder | What's in it |
 |---|---|
-| `girls/` | One file per girl: name, bio, poses (each with its own size, nudge and flip), background, dialogue style, voice and lines. |
+| `girls/` | One file per girl: name, bio, poses (each with its own size, nudge and flip), background, dialogue style, option style (optional), voice and lines. |
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
-| `option_styles/` | How the player's choice buttons look and sound, including the roll. |
+| `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
 | `date_rules.tres` | The scoring numbers: odds limits, how much her likes matter, what a miss costs. |
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |
 
