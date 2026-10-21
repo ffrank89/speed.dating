@@ -14,19 +14,21 @@ extends Control
 ## A stat can slow it down (Slow Motion): e.g. the fly moves in slow motion when the
 ## player's Perception is above 5. It can annoy her (Annoying Her): e.g. the fly sitting
 ## on her for a second makes the date stop while she says ".....ew" and loses points.
+## How she reacts is an Annoyance file (data/annoyances/), which hazards can share.
 ##
 ## Making a new one: extend StageHazard, start it up in begin(), and call clear() when
 ## the player deals with it (or leave() when it goes away by itself). If it Needs Action
 ## Cursor, check can_act() before letting the player deal with it. For Slow Motion,
 ## multiply its own timing by time_scale (and its sounds' pitch). For Annoying Her, call
-## track_annoying() each frame with where it is.
+## track_annoying() each frame with where it is (annoys her once it has sat on her for
+## Annoy Seconds), or annoy_her() whenever it should annoy her for any other reason.
 
 ## Sent when the player deals with it (e.g. shoos the fly off screen).
 signal cleared(hazard: StageHazard)
 ## Sent when it goes away on its own (no reward).
 signal left(hazard: StageHazard)
-## Sent when it has been over her for Annoy Seconds: the date stops for a moment, she
-## reacts and the date loses Annoy Points.
+## Sent when it annoys her (e.g. it has been over her for Annoy Seconds): the date plays
+## its Annoyance (stops for a moment, she reacts, the date loses points).
 signal annoyed(hazard: StageHazard)
 
 @export_group("When")
@@ -58,27 +60,15 @@ signal annoyed(hazard: StageHazard)
 @export_range(0.05, 1.0, 0.05) var slow_speed: float = 0.5
 
 @export_group("Annoying Her")
+## How she reacts when it annoys her: a file from data/annoyances/ (ew.tres: the date
+## stops, she turns around and says ".....ew", and the date loses a point). Hazards can
+## share one. Empty = it never annoys her.
+@export var annoyance: Annoyance
 ## Seconds it has to stay over her (her drawn pixels, not the space around her) before
-## it annoys her: the date stops for a moment (her dialogue and the options freeze), she
-## reacts, says Annoy Line, and the date loses Annoy Points. 0 = it never annoys her.
+## it annoys her, for a hazard that moves over her (the fly). 0 = not this way.
 @export_range(0.0, 30.0, 0.1) var annoy_seconds: float = 0.0
 ## How many times it can annoy her each time it turns up.
 @export_range(1, 20) var annoy_limit: int = 1
-## Points taken off the date score when it annoys her.
-@export_range(0.0, 10.0, 0.5) var annoy_points: float = 1.0
-## Her reaction: a name in data/reactions.tres (anger, question...). Empty = none.
-@export var annoy_reaction: String = "anger"
-## What she says, in a little bubble by her head (the date's Bark). Empty = nothing.
-@export var annoy_line: String = ".....ew"
-## Optional: a pose she switches to while she's annoyed (a pose name from her girl
-## file, e.g. backshot: turned away). A girl without that pose stays as she is. Empty =
-## no change.
-@export var annoy_pose: String = ""
-## On = she goes back to the pose she had when the date carries on. Off = she stays in
-## Annoy Pose until a line changes it.
-@export var annoy_pose_back: bool = true
-## How long the date stops, in seconds (at least as long as her line takes).
-@export_range(0.0, 10.0, 0.1) var annoy_pause_seconds: float = 1.0
 
 @export_group("Reward")
 ## Points added to the date score when the player deals with it.
@@ -131,9 +121,9 @@ func is_slowed() -> bool:
 
 ## Annoying Her: call each frame with where it is (in screen pixels) and the real seconds
 ## passed. Once it's been over her (her drawn pixels) for Annoy Seconds without a break,
-## it annoys her: annoyed is sent. Moving off her starts the count again.
+## it annoys her (annoy_her()). Moving off her starts the count again.
 func track_annoying(point: Vector2, real_delta: float) -> void:
-	if annoy_seconds <= 0.0 or not her or not is_active or _annoyances >= annoy_limit:
+	if annoy_seconds <= 0.0 or not her or not annoyance or not is_active or _annoyances >= annoy_limit:
 		return
 	if not her.is_point_on_her(point):
 		_over_her = 0.0
@@ -141,8 +131,18 @@ func track_annoying(point: Vector2, real_delta: float) -> void:
 	_over_her += real_delta
 	if _over_her >= annoy_seconds:
 		_over_her = 0.0
-		_annoyances += 1
-		annoyed.emit(self)
+		annoy_her()
+
+
+## Annoying Her: annoys her now, for any reason (a phone that rang too long...): the date
+## plays its Annoyance. Only while it's on screen, if it has an Annoyance, and up to Annoy
+## Limit times each time it turns up. True if it did.
+func annoy_her() -> bool:
+	if not annoyance or not is_active or _annoyances >= annoy_limit:
+		return false
+	_annoyances += 1
+	annoyed.emit(self)
+	return true
 
 
 ## Override (optional): called when Leaves After Seconds runs out. Default: leave() at once.

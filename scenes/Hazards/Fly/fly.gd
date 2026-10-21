@@ -14,8 +14,9 @@ extends StageHazard
 ## twice as long. Waving at it still reads the mouse at full speed.
 ##
 ## Annoying Her (also on the top node): if it stays on her (her drawn pixels) for a
-## second, the date stops for a moment, she gets angry, says ".....ew" and the date loses
-## a point. Shoo it before then.
+## second, the date plays its Annoyance (data/annoyances/ew.tres): the date stops for a
+## moment, she turns around, gets angry, says ".....ew" and the date loses a point. Shoo
+## it before then.
 ##
 ## Press F6 on this scene to try it on its own. Full guide: docs/guides/stage-hazards.md
 

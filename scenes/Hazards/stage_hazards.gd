@@ -7,8 +7,8 @@ extends Control
 
 ## Sent when the player deals with a hazard. The date adds its points and shows her reaction.
 signal hazard_cleared(hazard: StageHazard)
-## Sent when a hazard annoys her (e.g. the fly sat on her): the date stops for a moment,
-## she reacts and says so, and the date loses the hazard's Annoy Points.
+## Sent when a hazard annoys her (e.g. the fly sat on her): the date plays the hazard's
+## Annoyance (stops for a moment, she reacts and says so, the date loses points).
 signal hazard_annoyed(hazard: StageHazard)
 
 ## While it runs, S switches to the action cursor (PlayerCursor), which hazards like the

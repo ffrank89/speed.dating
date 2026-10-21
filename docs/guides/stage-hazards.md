@@ -132,22 +132,41 @@ drains). Then the date carries on: she turns back and her box comes back. "On he
 not the see-through space around her, and it has to stay there the whole
 second: moving off her starts the count again. Shoo it before then.
 
-Every hazard has this, on its top node → **Annoying Her**:
+**How she reacts is its own file**, an **annoyance** in `data/annoyances/`.
+The fly uses `ew.tres`. Every hazard can point at one, and several hazards
+can share the same one: change `ew.tres` and every hazard using it changes.
+
+**When** a hazard annoys her is on its top node → **Annoying Her**:
 
 | Setting | Fly | What it does |
 |---|---|---|
-| **Annoy Seconds** | 1 | How long it has to stay on her. 0 = it never annoys her |
+| **Annoyance** | `data/annoyances/ew.tres` | How she reacts (below). Empty = it never annoys her |
+| **Annoy Seconds** | 1 | How long it has to stay on her. 0 = not this way (for a hazard that annoys her some other way, below) |
 | **Annoy Limit** | 1 | How many times it can annoy her each time it turns up |
-| **Annoy Points** | 1 | Points taken off the date score |
-| **Annoy Reaction** | anger | Her reaction (a name in `data/reactions.tres`). Empty = none |
-| **Annoy Line** | .....ew | What she says in the bubble. Empty = nothing |
-| **Annoy Pose** | backshot | A pose she switches to (a pose name from her girl file; Split Ends' **backshot** is her turned away). A girl without that pose stays as she is. Empty = no change |
-| **Annoy Pose Back** | on | She turns back to the pose she had when the date carries on. Off = she stays in Annoy Pose until a line changes it |
-| **Annoy Pause Seconds** | 1 | How long the date stops (at least as long as her line takes to type) |
 
-**Her box graying out:** click the top node of `scenes/Dates/Date/Date.tscn`
-(**Date**) → **When She's Annoyed** → **Annoyed Box Color** (grey now; white
-= no change) and how fast it fades.
+**How** she reacts is in the annoyance file. Click `data/annoyances/ew.tres`:
+
+| Setting | ew.tres | What it does |
+|---|---|---|
+| **Line** | .....ew | What she says in the bubble. Empty = nothing |
+| **Reaction** | anger | Her reaction (a name in `data/reactions.tres`). Empty = none |
+| **Pose** | backshot | A pose she switches to (a pose name from her girl file; Split Ends' **backshot** is her turned away). A girl without that pose stays as she is. Empty = no change |
+| **Pose Back** | on | She turns back to the pose she had when the date carries on. Off = she stays in that pose until a line changes it |
+| **Points** | 1 | Points taken off the date score |
+| **Pause Seconds** | 1 | How long the date stops (at least as long as her line takes to type) |
+| **Box Color** | gray | The colour her dialogue box grays out to. White = no change |
+| **Box Fade Seconds** | 0.15 | How quickly the box grays out and comes back |
+
+| I want to... | Do this |
+|---|---|
+| Change what she says, or the points, for the fly | Change `ew.tres` (every hazard using it changes too) |
+| A **different** reaction for one hazard | Click `ew.tres` → **Ctrl+D** to duplicate it in the FileSystem panel, rename it (e.g. `gross.tres`), change it, and drag it into that hazard's **Annoyance** |
+| A hazard that never annoys her | Clear its **Annoyance** |
+
+**A new hazard that annoys her some other way** (a phone that rings too
+long, a waiter who won't leave): give it an **Annoyance**, and have its
+script call `annoy_her()` when it should (see For programmers). **Annoy
+Limit** still counts.
 
 **Her bubble** is the date's **Bark** node (`scenes/Dates/Date/Date.tscn` →
 **Bark**, a `scenes/Dates/Bark/Bark.tscn`): move or resize it to change where
@@ -194,7 +213,7 @@ script, so nothing else is needed.
 | It never turns up | Check **Appears After Answers** against how many questions the dialogue has, and **Chance**. Or use the **Stage hazards now** button. |
 | Waving does nothing | Move faster than **Min Wave Speed** and come within **Shoo Radius**. Or raise **Shoo Strength**. |
 | It's too easy to shoo off | Raise **Air Drag** or lower **Shoo Strength**. |
-| It never annoys her | Its **Annoy Seconds** is 0, it never stays on her drawn pixels for that long without a break, or it already annoyed her **Annoy Limit** times this time. |
+| It never annoys her | Its **Annoyance** is empty, its **Annoy Seconds** is 0, it never stays on her drawn pixels for that long without a break, or it already annoyed her **Annoy Limit** times this time. |
 | It annoys her too easily | Raise **Annoy Seconds**. |
 | It's in slow motion when it shouldn't be (or isn't when it should) | The player's **Slow Stat** (Perception) has to be *above* **Slow Above**: 6 or more for 5. On the test bench it's the slider. |
 | It flies somewhere odd | Check the path in `Fly.tscn`. It flies in from the screen edge nearest the path's **first** point. |
@@ -210,9 +229,12 @@ script, so nothing else is needed.
   `stats` (the date's, stat id → value; set by `StageHazards`), `time_scale`
   (set on `appear()`: Slow Speed or 1; Leaves After Seconds is divided by it),
   `is_slowed()`. A hazard multiplies its own timing by `time_scale`.
-  Annoying Her: `her` (the date's `GirlPortrait`, set by `StageHazards`),
+  Annoying Her: `annoyance` (an `Annoyance`), `annoy_seconds`,
+  `annoy_limit`, `her` (the date's `GirlPortrait`, set by `StageHazards`),
   `track_annoying(point, real_delta)` (call each frame; uses
-  `GirlPortrait.is_point_on_her()`), signal `annoyed(hazard)`. A child named `DrawingGuide` is
+  `GirlPortrait.is_point_on_her()`, then `annoy_her()`), `annoy_her()` (any
+  trigger; needs an `annoyance`, counts `annoy_limit`, returns true if it
+  did), signal `annoyed(hazard)`. A child named `DrawingGuide` is
   shown only when the scene is played on its own.
 - `StageHazards` (`scenes/Hazards/stage_hazards.gd`): instances its
   `hazards`, counts `OptionList.option_resolved`, brings on due hazards
@@ -220,10 +242,15 @@ script, so nothing else is needed.
   `cleared_sound`, and emits `hazard_cleared(hazard)` and
   `hazard_annoyed(hazard)`. Its `stats` (from `DateScene.stats`) go to each
   hazard as it turns up; its `portrait` to each hazard's `her`.
-- `DateScene._on_hazard_annoyed(hazard)`: sets `DialogueBox` and `OptionList`
-  to `PROCESS_MODE_DISABLED`, shows the reaction and pose, `await
-  bark.say(line, girl)`, `scorer.add_bonus(-annoy_points)`, waits out
-  `annoy_pause_seconds`, then lets them run again.
+- `Annoyance` (`scripts/data/annoyance.gd`, files in `data/annoyances/`):
+  `line`, `reaction`, `pose`, `pose_back`, `points`, `pause_seconds`,
+  `box_color`, `box_fade_seconds`.
+- `DateScene.annoy(annoyance, why)`: sets `DialogueBox` and `OptionList` to
+  `PROCESS_MODE_DISABLED`, tweens the box's `modulate` to `box_color`, shows
+  the reaction and pose, `await bark.say(line, girl)`,
+  `scorer.add_bonus(-points)`, waits out `pause_seconds`, then lets them run
+  again. Overlapping annoyances hold the date until the last one ends.
+  `_on_hazard_annoyed(hazard)` calls it with the hazard's `annoyance`.
 - `Bark` (`scenes/Dates/Bark/bark.gd`): `say(text, girl)` (her
   `DialogueBoxStyle` box and font, her `GirlVoice` via a `VoicePlayer`). The date applies the
   reward (`DateScorer.add_bonus`, `ReactionIcon.show_reaction`, the pose).

@@ -1,6 +1,6 @@
 # 0066: A hazard sitting on her annoys her: the date stops, she says ".....ew", and loses points
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0067](0067-annoyances-are-files.md) (how she reacts is now an annoyance file, `data/annoyances/ew.tres`; the gray box moved there too)
 - **Date:** 2026-10-21
 - **Affects:** [0050](0050-stage-hazards.md), [0065](0065-stat-slow-motion.md), [stage-hazards.md](../guides/stage-hazards.md)
 
