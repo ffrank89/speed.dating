@@ -1,6 +1,6 @@
 # 0054: Your party is your phone's Contacts
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0068](0068-one-key-for-apps.md) (W flips through the apps; C is gone)
 - **Date:** 2026-10-20
 - **Affects:** [calendar.md](../design/calendar.md), [core-loop.md](../design/core-loop.md), [girls.md](../design/girls.md), [0037](0037-phone-app-overlays.md), [0052](0052-result-is-her-contact-card.md), [0053](0053-full-date-flow.md)
 

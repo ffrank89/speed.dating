@@ -4,7 +4,7 @@ extends Control
 ## next one; Start Dating! puts the phone down and the date with her begins (phone down:
 ## real life). Girls in your Contacts, girls whose first date failed, and girls with no
 ## First Date Dialogue yet aren't shown. When there's no one left, Start goes back to the
-## calendar.
+## calendar, and the days the Date choice took are given back (Give Days Back).
 ##
 ## The phone (screen, font, your room behind it) is data/phone_style.tres; the app's
 ## look, words and sounds are Style (data/dating_app_style.tres); move or resize the
@@ -17,6 +17,9 @@ extends Control
 @export var girls: Array[GirlData] = []
 ## The date that starts when you press Start Dating! (with the girl on screen).
 @export_file("*.tscn") var date_scene: String = "res://scenes/Dates/Date/Date.tscn"
+## No one left to date: going back to the calendar gives back the days the Date choice
+## took (2), so the player hasn't lost them. Off = they stay spent.
+@export var give_days_back: bool = true
 
 # The girls you can swipe on now.
 var _profiles: Array[GirlData] = []
@@ -175,6 +178,9 @@ func _on_start_pressed():
 	if _busy or AppLauncher.is_busy():
 		return
 	if _profiles.is_empty():
+		# No date, so the date's days come back.
+		if give_days_back and PlayerManager.calendar:
+			PlayerManager.calendar.give_back()
 		AppLauncher.open_scene("calendar", PlayerManager.CALENDAR, start_button.get_global_rect())
 		return
 	_busy = true

@@ -14,10 +14,10 @@ It's one shared animation (`AppLauncher`), used by:
 | The calendar (after the intro, and after a date) | `data/apps/calendar.tres` | Where the player clicked, or the bottom of the phone's screen |
 | The dating app (a **Date** on the calendar) | `data/apps/dating_app.tres` | The Date choice (the app named in `data/day_actions/date.tres`) |
 | A microgame (once the phone is up over the date) | the microgame's **App**, or `data/apps/microgame.tres` | The bottom of the phone's screen, and closes back into it |
-| Your **Contacts** and **Profile** (**C** / **P** on the calendar), only when **Switching Apps** is off (below) | `data/apps/contacts.tres`, `data/apps/profile.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
+| Your **Contacts** and **Profile** (**W** on the calendar), only when **Switching Apps** is off (below) | `data/apps/contacts.tres`, `data/apps/profile.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
 
 **Switching between open apps** (Contacts and Profile over the calendar,
-with C and P) looks like the iPhone's app switcher instead, and remembers
+with W) looks like the iPhone's app switcher instead, and remembers
 the order you used them in: the screen shrinks to a card, the row of open
 apps slides to the next app's card and it grows; back goes to the app you
 were on before
@@ -141,4 +141,4 @@ screen is built from these.
 - Wired in: `intro_questions.gd` (→ calendar), `calendar.gd` (a Date choice
   opens its action's **App Name** and **Scene**; **Real Life** → phone
   down), `screen.gd` (Start → `phone_down` into the date), `date_scene.gd`
-  (her card → calendar), `ContactsApp` (C), `MicrogameHost.play()`.
+  (her card → calendar), `ContactsApp` / `ProfileApp` (W), `MicrogameHost.play()`.

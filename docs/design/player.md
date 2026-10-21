@@ -37,7 +37,7 @@
 |---|---|
 | `PlayerData.stats: Dictionary[StringName, int]` | Stat id → value, clamped to `data/stats.tres` (1–9). Training is +1. |
 | `PlayerData.raise(stat: PlayerStat, amount: int)` | Only called through `RunState` so the signal fires. |
-| `PlayerPanel` (UI scene) | **Started as the Profile app** (P on the calendar, `scenes/Phone/Profile/ProfileApp.tscn`): every stat that's on, as bars (`StatBars`). Perks and items: TBD. The old `player_panel.gd` was removed. |
+| `PlayerPanel` (UI scene) | **Started as the Profile app** (W on the calendar, `scenes/Phone/Profile/ProfileApp.tscn`): every stat that's on, as bars (`StatBars`). Perks and items: TBD. The old `player_panel.gd` was removed. |
 | Intro / starting stats | Today `IntroQuestions` sets stats (debug sliders, starting at each stat's Starting Value, 5). TBD: keep the questionnaire, or random start, or pick a starting "archetype"? |
 | Stat caps and starting values | TBD. Needs tuning with the date difficulty curve. |
 

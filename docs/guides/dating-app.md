@@ -25,7 +25,9 @@ shows one girl's profile at a time:
 - Girls in your Contacts, girls whose first date failed, and girls with no
   **First Date Dialogue** yet (Smokey, for now) aren't shown. When there's
   no one left, it says **No one left to swipe on.** and Start
-  becomes **Back to the calendar**.
+  becomes **Back to the calendar**. Going back that way **gives back the
+  2 days** the Date choice took: you're on the same day, with the same
+  choices.
 
 It opens from the calendar's **Date** choice. Press **F6** on
 `scenes/Tinder/Screen.tscn` to try it on its own.
@@ -50,6 +52,7 @@ Click the top node of `scenes/Tinder/Screen.tscn` (**DatingApp**):
 |---|---|
 | **Girls** | Everyone on the app, in this order. Drag girl files from `data/girls/` onto it. Now: Split Ends, Smokey |
 | **Date Scene** | The date that starts when you press Start Dating! (`scenes/Dates/Date/Date.tscn`) |
+| **Give Days Back** | On: with no one left, **Back to the calendar** gives back the days the Date choice took. Off: they stay spent |
 
 **A new girl:** make her girl file ([girls.md](../design/girls.md), or
 duplicate `data/girls/split_ends.tres`), fill in her dating-profile

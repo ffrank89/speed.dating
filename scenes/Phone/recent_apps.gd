@@ -1,14 +1,14 @@
 class_name RecentApps
 extends RefCounted
 ## The apps open on one screen, most recently used first, like the iPhone's app switcher:
-## the screen underneath (e.g. the calendar) and the apps opened over it with a key
-## (Contacts, Profile).
+## the screen underneath (e.g. the calendar) and the apps opened over it (Contacts,
+## Profile).
 ##
-## Switching to an app (its key) makes the app you were on the most recent, and the
-## switcher's cards are in this order: newest on the right, older ones to its left. Going
-## back (Escape, the home bar, the key again) steps to the app before without changing
-## the order, like swiping back along an iPhone's home bar: calendar → C → P, then back
-## goes to Contacts, then to the calendar.
+## Switching to an app (W) makes the app you were on the most recent, and the switcher's
+## cards are in this order: newest on the right, older ones to its left. Going back
+## (Escape, the home bar) steps to the app before without changing the order, like
+## swiping back along an iPhone's home bar: calendar → W → W (Contacts, then Profile),
+## then back goes to Contacts, then to the calendar.
 ##
 ## Each scene has its own (RecentApps.of(node)); it goes when the scene does.
 

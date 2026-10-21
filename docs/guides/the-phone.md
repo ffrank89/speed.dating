@@ -102,37 +102,42 @@ The phone is shared; what's on each app is its own file:
 
 ## Your apps
 
-On the calendar, two more apps are a key away:
+On the calendar, **W flips through your apps**, one press at a time:
 
-| App | Key | What's in it |
+| Press W on | You land on | What's in it |
 |---|---|---|
-| **Contacts** | **C** | Your party: [contacts.md](contacts.md) |
-| **Profile** | **P** | Your stats (every one that's on: [stats.md](stats.md)), each 1–9 with a bar |
+| The calendar | **Contacts** | Your party: [contacts.md](contacts.md) |
+| Contacts | **Profile** | Your stats (every one that's on: [stats.md](stats.md)), each 1–9 with a bar |
+| Profile | The calendar | |
 
-The phone switches to them **like moving between open apps on an iPhone**:
-the app you're on shrinks to a card, the row of open apps slides to the
-app's card (its icon and name above it), and it grows to fill the phone.
-Press the other key while one is open to switch straight to the other. A
-**debug note** in the top left of the calendar screen lists the keys (it
-doesn't show in a finished build).
+The phone switches **like moving between open apps on an iPhone**: the
+app you're on shrinks to a card, the row of open apps slides to the next
+app's card (its icon and name above it), and it grows to fill the phone. A
+**debug note** in the top left of the calendar screen says so (it doesn't
+show in a finished build).
+
+**W's order** is the calendar, then the apps in the order they sit in the
+calendar scene (top to bottom in the Scene panel: **ContactsApp**, then
+**ProfileApp**). Drag one above the other to change it. A new app dropped
+into the scene joins the round.
 
 **It remembers the order you used them in**, like an iPhone:
 
 - The cards are your open apps, the most recent on the right and older
   ones to its left, each a little under the newer one. A new app comes in
   on the right.
-- Switching with a key makes the app you were on the most recent.
-- **Back** (the key again, **Escape** or the home bar) goes to the app you
-  were on before, like swiping back along an iPhone's home bar: the app
-  slides off to the right and the one before comes in from the left.
+- Switching with W makes the app you were on the most recent.
+- **Back** (**Escape** or the home bar) goes to the app you were on
+  before, like swiping back along an iPhone's home bar: the app slides off
+  to the right and the one before comes in from the left.
 
 | You press | You land on | Recent apps, newest first |
 |---|---|---|
-| C (on the calendar) | Contacts | Contacts, Calendar |
-| P | Profile | Profile, Contacts, Calendar |
+| W (on the calendar) | Contacts | Contacts, Calendar |
+| W | Profile | Profile, Contacts, Calendar |
 | Escape | Contacts | (no change) |
 | Escape | the calendar | (no change) |
-| P | Profile (its card comes in from the left: it's older) | Profile, Calendar, Contacts |
+| W | Contacts (its card comes in from the left: it's older) | Contacts, Calendar, Profile |
 
 Each screen keeps its own list (the calendar's starts again after a
 date).
@@ -150,9 +155,11 @@ app's file in `data/apps/` (`calendar.tres`, `contacts.tres`,
 calendar scene to change its **Text**. Drop it into any scene for another
 note; **Only While Testing** (on) hides it in a finished build.
 
-**The keys:** **Project Settings → Input Map** → `open_contacts` (C) and
-`open_profile` (P). Any scene with `ContactsApp.tscn` / `ProfileApp.tscn`
-in it gets them; for now that's the calendar.
+**The key:** **Project Settings → Input Map** → `switch_apps` (W). Any
+scene with `ContactsApp.tscn` / `ProfileApp.tscn` in it gets it; for now
+that's the calendar. Each app's top node has **Switch Action** (empty = W
+skips that app) and **Open Action** (optional: a key of its own for just
+that app, empty now).
 
 **Profile** is a light first version (`scenes/Phone/Profile/ProfileApp.tscn`,
 press **F6** to try it). Click its top node to change its words (**Title
@@ -163,8 +170,7 @@ move it ([stats.md](stats.md) → Stat Bars). The list scrolls when it's taller
 than the phone. A full bar is the highest a stat goes (9, from
 `data/stats.tres`); the bars use the phone's **Accent Color**. Its icon and
 launch screen are
-`data/apps/profile.tres` (the Godot logo for now); its key is `open_profile`
-in **Project Settings → Input Map**.
+`data/apps/profile.tres` (the Godot logo for now).
 
 ## A new phone screen
 
@@ -201,10 +207,15 @@ To bring it up over real life, a programmer calls `await phone.raise()`
   `home_pressed`, `raised`, `lowered`. Nodes: `room`, `dim`, `phone`,
   `body`, `screen` (put an app's nodes here), `home_bar`, `frame`.
 - `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`): the base of
-  `ContactsApp` and `ProfileApp`: `open_action`, `app_name`, `open()`,
-  `close()`; override `_show_now()`, `_hide_now()`, `_before_close()`,
+  `ContactsApp` and `ProfileApp`: `switch_action` (`switch_apps`, W),
+  `open_action` (optional, empty), `app_name`, `open()`, `close()`;
+  override `_show_now()`, `_hide_now()`, `_before_close()`,
   `_escape_closes()`. Keys are read in `_input` (a tooltip would swallow
-  Escape otherwise). `AppLauncher.capture_rect(rect)` takes the picture of
+  Escape otherwise). Every app reads W; `_next_app(action)` works out the
+  round (null = the screen underneath, then the apps with that
+  `switch_action` in tree order) and only the next app (or the one on
+  screen, going back to the screen underneath with
+  `_switch_to_underneath()`) acts. `AppLauncher.capture_rect(rect)` takes the picture of
   the app you're leaving.
 - `RecentApps` (`scenes/Phone/recent_apps.gd`): the open apps on a screen,
   most recently used first (`RecentApps.of(node)`, kept on the scene):

@@ -11,7 +11,6 @@
 [node name="ContactsApp" type="CanvasLayer"]
 layer = 19
 script = ExtResource("1_app")
-open_action = &"open_contacts"
 app_name = "contacts"
 style = ExtResource("2_style")
 rules = ExtResource("3_rules")

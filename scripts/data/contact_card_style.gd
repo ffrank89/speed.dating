@@ -3,7 +3,7 @@ class_name ContactCardStyle
 extends Resource
 ## How the phone's Contacts look, type and sound: the end-of-date card (the iPhone "New
 ## Contact" screen where she types in, or doesn't, her name, number and address), and
-## your Contacts, where your party is saved (press C on the calendar: the list, and each
+## your Contacts, where your party is saved (press W on the calendar: the list, and each
 ## girl's saved card).
 ## The boxes, her font and text colour come from HER dialogue style; the phone, its
 ## screen colour and the phone's own font (Cancel, New Contact, the grey hints) are the

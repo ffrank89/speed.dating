@@ -25,6 +25,9 @@ var today := 1
 var _rng := RandomNumberGenerator.new()
 # Chapter number -> its days, planned when first needed (this chapter, or foresight).
 var _plans := {}
+# The last spend(), for give_back(): the action, and the day it started on.
+var _last_spent: DayAction
+var _last_spent_from := 0
 
 
 func _init(calendar_rules: CalendarRules) -> void:
@@ -65,13 +68,32 @@ func spend(action: DayAction) -> void:
 		if index < chapter_days.size():
 			chapter_days[index].spent_on = action
 			chapter_days[index].continued = i > 0
+	_last_spent = action
+	_last_spent_from = today
 	today += action.days
+
+
+## Gives back the days the last spend() used up, as if it never happened: e.g. the dating
+## app had no one left to date. Only the days (stats it changed stay changed), only
+## once, and only while nothing else has happened since.
+func give_back() -> void:
+	if not _last_spent or today != _last_spent_from + _last_spent.days:
+		return
+	var chapter_days := days()
+	for i in _last_spent.days:
+		var index := _last_spent_from - 1 + i
+		if index < chapter_days.size():
+			chapter_days[index].spent_on = null
+			chapter_days[index].continued = false
+	today = _last_spent_from
+	_last_spent = null
 
 
 ## Moves on to the next chapter's first day.
 func next_chapter() -> void:
 	chapter += 1
 	today = 1
+	_last_spent = null
 
 
 ## The calendar-day number of a day in this chapter.

@@ -128,8 +128,8 @@ offset_top = 40.0
 offset_right = 760.0
 offset_bottom = 230.0
 text = "DEBUG
-Press P to see your Profile
-Press C to see your Contacts"
+Press W to flip through your apps:
+Contacts, Profile, back to the calendar"
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true

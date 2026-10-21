@@ -1,6 +1,6 @@
 # 0060: Contacts and Profile by key, switching like the iPhone's app switcher
 
-- **Status:** Accepted, amended by [0062](0062-recent-apps-order.md) (the switcher keeps the order of recent apps; back goes to the app before)
+- **Status:** Accepted, amended by [0062](0062-recent-apps-order.md) (the switcher keeps the order of recent apps; back goes to the app before) and [0068](0068-one-key-for-apps.md) (one key, W, flips through the apps instead of C and P)
 - **Date:** 2026-10-21
 - **Affects:** [0054](0054-party-is-your-contacts.md), [0059](0059-three-day-calendar.md)
 
