@@ -103,7 +103,8 @@ offer the same days.
 One file each. An action is **made of parts, all optional**, so a new one
 needs no code. When it's picked, in this order:
 
-1. **Attributes:** it changes the player's attributes.
+1. **Attributes** and **Skills:** it changes the player's attributes (and
+   skills: [skills.md](skills.md)).
 2. **Message:** a line from `dialogue/calendar.dialogue` plays.
 3. Its **days** are used up, or with **Ends Chapter** the next chapter starts.
 4. **Opens:** it opens a screen like an app.
@@ -121,6 +122,7 @@ The date, the trainings, rest and the boss are just different mixes:
 |---|---|
 | **Title** | Its name on the calendar ("Date", "Train Culture") |
 | **Description** | The line under it on today's choices. Empty = what it changes ("Culture +1") |
+| **Skills** | Skills it changes: **Add Key/Value Pair**, drag a skill file from `data/skills/` on the left, the amount on the right (e.g. Speech 1). Skills that are off are left alone ([skills.md](skills.md)) |
 | **Icon** | Its picture (on its day, and on today's choice) |
 | **Days** | How many days it uses up |
 | **Weight** | How often it's offered compared to the others (the date is 3, the rest are 1). 0 = never |

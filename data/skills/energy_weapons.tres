@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PlayerSkill" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/player_skill.gd" id="1_skill"]
+[ext_resource type="Texture2D" uid="uid://bkmrtqmpbs54s" path="res://assets/placeholders/godot_logo.svg" id="2_icon"]
+
+[resource]
+script = ExtResource("1_skill")
+id = &"energy_weapons"
+display_name = "Energy Weapons"
+description = "Lasers, plasma and other sci-fi guns."
+icon = ExtResource("2_icon")

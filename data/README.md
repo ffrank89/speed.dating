@@ -10,6 +10,8 @@ Hover over any setting to see what it does.
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
 | `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
 | `attribute_rules.tres` | The scale of the player's four attributes: **1 to 9** (Lowest, Highest), and the value they start at when a screen is played on its own (Default Value). The intro, training, Profile, the date test bench and the `#check` numbers in dialogue all use it. |
+| `skills.tres` | **The player's skills** (Fallout: New Vegas's set): which ones the game has, their order, and **Skills On** (all of them on or off). |
+| `skills/` | One file per skill: its id (for dialogue checks), name, **Enabled**, description, icon and starting value. |
 | `date_rules.tres` | How a date runs and scores: how many exchanges (and how many are microgames), the opener and closer names, odds limits, how much her likes matter, what a miss costs, how hard microgames get, and what her contact card shows. |
 | `phone_style.tres` | **The player's phone**, shared by every phone screen (intro, dating app, calendar, Contacts, her card, microgames): its size and place, screen colour, wallpaper, rim, phone art, status bar, home bar, font, the room behind it, and how it comes up and goes down. |
 | `dating_app_style.tres` | The dating app: its words, her profile card (in her dialogue style, or plain), the Pass / Start buttons, the swipe, and sounds. |
@@ -50,5 +52,6 @@ for the player's attributes.
 | `stage-hazards.md` | Things that turn up during a date (the fly) |
 | `making-a-microgame.md` | Making a new microgame, step by step |
 | `cursor.md` | The player's cursor |
+| `skills.md` | The player's skills: turning them on and off, where they plug in |
 | `music.md` | The music on each screen |
 | `replacing-placeholders.md` | Every placeholder picture (the Godot logo), sound and music, and how to swap in the real ones |

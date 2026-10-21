@@ -27,7 +27,7 @@ class Result:
 
 var rules: DateRules
 var girl: GirlData
-## Attr.Id -> the player's attribute value (1-9).
+## The player's stats: Attr.Id -> attribute value, skill id -> skill value (1-9).
 var attributes: Dictionary = {}
 var score := 0.0
 var rng := RandomNumberGenerator.new()
@@ -44,7 +44,7 @@ func _init(p_rules: DateRules, p_girl: GirlData, p_attributes: Dictionary) -> vo
 func chance_of(option: DateOption) -> int:
 	if not option.has_check() or option.requirement <= 0:
 		return 100
-	var have: int = attributes.get(option.attribute, 0)
+	var have: int = attributes.get(option.check_key(), 0)
 	if have >= option.requirement:
 		return 100
 	var percent := int(floor(100.0 * have / option.requirement))
@@ -53,7 +53,8 @@ func chance_of(option: DateOption) -> int:
 
 ## What the option earns if it lands, after her likes.
 func points_if_hit(option: DateOption) -> float:
-	var like := girl.likes(option.attribute) if option.has_check() else 0.0
+	# She has likes for the four attributes; skills don't have any (yet).
+	var like := girl.likes(option.attribute) if option.attribute != -1 else 0.0
 	return option.value * (1.0 + like * rules.likes_weight)
 
 
@@ -61,7 +62,7 @@ func points_if_hit(option: DateOption) -> float:
 func difficulty_of(option: DateOption) -> float:
 	if not option.has_check() or option.requirement <= 0:
 		return rules.unchecked_difficulty
-	var have: int = attributes.get(option.attribute, 0)
+	var have: int = attributes.get(option.check_key(), 0)
 	# How far below the requirement, from 0 (meets it) to 1 (the lowest attribute).
 	var lowest := Attr.rules().lowest
 	var gap := float(option.requirement - lowest)

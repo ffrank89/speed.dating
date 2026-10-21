@@ -170,10 +170,13 @@ func _on_picked(choice: DayChoice) -> void:
 	var action := choice.action
 	# The action's parts, in order (each one only if the action has it).
 	var changes := action.attribute_changes()
-	if not changes.is_empty():
+	var skill_changes := action.skill_changes()
+	if not changes.is_empty() or not skill_changes.is_empty():
 		var player := PlayerManager.ensure_player()
 		for attr in changes:
-			player.increase_skill(Attr.display_name(attr), changes[attr])
+			player.raise_attribute(Attr.display_name(attr), changes[attr])
+		for skill: PlayerSkill in skill_changes:
+			player.raise_skill(skill, skill_changes[skill])
 	await _say(action)
 	if action.ends_chapter:
 		_calendar.next_chapter()
@@ -198,13 +201,12 @@ func _on_picked(choice: DayChoice) -> void:
 func _say(action: DayAction) -> void:
 	if not messages or action.dialogue_title.is_empty() or not messages.get_titles().has(action.dialogue_title):
 		return
-	var changes := action.attribute_changes()
-	var first: int = changes.keys()[0] if not changes.is_empty() else -1
+	var changes := action.change_list()
 	var details := {
 		"action": action.title,
 		"changes": action.changes_text(),
-		"attribute": Attr.display_name(first) if first >= 0 else "",
-		"amount": changes[first] if first >= 0 else 0,
+		"attribute": changes[0].name if not changes.is_empty() else "",
+		"amount": changes[0].amount if not changes.is_empty() else 0,
 	}
 	# The days coming up make way (keeping their room, so today's card doesn't move).
 	for card: DayCard in cards.get_children():

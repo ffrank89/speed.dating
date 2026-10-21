@@ -67,8 +67,8 @@ func select_girl(girl: GirlData) -> void:
 func ensure_player() -> PlayerCharacter:
 	if not player:
 		player = PlayerCharacter.new("Me!")
-		for skill in player.skills:
-			player.skills[skill] = Attr.rules().default_value
+		for attribute in player.attributes:
+			player.attributes[attribute] = Attr.rules().default_value
 	return player
 
 

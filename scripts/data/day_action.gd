@@ -5,7 +5,8 @@ extends Resource
 ##
 ## An action is made of parts, all optional, so a new one needs no code. When it's
 ## picked, in this order:
-##   1. Attributes: it changes the player's attributes (e.g. Culture +1).
+##   1. Attributes and Skills: it changes the player's attributes (e.g. Culture +1) or
+##      skills (e.g. Speech +1).
 ##   2. Message: a line from dialogue/calendar.dialogue plays in the calendar's box.
 ##   3. Its days are used up, or, with Ends Chapter, the next chapter starts.
 ##   4. Opens: it opens a screen like an app (e.g. the dating app).
@@ -34,6 +35,12 @@ extends Resource
 @export_range(-9, 9, 1, "or_greater", "or_less") var intellect: int = 0
 @export_range(-9, 9, 1, "or_greater", "or_less") var seduction: int = 0
 @export_range(-9, 9, 1, "or_greater", "or_less") var heart: int = 0
+
+@export_group("Skills")
+## How much it changes the player's skills: Add Key/Value Pair, drag a skill file from
+## data/skills/ on the left and type the amount on the right (e.g. Speech 1). Skills that
+## are off (data/skills.tres) are left alone.
+@export var skills: Dictionary[PlayerSkill, int] = {}
 
 @export_group("Message")
 ## The title in dialogue/calendar.dialogue that plays when you pick it (e.g. "train").
@@ -72,10 +79,32 @@ func attribute_changes() -> Dictionary:
 	return changes
 
 
-## What it changes, in words: "Culture +1, Heart -1". Empty = nothing.
-func changes_text() -> String:
-	var parts: PackedStringArray = []
+## What it changes in the skills that are on, as {PlayerSkill: amount}, leaving out the
+## zeros.
+func skill_changes() -> Dictionary:
+	var changes := {}
+	var list := SkillList.get_default()
+	for skill in skills:
+		if list.is_active(skill) and skills[skill] != 0:
+			changes[skill] = skills[skill]
+	return changes
+
+
+## Everything it changes, attributes first: [{"name": "Culture", "amount": 1}, ...].
+func change_list() -> Array[Dictionary]:
+	var list: Array[Dictionary] = []
 	var changes := attribute_changes()
 	for attr in changes:
-		parts.append("%s %+d" % [Attr.display_name(attr), changes[attr]])
+		list.append({"name": Attr.display_name(attr), "amount": changes[attr]})
+	var skill_amounts := skill_changes()
+	for skill: PlayerSkill in skill_amounts:
+		list.append({"name": skill.display_name, "amount": skill_amounts[skill]})
+	return list
+
+
+## What it changes, in words: "Culture +1, Speech +1". Empty = nothing.
+func changes_text() -> String:
+	var parts: PackedStringArray = []
+	for change in change_list():
+		parts.append("%s %+d" % [change.name, change.amount])
 	return ", ".join(parts)

@@ -244,7 +244,7 @@ func _separate(delta: float) -> void:
 
 # A small copy of the bubble's attribute icon that pops up behind it and fades away.
 func _drop_trail_icon(bubble: OptionBubble) -> void:
-	var texture := _style.icon_for(bubble.option.attribute)
+	var texture := bubble.option.check_icon(_style)
 	if not texture:
 		texture = _style.trail_fallback_icon
 	if not texture or _trail_layer.get_child_count() >= MAX_TRAIL_ICONS:

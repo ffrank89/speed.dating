@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/Stats/stat_bars.gd" id="1_bars"]
+[ext_resource type="Resource" path="res://data/phone_style.tres" id="2_phone"]
+[ext_resource type="Resource" path="res://data/option_styles/default.tres" id="3_icons"]
+
+[node name="StatBars" type="VBoxContainer"]
+offset_right = 852.0
+offset_bottom = 600.0
+mouse_filter = 2
+theme_override_constants/separation = 50
+script = ExtResource("1_bars")
+phone_style = ExtResource("2_phone")
+icons_from = ExtResource("3_icons")

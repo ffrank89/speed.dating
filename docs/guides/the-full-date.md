@@ -165,8 +165,9 @@ once she has a **First Date Dialogue**: Smokey has a girl file
   `AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)` when **Go To
   Calendar** is on.
 - The girl comes from `PlayerManager.current_girl` (set by the dating app); the
-  player's attributes from `PlayerManager.player.skills` (1–9; the Default Value, 5, each without
-  a player).
+  player's attributes and skills from `PlayerManager.player` (`attributes`,
+  `skills`; 1–9; without a player, the Default Value, 5, and each skill's
+  Starting Value), in `DateScene._player_stats()`.
 - `FirstDateTest` sets `girl`, `dialogue`, `only_title` and `attributes` on
   its Date (Auto Start and Go To Calendar off), then calls `begin()`.
 - Date music: the scene's **MusicCue** plays the `date` track

@@ -41,7 +41,9 @@ signal date_finished(result: DateResult)
 ## Go back to the calendar after her contact card (off in the test bench).
 @export var go_to_calendar: bool = true
 
-## The player's attributes (Attr.Id → 1-9). Set before begin(); empty = the player's own.
+## The player's attributes (Attr.Id → 1-9) and skills (skill id → 1-9). Set before
+## begin() to use instead of the player's own (the test bench's sliders); anything not
+## set is the player's own.
 var attributes: Dictionary = {}
 var scorer: DateScorer
 ## The pose names she has, in her girl file's order.
@@ -91,8 +93,9 @@ func begin() -> void:
 	background.texture = girl.date_background
 	pose_names.assign(girl.poses.keys())
 	show_pose(girl.default_pose)
-	if attributes.is_empty():
-		attributes = _player_attributes()
+	# The player's own attributes and skills, with any set from outside (the test bench's
+	# sliders) on top.
+	attributes = _player_stats().merged(attributes, true)
 	scorer = DateScorer.new(rules, girl, attributes)
 	heart_meter.setup(girl)
 
@@ -227,16 +230,20 @@ func _picked_girl() -> GirlData:
 	return PlayerManager.current_girl if PlayerManager.current_girl else fallback_girl
 
 
-# The player's attributes from their character, or the Default Value each
-# (data/attribute_rules.tres) if there isn't one yet.
-func _player_attributes() -> Dictionary:
+# The player's attributes (Attr.Id → value) and skills (skill id → value) from their
+# character, or the Default Value each (data/attribute_rules.tres) and each skill's
+# Starting Value if there isn't one yet.
+func _player_stats() -> Dictionary:
 	var values := {}
 	var player: PlayerCharacter = PlayerManager.player
 	var fallback := Attr.rules().default_value
 	for attr in Attr.Id.values():
 		values[attr] = fallback
 		if player:
-			values[attr] = int(player.skills.get(Attr.display_name(attr), fallback))
+			values[attr] = int(player.attributes.get(Attr.display_name(attr), fallback))
+	for skill in SkillList.get_default().skills:
+		if skill:
+			values[skill.id] = player.get_skill(skill) if player else skill.starting_value
 	return values
 
 

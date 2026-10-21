@@ -48,7 +48,7 @@ Split Ends: My dad's boat has a name. Guess it.
 
 | Tag | Meaning |
 |---|---|
-| `#check=culture:4` | This option tests **Culture** and needs **4**. Attributes go from **1 to 9** (`data/attribute_rules.tres`), so a check is 1–9: 2–3 is easy, 4–6 is middling, 7–9 is hard. Attributes: `culture`, `intellect`, `seduction`, `heart`. Leave `#check` out for an option with no roll. |
+| `#check=culture:4` | This option tests **Culture** and needs **4**. Attributes go from **1 to 9** (`data/attribute_rules.tres`), so a check is 1–9: 2–3 is easy, 4–6 is middling, 7–9 is hard. Attributes: `culture`, `intellect`, `seduction`, `heart`. A **skill** that's on works too, by its id: `#check=speech:5` ([skills.md](skills.md)). Leave `#check` out for an option with no roll. |
 | `#value=2` | What it's worth if it lands, from **−3** (rude) to **+3** (perfect). Leave it out and it's worth 0. |
 | `if hit` / `else` | Her reply when the option lands / misses. Indent with **Tab**. Options without a check always "hit". |
 | `if missed` | The same as `else`, if it reads better. |

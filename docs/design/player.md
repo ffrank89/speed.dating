@@ -9,6 +9,10 @@
   `data/attribute_rules.tres`).
   They decide which dialogue options are safe vs risky, how hard microgames
   are, which girls can appear, and part of player–girl synergy.
+- **Skills**: the set from Fallout: New Vegas (Barter, Speech, Sneak…),
+  1–9 each, each one switchable on or off. What they do isn't decided yet;
+  they plug into Profile, the intro, calendar actions and dialogue checks
+  ([skills.md](../guides/skills.md)).
 - **Perks** are the player's build-arounds (see [perks.md](perks.md)).
 - **Inventory** holds items shown to a girl for a reaction. Flavor only in
   the first build.
@@ -39,7 +43,8 @@
 | Attribute caps and starting values | TBD. Needs tuning with the date difficulty curve. |
 
 **Today:** `PlayerCharacter` (`scripts/characters/player_character.gd`, a
-small `RefCounted`: `name`, `skills`, `get_skill()`, `increase_skill()`),
+small `RefCounted`: `name`, `attributes`, `skills`, `get_attribute()`,
+`raise_attribute()`, `get_skill()`, `raise_skill()`),
 held by `PlayerManager.player`. Later it becomes `PlayerData` on
 `RunState`.
 
