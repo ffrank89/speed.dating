@@ -35,7 +35,7 @@ it does.
 |---|---|
 | `data/` | The game's data: girls, looks (styles), rules, music. No code. |
 | `dialogue/` | What everyone says (`.dialogue` files, Dialogue Manager format) |
-| `scenes/` | The screens and their parts: `Intro`, `Calendar`, `Tinder` (the dating app), `Dates`, `Dialogue`, `Microgames`, `Hazards`, `Results` (her contact card), `Phone` (the phone, Contacts, Profile, how apps open), `Music`, `Cursor`, `Debug` |
+| `scenes/` | The screens and their parts: `Intro`, `Calendar`, `Tinder` (the dating app), `Dates`, `Dialogue`, `Microgames`, `Hazards`, `Results` (her contact card), `Phone` (the phone, Contacts, Profile, how apps open), `Stats` (Stat Bars, the stats hub), `Music`, `Cursor`, `Debug` |
 | `scripts/` | Shared code: the data types (`scripts/data/`), date scoring, the run's calendar, the player, `PlayerManager` (the run's state) |
 | `assets/` | Pictures, fonts and sounds |
 | `addons/` | Dialogue Manager |

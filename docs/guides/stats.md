@@ -63,13 +63,45 @@ and a dialogue check on it warns in Godot's Output panel and has no roll.
 |---|---|
 | **Profile** (W on the calendar, twice) | Lists every stat that's on, with a bar. It scrolls. |
 | **The intro** | A slider for each stat that's on. It scrolls. |
-| **Training** (calendar actions) | `data/day_actions/<action>.tres` → **Stats** → **Add Key/Value Pair**: drag a stat file on the left, type the amount on the right (Train Culture is Culture 1). |
+| **Training** (calendar actions) | `data/day_actions/<action>.tres` → **Stats** → **Add Key/Value Pair**: drag a stat file on the left, type the amount on the right (Train Culture is Culture 1). The stat's picture flies into the stats hub (below). |
+| **The stats hub** (beside the phone on the calendar) | Every stat that's on: its picture and number (below). |
 | **Dialogue checks** | `[#check=strength:5, #value=2]`. Odds are your stat ÷ 5. The bubble shows the stat's icon and name. |
 | **Her Likes** | Her girl file → **Dating → Likes** → **Add Key/Value Pair**: a stat file, and 0–1 for how much she cares. An option checking a stat she likes is worth more. Stats she doesn't list are 0. |
 | **The date test bench** | A slider for each stat that's on. |
 | **Microgames** | An option's check sets its microgame's difficulty: `[#check=seduction:5, #microgame=light_cigarette]` is easiest at Seduction 5 or more, hardest at 1. Any stat works. |
 | **Stage hazards** | Each hazard's **Slow Motion**: a stat that slows it down. The fly moves in slow motion with Perception above 5 ([stage-hazards.md](stage-hazards.md)). |
 | **Any screen** | Drag `scenes/Stats/StatBars.tscn` into it (below). |
+
+## Stats hub: beside the phone
+
+On the calendar, the panel to the right of the phone is the **stats hub**
+(`scenes/Stats/StatHub.tscn`): every stat that's on, each its picture and
+its number. **When you train**, the stat's picture flies from the choice
+you picked to the hub, the hub's picture of that stat **swallows** it (it
+gulps, squashes and settles), and the number next to it **goes up** with a
+green flash. A stat that goes down just changes its number, with a red
+flash. Rest the mouse on a stat for its name.
+
+Click **StatHub** in `scenes/Calendar/calendar.tscn`:
+
+| Setting | Now | What it does |
+|---|---|---|
+| **Heading Text** | Stats | Above the stats. Empty = none |
+| **Only These** | (empty) | Only these stats, in this order. Empty = every stat that's on |
+| **Player Style** / **Phone Style** | `data/player_style.tres` / `data/phone_style.tres` | The panel's colour and corners and the text colours (the player's style); the font (the player's style's, or the phone's) |
+| **Layout** | 2 columns, 90 px pictures, size 60 numbers | **Columns**, **Icon Size**, **Font Size**, **Heading Size**, **Gap**, **Padding** |
+| **Boost Animation → Fly Seconds** | 0.7 | How long the picture takes to fly from the phone to the hub |
+| **Arc Height** | 260 | How high its path arcs up. 0 = straight |
+| **Swallow Seconds** / **Swallow Scale** | 0.45 / 1.4 | How long the gulp takes, and how big the hub's picture gets |
+| **Number Pop Scale** | 1.6 | How big the number pops as it changes |
+| **Boost Color** / **Drop Color** | green / red | The number's flash going up / down |
+| **Between Seconds** | 0.25 | The wait between stats when one choice raises several |
+| **Swallow Sound** | Kenney `drop_004` (stand-in) | Played at the gulp |
+
+**Move it:** drag StatHub in the calendar scene (it's anchored to the right
+edge, halfway down). **Put it on another screen:** drag
+`scenes/Stats/StatHub.tscn` into that scene. It fills itself in. Only the
+calendar plays the training animation for now.
 
 ## Stat Bars: the list you can move
 
@@ -106,3 +138,8 @@ scene.
   (`DateScene._player_stats()`).
 - `StatBars` (`scenes/Stats/stat_bars.gd`): `heading_text`, `only_these`,
   `refresh()`.
+- `StatHub` (`scenes/Stats/stat_hub.gd`): `refresh()`, `show_changes(changes,
+  from_rect)` (call after the stats have changed; awaitable). Raised stats
+  fly in (`_fly_in`: a `top_level` TextureRect along a quadratic Bézier,
+  then `_swallow`); a number shows the player's value only once its picture
+  lands, so the hub never refreshes itself mid-animation.

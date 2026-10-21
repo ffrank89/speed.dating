@@ -38,7 +38,9 @@ like the blinds in Balatro: **three days at a time**, stacked.
     ([dating-app.md](dating-app.md)).
   - **Train** (1 day): raises a stat by 1 (stats go from 1 to
     9), with a line in the calendar's box at the bottom of the phone ("You
-    spend the day on your Culture. Culture +1.").
+    spend the day on your Culture. Culture +1."). The stat's picture flies
+    from the choice into the **stats hub** beside the phone, which swallows
+    it, and the number goes up ([stats.md](stats.md) → Stats hub).
   - **Rest** (1 day): a line, and the day passes. Perks, items and events
     come later.
   - **Boss** (the last day): for now a line, then the next chapter starts.
@@ -237,6 +239,9 @@ yet).
   `spend()` or `next_chapter()`, then `AppLauncher.open_scene(app_name,
   scene)`, or `AppLauncher.phone_down(scene)` with `real_life`).
   `CalendarRules`, `CalendarStyle` (`words(text, blanks)`, `weekday(n)`).
+- `CalendarScene.stat_hub` (a `StatHub`, the scene's **StatHub**):
+  `_on_picked` raises the stats, then calls `stat_hub.show_changes(changes,
+  choice.icon.get_global_rect())` without waiting, so it plays with the line.
 - `CalendarScene` (`scenes/Calendar/calendar.gd`): `_build_cards()`
   instances `card_scene` (`DayCard.setup(style, player_style, number, day,
   today, boss_day, seen, font)`) for today and the next **Upcoming Days**,

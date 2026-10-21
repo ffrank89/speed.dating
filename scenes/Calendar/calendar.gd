@@ -13,6 +13,8 @@ extends Control
 ## "Month" swaps the cards for the whole month, small; days past this chapter show an X
 ## (data/calendar_rules.tres → Foresight Days lets you see further).
 ## W flips through your other apps, Contacts and Profile (a debug note says so).
+## Beside the phone, the stats hub (scenes/Stats/StatHub.tscn) shows your stats; training
+## flies the stat's picture from the choice into it.
 ##
 ## Every part is swappable: the layout is this scene (PhoneScreen → Phone → Body →
 ## Screen), a day is Card Scene (DayCard.tscn), a choice is Choice Scene
@@ -36,6 +38,9 @@ extends Control
 @export var choice_scene: PackedScene = preload("res://scenes/Calendar/DayChoice.tscn")
 ## One day in the whole month. Make your own design from DayBox.tscn and drop it here.
 @export var month_day_scene: PackedScene = preload("res://scenes/Calendar/DayBox.tscn")
+## The stats hub beside the phone (StatHub in this scene): training shows the stat going
+## up there. Empty = no hub animation.
+@export var stat_hub: StatHub
 
 var _calendar: RunCalendar
 var _expanded := false
@@ -174,6 +179,10 @@ func _on_picked(choice: DayChoice) -> void:
 		var player := PlayerManager.ensure_player()
 		for stat: PlayerStat in changes:
 			player.raise_stat(stat, changes[stat])
+		# The hub shows it while the line plays: each stat's picture flies from the choice
+		# into the hub, which swallows it, and its number goes up.
+		if stat_hub:
+			stat_hub.show_changes(changes, choice.icon.get_global_rect() if choice.icon.visible else choice.get_global_rect())
 	await _say(action)
 	if action.ends_chapter:
 		_calendar.next_chapter()

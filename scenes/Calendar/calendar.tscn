@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=13 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_calendar"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
@@ -10,9 +10,10 @@
 [ext_resource type="Resource" path="res://data/player_style.tres" id="8_player"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/Profile/ProfileApp.tscn" id="9_profile"]
 [ext_resource type="PackedScene" path="res://scenes/Debug/DebugNote.tscn" id="10_note"]
+[ext_resource type="PackedScene" path="res://scenes/Stats/StatHub.tscn" id="11_hub"]
 [ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 
-[node name="CalendarScene" type="Control"]
+[node name="CalendarScene" type="Control" node_paths=PackedStringArray("stat_hub")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,6 +26,7 @@ style = ExtResource("3_style")
 player_style = ExtResource("8_player")
 rules = ExtResource("7_rules")
 messages = ExtResource("4_lines")
+stat_hub = NodePath("StatHub")
 
 [node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
 unique_name_in_owner = true
@@ -114,6 +116,20 @@ offset_left = 24.0
 offset_top = -440.0
 offset_right = -24.0
 offset_bottom = -24.0
+
+[node name="StatHub" parent="." instance=ExtResource("11_hub")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -700.0
+offset_top = -420.0
+offset_right = -120.0
+offset_bottom = 420.0
+grow_horizontal = 0
+grow_vertical = 2
 
 [node name="ContactsApp" parent="." instance=ExtResource("6_contacts")]
 unique_name_in_owner = true
