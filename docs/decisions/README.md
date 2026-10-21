@@ -64,4 +64,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0058](0058-phone-and-real-life.md) | On your phone (intro, dating app, calendar, Contacts, her card, microgames) or real life (dates, boss, hazards): one shared phone, phone down / up | Accepted |
 | [0059](0059-three-day-calendar.md) | The calendar shows three days, Balatro-style; the player's style decides its look; stats are a Profile app | Accepted |
 | [0060](0060-switching-apps.md) | Contacts (C) and Profile (P) by key with a debug note, switching like the iPhone's app switcher; choices are plain boxes | Accepted |
-| [0061](0061-f5-music-and-clean-up.md) | F5 plays the game and the window scales; a new music system; girls are only girl files; old code and unused files removed | Accepted |
+| [0061](0061-f5-music-and-clean-up.md) | F5 plays the game and the window scales; a new music system; girls are only girl files; old code removed, every picture kept | Accepted |

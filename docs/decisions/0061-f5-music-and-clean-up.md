@@ -1,4 +1,4 @@
-# 0061: F5 plays the game, a new music system, girls are only girl files, and a clean-up
+# 0061: F5 plays the game, a new music system, girls are only girl files, and a clean-up (every picture kept)
 
 - **Status:** Accepted
 - **Date:** 2026-10-21
@@ -31,10 +31,14 @@
   (`image_scenes/`, `icon_scenes/`, `icons/`, `scenes/Border`,
   `scenes/ScoreDisplay`, `scenes/Dates/BaseDate`, the old calendar
   background, perks and inventory items, `spritebackground.tscn`), along
-  with about 48 MB of unused pictures, the old m1–m3 test dialogues,
-  leftover `print()`s and `.DS_Store` files (now ignored by git). Everything
-  is still in the git history. `PlayerManager` keeps just the run's state.
-  Docs that had drifted from the code were brought up to date.
+  with the old m1–m3 test dialogues, an unused font (`script-VF.ttf`), a
+  duplicate of the calendar music (`second ss free loop.m4a`), leftover
+  `print()`s and `.DS_Store` files (now ignored by git). Everything is still
+  in the git history. `PlayerManager` keeps just the run's state. Docs that
+  had drifted from the code were brought up to date.
+- **Every picture stays,** used or not (about 47 MB the game doesn't use
+  yet, e.g. old poses, backgrounds, posters and stat frames): they were
+  deleted at first, then put back.
 
 ## Why
 
@@ -43,7 +47,8 @@ manager and come up with a new one with the same modular design patterns as
 the rest of the project". Item 2 was "Make F5 start the real game, and add
 a stretch mode so the window scales"; item 5 was the clean-up: legacy
 folders, unused assets, `print()`s, `.DS_Store`, merging the girl info into
-the girl files, and the doc drift.
+the girl files, and the doc drift. Then: "Add all the unused pictures
+back."
 
 ## Not chosen
 
@@ -54,9 +59,9 @@ the girl files, and the doc drift.
 - Music chosen in code per scene, or one big music scene: a cue in each
   scene keeps "what plays here" next to the scene, and the library keeps
   every file in one place, like the other style files.
-- Deleting every unused file: the Kenney sound pack, the letter sounds,
-  the music loops and art that's still wanted (stat animation frames, item
-  art) were kept.
+- Deleting the unused pictures: they're art that may still be wanted, so
+  they all stay. The Kenney sound pack, the letter sounds and the music
+  loops stay too.
 
 ## Revisit when
 
