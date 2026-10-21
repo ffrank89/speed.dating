@@ -62,3 +62,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0056](0056-heart-meter-and-closing-her-card.md) | A heart meter on dates (a ring per heart, her colour); the player closes her card | Accepted |
 | [0057](0057-action-cursor.md) | The action cursor (S) for stage hazards | Accepted |
 | [0058](0058-phone-and-real-life.md) | On your phone (intro, dating app, calendar, Contacts, her card, microgames) or real life (dates, boss, hazards): one shared phone, phone down / up | Accepted |
+| [0059](0059-three-day-calendar.md) | The calendar shows three days, Balatro-style; the player's style decides its look; stats are a Profile app | Accepted |

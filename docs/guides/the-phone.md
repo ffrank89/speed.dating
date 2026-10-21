@@ -91,12 +91,34 @@ The phone is shared; what's on each app is its own file:
 
 | App | Its look |
 |---|---|
-| The calendar | `data/calendar_style.tres` (+ its box style `data/dialogue_styles/calendar.tres`): [the-calendar.md](the-calendar.md) |
+| The calendar | Its look: the player's style, `data/player_style.tres`; its layout and words: `data/calendar_style.tres`: [the-calendar.md](the-calendar.md) |
+| Profile (your stats) | Its settings: click the top node of `scenes/Phone/Profile/ProfileApp.tscn` (below) |
 | The dating app | `data/dating_app_style.tres`: [dating-app.md](dating-app.md) |
 | Contacts and her card | `data/contact_card_style.tres` + her dialogue style: [contacts.md](contacts.md), [result-screen.md](result-screen.md) |
 | Microgames | `data/microgame_style.tres`: [making-a-microgame.md](making-a-microgame.md) |
 | The intro | Its words: click the top node of `scenes/Intro/IntroQuestions.tscn` |
 | How apps open and close | `data/app_transition_style.tres`: [phone-apps.md](phone-apps.md) |
+
+## Your apps
+
+On the calendar, two more apps open on the phone, over it:
+
+| App | Opens with | What's in it |
+|---|---|---|
+| **Contacts** | **C**, or the calendar's **Contacts** button | Your party: [contacts.md](contacts.md) |
+| **Profile** | **P**, or the calendar's **Profile** button | Your stats: Culture, Intellect, Seduction and Heart, each with a bar |
+
+Press the key again, **Escape**, or the phone's home bar to close one. Only
+one opens at a time.
+
+**Profile** is a light first version (`scenes/Phone/Profile/ProfileApp.tscn`,
+press **F6** to try it). Click its top node to change its words (**Title
+Text**, **Subtitle Text**), the highest an attribute goes (**Max Value**,
+100 = a full bar), sizes, and the empty part of the bars. The bars use the
+phone's **Accent Color**; the pictures come from **Icons From** (the option
+style's **Attribute Icons**). Its icon and launch screen are
+`data/apps/profile.tres` (the Godot logo for now); its key is `open_profile`
+in **Project Settings → Input Map**.
 
 ## A new phone screen
 

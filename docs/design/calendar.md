@@ -23,10 +23,12 @@
   ability). Each day offers 2–3 actions, picked at random per run; pick one
   and it uses its days (date 2, training 1, rest 1). Training, rest and the
   boss are placeholders. Guide: [the-calendar.md](../guides/the-calendar.md).
-- **On the phone (2026-10-21, [0058](../decisions/0058-phone-and-real-life.md)):**
-  the calendar is an app on the player's portrait phone: the chapter is a
-  vertical week list, today's choices below it, and the whole month opens as
-  a small grid.
+- **On the phone (2026-10-21, [0058](../decisions/0058-phone-and-real-life.md),
+  [0059](../decisions/0059-three-day-calendar.md)):** the calendar is an app
+  on the player's portrait phone, laid out like Balatro's blinds: three day
+  cards stacked (today with its choices, then two "Upcoming"), and the whole
+  month as a small grid. Its look is the player's style
+  (`data/player_style.tres`). Your stats are their own app, **Profile** (P).
 - On the calendar, **press C** for your **Contacts** (the party screen,
   [0054](../decisions/0054-party-is-your-contacts.md)): every girl who gave
   you her number, and her saved card. **Built:** the list and her card.

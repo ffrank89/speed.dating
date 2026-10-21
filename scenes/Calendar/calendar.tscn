@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=10 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_calendar"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="5_box"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/Contacts/ContactsApp.tscn" id="6_contacts"]
 [ext_resource type="Resource" path="res://data/calendar_rules.tres" id="7_rules"]
+[ext_resource type="Resource" path="res://data/player_style.tres" id="8_player"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/Profile/ProfileApp.tscn" id="9_profile"]
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3
@@ -18,6 +20,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_calendar")
 style = ExtResource("3_style")
+player_style = ExtResource("8_player")
 rules = ExtResource("7_rules")
 messages = ExtResource("4_lines")
 
@@ -33,9 +36,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 24
 
 [node name="Column" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin"]
@@ -43,104 +46,91 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 18
 
-[node name="Title" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+[node name="TitleRow" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Calendar"
 
-[node name="Header" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="DaysLeft" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Header"]
+[node name="ChapterLabel" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-text = "6 days to the boss"
-
-[node name="ExpandButton" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Header"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 2
-text = "See the whole month ▾"
-
-[node name="Month" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_constants/separation = -4
-
-[node name="PlateRow" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 40
-
-[node name="ChapterPlate" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month/PlateRow"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-
-[node name="ChapterLabel" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month/PlateRow/ChapterPlate"]
-unique_name_in_owner = true
-layout_mode = 2
+size_flags_vertical = 8
 text = "CHAPTER 1"
 
-[node name="MonthBox" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month"]
+[node name="DaysLeft" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "6 days to the boss"
+
+[node name="Buttons" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="ContactsButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Contacts"
+
+[node name="ProfileButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Profile"
+
+[node name="ExpandButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Month ▾"
+
+[node name="Cards" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
+theme_override_constants/separation = 24
 
-[node name="WeekScroll" type="ScrollContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month/MonthBox"]
-unique_name_in_owner = true
-layout_mode = 2
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 3
-
-[node name="Week" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month/MonthBox/WeekScroll"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/separation = 10
-
-[node name="Days" type="GridContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Month/MonthBox"]
+[node name="MonthBox" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 unique_name_in_owner = true
 visible = false
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Days" type="GridContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/MonthBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 mouse_filter = 2
 columns = 7
 
-[node name="TodayPanel" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 10
-
-[node name="TodayLabel" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/TodayPanel"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TODAY · MON"
-
-[node name="Choices" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/TodayPanel"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 14
-
 [node name="DialogueBox" parent="PhoneScreen/Phone/Body/Screen" instance=ExtResource("5_box")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 24.0
-offset_top = -460.0
+offset_top = -440.0
 offset_right = -24.0
 offset_bottom = -24.0
 
 [node name="ContactsApp" parent="." instance=ExtResource("6_contacts")]
+unique_name_in_owner = true
+
+[node name="ProfileApp" parent="." instance=ExtResource("9_profile")]
 unique_name_in_owner = true
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]

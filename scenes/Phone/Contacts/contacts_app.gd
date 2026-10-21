@@ -59,6 +59,7 @@ var _from := Rect2()
 
 
 func _ready() -> void:
+	add_to_group(&"phone_overlay")
 	if not style:
 		style = ContactCardStyle.new()
 	if not rules:
@@ -82,7 +83,7 @@ func _ready() -> void:
 ## Opens Contacts like an iPhone app inside the phone (Style → Open As App), or brings
 ## the phone up with it. Use with await to wait for it.
 func open() -> void:
-	if visible or _busy or AppLauncher.is_busy():
+	if visible or _busy or AppLauncher.is_busy() or _other_app_open():
 		return
 	_busy = true
 	if style.open_as_app:
@@ -305,6 +306,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif visible and not card.visible and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		close()
+
+
+# Another of your apps (Profile) is already open over this screen.
+func _other_app_open() -> bool:
+	for app in get_tree().get_nodes_in_group(&"phone_overlay"):
+		if app != self and app.visible:
+			return true
+	return false
 
 
 func _font(label: Label, font: Font, font_size: int, color: Color) -> void:

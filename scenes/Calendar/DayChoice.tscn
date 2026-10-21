@@ -3,50 +3,72 @@
 [ext_resource type="Script" path="res://scenes/Calendar/day_choice.gd" id="1_choice"]
 
 [node name="DayChoice" type="PanelContainer"]
-offset_right = 760.0
-offset_bottom = 300.0
+custom_minimum_size = Vector2(240, 0)
+offset_right = 270.0
+offset_bottom = 460.0
 size_flags_horizontal = 3
 script = ExtResource("1_choice")
 
-[node name="Row" type="HBoxContainer" parent="."]
+[node name="Column" type="VBoxContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 28
+theme_override_constants/separation = 8
 
-[node name="Key" type="PanelContainer" parent="Row"]
+[node name="Icon" type="TextureRect" parent="Column"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-
-[node name="KeyLabel" type="Label" parent="Row/Key"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "1"
-horizontal_alignment = 1
-
-[node name="Icon" type="TextureRect" parent="Row"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 130)
-layout_mode = 2
-size_flags_vertical = 4
+size_flags_horizontal = 4
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Words" type="VBoxContainer" parent="Row"]
+[node name="Title" type="Label" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Train Culture"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Days" type="Label" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1 day"
+horizontal_alignment = 1
+
+[node name="Detail" type="Label" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Culture +5"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="Column"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PickRow" type="HBoxContainer" parent="Column"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Key" type="PanelContainer" parent="Column/PickRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="KeyLabel" type="Label" parent="Column/PickRow/Key"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pick" type="Button" parent="Column/PickRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
-alignment = 1
-
-[node name="Title" type="Label" parent="Row/Words"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Date"
-
-[node name="Detail" type="Label" parent="Row/Words"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "2 days · Swipe for someone new"
-autowrap_mode = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Pick"

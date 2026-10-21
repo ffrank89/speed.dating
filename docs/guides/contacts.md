@@ -4,7 +4,7 @@ For writers, artists and designers. **No code needed.**
 
 Your party is the **Contacts** on your phone. Every girl who gave you her
 number on a date is saved there. That's who's in your party. Press **C** on
-the calendar to see them.
+the calendar (or its **Contacts** button) to see them.
 
 ```
 Date ends ─► she types her number into a New Contact (or doesn't)

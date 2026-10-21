@@ -62,3 +62,7 @@ between phone and real life.
 
 The real phone art arrives (fit **Phone Size** and **Edge Width** to it), or
 a screen needs to be wider than the phone.
+
+## Note (2026-10-21)
+
+The calendar's vertical week list became three stacked day cards ([0059](0059-three-day-calendar.md)).
