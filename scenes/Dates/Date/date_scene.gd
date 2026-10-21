@@ -43,6 +43,14 @@ signal date_finished(result: DateResult)
 ## Go back to the calendar after her contact card (off in the test bench).
 @export var go_to_calendar: bool = true
 
+@export_group("When She's Annoyed")
+## Her dialogue box at the bottom grays out to this colour while a stage hazard annoys
+## her (she says her line, e.g. ".....ew"), and comes back when the date carries on.
+## White = no change.
+@export var annoyed_box_color: Color = Color(0.55, 0.55, 0.55, 1.0)
+## How long the box takes to gray out and come back, in seconds.
+@export_range(0.0, 1.0, 0.05) var annoyed_fade_seconds: float = 0.15
+
 ## The player's stats (stat id → 1-9). Set before begin() to use instead of the player's
 ## own (the test bench's sliders); any stat not set is the player's own.
 var stats: Dictionary = {}
@@ -58,6 +66,9 @@ var _started := false
 var _ended := false
 # How many hazards are holding the date still right now (see _on_hazard_annoyed).
 var _held := 0
+# The pose she had before a hazard annoyed her, to go back to.
+var _pose_before := ""
+var _pose_name := ""
 
 @onready var background: TextureRect = $Background
 @onready var portrait: GirlPortrait = $Portrait
@@ -126,6 +137,7 @@ func end_now() -> void:
 func show_pose(pose_name: String) -> void:
 	portrait.show_pose(girl.get_pose(pose_name))
 	_pose_index = maxi(pose_names.find(pose_name), 0)
+	_pose_name = pose_name if girl.poses.has(pose_name) else girl.default_pose
 
 
 ## Shows her next pose (the test bench's pose button). Returns its name.
@@ -273,18 +285,24 @@ func _on_hazard_cleared(hazard: StageHazard) -> void:
 
 
 # A stage hazard annoyed her (e.g. the fly sat on her for a second): her dialogue and the
-# options stop, she reacts and says so (the hazard's Annoy Line, in the Bark bubble),
-# the date loses its Annoy Points, and after Annoy Pause Seconds everything carries on.
+# options stop and her dialogue box grays out, she turns to the hazard's Annoy Pose,
+# reacts and says so (its Annoy Line, in the Bark bubble), the date loses its Annoy
+# Points, and after Annoy Pause Seconds everything carries on (her pose back, if Annoy
+# Pose Back).
 func _on_hazard_annoyed(hazard: StageHazard) -> void:
 	if not scorer or _ended:
 		return
 	_held += 1
+	if _held == 1:
+		_pose_before = _pose_name
+		_fade_box(annoyed_box_color)
 	for part: Node in [dialogue_box, option_list]:
 		part.process_mode = Node.PROCESS_MODE_DISABLED
 	var started := Time.get_ticks_msec()
 	if not hazard.annoy_reaction.is_empty():
 		reaction_icon.show_reaction(hazard.annoy_reaction)
-	if not hazard.annoy_pose.is_empty():
+	# Only a pose she has (another girl may not have one by that name).
+	if girl.poses.has(hazard.annoy_pose):
 		show_pose(hazard.annoy_pose)
 	if not hazard.annoy_line.is_empty():
 		await bark.say(hazard.annoy_line, girl)
@@ -297,8 +315,15 @@ func _on_hazard_annoyed(hazard: StageHazard) -> void:
 		await get_tree().create_timer(left).timeout
 	_held -= 1
 	if _held == 0:
+		if hazard.annoy_pose_back and girl.poses.has(hazard.annoy_pose):
+			show_pose(_pose_before)
+		_fade_box(Color.WHITE)
 		for part: Node in [dialogue_box, option_list]:
 			part.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _fade_box(color: Color) -> void:
+	create_tween().tween_property(dialogue_box, "modulate", color, annoyed_fade_seconds)
 
 
 func _on_pose_requested(speaker: GirlData, pose_name: String) -> void:

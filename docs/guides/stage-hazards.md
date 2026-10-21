@@ -124,10 +124,11 @@ slowed. The fly has no buzz sound yet; once one is set, it slows down too.
 ## Annoying her: the fly sitting on her
 
 **If the fly stays on her for a second, she's annoyed.** The date stops for
-a moment: her dialogue and the option bubbles freeze, she shows the
-**anger** reaction and says **".....ew"** in a little bubble by her head (in
-her own box style and voice), and the date loses **1 point** (the heart
-meter drains). Then the date carries on. "On her" means her drawn pixels,
+a moment: her dialogue and the option bubbles freeze and her dialogue box
+grays out, she **turns around** (her **backshot** pose), shows the **anger**
+reaction and says **".....ew"** in a little bubble by her head (in her own
+box style and voice), and the date loses **1 point** (the heart meter
+drains). Then the date carries on: she turns back and her box comes back. "On her" means her drawn pixels,
 not the see-through space around her, and it has to stay there the whole
 second: moving off her starts the count again. Shoo it before then.
 
@@ -140,8 +141,13 @@ Every hazard has this, on its top node → **Annoying Her**:
 | **Annoy Points** | 1 | Points taken off the date score |
 | **Annoy Reaction** | anger | Her reaction (a name in `data/reactions.tres`). Empty = none |
 | **Annoy Line** | .....ew | What she says in the bubble. Empty = nothing |
-| **Annoy Pose** | (empty) | A pose she switches to (from her girl file). Empty = no change |
+| **Annoy Pose** | backshot | A pose she switches to (a pose name from her girl file; Split Ends' **backshot** is her turned away). A girl without that pose stays as she is. Empty = no change |
+| **Annoy Pose Back** | on | She turns back to the pose she had when the date carries on. Off = she stays in Annoy Pose until a line changes it |
 | **Annoy Pause Seconds** | 1 | How long the date stops (at least as long as her line takes to type) |
+
+**Her box graying out:** click the top node of `scenes/Dates/Date/Date.tscn`
+(**Date**) → **When She's Annoyed** → **Annoyed Box Color** (grey now; white
+= no change) and how fast it fades.
 
 **Her bubble** is the date's **Bark** node (`scenes/Dates/Date/Date.tscn` →
 **Bark**, a `scenes/Dates/Bark/Bark.tscn`): move or resize it to change where

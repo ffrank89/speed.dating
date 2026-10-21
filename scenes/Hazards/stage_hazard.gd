@@ -70,8 +70,13 @@ signal annoyed(hazard: StageHazard)
 @export var annoy_reaction: String = "anger"
 ## What she says, in a little bubble by her head (the date's Bark). Empty = nothing.
 @export var annoy_line: String = ".....ew"
-## Optional: a pose she switches to (a pose name from her girl file). Empty = no change.
+## Optional: a pose she switches to while she's annoyed (a pose name from her girl
+## file, e.g. backshot: turned away). A girl without that pose stays as she is. Empty =
+## no change.
 @export var annoy_pose: String = ""
+## On = she goes back to the pose she had when the date carries on. Off = she stays in
+## Annoy Pose until a line changes it.
+@export var annoy_pose_back: bool = true
 ## How long the date stops, in seconds (at least as long as her line takes).
 @export_range(0.0, 10.0, 0.1) var annoy_pause_seconds: float = 1.0
 

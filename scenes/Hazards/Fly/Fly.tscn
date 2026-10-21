@@ -37,6 +37,7 @@ slow_stat = ExtResource("5_perception")
 slow_above = 5
 slow_speed = 0.5
 annoy_seconds = 1.0
+annoy_pose = "backshot"
 
 [node name="DrawingGuide" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.6)
