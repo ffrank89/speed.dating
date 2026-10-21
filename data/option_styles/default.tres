@@ -1,8 +1,6 @@
-[gd_resource type="Resource" script_class="OptionListStyle" load_steps=11 format=3]
+[gd_resource type="Resource" script_class="OptionListStyle" load_steps=9 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/culture stat gif/culturestat.png" id="1_lwrlb"]
 [ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="2_en2jh"]
-[ext_resource type="Texture2D" path="res://assets/lovestat gif/lovestat.png" id="3_cgiyp"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/confirmation_001.wav" id="4_avmjk"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/select_002.wav" id="5_vxsn7"]
 [ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="6_x8ou3"]
@@ -35,10 +33,6 @@ hit_color = Color(0.298039, 0.831373, 0.478431, 1)
 miss_color = Color(1, 0.352941, 0.352941, 1)
 hit_text = "HIT"
 miss_text = "MISS"
-culture_icon = ExtResource("1_lwrlb")
-intellect_icon = ExtResource("6_x8ou3")
-seduction_icon = ExtResource("6_x8ou3")
-heart_icon = ExtResource("3_cgiyp")
 icon_size = 64
 trail_fallback_icon = ExtResource("6_x8ou3")
 hover_sound = ExtResource("5_vxsn7")

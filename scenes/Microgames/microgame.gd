@@ -42,7 +42,7 @@ const HOST_SCENE := "res://scenes/Microgames/MicrogameHost.tscn"
 ## Start again automatically after each try when playing on its own.
 @export var replay_after_test: bool = true
 
-## 0 = easiest, 1 = hardest. Comes from the player's attribute against the option's
+## 0 = easiest, 1 = hardest. Comes from the player's stat against the option's
 ## requirement (tune it in data/date_rules.tres → Microgames). Set before start().
 var difficulty: float = 0.5
 ## Extras from perks, e.g. {"extra_time": 1.5}. Usually empty.

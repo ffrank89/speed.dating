@@ -79,7 +79,7 @@ Thanksgiving attack 4.
 - `BossData` (`Resource`, `.tres` per boss)
 - `PartyMember` ×1–3 (the lineup), their `GirlData` battle fields
 - `SynergyReport`
-- `GirlType` enum (shared, in the constants script next to `Attr`)
+- `GirlType` enum (shared, in a constants script)
 
 ### Custom objects and functions
 
@@ -139,4 +139,4 @@ Exact list for the first build.
 
 - **Combat**: this is the combat.
 - **Run Loop**: ends each chapter; a loss ends the run.
-- **Build**: the exam that grades your party, perks and attributes.
+- **Build**: the exam that grades your party, perks and stats.

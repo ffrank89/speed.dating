@@ -11,22 +11,25 @@ config_version=5
 [application]
 
 config/name="speed dating"
-run/main_scene="uid://ckpg8pvesqt83"
+run/main_scene="uid://efp3ydwobkem"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
 
 PlayerManager="*res://scripts/managers/player_manager.gd"
-MusicManager="*res://scripts/managers/music_manager.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 AppLauncher="*res://scenes/Phone/AppLauncher.tscn"
 PlayerCursor="*res://scenes/Cursor/PlayerCursor.tscn"
+Music="*res://scenes/Music/Music.tscn"
 
 [display]
 
 window/size/viewport_width=3000
 window/size/viewport_height=1700
-window/size/resizable=false
+window/size/window_width_override=1500
+window/size/window_height_override=850
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
 
 [editor_plugins]
 
@@ -84,7 +87,7 @@ action_cursor={
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://dialogue/split_ends/m1_test.dialogue", "res://dialogue/split_ends/m2_test.dialogue", "res://dialogue/split_ends/m3_test.dialogue", "res://dialogue/split_ends/first_date.dialogue", "res://dialogue/calendar.dialogue")
+locale/translations_pot_files=PackedStringArray("res://dialogue/split_ends/first_date.dialogue", "res://dialogue/calendar.dialogue")
 
 [rendering]
 

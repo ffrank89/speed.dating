@@ -11,14 +11,25 @@ extends Control
 ## A date lists its hazards on its StageHazards node. Press F6 on a hazard's scene to
 ## try it on its own, over and over. Full guide: docs/guides/stage-hazards.md
 ##
+## A stat can slow it down (Slow Motion): e.g. the fly moves in slow motion when the
+## player's Perception is above 5. It can annoy her (Annoying Her): e.g. the fly sitting
+## on her for a second makes the date stop while she says ".....ew" and loses points.
+## How she reacts is an Annoyance file (data/annoyances/), which hazards can share.
+##
 ## Making a new one: extend StageHazard, start it up in begin(), and call clear() when
 ## the player deals with it (or leave() when it goes away by itself). If it Needs Action
-## Cursor, check can_act() before letting the player deal with it.
+## Cursor, check can_act() before letting the player deal with it. For Slow Motion,
+## multiply its own timing by time_scale (and its sounds' pitch). For Annoying Her, call
+## track_annoying() each frame with where it is (annoys her once it has sat on her for
+## Annoy Seconds), or annoy_her() whenever it should annoy her for any other reason.
 
 ## Sent when the player deals with it (e.g. shoos the fly off screen).
 signal cleared(hazard: StageHazard)
 ## Sent when it goes away on its own (no reward).
 signal left(hazard: StageHazard)
+## Sent when it annoys her (e.g. it has been over her for Annoy Seconds): the date plays
+## its Annoyance (stops for a moment, she reacts, the date loses points).
+signal annoyed(hazard: StageHazard)
 
 @export_group("When")
 ## It turns up after the player has answered this many questions on a date.
@@ -37,6 +48,28 @@ signal left(hazard: StageHazard)
 ## Off = the normal cursor works too.
 @export var needs_action_cursor: bool = true
 
+@export_group("Slow Motion")
+## A stat that slows it down (drag one from data/stats/, e.g. perception.tres). When the
+## player's stat is above Slow Above, it moves, animates and sounds in slow motion, and
+## stays that much longer. Empty = never.
+@export var slow_stat: PlayerStat
+## It's slowed when the stat is above this: 5 = at 6 or more.
+@export_range(0, 100) var slow_above: int = 5
+## How fast it goes in slow motion: 0.5 = half speed, and its sounds half speed and an
+## octave lower. 1 = no change.
+@export_range(0.05, 1.0, 0.05) var slow_speed: float = 0.5
+
+@export_group("Annoying Her")
+## How she reacts when it annoys her: a file from data/annoyances/ (ew.tres: the date
+## stops, she turns around and says ".....ew", and the date loses a point). Hazards can
+## share one. Empty = it never annoys her.
+@export var annoyance: Annoyance
+## Seconds it has to stay over her (her drawn pixels, not the space around her) before
+## it annoys her, for a hazard that moves over her (the fly). 0 = not this way.
+@export_range(0.0, 30.0, 0.1) var annoy_seconds: float = 0.0
+## How many times it can annoy her each time it turns up.
+@export_range(1, 20) var annoy_limit: int = 1
+
 @export_group("Reward")
 ## Points added to the date score when the player deals with it.
 @export_range(-10.0, 10.0, 0.5) var points: float = 1.0
@@ -54,6 +87,19 @@ signal left(hazard: StageHazard)
 
 ## True while it's on screen.
 var is_active := false
+## The player's stats on this date (stat id → value), handed over by the date (the test
+## bench's sliders included). Empty = the player's own.
+var stats: Dictionary = {}
+## How fast it runs this time it's on screen: 1 = normal, Slow Speed in slow motion.
+## Worked out each time it turns up.
+var time_scale := 1.0
+## Her portrait on the date (set by StageHazards), to tell when it's over her. Null = it
+## can't annoy her (e.g. played on its own).
+var her: GirlPortrait
+# Annoying Her: seconds it's been over her without a break, and how often it has annoyed
+# her this time.
+var _over_her := 0.0
+var _annoyances := 0
 var _appearance := 0
 
 
@@ -66,6 +112,37 @@ func begin() -> void:
 ## only while the action cursor is on (S).
 func can_act() -> bool:
 	return not needs_action_cursor or PlayerCursor.action_mode
+
+
+## True if it's in slow motion this time (Slow Motion).
+func is_slowed() -> bool:
+	return time_scale < 1.0
+
+
+## Annoying Her: call each frame with where it is (in screen pixels) and the real seconds
+## passed. Once it's been over her (her drawn pixels) for Annoy Seconds without a break,
+## it annoys her (annoy_her()). Moving off her starts the count again.
+func track_annoying(point: Vector2, real_delta: float) -> void:
+	if annoy_seconds <= 0.0 or not her or not annoyance or not is_active or _annoyances >= annoy_limit:
+		return
+	if not her.is_point_on_her(point):
+		_over_her = 0.0
+		return
+	_over_her += real_delta
+	if _over_her >= annoy_seconds:
+		_over_her = 0.0
+		annoy_her()
+
+
+## Annoying Her: annoys her now, for any reason (a phone that rang too long...): the date
+## plays its Annoyance. Only while it's on screen, if it has an Annoyance, and up to Annoy
+## Limit times each time it turns up. True if it did.
+func annoy_her() -> bool:
+	if not annoyance or not is_active or _annoyances >= annoy_limit:
+		return false
+	_annoyances += 1
+	annoyed.emit(self)
+	return true
 
 
 ## Override (optional): called when Leaves After Seconds runs out. Default: leave() at once.
@@ -95,10 +172,14 @@ func appear() -> void:
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
 	_appearance += 1
+	_over_her = 0.0
+	_annoyances = 0
+	time_scale = slow_speed if _slowed_by_stat() else 1.0
 	begin()
 	if leaves_after_seconds > 0.0 and is_active:
 		var this_time := _appearance
-		get_tree().create_timer(leaves_after_seconds, false).timeout.connect(func() -> void:
+		# In slow motion it stays longer too.
+		get_tree().create_timer(leaves_after_seconds / time_scale, false).timeout.connect(func() -> void:
 			if is_active and _appearance == this_time:
 				time_to_go()
 		)
@@ -112,6 +193,15 @@ func is_due(answers: int) -> bool:
 	if again_every_answers > 0 and answers > appears_after_answers:
 		due = (answers - appears_after_answers) % again_every_answers == 0
 	return due and randf() <= chance
+
+
+# Slow Motion: the player's Slow Stat (on this date) is above Slow Above, and the stat is
+# on (data/stats/).
+func _slowed_by_stat() -> bool:
+	if not slow_stat or not StatList.get_default().is_active(slow_stat):
+		return false
+	var value: int = stats.get(slow_stat.id, PlayerManager.ensure_player().get_stat(slow_stat))
+	return value > slow_above
 
 
 func _finish() -> void:

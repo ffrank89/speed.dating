@@ -1,25 +1,21 @@
 extends Control
 ## Test bench for a date: the real date scene (the Date node, scenes/Dates/Date/Date.tscn)
-## plus a debug panel. Press F5 (it's the main scene) or F6 here.
-## The sliders stand in for the player's attributes. The date stays here when it's over
-## instead of going to the calendar; press Restart to play another.
+## plus a debug panel. Press F6 here.
+## The sliders stand in for the player's stats (the ones that are on). The date stays
+## here when it's over instead of going to the calendar; press Restart to play another.
 
 @export var girl: GirlData
 ## The dialogue to play. Empty = the girl's First Date Dialogue.
 @export var dialogue: DialogueResource
 ## Empty = the whole date (opener, 5 exchanges, closer, contact card).
-## A title (e.g. "start" in the m2/m3 test files) = play just that one, then the card.
+## A title (e.g. "opener") = play just that one, then the card.
 @export var start_title: String = ""
 ## The scoring and flow numbers (data/date_rules.tres).
 @export var rules: DateRules
 
-# Static so the sliders keep their values when the date restarts.
-static var attributes := {
-	Attr.Id.CULTURE: 50,
-	Attr.Id.INTELLECT: 50,
-	Attr.Id.SEDUCTION: 50,
-	Attr.Id.HEART: 50,
-}
+# Static so the sliders keep their values when the date restarts. Stat id → value; each
+# starts at its stat's Starting Value (data/stats/).
+static var stats := {}
 
 @onready var date: DateScene = $Date
 @onready var girl_label: Label = %GirlLabel
@@ -33,6 +29,9 @@ static var attributes := {
 
 
 func _ready() -> void:
+	for stat in StatList.get_default().active():
+		if not stats.has(stat.id):
+			stats[stat.id] = stat.starting_value
 	_build_sliders()
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	date.status_changed.connect(func(text: String) -> void: status_label.text = text)
@@ -45,7 +44,7 @@ func _ready() -> void:
 	if rules:
 		date.rules = rules
 	date.only_title = start_title
-	date.attributes = attributes
+	date.stats = stats
 	date.begin()
 	if not date.girl:
 		pose_button.disabled = true
@@ -59,21 +58,23 @@ func _ready() -> void:
 
 
 func _build_sliders() -> void:
-	for attr in Attr.Id.values():
+	var list := StatList.get_default()
+	for stat in list.active():
 		var row := HBoxContainer.new()
 		var label := Label.new()
 		label.custom_minimum_size.x = 260
-		label.text = _slider_text(attr)
+		label.text = _slider_text(stat)
 
 		var slider := HSlider.new()
-		slider.max_value = 100
-		slider.value = attributes[attr]
+		slider.min_value = list.lowest
+		slider.max_value = list.highest
+		slider.value = stats[stat.id]
 		slider.custom_minimum_size.x = 400
 		slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		slider.focus_mode = Control.FOCUS_NONE
 		slider.value_changed.connect(func(value: float) -> void:
-			attributes[attr] = int(value)
-			label.text = _slider_text(attr)
+			stats[stat.id] = int(value)
+			label.text = _slider_text(stat)
 		)
 
 		row.add_child(label)
@@ -81,5 +82,5 @@ func _build_sliders() -> void:
 		sliders.add_child(row)
 
 
-func _slider_text(attr: Attr.Id) -> String:
-	return "%s  %d" % [Attr.display_name(attr), attributes[attr]]
+func _slider_text(stat: PlayerStat) -> String:
+	return "%s  %d" % [stat.display_name, stats[stat.id]]

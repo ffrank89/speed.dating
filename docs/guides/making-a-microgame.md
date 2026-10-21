@@ -14,7 +14,7 @@ phone gives a bigger screen). Build it tall, not wide.
 ## How it fits together
 
 ```
-Writer tags an option        - Light it for her. [#check=seduction:50, #value=2, #microgame=light_cigarette]
+Writer tags an option        - Light it for her. [#check=seduction:5, #value=2, #microgame=light_cigarette]
         │
 Player picks it              the bubble says PLAY instead of a % chance
         │
@@ -31,7 +31,7 @@ DateScorer                   pass = hit, fail = miss (points as usual)
 Dialogue                     her "if hit" or "else" reply
 ```
 
-The player's attribute against the option's `#check` sets the
+The player's stat against the option's `#check` sets the
 **difficulty** (0 = easiest, 1 = hardest) instead of the odds.
 
 ## Files
@@ -43,8 +43,8 @@ The player's attribute against the option's `#check` sets the
 | `scenes/Microgames/MicrogameHost.tscn` | The shared frame, on the phone. Move the **Banner**, **TimerBar** and **Stamp** here (under **PhoneScreen → Phone → Body → Screen**). |
 | `data/microgames.tres` | The list of microgames by name. A dialogue tag `[#microgame=name]` looks the name up here. |
 | `data/microgame_style.tres` | How the frame looks and sounds (no code). |
-| `data/date_rules.tres` → **Microgames** | How the player's attribute turns into difficulty. |
-| `dialogue/split_ends/first_date.dialogue` | Her first date. The `~ microgame_...` exchanges have a microgame option; 2 play per date ([the-full-date.md](the-full-date.md)). `m3_test.dialogue` has the older test lines. |
+| `data/date_rules.tres` → **Microgames** | How the player's stat turns into difficulty. |
+| `dialogue/split_ends/first_date.dialogue` | Her first date. The `~ microgame_...` exchanges have a microgame option; 2 play per date ([the-full-date.md](the-full-date.md)). |
 
 ## Try the example first
 
@@ -56,7 +56,7 @@ The player's attribute against the option's `#check` sets the
 2. Click the top node (**TemplateMicrogame**). In the Inspector, change
    **Testing (F6) → Test Difficulty** to 0 and then 1, and press F6 again to
    feel the difference.
-3. Press **F5** to play a date and pick **"Catch the lighter she tosses
+3. Press **F6** on the date test bench (`scenes/Dates/FirstDate/FirstDateTest.tscn`) and pick **"Catch the lighter she tosses
    you."** when she says "Think fast!" The phone comes up over the date with
    the same microgame on it, and her reply depends on whether you caught it. To skip straight
    to it: open `FirstDateTest.tscn`, click the top node and set **Start
@@ -96,7 +96,7 @@ Click the top node. Under **Frame**:
 Click `data/microgames.tres` → **Games** → **Add Key/Value Pair** → type
 `light_cigarette` on the left → drag `LightCigarette.tscn` onto the right.
 
-That's the name the test dialogue already uses, so **"Light it for her."**
+That's the name her first date already uses, so **"Light it for her."**
 plays your microgame from now on (until now it rolled, with a warning in the
 Output panel).
 
@@ -178,9 +178,9 @@ meter before time runs out.** Pieces you'll want:
   fair at 1.
 - Try it with **only the keyboard** (arrows/WASD + Space) and with **only
   the mouse**.
-- **F5**: pick **"Light it for her."** when she asks for a light (or set
+- **F6** on the date test bench: pick **"Light it for her."** when she asks for a light (or set
   the test bench's **Start Title** to `microgame_light_it`). Drag the **Seduction**
-  slider (top left) to change the difficulty: at 50 or more the player meets
+  slider (top left) to change the difficulty: at 5 or more the player meets
   the requirement and gets the easiest version.
 
 ## Mouse and keyboard
@@ -201,11 +201,11 @@ Every microgame must work with either. Two rules make that automatic:
 | Setting | Now | Meaning |
 |---|---|---|
 | Min Difficulty | 0.2 | The player meets the option's requirement |
-| Max Difficulty | 1.0 | The player has 0 of the attribute |
+| Max Difficulty | 1.0 | The player's stat is the lowest (1) |
 | Unchecked Difficulty | 0.5 | The option has a microgame but no `#check` |
 
-In between it's a straight line: Seduction 25 against a requirement of 50
-gives 0.2 + (1.0 − 0.2) × 0.5 = **0.6**.
+In between it's a straight line: Seduction 3 against a requirement of 5 is
+halfway from 5 down to 1, so 0.2 + (1.0 − 0.2) × 0.5 = **0.6**.
 
 Your microgame decides what difficulty *means*. Make an easiest and a
 hardest number for each thing that should change, export them, and blend
@@ -234,7 +234,7 @@ and size.
 
 ```
 Split Ends: [#pose=cig] Got a light?
-- Light it for her. [#check=seduction:50, #value=2, #microgame=light_cigarette]
+- Light it for her. [#check=seduction:5, #value=2, #microgame=light_cigarette]
 	if hit
 		Split Ends: [#react=heart] ...Smooth.
 	else

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Annoyance" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/annoyance.gd" id="1_annoyance"]
+
+[resource]
+script = ExtResource("1_annoyance")
+line = ".....ew"
+reaction = "anger"
+pose = "backshot"
+pose_back = true
+points = 1.0
+pause_seconds = 1.0
+box_color = Color(0.55, 0.55, 0.55, 1)
+box_fade_seconds = 0.15

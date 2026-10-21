@@ -43,9 +43,11 @@
 | `rarity` | TBD. Do we need rarity for event drops? |
 | `stackable: bool` | TBD. Today the bug was duplicated perks; decide whether duplicates are ever allowed. |
 
-**Migrating:** today `ScoreCalculator.apply_perk_modifiers` has
-`if perk is Inebriated` checks. Those move into each perk's
-`modify_score`. `PerkBorder` stays as the display and reads `RunState.perks`.
+**Old code removed (2026-10-21, [0061](../decisions/0061-f5-music-and-clean-up.md)):**
+the first prototype's `Perk` classes (Inebriated, Sleepy), `PerkBorder` and
+`PerkIcon` weren't used by the game any more and were deleted. They're in
+the git history. Perks will be built fresh as `PerkData` with the hooks
+above.
 
 Perk pool for the first build: TBD (aim for ~8–10 so runs differ).
 
@@ -53,8 +55,8 @@ Perk pool for the first build: TBD (aim for ~8–10 so runs differ).
 
 | Asset | Used by | Status |
 |---|---|---|
-| Perk icon animation per perk | `PerkIcon` in `PerkBorder`, perk tooltip, event reward screen | Exists for Inebriated (`inebriated stat gif`) and Sleepy (`sleepy stat gif`); more stat gifs in `assets/` could become perks |
-| Perk border / frame | `PerkBorder` | Exists |
+| Perk icon animation per perk | Perk display, perk tooltip, event reward screen | Frames exist for Inebriated (`inebriated stat gif`) and Sleepy (`sleepy stat gif`); more stat gifs in `assets/` could become perks |
+| Perk border / frame | Perk display | TBD (the old `PerkBorder` was removed) |
 | "Perk triggered" flash | Date Scene and Boss Scene when a hook changes something | TBD. Balatro-style feedback is a big part of the fun. |
 | Perk reward card | Calendar event screen | TBD |
 

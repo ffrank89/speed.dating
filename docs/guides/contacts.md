@@ -111,10 +111,9 @@ That's all.
 
 | Problem | Fix |
 |---|---|
-| She's not in the list | She didn't give her number (a failed date), or the date was on the test bench (F5), which doesn't save anyone. Play it from the dating app. |
+| She's not in the list | She didn't give her number (a failed date), or no date was played this run. Press **F5** and play one from the dating app. |
 | C does nothing | You're not on the calendar (only screens with `ContactsApp.tscn` in them), or `open_contacts` is missing from the Input Map (Godot prints a warning). |
 | Her row looks like the dark default box | She has no **Dialogue Style** in her girl file. |
-| Smokey shows up as Split Ends | Smokey has no girl file yet, so her date uses Split Ends'. |
 
 ## Not built yet
 
@@ -125,15 +124,15 @@ synergy report.
 ## For programmers
 
 - `PartyMember` (`scripts/data/party_member.gd`): `girl: GirlData`,
-  `affection` (0–3 hearts), `profile: DateCharacter` (her dating-app entry).
+  `affection` (0–3 hearts).
 - `PlayerManager.party: Array[PartyMember]`;
-  `add_party_member(girl, affection, profile)` (keeps the higher hearts if
-  she's already there), `is_in_party(date_name)`, signal `party_changed`.
+  `add_party_member(girl, affection)` (keeps the higher hearts if
+  she's already there), `is_in_party(girl)`, signal `party_changed`.
   The date scene calls `add_party_member` when she gives her number.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
   layer 19) is a `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`):
   `open_action` (`open_contacts`), `open()` / `close()` (the app switcher,
-  `phone_screen.switch_in/out`; or `AppLauncher.open/close`, or
+  `phone_screen.switch_apps()`, in the order of `RecentApps`; or `AppLauncher.open/close`, or
   `phone_screen.raise()` / `lower()`). Its phone is `phone_screen`
   (`PhoneScreen`, Behind = Nothing; its `home_pressed` closes it),
   `show_list(members)` / `hide_list()` show it at once; signals

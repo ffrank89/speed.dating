@@ -6,9 +6,11 @@ Hover over any setting to see what it does.
 
 | Folder | What's in it |
 |---|---|
-| `girls/` | One file per girl: name, bio, poses (each with its own size, nudge and flip), background, dialogue style, option style (optional), voice and lines. |
+| `girls/` | One file per girl, everything about her: name, age, bio, interests and picture (her dating-app profile), her contact card, poses (each with its own size, nudge and flip), background, dialogue style, option style (optional), voice and first-date lines. Who's on the dating app: `scenes/Tinder/Screen.tscn` → **Girls**. |
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
 | `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
+| `stats.tres` | **The player's stats**: every stat in order (Culture, Intellect, Seduction, Heart, and S.P.E.C.I.A.L.: Strength, Perception, Endurance, Charisma, Intelligence, Agility, Luck) and their scale, **1 to 9**. |
+| `stats/` | One file per stat: its id (for dialogue checks), name, **Enabled** (switch it off to try the game without it), description, icon and starting value. |
 | `date_rules.tres` | How a date runs and scores: how many exchanges (and how many are microgames), the opener and closer names, odds limits, how much her likes matter, what a miss costs, how hard microgames get, and what her contact card shows. |
 | `phone_style.tres` | **The player's phone**, shared by every phone screen (intro, dating app, calendar, Contacts, her card, microgames): its size and place, screen colour, wallpaper, rim, phone art, status bar, home bar, font, the room behind it, and how it comes up and goes down. |
 | `dating_app_style.tres` | The dating app: its words, her profile card (in her dialogue style, or plain), the Pass / Start buttons, the swipe, and sounds. |
@@ -19,18 +21,37 @@ Hover over any setting to see what it does.
 | `microgames.tres` | Every microgame by the name writers use: `[#microgame=light_cigarette]`. Add one like a pose: Add Key/Value Pair. |
 | `microgame_style.tres` | How the frame around every microgame looks and sounds (on the phone): dim over the date, banner, timer bar, NICE/OOPS stamp. |
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |
+| `annoyances/` | How she reacts when something annoys her on a date (the date stops, she turns around, says a line in a bubble, the date loses points, her dialogue box grays out). `ew.tres` is the fly's ".....ew". A stage hazard points at one; hazards can share one. |
 | `heart_meter_style.tres` | The heart meter on dates (top right): ring size, thickness and colours, the heart picture, the heart sound. Each girl's fill colour is her dialogue style's **Meter Color**. |
 | `calendar_rules.tres` | How the calendar runs: days per chapter, the boss day, what each day can offer and how many choices, how much of the whole calendar shows, and how far ahead you can see. |
 | `day_actions/` | One file per thing you can spend a day on (date, training, rest, boss): its name, picture, how many days it takes, how often it's offered, and what it does. |
 | `player_style.tres` | **The player's own look**, the way a girl's dialogue style is hers: the calendar's day cards (colours, font, borders, shadow), the day colours (today, coming up, boss, X), the highlight on a choice under the mouse, and the Month button. |
 | `calendar_style.tres` | How the calendar app is laid out and sounds: its words, the three day cards and today's choices (sizes, how many days come up), the whole month's squares, calendar art, the X on days you can't see. Its lines play in `dialogue_styles/calendar.tres`. |
+| `music.tres` | **Every music track by name**, how one fades into the next, and how loud the music is. Which track plays on a screen is that scene's **Music Cue**. |
 
-**Try your change:** press **F5**. It plays a whole date on the test bench (`scenes/Dates/FirstDate/FirstDateTest.tscn`) with sliders for the player's attributes.
+**Try your change:** press **F5** to play the game from the start (the
+intro, then the calendar). Every screen can also be played on its own:
+open it and press **F6**. For dates, the test bench
+`scenes/Dates/FirstDate/FirstDateTest.tscn` plays a whole date with sliders
+for the player's stats.
 
-**Step-by-step guides** in the project folder (or on GitHub):
-- `docs/guides/dialogue-box.md`: box colours, picture boxes, fonts, voices,
-  letter sounds, poses, writing lines
-- `docs/guides/options-and-scoring.md`: writing options, odds, scoring,
-  tuning, option buttons, reactions
-- `docs/guides/replacing-placeholders.md`: every placeholder picture (the
-  Godot logo) and sound, and how to swap in the real ones
+**Step-by-step guides** in `docs/guides/` (in the project folder, or on GitHub):
+
+| Guide | What's in it |
+|---|---|
+| `the-phone.md` | The player's phone: its look, your room, phone up and down, your apps (Contacts, Profile) |
+| `phone-apps.md` | How apps open and close inside the phone |
+| `the-calendar.md` | The calendar: days, choices, the month, its words and sounds |
+| `dating-app.md` | The dating app: who's on it, her card, swiping |
+| `the-full-date.md` | How a whole date plays: opener, exchanges, closers, her card |
+| `dialogue-box.md` | Box colours, picture boxes, fonts, voices, letter sounds, poses, writing lines |
+| `options-and-scoring.md` | Writing options, odds, scoring, tuning, option bubbles, reactions |
+| `heart-meter.md` | The hearts on a date |
+| `result-screen.md` | Her contact card at the end of a date |
+| `contacts.md` | Your Contacts (your party) |
+| `stage-hazards.md` | Things that turn up during a date (the fly) |
+| `making-a-microgame.md` | Making a new microgame, step by step |
+| `cursor.md` | The player's cursor |
+| `stats.md` | The player's stats: switching them on and off, adding new ones, where they're used |
+| `music.md` | The music on each screen |
+| `replacing-placeholders.md` | Every placeholder picture (the Godot logo), sound and music, and how to swap in the real ones |

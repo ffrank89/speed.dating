@@ -1,6 +1,6 @@
 # 0055: The calendar: a chapter strip in dialogue-box style, and today's choices
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0059](0059-three-day-calendar.md) (three day cards; the whole month behind the Month button)
 - **Date:** 2026-10-20
 - **Affects:** [calendar.md](../design/calendar.md), [core-loop.md](../design/core-loop.md), [0037](0037-phone-app-overlays.md), [0054](0054-party-is-your-contacts.md)
 

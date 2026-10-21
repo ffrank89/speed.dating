@@ -7,6 +7,9 @@ extends Control
 
 ## Sent when the player deals with a hazard. The date adds its points and shows her reaction.
 signal hazard_cleared(hazard: StageHazard)
+## Sent when a hazard annoys her (e.g. the fly sat on her): the date plays the hazard's
+## Annoyance (stops for a moment, she reacts and says so, the date loses points).
+signal hazard_annoyed(hazard: StageHazard)
 
 ## While it runs, S switches to the action cursor (PlayerCursor), which hazards like the
 ## fly need; not during microgames, and not once stop() is called (the date's over).
@@ -17,9 +20,14 @@ signal hazard_cleared(hazard: StageHazard)
 @export var option_list: OptionList
 ## Hazards freeze while a microgame plays (the date's MicrogameHost).
 @export var microgame_host: MicrogameHost
+## Her portrait on the date, so a hazard can tell when it's over her (Annoying Her).
+@export var portrait: GirlPortrait
 
 ## How many questions the player has answered on this date.
 var answers := 0
+## The player's stats on this date (stat id → value), set by the date. Each hazard gets
+## them when it turns up (e.g. for its Slow Motion). Empty = the player's own.
+var stats: Dictionary = {}
 var _hazards: Array[StageHazard] = []
 var _sound := AudioStreamPlayer.new()
 var _stopped := false
@@ -34,7 +42,9 @@ func _ready() -> void:
 			push_warning("StageHazards: a scene in Hazards doesn't use a StageHazard script.")
 			continue
 		add_child(hazard)
+		hazard.her = portrait
 		hazard.cleared.connect(_on_cleared)
+		hazard.annoyed.connect(_on_annoyed)
 		_hazards.append(hazard)
 	if option_list:
 		option_list.option_resolved.connect(_on_answered)
@@ -54,6 +64,7 @@ func stop() -> void:
 ## Brings on every hazard now, whatever the answer count (the test scene's debug button).
 func appear_all() -> void:
 	for hazard in _hazards:
+		hazard.stats = stats
 		hazard.appear()
 
 
@@ -80,7 +91,13 @@ func _on_answered(_response: DialogueResponse, _result: DateScorer.Result) -> vo
 func _bring_on(hazard: StageHazard) -> void:
 	if hazard.delay_seconds > 0.0:
 		await get_tree().create_timer(hazard.delay_seconds, false).timeout
+	hazard.stats = stats
 	hazard.appear()
+
+
+func _on_annoyed(hazard: StageHazard) -> void:
+	if not _stopped:
+		hazard_annoyed.emit(hazard)
 
 
 func _on_cleared(hazard: StageHazard) -> void:

@@ -6,7 +6,7 @@ extends Control
 ## the next two days, dimmed and "Upcoming", showing what they'll offer. Each card's
 ## border and tab are coloured by what the day is (today, coming up, the boss, too far
 ## ahead to see). Click a choice's Pick (or press 1-3) and it does what its action file
-## says (data/day_actions/): changes attributes, plays a line from
+## says (data/day_actions/): changes stats, plays a line from
 ## dialogue/calendar.dialogue in a box on the phone, uses up its days (or ends the
 ## chapter), and opens a screen (a date opens the dating app on the phone; a real-life
 ## screen, like a boss fight, puts the phone down).
@@ -169,11 +169,11 @@ func _on_picked(choice: DayChoice) -> void:
 	_play(style.pick_sound)
 	var action := choice.action
 	# The action's parts, in order (each one only if the action has it).
-	var changes := action.attribute_changes()
+	var changes := action.stat_changes()
 	if not changes.is_empty():
 		var player := PlayerManager.ensure_player()
-		for attr in changes:
-			player.increase_skill(Attr.display_name(attr), changes[attr])
+		for stat: PlayerStat in changes:
+			player.raise_stat(stat, changes[stat])
 	await _say(action)
 	if action.ends_chapter:
 		_calendar.next_chapter()
@@ -193,18 +193,17 @@ func _on_picked(choice: DayChoice) -> void:
 
 
 # A line from dialogue/calendar.dialogue in the calendar's box, at the bottom of the
-# phone over the days coming up. The lines can use {{action}}, {{changes}},
-# {{attribute}} and {{amount}}.
+# phone over the days coming up. The lines can use {{action}}, {{changes}}, {{stat}} and
+# {{amount}}.
 func _say(action: DayAction) -> void:
 	if not messages or action.dialogue_title.is_empty() or not messages.get_titles().has(action.dialogue_title):
 		return
-	var changes := action.attribute_changes()
-	var first: int = changes.keys()[0] if not changes.is_empty() else -1
+	var changes := action.change_list()
 	var details := {
 		"action": action.title,
 		"changes": action.changes_text(),
-		"attribute": Attr.display_name(first) if first >= 0 else "",
-		"amount": changes[first] if first >= 0 else 0,
+		"stat": changes[0].name if not changes.is_empty() else "",
+		"amount": changes[0].amount if not changes.is_empty() else 0,
 	}
 	# The days coming up make way (keeping their room, so today's card doesn't move).
 	for card: DayCard in cards.get_children():

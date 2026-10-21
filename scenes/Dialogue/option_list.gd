@@ -1,12 +1,12 @@
 class_name OptionList
 extends Control
 ## The player's choices, as bubbles that pop out above her head and drift slowly
-## around this node's rectangle. Each bubble shows its attribute check and, for a
+## around this node's rectangle. Each bubble shows its stat check and, for a
 ## risky option (player below the requirement), its % chance. Picking one plays the
 ## roll, then reports what happened through option_resolved.
 ##
 ## Click a bubble to pick it, or drag it onto her (Drop Target) and let go. Dragging
-## also throws it around and drops a trail of its attribute icon. Keys 1-4 pick too,
+## also throws it around and drops a trail of its stat icon. Keys 1-4 pick too,
 ## or arrow keys then Space/Enter.
 ##
 ## Where they float: this node's rectangle (move and resize it in the scene).
@@ -242,9 +242,9 @@ func _separate(delta: float) -> void:
 					b.velocity += axis * (a_speed - b_speed)
 
 
-# A small copy of the bubble's attribute icon that pops up behind it and fades away.
+# A small copy of the bubble's stat icon that pops up behind it and fades away.
 func _drop_trail_icon(bubble: OptionBubble) -> void:
-	var texture := _style.icon_for(bubble.option.attribute)
+	var texture := bubble.option.check_icon()
 	if not texture:
 		texture = _style.trail_fallback_icon
 	if not texture or _trail_layer.get_child_count() >= MAX_TRAIL_ICONS:

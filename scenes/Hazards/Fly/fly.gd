@@ -9,6 +9,15 @@ extends StageHazard
 ## flies in from the nearest edge of the screen to the path's first point, then follows
 ## the path back and forth (or round and round, if the last point sits on the first).
 ##
+## Slow Motion (set on this scene's top node): with the player's Perception above 5 it
+## flies, jitters, flaps and buzzes at half speed (the buzz an octave lower), and stays
+## twice as long. Waving at it still reads the mouse at full speed.
+##
+## Annoying Her (also on the top node): if it stays on her (her drawn pixels) for a
+## second, the date plays its Annoyance (data/annoyances/ew.tres): the date stops for a
+## moment, she turns around, gets angry, says ".....ew" and the date loses a point. Shoo
+## it before then.
+##
 ## Press F6 on this scene to try it on its own. Full guide: docs/guides/stage-hazards.md
 
 enum State { ENTERING, FOLLOWING, PUSHED, RETURNING, LEAVING }
@@ -87,6 +96,11 @@ func begin() -> void:
 	_state = State.ENTERING
 	_last_mouse = get_local_mouse_position()
 	body.position = _position
+	# Slow Motion: its animations and buzz run at its own speed (lower and slower).
+	for node in body.find_children("*", "", true, false):
+		if node is AnimatedSprite2D or node is AnimationPlayer:
+			node.speed_scale = time_scale
+	buzz_player.pitch_scale = time_scale
 	if buzz_sound:
 		buzz_player.stream = buzz_sound
 		buzz_player.play()
@@ -97,12 +111,14 @@ func time_to_go() -> void:
 	_state = State.LEAVING
 
 
-func _process(delta: float) -> void:
-	_time += delta
+func _process(real_delta: float) -> void:
+	# The mouse moves in real time; the fly in its own (slower in Slow Motion).
 	var mouse := get_local_mouse_position()
-	var mouse_velocity := (mouse - _last_mouse) / maxf(delta, 0.001)
+	var mouse_velocity := (mouse - _last_mouse) / maxf(real_delta, 0.001)
 	_last_mouse = mouse
 	_try_shoo(mouse, mouse_velocity)
+	var delta := real_delta * time_scale
+	_time += delta
 
 	match _state:
 		State.ENTERING:
@@ -130,6 +146,8 @@ func _process(delta: float) -> void:
 				return
 
 	_draw_body()
+	# Sitting on her too long annoys her (counted in real seconds).
+	track_annoying(body.global_position, real_delta)
 
 
 # A wave of the mouse close by pushes it the way the mouse is moving (and away from it).

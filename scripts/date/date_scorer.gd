@@ -3,12 +3,13 @@ extends RefCounted
 ## The one score for a date. Works out each option's odds, rolls risky ones,
 ## and adds up the points. The numbers it uses live in DateRules.
 ##
-##   points if it lands = value × (1 + her like for the attribute × likes_weight)
+##   points if it lands = value × (1 + her like for the stat × likes_weight)
 ##   chance             = 100% at or above the requirement, else
-##                        attribute ÷ requirement, clamped to min/max chance
+##                        stat ÷ requirement, clamped to min/max chance
 ##   points if it misses = −max(points × miss_penalty, min_miss_cost)
 ##   microgame difficulty = min_difficulty at or above the requirement, rising to
-##                          max_difficulty at 0 of the attribute
+##                          max_difficulty at the lowest a stat goes (1)
+## Stats and requirements are on the 1-9 scale (data/stats.tres).
 
 ## What happened when an option was picked.
 class Result:
@@ -26,16 +27,16 @@ class Result:
 
 var rules: DateRules
 var girl: GirlData
-## Attr.Id -> the player's attribute value (0-100).
-var attributes: Dictionary = {}
+## The player's stats: stat id (&"culture") -> value (1-9).
+var stats: Dictionary = {}
 var score := 0.0
 var rng := RandomNumberGenerator.new()
 
 
-func _init(p_rules: DateRules, p_girl: GirlData, p_attributes: Dictionary) -> void:
+func _init(p_rules: DateRules, p_girl: GirlData, p_stats: Dictionary) -> void:
 	rules = p_rules
 	girl = p_girl
-	attributes = p_attributes
+	stats = p_stats
 	rng.randomize()
 
 
@@ -43,7 +44,7 @@ func _init(p_rules: DateRules, p_girl: GirlData, p_attributes: Dictionary) -> vo
 func chance_of(option: DateOption) -> int:
 	if not option.has_check() or option.requirement <= 0:
 		return 100
-	var have: int = attributes.get(option.attribute, 0)
+	var have: int = stats.get(option.check_key(), 0)
 	if have >= option.requirement:
 		return 100
 	var percent := int(floor(100.0 * have / option.requirement))
@@ -52,7 +53,7 @@ func chance_of(option: DateOption) -> int:
 
 ## What the option earns if it lands, after her likes.
 func points_if_hit(option: DateOption) -> float:
-	var like := girl.likes(option.attribute) if option.has_check() else 0.0
+	var like := girl.like_for(option.stat)
 	return option.value * (1.0 + like * rules.likes_weight)
 
 
@@ -60,8 +61,11 @@ func points_if_hit(option: DateOption) -> float:
 func difficulty_of(option: DateOption) -> float:
 	if not option.has_check() or option.requirement <= 0:
 		return rules.unchecked_difficulty
-	var have: int = attributes.get(option.attribute, 0)
-	var short_by := clampf(1.0 - float(have) / option.requirement, 0.0, 1.0)
+	var have: int = stats.get(option.check_key(), 0)
+	# How far below the requirement, from 0 (meets it) to 1 (the lowest a stat goes).
+	var lowest := StatList.get_default().lowest
+	var gap := float(option.requirement - lowest)
+	var short_by := clampf((option.requirement - have) / gap, 0.0, 1.0) if gap > 0.0 else 0.0
 	return lerpf(rules.min_difficulty, rules.max_difficulty, short_by)
 
 

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/Music/music.gd" id="1_music"]
+[ext_resource type="Resource" path="res://data/music.tres" id="2_library"]
+
+[node name="Music" type="Node"]
+script = ExtResource("1_music")
+library = ExtResource("2_library")
+
+[node name="PlayerA" type="AudioStreamPlayer" parent="."]
+bus = &"Music"
+
+[node name="PlayerB" type="AudioStreamPlayer" parent="."]
+bus = &"Music"

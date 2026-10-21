@@ -1,6 +1,6 @@
 # 0025: RunState autoload replaces PlayerManager
 
-- **Status:** Accepted
+- **Status:** Accepted, not built yet: `PlayerManager` still holds the run, trimmed to just that in [0061](0061-f5-music-and-clean-up.md)
 - **Date:** 2026-10-11
 - **Affects:** [core-loop.md](../design/core-loop.md)
 

@@ -1,7 +1,9 @@
 class_name DateScene
 extends Control
 ## A whole date: her room and her, the dialogue, the player's option bubbles, microgames,
-## stage hazards, and her contact card at the end.
+## stage hazards, and her contact card at the end. A hazard that annoys her (the fly
+## sitting on her) plays its Annoyance (data/annoyances/): the date stops for a moment,
+## she reacts, says so in a bubble (Bark), and the date loses points.
 ##
 ## How a date plays, from her first-date .dialogue file (title names and numbers are in
 ## data/date_rules.tres → Flow):
@@ -15,7 +17,7 @@ extends Control
 ## for the run if the date failed, and the game goes back to the calendar.
 ##
 ## The game opens this scene from the dating app, with the girl picked there. To test,
-## press F5: scenes/Dates/FirstDate/FirstDateTest.tscn wraps this with a debug panel.
+## press F6 on scenes/Dates/FirstDate/FirstDateTest.tscn: it wraps this with a debug panel.
 ## Full guide: docs/guides/the-full-date.md
 
 ## Something to tell the tester (shown in the test bench's debug panel).
@@ -25,10 +27,10 @@ signal score_changed(text: String)
 ## The date is over and her contact card has closed.
 signal date_finished(result: DateResult)
 
-## Who the date is with. Empty = the girl picked in the dating app (her date character's
-## Girl Data Path), or Fallback Girl if she has no girl file yet.
+## Who the date is with. Empty = the girl picked in the dating app, or Fallback Girl if
+## no one was picked (the scene played on its own).
 @export var girl: GirlData
-## Used when the picked girl has no girl file yet.
+## Used when no one was picked in the dating app (e.g. F6 on this scene).
 @export var fallback_girl: GirlData
 ## The dialogue to play. Empty = the girl's First Date Dialogue.
 @export var dialogue: DialogueResource
@@ -41,8 +43,9 @@ signal date_finished(result: DateResult)
 ## Go back to the calendar after her contact card (off in the test bench).
 @export var go_to_calendar: bool = true
 
-## The player's attributes (Attr.Id → 0-100). Set before begin(); empty = the player's own.
-var attributes: Dictionary = {}
+## The player's stats (stat id → 1-9). Set before begin() to use instead of the player's
+## own (the test bench's sliders); any stat not set is the player's own.
+var stats: Dictionary = {}
 var scorer: DateScorer
 ## The pose names she has, in her girl file's order.
 var pose_names: Array[String] = []
@@ -53,10 +56,16 @@ var _titles: Array[String] = []
 var _closer_done := false
 var _started := false
 var _ended := false
+# How many annoyances are holding the date still right now (see annoy()).
+var _held := 0
+# The pose she had before she was annoyed, to go back to.
+var _pose_before := ""
+var _pose_name := ""
 
 @onready var background: TextureRect = $Background
 @onready var portrait: GirlPortrait = $Portrait
 @onready var reaction_icon: ReactionIcon = $ReactionIcon
+@onready var bark: Bark = $Bark
 @onready var dialogue_box: DialogueBox = $DialogueBox
 @onready var option_list: OptionList = $OptionList
 @onready var stage_hazards: StageHazards = $StageHazards
@@ -72,6 +81,7 @@ func _ready() -> void:
 	option_list.option_resolved.connect(_on_option_resolved)
 	dialogue_box.finished.connect(_next_title)
 	stage_hazards.hazard_cleared.connect(_on_hazard_cleared)
+	stage_hazards.hazard_annoyed.connect(_on_hazard_annoyed)
 	if auto_start:
 		begin.call_deferred()
 
@@ -91,9 +101,10 @@ func begin() -> void:
 	background.texture = girl.date_background
 	pose_names.assign(girl.poses.keys())
 	show_pose(girl.default_pose)
-	if attributes.is_empty():
-		attributes = _player_attributes()
-	scorer = DateScorer.new(rules, girl, attributes)
+	# The player's own stats, with any set from outside (the test bench's sliders) on top.
+	stats = _player_stats().merged(stats, true)
+	scorer = DateScorer.new(rules, girl, stats)
+	stage_hazards.stats = stats
 	heart_meter.setup(girl)
 
 	_lines = dialogue if dialogue else girl.first_date_dialogue
@@ -118,6 +129,7 @@ func end_now() -> void:
 func show_pose(pose_name: String) -> void:
 	portrait.show_pose(girl.get_pose(pose_name))
 	_pose_index = maxi(pose_names.find(pose_name), 0)
+	_pose_name = pose_name if girl.poses.has(pose_name) else girl.default_pose
 
 
 ## Shows her next pose (the test bench's pose button). Returns its name.
@@ -216,33 +228,25 @@ func _end_date() -> void:
 # She gave you her number: she's saved in your contacts (your party), with her hearts.
 # A failed date means she's gone for the run.
 func _apply_to_run(result: DateResult) -> void:
-	var picked: DateCharacter = PlayerManager.current_date
-	if not picked:
-		return
 	if result.got_number:
-		PlayerManager.add_party_member(girl, result.affection, picked)
+		PlayerManager.add_party_member(girl, result.affection)
 	else:
-		PlayerManager.mark_gone(picked)
+		PlayerManager.mark_gone(girl)
 
 
-# The girl picked in the dating app, by her date character's Girl Data Path.
+# The girl picked in the dating app, or Fallback Girl if no one was.
 func _picked_girl() -> GirlData:
-	var picked: DateCharacter = PlayerManager.current_date
-	if picked and not picked.girl_data_path.is_empty():
-		return load(picked.girl_data_path)
-	if picked:
-		push_warning("Date: %s has no girl file yet; using Fallback Girl." % picked.name)
-	return fallback_girl
+	return PlayerManager.current_girl if PlayerManager.current_girl else fallback_girl
 
 
-# The player's attributes from their character, or 50 each if there isn't one yet.
-func _player_attributes() -> Dictionary:
+# The player's stats (stat id → value) from their character, or each stat's Starting
+# Value if there isn't one yet.
+func _player_stats() -> Dictionary:
 	var values := {}
 	var player: PlayerCharacter = PlayerManager.player
-	for attr in Attr.Id.values():
-		values[attr] = 50
-		if player:
-			values[attr] = int(player.skills.get(Attr.display_name(attr), 50))
+	for stat in StatList.get_default().stats:
+		if stat:
+			values[stat.id] = player.get_stat(stat) if player else stat.starting_value
 	return values
 
 
@@ -270,6 +274,52 @@ func _on_hazard_cleared(hazard: StageHazard) -> void:
 	if not hazard.pose.is_empty():
 		show_pose(hazard.pose)
 	score_changed.emit("Date score: %.1f   (last: %+.1f, %s cleared)" % [scorer.score, hazard.points, hazard.name])
+
+
+## Something annoyed her (`why`, for the debug panel): plays `annoyance`. Her dialogue and
+## the options stop and her dialogue box grays out, she turns to its Pose, reacts and
+## says its Line (in the Bark bubble), the date loses its Points, and after its Pause
+## Seconds everything carries on (her pose back, if Pose Back).
+func annoy(annoyance: Annoyance, why: String = "something") -> void:
+	if not annoyance or not scorer or _ended:
+		return
+	_held += 1
+	if _held == 1:
+		_pose_before = _pose_name
+		_fade_box(annoyance.box_color, annoyance.box_fade_seconds)
+	for part: Node in [dialogue_box, option_list]:
+		part.process_mode = Node.PROCESS_MODE_DISABLED
+	var started := Time.get_ticks_msec()
+	if not annoyance.reaction.is_empty():
+		reaction_icon.show_reaction(annoyance.reaction)
+	# Only a pose she has (another girl may not have one by that name).
+	if girl.poses.has(annoyance.pose):
+		show_pose(annoyance.pose)
+	if not annoyance.line.is_empty():
+		await bark.say(annoyance.line, girl)
+	scorer.add_bonus(-annoyance.points)
+	_state.score = scorer.score
+	heart_meter.show_score(scorer.score)
+	score_changed.emit("Date score: %.1f   (last: %+.1f, %s annoyed her)" % [scorer.score, -annoyance.points, why])
+	var left := annoyance.pause_seconds - (Time.get_ticks_msec() - started) / 1000.0
+	if left > 0.0:
+		await get_tree().create_timer(left).timeout
+	_held -= 1
+	if _held == 0:
+		if annoyance.pose_back and girl.poses.has(annoyance.pose):
+			show_pose(_pose_before)
+		_fade_box(Color.WHITE, annoyance.box_fade_seconds)
+		for part: Node in [dialogue_box, option_list]:
+			part.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+# A stage hazard annoyed her (e.g. the fly sat on her for a second): play its Annoyance.
+func _on_hazard_annoyed(hazard: StageHazard) -> void:
+	annoy(hazard.annoyance, hazard.name)
+
+
+func _fade_box(color: Color, seconds: float) -> void:
+	create_tween().tween_property(dialogue_box, "modulate", color, seconds)
 
 
 func _on_pose_requested(speaker: GirlData, pose_name: String) -> void:

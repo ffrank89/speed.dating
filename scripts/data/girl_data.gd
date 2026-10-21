@@ -11,11 +11,15 @@ extends Resource
 ## Her name as players see it, on her profile and her name plate.
 ## Dialogue lines must use exactly this name, e.g. "Split Ends: Hi!".
 @export var display_name: String
+## Shown after her name on her dating profile ("Split Ends, 24").
 @export var age: int = 0
 ## Her dating-profile bio.
 @export_multiline var bio: String
 ## Shown on her dating profile.
 @export var interests: Array[String] = []
+## Her picture on her dating profile: an animated sprite. Click it to edit its frames in
+## the SpriteFrames panel at the bottom of Godot.
+@export var profile_picture: SpriteFrames
 
 @export_group("Contact Card")
 ## What she types as her phone number when she gives it to you at the end of a date.
@@ -59,11 +63,10 @@ extends Resource
 @export var affection_thresholds: Array[int] = [3, 6, 9]
 
 @export_subgroup("Likes")
-## How much she cares about each attribute (0-1). Weights date scoring and synergy.
-@export_range(0.0, 1.0, 0.05) var likes_culture: float = 0.25
-@export_range(0.0, 1.0, 0.05) var likes_intellect: float = 0.25
-@export_range(0.0, 1.0, 0.05) var likes_seduction: float = 0.25
-@export_range(0.0, 1.0, 0.05) var likes_heart: float = 0.25
+## How much she cares about each stat (0-1): Add Key/Value Pair, drag a stat file from
+## data/stats/ on the left, type 0-1 on the right. A stat that isn't listed = 0. Weights
+## date scoring (an option that checks a stat she likes is worth more) and synergy.
+@export var likes: Dictionary[PlayerStat, float] = {}
 
 
 ## The named pose, or her default pose if she doesn't have one by that name.
@@ -73,14 +76,6 @@ func get_pose(pose_name: String) -> GirlPose:
 	return poses.get(default_pose)
 
 
-func likes(attr: Attr.Id) -> float:
-	match attr:
-		Attr.Id.CULTURE:
-			return likes_culture
-		Attr.Id.INTELLECT:
-			return likes_intellect
-		Attr.Id.SEDUCTION:
-			return likes_seduction
-		Attr.Id.HEART:
-			return likes_heart
-	return 0.0
+## How much she likes this stat (0-1). 0 = not listed.
+func like_for(stat: PlayerStat) -> float:
+	return likes.get(stat, 0.0) if stat else 0.0

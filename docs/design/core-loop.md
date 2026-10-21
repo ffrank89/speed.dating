@@ -26,7 +26,7 @@ flowchart LR
     Cal[Calendar<br/>pick today's action] -->|Date day| Tinder[Tinder screen<br/>2–3 profiles]
     Tinder --> Date[Date Scene<br/>dialogue + microgames]
     Cal -->|Follow-up| Date
-    Cal -->|Train| Train[Raise one attribute]
+    Cal -->|Train| Train[Raise one stat]
     Cal -->|Rest / event| Event[Perk, item or event]
     Date -->|DateResult| Cal
     Train --> Cal
@@ -62,7 +62,7 @@ costs a day. That scarcity is the core tension:
 
 - A **first date** adds a new girl (widens the party).
 - A **follow-up** raises one girl's Affection (deepens the party).
-- **Training** raises an attribute, which makes future dates safer and
+- **Training** raises a stat, which makes future dates safer and
   improves player–girl synergy.
 - A **rest/event** day can hand you a perk that changes your whole plan.
 
@@ -75,13 +75,13 @@ On a date day the **Tinder screen** deals 2–3 random **girls** (from the
 **Girl Character** module's `GirlData` pool). Each profile shows her **tags**.
 This is the roguelike "draft" moment: do you take the girl who completes your
 Artsy?/Bookish?/Healthy? set (**Synergy**), the one strong against the boss type (**Boss**), or
-the one whose preferences match your attributes (an easier **Date**)? Some
-girls only appear once your attributes or perks pass a threshold, so training
+the one whose preferences match your stats (an easier **Date**)? Some
+girls only appear once your stats or perks pass a threshold, so training
 and perks also change what the draft offers.
 
 ### 4. The date is the skill test
 
-The **Date Scene** is where you actually play. Your **Player** attributes
+The **Date Scene** is where you actually play. Your **Player** stats
 decide which dialogue options are safe and which are risky. Your **Perks**
 add or remove options and change **microgame** difficulty. The girl's
 `GirlData` supplies her lines, preferences and microgames. Doing well turns
@@ -97,7 +97,7 @@ contact in your phone's **Contacts** app. The **Synergy
 System** reads the whole party and works out:
 
 - **Girl–girl synergy**: shared tags hitting thresholds (2 Artsy girls? Their damage heir Xdamage is increase).
-- **Player–girl synergy**: her Affection, how well your attributes match
+- **Player–girl synergy**: her Affection, how well your stats match
   her preferences, and perks that interact with her tags (Inebriated boosts
   Stoner girls).
 
@@ -123,7 +123,7 @@ attack = base attack × (1 + 0.25 × Affection) × synergy multiplier
 (0.25 is a number to tune, not a decision.)
 
 So the fight grades everything you did: who you dated (**Girls/tags**), how
-well (**Affection**), how you trained (**Attributes → player–girl synergy**),
+well (**Affection**), how you trained (**Stats → player–girl synergy**),
 which perks you found (**Perks**) and whether you read the boss's type
 (**Boss**). Watching it is the payoff. Losing tells you which of those you
 got wrong.
@@ -146,11 +146,11 @@ different girls, perks and events.
 | ------------------------------- | --------------------------------------------------------------------------------------- |
 | Boss → Calendar                | Boss type, shown from day 1                                                             |
 | Calendar → Tinder → Date      | Today's action; 2–3`GirlData` offers                                                 |
-| Player → Date                  | Attributes (option risk), perks (option and microgame modifiers), inventory (reactions) |
+| Player → Date                  | Stats (option risk), perks (option and microgame modifiers), inventory (reactions) |
 | Girl → Date                    | Art, dialogue, preferences, microgame pool, item reactions                              |
-| Date → RunState                | `DateResult`: girl, Affection, attribute gains, perks earned                          |
+| Date → RunState                | `DateResult`: girl, Affection, stat gains, perks earned                          |
 | Calendar → Player              | Training gains; event perks and items                                                   |
-| Party + Player → Synergy       | Tags, Affection, preferences vs attributes, perks                                       |
+| Party + Player → Synergy       | Tags, Affection, preferences vs stats, perks                                       |
 | Synergy → Calendar             | Synergy report on the party screen                                                      |
 | Synergy + Girls + Perks → Boss | Battle stats × multipliers, girl type vs boss (crit / fumble)                           |
 | Boss → Calendar                | Win (next chapter) or loss (run ends)                                                   |
@@ -176,7 +176,7 @@ every module file points back here.
 
 ## Shared code
 
-Every module builds on this layer. Nothing here is written yet. The
+Every module builds on this layer. Most of it isn't written yet (rows that are say **Built** or **Started**). The
 "Replaces" column shows what in today's code it takes over from.
 
 ### Shared objects
@@ -185,17 +185,17 @@ Every module builds on this layer. Nothing here is written yet. The
 | ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | `RunState`      | `Node` (autoload)                    | The player, party, current day and chapter, perks, inventory, the chapter's schedule, girls seen or gone this run. Scenes read and write it and never call each other directly. | `PlayerManager` (state half)                                   |
 | `SceneRouter`   | `Node` (autoload)                    | Scene changes and fade transitions, so`RunState` stays pure data. **The transition half exists:** `AppLauncher` (iPhone-style open/close, [phone-apps.md](../guides/phone-apps.md)).                                                                                                             | `PlayerManager` (scene-change half)                            |
-| `PlayerData`    | `Resource` (runtime)                 | Four attributes (Culture, Intellect, Seduction, Heart, 0–100).                                                                                                                 | `PlayerCharacter`                                              |
-| `GirlData`      | `Resource` (`.tres`, one per girl) | Everything about a girl that's the same every run. See[girls.md](girls.md).                                                                                                      | `DateCharacter` + `SmokeyCharacter` / `SplitEndsCharacter` |
-| `PartyMember`   | `Resource` (runtime)                 | A girl in *this* run: `GirlData` ref, Affection, current HP, buffs. **Started:** `scripts/data/party_member.gd` (`girl`, `affection`, `profile`); shown as your Contacts ([0054](../decisions/0054-party-is-your-contacts.md)). HP and buffs to come. | `PlayerManager.party` is now `Array[PartyMember]` |
-| `PerkData`      | `Resource` (`.tres`)               | A perk's name, art and hook functions. See [perks.md](perks.md).                                                                                                                | `Perk`, `Inebriated`, `Sleepy`                             |
+| `PlayerData`    | `Resource` (runtime)                 | Four stats (Culture, Intellect, Seduction, Heart, 1–9).                                                                                                                     | `PlayerCharacter`                                              |
+| `GirlData`      | `Resource` (`.tres`, one per girl) | Everything about a girl that's the same every run. **Built** (`scripts/data/girl_data.gd`, `data/girls/`). See [girls.md](girls.md).                                                                                                      | `DateCharacter` + `SmokeyCharacter` / `SplitEndsCharacter` (removed) |
+| `PartyMember`   | `Resource` (runtime)                 | A girl in *this* run: `GirlData` ref, Affection, current HP, buffs. **Started:** `scripts/data/party_member.gd` (`girl`, `affection`); shown as your Contacts ([0054](../decisions/0054-party-is-your-contacts.md)). HP and buffs to come. | `PlayerManager.party` is now `Array[PartyMember]` |
+| `PerkData`      | `Resource` (`.tres`)               | A perk's name, art and hook functions. See [perks.md](perks.md).                                                                                                                | `Perk`, `Inebriated`, `Sleepy` (removed)                   |
 | `TagData`       | `Resource` (`.tres`)               | A tag's name, icon, thresholds and bonus per threshold.                                                                                                                         | —                                                               |
 | `BossData`      | `Resource` (`.tres`)               | Life event, type, stats, abilities, art.                                                                                                                                        | —                                                               |
-| `ItemData`      | `Resource`                           | Name, art. Flavor only in the first build.                                                                                                                                      | `InventoryItem` + subclasses                                   |
-| `DateResult`    | `RefCounted`                         | Girl, Affection, attribute gains, perks earned.                                                                                                                                 | —                                                               |
+| `ItemData`      | `Resource`                           | Name, art. Flavor only in the first build.                                                                                                                                      | `InventoryItem` + subclasses (removed)                         |
+| `DateResult`    | `RefCounted`                         | Girl, Affection, stat gains, perks earned.                                                                                                                                 | —                                                               |
 | `SynergyReport` | `RefCounted`                         | Active tag bonuses and per-girl multipliers.                                                                                                                                    | —                                                               |
 | `Microgame`     | `Control` (base scene)               | The contract every microgame scene follows.                                                                                                                                     | —                                                               |
-| `Attr`          | `enum` in a constants script         | `CULTURE, INTELLECT, SEDUCTION, HEART`, so attributes aren't loose strings.                                                                                                   | string keys like`"Culture"`                                    |
+| `PlayerStat` / `StatList` | `Resource` (`.tres`) | **Built.** One file per stat (`data/stats/`: id, name, Enabled, icon, starting value) and the list with the scale (`data/stats.tres`), so stats aren't loose strings and can be switched on and off. | `Attr` enum (removed) |
 
 ### Shared functions
 
@@ -207,7 +207,7 @@ Every module builds on this layer. Nothing here is written yet. The
 | `RunState.break_up(member: PartyMember)`                                                                                  | RunState             | Calendar (Contacts app)             |
 | `RunState.add_perk(perk: PerkData)` / `add_item(item)`                                                                  | RunState             | Calendar events, Dates              |
 | `RunState.advance_day()`                                                                                                  | RunState             | Calendar                            |
-| `RunState.get_attribute(a: Attr)` / `raise_attribute(a, amount)`                                                        | RunState             | Dates, Calendar (training), Synergy |
+| `RunState.get_stat(stat: PlayerStat)` / `raise_stat(stat, amount)`                                                        | RunState             | Dates, Calendar (training), Synergy |
 | `SceneRouter.go_to(scene_id, payload := {})`                                                                              | SceneRouter          | Every scene                         |
 | `Synergy.calculate(party, player, perks) -> SynergyReport`                                                                | static on`Synergy` | Calendar (party screen), Boss       |
 | `PerkData` hooks: `modify_options`, `modify_microgame`, `modify_score`, `modify_synergy`, `modify_battle` (TBD) | each perk            | Dates, Synergy, Boss                |
@@ -216,7 +216,7 @@ Every module builds on this layer. Nothing here is written yet. The
 ### Signals on `RunState`
 
 `day_changed(day)`, `party_changed()`, `perks_changed()`,
-`attributes_changed()`, `run_ended(won: bool)`. UI listens to these instead
+`stats_changed()`, `run_ended(won: bool)`. UI listens to these instead
 of being told to refresh by other scenes.
 
 ### Build order

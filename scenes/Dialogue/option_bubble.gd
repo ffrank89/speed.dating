@@ -70,12 +70,12 @@ func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle
 	column.add_theme_constant_override("separation", 6)
 	add_child(column)
 
-	# Top row: attribute icon, "Culture 40", and the % badge.
+	# Top row: the stat's icon, "Culture 4", and the % badge.
 	var header := HBoxContainer.new()
 	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_theme_constant_override("separation", 16)
 	column.add_child(header)
-	var icon := style.icon_for(option.attribute)
+	var icon := option.check_icon()
 	if icon:
 		var picture := TextureRect.new()
 		picture.texture = icon
@@ -85,7 +85,7 @@ func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle
 		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		header.add_child(picture)
 	if option.has_check():
-		header.add_child(_label("%s %d" % [Attr.display_name(option.attribute), option.requirement], style.check_color))
+		header.add_child(_label("%s %d" % [option.check_name(), option.requirement], style.check_color))
 	var gap := Control.new()
 	gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL

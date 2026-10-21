@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/Dates/Bark/bark.gd" id="1_bark"]
+
+[node name="Bark" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 200.0
+mouse_filter = 2
+script = ExtResource("1_bark")

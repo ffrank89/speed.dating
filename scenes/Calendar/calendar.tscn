@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=12 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_calendar"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://data/player_style.tres" id="8_player"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/Profile/ProfileApp.tscn" id="9_profile"]
 [ext_resource type="PackedScene" path="res://scenes/Debug/DebugNote.tscn" id="10_note"]
+[ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3
@@ -132,5 +133,8 @@ Press C to see your Contacts"
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+
+[node name="MusicCue" parent="." instance=ExtResource("90_music")]
+track = "calendar"
 
 [editable path="PhoneScreen"]

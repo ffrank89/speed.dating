@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PlayerStat" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="1_stat"]
+[ext_resource type="Texture2D" uid="uid://c584o6ncq0l18" path="res://assets/culture stat gif/culturestat.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_stat")
+id = &"culture"
+display_name = "Culture"
+description = "Taste: music, art, books, knowing what's cool."
+icon = ExtResource("2_icon")

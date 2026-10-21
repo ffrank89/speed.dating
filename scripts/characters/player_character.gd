@@ -1,54 +1,31 @@
 class_name PlayerCharacter
-extends Node
-
+extends RefCounted
+## The player: their name and their stats (data/stats.tres: Culture, Heart, Strength,
+## Luck...), each on the list's scale (1-9). Made by the intro (or
+## PlayerManager.ensure_player()).
 
 signal stats_changed
-signal outfit_changed
 
-var personality_traits: Dictionary = {}
-var charm: float = .1
-
-var age: int = 0
-var bio: String = ""
-var icon_path: String = ""
-var skills: Dictionary
-var reaction: String
+var name: String
+## Stat id (&"culture") → value. Every stat in data/stats.tres, on or off, so turning one
+## on mid-run just works.
+var stats: Dictionary
 
 
-func _init(char_name: String):
-	self.name = char_name
-	self.skills = {
-		"Culture": 0,
-		"Intellect": 0,
-		"Seduction": 0,
-		"Heart": 0
-	}
-	self.reaction = "Neutral"
-	
+func _init(char_name: String) -> void:
+	name = char_name
+	stats = {}
+	for stat in StatList.get_default().stats:
+		if stat:
+			stats[stat.id] = stat.starting_value
 
-func get_skill_level(skill: String):
-	print("get_skill_level: ", self.skills)
-	return self.skills[skill]
-	
-func get_skills():
-	return self.skills
-	
-func increase_skill(skill_name: String, amount):
-	_increase_skill_add(skill_name, amount)
 
-func _increase_skill_add(skill_name: String, amount: int):
-	if self.skills.has(skill_name):
-		print("Increase skill add, ADDING")
-		self.skills[skill_name] += amount
-	else:
-		print("Increase skill add, EQIAL")
+## A stat's value. One the player hasn't got yet is at its Starting Value.
+func get_stat(stat: PlayerStat) -> int:
+	return stats.get(stat.id, stat.starting_value)
 
-		self.skills[skill_name] = amount
-	
-	emit_signal("stats_changed")
 
-func get_skill(skill_name: String) -> int:
-	return self.skills.get(skill_name, 0)
-
-func check_item_reaction(item: InventoryItem):
-	return "NO REACTIONS"
+# Training raises it (or lowers it), never past the list's Lowest or Highest.
+func raise_stat(stat: PlayerStat, amount: int) -> void:
+	stats[stat.id] = StatList.get_default().clamp_value(get_stat(stat) + amount)
+	stats_changed.emit()

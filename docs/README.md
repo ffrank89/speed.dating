@@ -9,7 +9,7 @@ If the two disagree, this folder wins.
 
 **Speed Dating** is a ~30-minute roguelike run split into chapters. You live
 through a Persona 5–style calendar. On date days you swipe through 2–3 random
-profiles and speed-date one of them: dialogue drawn from her pool, attribute
+profiles and speed-date one of them: dialogue drawn from her pool, stat
 checks that make choices risky but never locked, and short WarioWare-style
 microgames taken from moments in the date. A good date recruits her to your
 party, and follow-up dates raise her Affection. Girls carry tags that stack
@@ -30,7 +30,7 @@ Third-party fonts, sounds and code are listed with their licences in [`CREDITS.m
 |---|---|
 | [`design/core-loop.md`](design/core-loop.md) | **Start here.** The run from start to finish, how every module feeds the others, and the shared code all modules use. |
 | `design/<module>.md` | One file per module, all with the same four sections (below). |
-| [`guides/`](guides/) | How-tos for artists and writers, no code needed (except writing a microgame's game code). [Dialogue box, fonts, voices and poses](guides/dialogue-box.md); [options, odds and scoring](guides/options-and-scoring.md); [making a microgame](guides/making-a-microgame.md); [the phone (on your phone vs real life, its look, phone up / down)](guides/the-phone.md); [phone apps and the open-app animation](guides/phone-apps.md); [the dating app](guides/dating-app.md); [stage hazards (the fly)](guides/stage-hazards.md); [the player's cursor](guides/cursor.md); [the result screen (getting her number)](guides/result-screen.md); [the full date (opener, exchanges, closers, what happens after)](guides/the-full-date.md); [the heart meter](guides/heart-meter.md); [your contacts (the party, press C)](guides/contacts.md); [the calendar](guides/the-calendar.md); [replacing placeholders](guides/replacing-placeholders.md). |
+| [`guides/`](guides/) | How-tos for artists and writers, no code needed (except writing a microgame's game code). [Dialogue box, fonts, voices and poses](guides/dialogue-box.md); [options, odds and scoring](guides/options-and-scoring.md); [making a microgame](guides/making-a-microgame.md); [the phone (on your phone vs real life, its look, phone up / down)](guides/the-phone.md); [phone apps and the open-app animation](guides/phone-apps.md); [the dating app](guides/dating-app.md); [stage hazards (the fly)](guides/stage-hazards.md); [the player's cursor](guides/cursor.md); [the result screen (getting her number)](guides/result-screen.md); [the full date (opener, exchanges, closers, what happens after)](guides/the-full-date.md); [the heart meter](guides/heart-meter.md); [your contacts (the party, press C)](guides/contacts.md); [the calendar](guides/the-calendar.md); [stats (on and off, S.P.E.C.I.A.L.)](guides/stats.md); [music](guides/music.md); [replacing placeholders](guides/replacing-placeholders.md). |
 | [`plans/`](plans/) | Build plans for what we're working on now. Current: [first date](plans/first-date.md). |
 | [`decisions/`](decisions/) | One short record per settled decision: what we chose, why, what we didn't pick, and when to revisit it. |
 

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="MusicLibrary" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/music_library.gd" id="1_library"]
+[ext_resource type="Script" path="res://scripts/data/music_track.gd" id="2_track"]
+[ext_resource type="AudioStream" path="res://assets/audio/loops/second ss free loop.ogg" id="3_loop"]
+[ext_resource type="AudioStream" path="res://assets/audio/loops/(FREE) 2hollis  Snow Strippers type beat keflavik.mp3" id="4_beat"]
+[ext_resource type="AudioStream" uid="uid://46xsldqgh8ou" path="res://assets/audio/loops/real first loop poop.ogg" id="5_first"]
+
+[sub_resource type="Resource" id="MusicTrack_phone"]
+script = ExtResource("2_track")
+stream = ExtResource("3_loop")
+loop_early_seconds = 1.1
+
+[sub_resource type="Resource" id="MusicTrack_dating"]
+script = ExtResource("2_track")
+stream = ExtResource("4_beat")
+loop_early_seconds = 1.1
+
+[sub_resource type="Resource" id="MusicTrack_first"]
+script = ExtResource("2_track")
+stream = ExtResource("5_first")
+
+[resource]
+script = ExtResource("1_library")
+tracks = Dictionary[String, ExtResource("2_track")]({
+"calendar": SubResource("MusicTrack_phone"),
+"dating_app": SubResource("MusicTrack_dating"),
+"date": SubResource("MusicTrack_phone"),
+"first_loop": SubResource("MusicTrack_first")
+})

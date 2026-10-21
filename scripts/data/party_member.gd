@@ -9,16 +9,13 @@ var girl: GirlData
 ## 0-3 hearts. Her contact shows what these hearts unlocked on her card
 ## (data/date_rules.tres → Result).
 var affection: int = 0
-## Her dating-app profile (the old DateCharacter), so the dating app knows she's taken.
-var profile: DateCharacter
 
 
-func _init(her_girl: GirlData = null, her_affection: int = 0, her_profile: DateCharacter = null) -> void:
+func _init(her_girl: GirlData = null, her_affection: int = 0) -> void:
 	girl = her_girl
 	affection = her_affection
-	profile = her_profile
 
 
 ## Her name, as saved in your phone.
 func display_name() -> String:
-	return girl.display_name if girl else (String(profile.name) if profile else "")
+	return girl.display_name if girl else ""

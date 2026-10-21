@@ -24,7 +24,8 @@ end of the date, so the meter always shows what she'd give you right now.
   **F6**. It fills up a step at a time with **Testing → Test Girl**'s
   thresholds and colour, then starts over. **Test Step** is how many points
   each step adds.
-- **In a date:** press **F5** and pick options. Good picks fill the rings.
+- **In a date:** press **F6** on the date test bench
+  (`scenes/Dates/FirstDate/FirstDateTest.tscn`) and pick options. Good picks fill the rings.
 
 ## The colour: her style
 

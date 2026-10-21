@@ -1,7 +1,9 @@
 extends Control
-## The intro, on your phone: "Your Profile". For now it's a debug screen: set your four
-## attributes with the sliders (or Randomize), then Start Dating! opens the calendar on
-## the phone, and the run begins.
+## The intro, on your phone: "Your Profile". For now it's a debug screen: set your stats
+## with the sliders (or Randomize), then Start Dating! opens the calendar on the phone,
+## and the run begins. There's a slider for every stat that's on (data/stats.tres), from
+## Lowest to Highest (1-9), starting at the stat's Starting Value. The list scrolls when
+## it's taller than the phone.
 ##
 ## The words are the settings below. The phone, its font, colours and your room behind
 ## it are data/phone_style.tres. Move the parts in this scene (PhoneScreen → Phone →
@@ -13,17 +15,12 @@ extends Control
 @export var hint_text: String = "Debug: set your stats"
 @export var randomize_text: String = "Randomize Stats"
 @export var start_text: String = "Start Dating!"
-## Size of each attribute's name and number.
-@export_range(8, 200) var stat_font_size: int = 44
+## Size of each stat's name and number.
+@export_range(8, 200) var stat_font_size: int = 40
 
-# Track player stats
-var player_stats = {
-	"Culture": 100,
-	"Intellect": 100,
-	"Seduction": 100,
-	"Heart": 100
-}
-# Sliders for each stat
+# The stats that are on (PlayerStat → value), from their Starting Value.
+var player_stats = {}
+# Sliders for each stat (PlayerStat → HSlider)
 var stat_sliders = {}
 
 @onready var phone_screen: PhoneScreen = %PhoneScreen
@@ -35,6 +32,8 @@ var stat_sliders = {}
 
 
 func _ready():
+	for stat in StatList.get_default().active():
+		player_stats[stat] = stat.starting_value
 	style_ui_elements()
 	setup_stats_interface()
 	randomize_button.pressed.connect(_on_randomize_pressed)
@@ -71,78 +70,68 @@ func _style_button(button: Button, fill: Color, ink: Color) -> void:
 
 
 func setup_stats_interface():
-	var ui := phone_screen.style
 	# Clear any existing children
 	for child in stats_container.get_children():
 		child.queue_free()
 
-	# Add a slider for each stat
-	for stat in player_stats.keys():
-		var stat_row = HBoxContainer.new()
-		stat_row.add_theme_constant_override("separation", 24)
+	# A slider for each stat that's on.
+	for stat: PlayerStat in player_stats:
+		_add_slider(stat, stat.display_name, player_stats, stat_font_size)
 
-		# Create label
-		var label = Label.new()
-		label.text = stat
-		label.custom_minimum_size.x = 250
-		ui.style_label(label, ui.ui_text_color, stat_font_size)
 
-		# Create slider
-		var slider = HSlider.new()
-		slider.min_value = 0
-		slider.max_value = 100
-		slider.value = player_stats[stat]
-		slider.step = 1
-		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		slider.custom_minimum_size.y = 50
+# One row: the stat's name, its slider and its number. `values[key]` follows the slider.
+func _add_slider(key, label_text: String, values: Dictionary, font_size: int) -> void:
+	var ui := phone_screen.style
+	var stat_row = HBoxContainer.new()
+	stat_row.add_theme_constant_override("separation", 24)
 
-		# Create value label
-		var value_label = Label.new()
-		value_label.text = str(int(slider.value))
-		value_label.custom_minimum_size.x = 90
-		value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		ui.style_label(value_label, ui.accent_color, stat_font_size)
+	var label = Label.new()
+	label.text = label_text
+	label.custom_minimum_size.x = 250
+	ui.style_label(label, ui.ui_text_color, font_size)
 
-		# Connect slider value change
-		slider.value_changed.connect(func(val):
-			player_stats[stat] = val
-			value_label.text = str(int(val))
-		)
+	var slider = HSlider.new()
+	slider.min_value = StatList.get_default().lowest
+	slider.max_value = StatList.get_default().highest
+	slider.value = values[key]
+	slider.step = 1
+	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	slider.custom_minimum_size.y = 50
+	# The mouse wheel scrolls the list instead of moving the slider under it.
+	slider.scrollable = false
 
-		# Store the slider for later reference
-		stat_sliders[stat] = slider
+	var value_label = Label.new()
+	value_label.text = str(int(slider.value))
+	value_label.custom_minimum_size.x = 90
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	ui.style_label(value_label, ui.accent_color, font_size)
 
-		stat_row.add_child(label)
-		stat_row.add_child(slider)
-		stat_row.add_child(value_label)
-		stats_container.add_child(stat_row)
+	slider.value_changed.connect(func(val):
+		values[key] = int(val)
+		value_label.text = str(int(val))
+	)
+	stat_sliders[key] = slider
+
+	stat_row.add_child(label)
+	stat_row.add_child(slider)
+	stat_row.add_child(value_label)
+	stats_container.add_child(stat_row)
 
 
 func _on_randomize_pressed():
-	# Generate random stats
-	for stat in player_stats.keys():
-		var random_value = randi_range(10, 90)
-		player_stats[stat] = random_value
-		stat_sliders[stat].value = random_value
+	# Generate random stats (the sliders update the values).
+	for key in stat_sliders:
+		stat_sliders[key].value = randi_range(StatList.get_default().lowest, StatList.get_default().highest)
 
 
 func _on_start_dating_pressed():
-	# Get the PlayerManager singleton
-	var player_manager = get_node("/root/PlayerManager")
-
-	# Create a new player with custom stats
+	# A new player with the stats from the sliders.
 	var new_player = PlayerCharacter.new("Me!")
-
-	# Set the stats based on slider values
-	for stat in player_stats:
-		new_player.skills[stat] = player_stats[stat]
-
-	print("Debug mode - Player stats set to:", player_stats)
-
-	# Replace the player in PlayerManager
-	player_manager.player = new_player
+	for stat: PlayerStat in player_stats:
+		new_player.stats[stat.id] = player_stats[stat]
+	PlayerManager.player = new_player
 
 	# The run starts on the calendar, opening on the phone (a date day opens the dating
 	# app from there).
-	AppLauncher.open_scene("calendar", player_manager.CALENDAR, start_button.get_global_rect())
+	AppLauncher.open_scene("calendar", PlayerManager.CALENDAR, start_button.get_global_rect())

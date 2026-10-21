@@ -35,7 +35,8 @@ Patrick Hand.
 - **On its own:** open `scenes/Results/ContactCard.tscn` and press **F6**.
   Click the top node → **Testing (F6) → Test Hearts** (0–3) to see each ending.
   **Test Girl** picks whose card it is.
-- **In the date:** press **F5** and play to the end (after the closer), or
+- **In the date:** press **F6** on the date test bench
+  (`scenes/Dates/FirstDate/FirstDateTest.tscn`) and play to the end (after the closer), or
   press **End date now** in the debug panel. The hearts come from the date
   score so far. What happens after the card (party, gone for the run, back
   to the calendar) is in [the-full-date.md](the-full-date.md).
@@ -84,7 +85,7 @@ font, size and colour for the iPhone's own words, how it comes up) is
 | Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and **Failed Name Text** (*"not a chance!"*), what she types on a failed date |
 | Closing | **Close By Hand** (on: wait for the player to click Done or press Escape), **Done Hover Color** (green), **Done Glow Size** / **Done Glow Strength**, **Done Pulse** (on: it pulses while waiting), **Close Sound** (Kenney `close_002` for now) |
 | Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); **Secret Text** (*"you dont know me like that!"*); description and icon sizes |
-| Sounds | Key, space, delete, next box, Done and Cancel |
+| Sounds | Key, space, next box, each trait popping in, Done and Cancel (and, for the Contacts app, opening a contact and going back) |
 
 **Where things sit on the card:** open `ContactCard.tscn`. Drag the rows in
 **PhoneScreen → Phone → Body → Screen → Margin → Column**.

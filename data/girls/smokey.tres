@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="GirlData" load_steps=23 format=3]
+
+[ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://dviwladmgecna" path="res://scripts/data/girl_pose.gd" id="2_pose"]
+[ext_resource type="Texture2D" uid="uid://40q01nltc2uc" path="res://assets/background 2.png" id="3_room"]
+[ext_resource type="Texture2D" uid="uid://wplfnjm2lbq8" path="res://assets/green_girl/beauit.png" id="4_normal"]
+[ext_resource type="Texture2D" uid="uid://suhiobr1pax" path="res://assets/green_girl/reach.png" id="5_happy"]
+[ext_resource type="Texture2D" uid="uid://6ubma5wjr81w" path="res://assets/green_girl/parker.png" id="6_concerned"]
+[ext_resource type="Texture2D" uid="uid://dn6tkrjq0m3wm" path="res://assets/green_girl/earring.png" id="7_earring"]
+[ext_resource type="Texture2D" uid="uid://cmf8a15ntohw2" path="res://assets/girl sprite 2 gif/girl2 sprite2.png" id="8_pic1"]
+[ext_resource type="Texture2D" uid="uid://bj02dbpd8sijh" path="res://assets/girl sprite 2 gif/girl2 sprite3.png" id="9_pic2"]
+[ext_resource type="Texture2D" uid="uid://dc50yhe1dtasq" path="res://assets/girl sprite 2 gif/girl2 sprite4.png" id="10_pic3"]
+[ext_resource type="Texture2D" uid="uid://camcr70dq0hiu" path="res://assets/girl sprite 2 gif/girl2 sprite5.png" id="11_pic4"]
+[ext_resource type="Texture2D" uid="uid://c87o7p1joutag" path="res://assets/girl sprite 2 gif/girl2 sprite6.png" id="12_pic5"]
+[ext_resource type="Texture2D" uid="uid://cunt53phm1q5k" path="res://assets/girl sprite 2 gif/girl2 sprite.png" id="13_pic6"]
+[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="89_stat_script"]
+[ext_resource type="Resource" path="res://data/stats/culture.tres" id="90_culture"]
+[ext_resource type="Resource" path="res://data/stats/intellect.tres" id="91_intellect"]
+[ext_resource type="Resource" path="res://data/stats/seduction.tres" id="92_seduction"]
+[ext_resource type="Resource" path="res://data/stats/heart.tres" id="93_heart"]
+
+[sub_resource type="Resource" id="Pose_normal"]
+script = ExtResource("2_pose")
+image = ExtResource("4_normal")
+
+[sub_resource type="Resource" id="Pose_happy"]
+script = ExtResource("2_pose")
+image = ExtResource("5_happy")
+
+[sub_resource type="Resource" id="Pose_concerned"]
+script = ExtResource("2_pose")
+image = ExtResource("6_concerned")
+
+[sub_resource type="Resource" id="Pose_earring"]
+script = ExtResource("2_pose")
+image = ExtResource("7_earring")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_profile"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_pic1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_pic2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_pic3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_pic4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_pic5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_pic6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[resource]
+script = ExtResource("1_data")
+id = &"smokey"
+display_name = "Smokey"
+age = 24
+bio = "friends made me get on here but im indaa not opposed rn!"
+interests = Array[String](["weed", "and", "smoken it ", "frogs in the park"])
+profile_picture = SubResource("SpriteFrames_profile")
+poses = Dictionary[String, ExtResource("2_pose")]({
+"concerned": SubResource("Pose_concerned"),
+"earring": SubResource("Pose_earring"),
+"happy": SubResource("Pose_happy"),
+"normal": SubResource("Pose_normal")
+})
+default_pose = "concerned"
+date_background = ExtResource("3_room")
+likes = Dictionary[ExtResource("89_stat_script"), float]({
+ExtResource("90_culture"): 0.25,
+ExtResource("91_intellect"): 0.25,
+ExtResource("92_seduction"): 0.25,
+ExtResource("93_heart"): 0.25
+})
