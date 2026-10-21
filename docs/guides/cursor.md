@@ -31,9 +31,25 @@ Click `data/cursors/default.tres`:
 | **States → Pressed Image** | Optional: while the mouse button is held. E.g. a closed hand. |
 | **States → Drag Image** | Optional: while dragging an option bubble. E.g. a grabbing hand. |
 | **Drawn In Game** | Off = the computer draws it (no lag, but at most 256 × 256 pixels). On = the game draws it: any size, and it squishes when you click (**Click Squish**). |
+| **Pointer → Tint** | Colours the pictures (white = as drawn). The placeholder action cursor is the Godot logo tinted orange, so it doesn't look like the normal one. |
 
 Draw every state at the **same size with the tip in the same place**: one
 Hotspot is used for all of them.
+
+## The action cursor (stage hazard cursor)
+
+During a date, press **S** to switch to the **action cursor**, and **S**
+again to switch back. Stage hazards like the fly can only be dealt with while
+it's on: wave the action cursor at the fly to shoo it. It switches off by
+itself when a microgame starts (S moves you down there) and when the date
+ends.
+
+| What | Where |
+|---|---|
+| Its look | `data/cursors/action.tres`: the same settings as any cursor. Now the Godot logo, bigger and tinted orange. |
+| Which cursor is the action one | `scenes/Cursor/PlayerCursor.tscn` → **Action Style** |
+| The key | **Project → Project Settings → Input Map** → `action_cursor` (S now). PlayerCursor's **Action Key** names which action it listens for. |
+| Which hazards need it | Each hazard's top node → **Dealing With It → Needs Action Cursor** (on for the fly). Off = the normal cursor works too. |
 
 ## More than one cursor
 
@@ -54,6 +70,8 @@ Make another file: right-click `default.tres` → **Duplicate…**, e.g.
 | "at most 256 × 256" warning | The picture × Size is too big for the computer's cursor. Lower **Size**, or turn on **Drawn In Game**. |
 | The cursor lags a little | That's **Drawn In Game**. Turn it off for the computer's own, lag-free cursor. |
 | No hover picture on a button | Hover shows over things whose **Mouse → Default Cursor Shape** is **Pointing Hand**. Set that on the button in the Inspector. |
+| S does nothing | It only works on a date (where there are stage hazards), not during a microgame, and not after the date ends. |
+| I can't shoo the fly | Press **S** first: the fly needs the action cursor. |
 
 ## For programmers
 
@@ -69,3 +87,8 @@ layer 128) applies a `CursorStyle`:
 
 `use(style)` switches cursors. Option bubbles use the DRAG shape while
 they're dragged.
+- Action cursor: `PlayerCursor.action_style`, `action_key` (`action_cursor`),
+  `action_mode`, `set_action_mode(on)`, signal `action_mode_changed(on)`.
+  `action_allowed` says whether the key works; a date's `StageHazards` turns
+  it on in `_ready`, off during microgames, on `stop()` and when it leaves.
+  `StageHazard.can_act()` checks **Needs Action Cursor**.

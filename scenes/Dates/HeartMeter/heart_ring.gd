@@ -7,6 +7,8 @@ extends Control
 
 ## Sent when the ring fills and the heart turns to colour.
 signal heart_won
+## Sent as the ring fills (or empties) past each Fill Tick Every step. `amount` = how full.
+signal ticked(amount: float, filling: bool)
 
 # A heart shown in grey (a picture's colours turned to shades of grey).
 const GREY := "shader_type canvas_item;\nvoid fragment() {\n\tfloat g = dot(COLOR.rgb, vec3(0.299, 0.587, 0.114));\n\tCOLOR.rgb = vec3(g);\n}\n"
@@ -14,6 +16,7 @@ const GREY := "shader_type canvas_item;\nvoid fragment() {\n\tfloat g = dot(COLO
 ## How full the ring looks now, 0-1.
 var fill := 0.0:
 	set(value):
+		_tick_past(fill, value)
 		fill = value
 		queue_redraw()
 ## Whether its heart has been won.
@@ -23,6 +26,8 @@ var _style: HeartMeterStyle
 var _color := Color.WHITE
 var _tween: Tween
 var _grey := ShaderMaterial.new()
+# True while the ring slides to a new amount (ticks only sound then, not on a jump).
+var _sliding := false
 
 @onready var heart: TextureRect = %Heart
 ## The animated heart, shown instead of Heart once the ring is full (Heart Animation).
@@ -54,12 +59,31 @@ func fill_to(amount: float, animate := true) -> void:
 	if _tween:
 		_tween.kill()
 	if not animate or _style.fill_seconds <= 0.0:
+		_sliding = false
 		fill = amount
 		_update_heart(false)
 		return
+	if is_equal_approx(amount, fill):
+		_sliding = false
+		_update_heart(true)
+		return
+	_sliding = true
+	if _style.fill_tick_every <= 0.0:
+		# Once per fill: a single tick as it starts moving.
+		ticked.emit(amount, amount > fill)
 	_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_tween.tween_property(self, "fill", amount, _style.fill_seconds)
+	_tween.tween_callback(func() -> void: _sliding = false)
 	_tween.tween_callback(_update_heart.bind(true))
+
+
+# A tick for each Fill Tick Every step the ring passes while it slides.
+func _tick_past(from: float, to: float) -> void:
+	if not _sliding or not _style or _style.fill_tick_every <= 0.0:
+		return
+	var step := _style.fill_tick_every
+	if floori(to / step + 0.0001) != floori(from / step + 0.0001):
+		ticked.emit(to, to > from)
 
 
 func _update_heart(celebrate: bool) -> void:

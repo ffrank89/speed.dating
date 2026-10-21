@@ -15,11 +15,11 @@ screen, and she fills it in:
 
 Abilities don't show yet: they're not listed in **Trait Hearts** (below).
 
-**Then it waits for you.** When she's done, your **✕** (the X art, drawing
-itself in) appears at the card's top-right corner. Click it, or press
-**Escape**, to close the app and go back to the calendar. (Contact card
-style → **Closing → Close By Hand** off = it closes by itself after **End
-Hold Seconds**, like before.)
+**Then it waits for you.** When she's done, **Done** (top right of the card)
+becomes a button: it pulses gently, and glows green under the mouse. Click
+it, or press **Escape**, to close the app and go back to the calendar.
+(Contact card style → **Closing → Close By Hand** off = it closes by itself
+after **End Hold Seconds**, like before.)
 
 During the date, the [heart meter](heart-meter.md) in the top right shows
 the hearts she'd give you so far.
@@ -79,7 +79,7 @@ Dating, now 3 / 6 / 9 points) the date score reached.
 | Words | "New Contact", "Cancel", "Done", "Add Photo", the grey hints ("First name"…), "mobile", "home", and the two endings' messages |
 | Fields | The size of what she types, and how faint the grey hints are |
 | Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and **Failed Name Text** (*"not a chance!"*), what she types on a failed date |
-| Closing | **Close By Hand** (on: wait for the player's ✕ or Escape), **Close Image** (`assets/x1/x1_7.png`), **Close Animation** (`icons/x/x.tres`, the X drawing itself; plays once), **Close Size**, **Close Sound** (Kenney `close_002` for now) |
+| Closing | **Close By Hand** (on: wait for the player to click Done or press Escape), **Done Hover Color** (green), **Done Glow Size** / **Done Glow Strength**, **Done Pulse** (on: it pulses while waiting), **Close Sound** (Kenney `close_002` for now) |
 | Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); **Secret Text** (*"you dont know me like that!"*); description and icon sizes |
 | Sounds | Key, space, delete, next box, Done and Cancel |
 

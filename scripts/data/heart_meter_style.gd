@@ -42,3 +42,17 @@ extends Resource
 ## When a ring fills and you get a heart. Now the same sound as getting her number.
 @export var heart_sound: AudioStream
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0
+
+@export_subgroup("Filling")
+## Plays as a ring fills up (ticks along with it). Empty = silent.
+@export var fill_sound: AudioStream
+## A tick each time the ring fills this much more (0.1 = every tenth of the ring).
+## 0 = it plays once each time the ring starts filling.
+@export_range(0.0, 1.0, 0.01) var fill_tick_every: float = 0.1
+## The tick's pitch when the ring is empty, and when it's full: it climbs as it fills.
+## Both 1 = the sound as recorded.
+@export_range(0.25, 4.0, 0.05) var fill_pitch_start: float = 0.9
+@export_range(0.25, 4.0, 0.05) var fill_pitch_end: float = 1.7
+@export_range(-30.0, 6.0, 0.5) var fill_volume_db: float = -12.0
+## Optional: plays as a ring empties (a miss). Same ticks and pitch. Empty = silent.
+@export var drain_sound: AudioStream

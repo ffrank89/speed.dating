@@ -187,6 +187,7 @@ func _end_date() -> void:
 	_ended = true
 	dialogue_box.hide()
 	option_list.hide()
+	stage_hazards.stop()
 	# -1 = a failed date (below her Number Threshold); otherwise the hearts earned.
 	var hearts := scorer.hearts() if scorer.gives_number() else -1
 	var how := "failed" if hearts < 0 else "%d of 3 hearts" % hearts

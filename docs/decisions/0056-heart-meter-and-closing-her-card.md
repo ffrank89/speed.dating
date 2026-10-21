@@ -8,7 +8,9 @@
 
 **Heart meter.** In the top right of a date, one **ring per heart** she can give (her Affection Thresholds). Each ring fills as the date score climbs toward its threshold; when it's full, the **grey heart** in its middle turns to colour, pops, plays the **heart animation** (the heart reaction from `data/reactions.tres`; Frank: "Use the hearts animation once its red"), and the **heart sound** plays (the "you got her number" sound to start, changeable). Dropping back below a threshold greys that heart again, since hearts are counted at the end. Each girl's fill colour is her dialogue style's **Meter Color**; size, thickness, colours, the heart picture and sound are `data/heart_meter_style.tres`; one ring's design is `HeartRing.tscn` (swappable via Ring Scene). Guide: [heart-meter.md](../guides/heart-meter.md).
 
-**Closing her card.** When she's done with the contact card, it no longer closes by itself: the **✕** (the existing X art, drawing itself in) appears on the card's corner, and the player clicks it or presses **Escape** to close the app and go back to the calendar. Contact card style → **Closing → Close By Hand** off brings back the timed close.
+**Fill sound.** As a ring fills it ticks, climbing in pitch as it gets full (Frank: "we should use a sound for the heart bar filling up - ensure this is modular"): Heart Meter Style → Sounds → Filling (Fill Sound, Fill Tick Every, Fill Pitch Start / End, Fill Volume Db, an optional Drain Sound).
+
+**Closing her card.** When she's done with the contact card, it no longer closes by itself: **Done** becomes a button (it pulses, and glows green under the mouse), and the player clicks it or presses **Escape** to close the app and go back to the calendar. Contact card style → **Closing → Close By Hand** off brings back the timed close. (First built with the X art on the card's corner; Frank: "remove the X from the contact screen, but allow us to click the Done, it should glow green when we hover over it.")
 
 ## Why
 

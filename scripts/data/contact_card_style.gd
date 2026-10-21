@@ -88,23 +88,18 @@ extends Resource
 @export_range(16, 200) var trait_icon_size: int = 64
 
 @export_group("Closing")
-## On = when she's done, the card stays until the player clicks the ✕ (top right of the
+## On = when she's done, the card stays until the player clicks Done (top right of the
 ## card) or presses Escape. Off = it closes by itself after End Hold Seconds.
 @export var close_by_hand: bool = true
-## The ✕ picture.
-@export var close_image: Texture2D
-## Optional: an animated ✕ that plays once when it appears (e.g. the X drawing itself,
-## icons/x/x.tres). Wins over Close Image while it plays, then stays on its last frame.
-@export var close_animation: SpriteFrames
-## Which animation in Close Animation. Empty = its first one.
-@export var close_animation_name: String = ""
-## Size of the ✕, in pixels.
-@export_range(16, 400) var close_size: int = 130
-## A round button behind the ✕ so it shows up on anything. A = how solid; 0 = none.
-@export var close_backing_color: Color = Color(1, 1, 1, 0.95)
-## The line around that round button. A = 0 for none.
-@export var close_backing_outline: Color = Color(0, 0, 0, 0.25)
-## Clicking the ✕ (or Escape).
+## Done's colour while the mouse is over it.
+@export var done_hover_color: Color = Color(0.2, 0.85, 0.4)
+## How far Done's glow spreads while the mouse is over it, in pixels. 0 = no glow.
+@export_range(0, 40) var done_glow_size: int = 14
+## How strong the glow is (0-1).
+@export_range(0.0, 1.0, 0.05) var done_glow_strength: float = 0.4
+## Done gently pulses while it's waiting to be clicked, so the player sees it's a button.
+@export var done_pulse: bool = true
+## Clicking Done (or Escape).
 @export var close_sound: AudioStream
 
 @export_group("Contacts App")

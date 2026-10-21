@@ -16,6 +16,8 @@ extends Resource
 @export var hotspot: Vector2 = Vector2.ZERO
 ## How big to show it. 1 = the picture's own size.
 @export_range(0.1, 4.0, 0.05) var size: float = 1.0
+## Colours the pictures (white = as drawn). Handy for telling placeholder cursors apart.
+@export var tint: Color = Color.WHITE
 
 @export_group("States")
 ## Optional: over something clickable (option bubbles, app icons). Empty = Image.

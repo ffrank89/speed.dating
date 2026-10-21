@@ -1,6 +1,7 @@
 extends StageHazard
-## A fly that buzzes around the date along one of its paths. Wave the mouse at it to
-## shoo it; shoo it off the screen and she reacts and the date earns a point.
+## A fly that buzzes around the date along one of its paths. Switch to the action cursor
+## (S), then wave the mouse at it to shoo it; shoo it off the screen and she reacts and
+## the date earns a point. (Dealing With It → Needs Action Cursor off = no S needed.)
 ##
 ## Paths: every Path2D under Paths is one path. Draw them right here in this scene with
 ## the Path2D tool, over the DrawingGuide (her room and her). Saved paths (Curve2D files)
@@ -133,7 +134,7 @@ func _process(delta: float) -> void:
 
 # A wave of the mouse close by pushes it the way the mouse is moving (and away from it).
 func _try_shoo(mouse: Vector2, mouse_velocity: Vector2) -> void:
-	if _state == State.LEAVING or _is_off_screen():
+	if _state == State.LEAVING or _is_off_screen() or not can_act():
 		return
 	var distance := mouse.distance_to(_position)
 	var wave := mouse_velocity.length()

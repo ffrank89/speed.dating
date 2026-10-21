@@ -108,8 +108,9 @@ shows on the card is in [result-screen.md](result-screen.md).
 
 ## After the date
 
-Her contact card stays up until you close it: click the **✕** on its corner
-or press **Escape** ([result-screen.md](result-screen.md)). Then:
+Her contact card stays up until you close it: click **Done** (it glows
+green under the mouse) or press **Escape** ([result-screen.md](result-screen.md)).
+Then:
 
 | How it went | What happens |
 |---|---|
