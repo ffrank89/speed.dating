@@ -35,6 +35,7 @@ thing. **No code needed.**
 | **Your room** (behind the phone) | `assets/bedroom2.png` | `data/phone_style.tres` → **Your Room → Room Image** | Behind the phone on the intro, dating app and calendar |
 | **Phone up / down sounds** | Kenney stand-ins (`maximize_008`, `minimize_008`) | `data/phone_style.tres` → **Phone Up / Down → Up Sound / Down Sound** | Taking the phone out and putting it away |
 | **Dating app sounds** | Kenney stand-ins (`switch_005`, `confirmation_002`, `click_003`) | `data/dating_app_style.tres` → **Sounds** | Passing on a profile, Start Dating!, a button under the mouse |
+| **App switch sound** | Kenney stand-in (`switch_006`) | `data/app_transition_style.tres` → **Switching Apps → Switch Sound** | Switching to Contacts or Profile and back |
 | **Contacts and Profile app icons** | `assets/placeholders/godot_logo.svg` | `data/apps/contacts.tres`, `data/apps/profile.tres` → **Icon** | The tiles Contacts (C) and Profile (P) open from |
 | **Template microgame target** | `assets/placeholders/godot_logo.svg` | `scenes/Microgames/_template/TemplateMicrogame.tscn` → **PlayArea/Target** | The thing you catch in the example microgame. Copies of the template start with it too. |
 | **Trail fallback icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Dragging → Trail Fallback Icon** | The little icons dropped when dragging an option with no attribute check |

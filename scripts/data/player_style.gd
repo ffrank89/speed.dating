@@ -47,17 +47,16 @@ extends Resource
 @export_range(0, 20) var text_outline_width: int = 6
 @export var text_outline_color: Color = Color(0, 0, 0, 0.55)
 
+@export_group("Choices")
+## Today's choices light up with a border in this colour under the mouse.
+@export var choice_hover_color: Color = Color("#ff9800")
+## How thick that border is, in pixels.
+@export_range(0, 30) var choice_hover_width: int = 6
+
 @export_group("Buttons")
-## Each of today's choices has a Pick button.
-@export var pick_color: Color = Color("#ff9800")
-@export var pick_text_color: Color = Color.WHITE
-## A choice that doesn't fit before the boss.
-@export var blocked_color: Color = Color("#55606a")
-## The calendar's Contacts and Profile buttons.
-@export var app_button_color: Color = Color("#e0453a")
-## The calendar's "See the whole month" button.
+## The calendar's Month button.
 @export var month_button_color: Color = Color("#ff9800")
-@export var app_button_text_color: Color = Color.WHITE
+@export var button_text_color: Color = Color.WHITE
 ## How rounded buttons are, in pixels.
 @export_range(0, 100) var button_corner: int = 16
 ## The darker edge under each button, in pixels (chunky, like a key).
@@ -88,10 +87,16 @@ func make_card(edge: Color, padding: int) -> StyleBoxFlat:
 	return box
 
 
-## A darker panel inside a card.
-func make_panel(padding: int) -> StyleBoxFlat:
-	var box := _flat(panel_color, maxi(corner - 6, 0))
+## A darker panel inside a card. `lit` = under the mouse: a little lighter, with a border
+## in Choice Hover Color.
+func make_panel(padding: int, lit := false) -> StyleBoxFlat:
+	var box := _flat(panel_color.lightened(0.08) if lit else panel_color, maxi(corner - 6, 0))
 	box.set_content_margin_all(padding)
+	if lit:
+		box.border_color = choice_hover_color
+		box.set_border_width_all(choice_hover_width)
+		# The border sits inside the panel; the words keep their place.
+		box.set_content_margin_all(padding)
 	return box
 
 
@@ -115,7 +120,7 @@ func make_button(color: Color, state := "normal") -> StyleBoxFlat:
 		"pressed":
 			fill = color.darkened(0.12)
 		"disabled":
-			fill = blocked_color
+			fill = color.darkened(0.5)
 	var box := _flat(fill, button_corner)
 	box.border_color = fill.darkened(0.35)
 	box.border_width_bottom = 0 if state == "pressed" else button_depth

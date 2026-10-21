@@ -57,6 +57,31 @@ extends Resource
 ## or closes. It's stretched to fill the screen, so draw it at 3000 × 1700.
 @export var device_frame: Texture2D
 
+@export_group("Switching Apps")
+## On = Contacts and Profile open over the calendar like moving between open apps on an
+## iPhone (the app switcher): the screen shrinks to a card, the next app's card slides
+## in beside it and grows to fill the phone. Closing goes back the same way.
+## Off = they open like any app (Contacts: its Open As App setting).
+@export var switch_between_apps: bool = true
+## How small the cards get, as a share of the phone's screen.
+@export_range(0.3, 1.0, 0.01) var switch_card_scale: float = 0.78
+## How far apart the cards are, as a share of the screen's width.
+@export_range(0.2, 1.5, 0.01) var switch_card_spacing: float = 0.72
+## Seconds for each part: the screen shrinking to a card, the cards sliding across, the
+## new card growing to fill the screen.
+@export_range(0.05, 1.0, 0.01) var switch_shrink_seconds: float = 0.2
+@export_range(0.05, 1.0, 0.01) var switch_slide_seconds: float = 0.3
+@export_range(0.05, 1.0, 0.01) var switch_grow_seconds: float = 0.22
+## Behind the cards.
+@export var switch_background: Color = Color(0.09, 0.09, 0.11)
+## The app's icon and name above each card (from its file in data/apps/). Icon size in
+## pixels; 0 = no icon.
+@export_range(0, 200) var switch_icon_size: int = 64
+@export_range(8, 100) var switch_name_size: int = 36
+@export var switch_name_color: Color = Color.WHITE
+## Played as the cards start to move.
+@export var switch_sound: AudioStream
+
 @export_group("Behind")
 ## How much the screen behind zooms while an app opens. 1.0 = no zoom.
 @export_range(0.5, 2.0, 0.01) var behind_zoom: float = 1.08

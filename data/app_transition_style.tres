@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="AppTransitionStyle" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="AppTransitionStyle" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/app_transition_style.gd" id="1_style"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/maximize_003.wav" id="2_open"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/minimize_003.wav" id="3_close"]
 [ext_resource type="Resource" path="res://data/phone_style.tres" id="4_phone"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/switch_006.wav" id="5_switch"]
 
 [resource]
 script = ExtResource("1_style")
 phone = ExtResource("4_phone")
 open_sound = ExtResource("2_open")
 close_sound = ExtResource("3_close")
+switch_sound = ExtResource("5_switch")

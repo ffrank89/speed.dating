@@ -12,7 +12,7 @@ extends Control
 ## screen, like a boss fight, puts the phone down).
 ## "Month" swaps the cards for the whole month, small; days past this chapter show an X
 ## (data/calendar_rules.tres → Foresight Days lets you see further).
-## Contacts (C) and Profile (P) open your other apps.
+## C and P switch to your other apps, Contacts and Profile (a debug note says so).
 ##
 ## Every part is swappable: the layout is this scene (PhoneScreen → Phone → Body →
 ## Screen), a day is Card Scene (DayCard.tscn), a choice is Choice Scene
@@ -47,9 +47,6 @@ var _choices: Array[DayChoice] = []
 @onready var title: Label = %Title
 @onready var chapter_label: Label = %ChapterLabel
 @onready var days_left: Label = %DaysLeft
-@onready var buttons: HBoxContainer = %Buttons
-@onready var contacts_button: Button = %ContactsButton
-@onready var profile_button: Button = %ProfileButton
 @onready var expand_button: Button = %ExpandButton
 ## Today's card and the days coming up.
 @onready var cards: VBoxContainer = %Cards
@@ -71,8 +68,6 @@ func _ready() -> void:
 		player_style = PlayerStyle.new()
 	_calendar = PlayerManager.get_calendar(rules)
 	dialogue_box.default_style = style.box_style
-	contacts_button.pressed.connect(func() -> void: contacts.open())
-	profile_button.pressed.connect(func() -> void: profile.open())
 	expand_button.pressed.connect(_toggle_expanded)
 	_apply_style()
 	_refresh()
@@ -102,10 +97,6 @@ func _refresh() -> void:
 	days_left.visible = style.show_days_left
 	expand_button.text = style.collapse_text if _expanded else style.expand_text
 	expand_button.visible = style.show_expand_button
-	contacts_button.text = style.contacts_button_text
-	profile_button.text = style.profile_button_text
-	for button: Button in [contacts_button, profile_button]:
-		button.visible = style.show_app_buttons
 	cards.visible = not _expanded
 	month_box.visible = _expanded
 	if _expanded:
@@ -141,7 +132,7 @@ func _build_choices(card: DayCard) -> void:
 	for i in options.size():
 		var choice := choice_scene.instantiate() as DayChoice
 		card.choices.add_child(choice)
-		choice.setup(style, player_style, options[i], i + 1, _calendar.fits(options[i]), phone_screen.style.ui_font)
+		choice.setup(style, player_style, options[i], _calendar.fits(options[i]), phone_screen.style.ui_font)
 		choice.picked.connect(_on_picked)
 		choice.blocked.connect(func(_choice: DayChoice) -> void: _play(style.blocked_sound))
 		_choices.append(choice)
@@ -223,22 +214,23 @@ func _say(action: DayAction) -> void:
 	await dialogue_box.finished
 
 
-# A day has passed: the cards come up from below, one after another.
+# A day has passed: the cards fade in and settle, one after another. (They only change
+# how they're drawn, never where they sit: the column keeps them in place.)
 func _slide_in_cards() -> void:
-	await get_tree().process_frame
-	var slide: Tween = null
+	var appear: Tween = null
 	var list := cards.get_children()
 	for i in list.size():
 		var card: DayCard = list[i]
 		var target := card.modulate.a
 		card.modulate.a = 0.0
-		var rest := card.position.y
-		card.position.y = rest + 80.0
-		slide = create_tween().set_parallel().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		slide.tween_property(card, "position:y", rest, style.slide_seconds).set_delay(i * 0.07)
-		slide.tween_property(card, "modulate:a", target, style.slide_seconds * 0.6).set_delay(i * 0.07)
-	if slide:
-		await slide.finished
+		card.scale = Vector2.ONE * 0.94
+		card.resized.connect(func() -> void: card.pivot_offset = card.size / 2.0)
+		card.pivot_offset = card.size / 2.0
+		appear = create_tween().set_parallel().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		appear.tween_property(card, "scale", Vector2.ONE, style.slide_seconds).set_delay(i * 0.07)
+		appear.tween_property(card, "modulate:a", target, style.slide_seconds * 0.6).set_delay(i * 0.07)
+	if appear:
+		await appear.finished
 
 
 func _toggle_expanded() -> void:
@@ -278,13 +270,11 @@ func _unhandled_input(event: InputEvent) -> void:
 func _apply_style() -> void:
 	var ui := phone_screen.style
 	var player := player_style
-	# The app's title and how long to the boss are the phone's words; the buttons are the
-	# player's.
+	# The app's title and how long to the boss are the phone's words; the Month button is
+	# the player's.
 	ui.style_label(title, ui.ui_text_color, ui.title_font_size)
 	ui.style_label(chapter_label, Color(ui.ui_text_color, 0.5), style.choice_detail_size + 6)
 	ui.style_label(days_left, Color(ui.ui_text_color, 0.6), style.choice_detail_size + 8)
-	_style_button(contacts_button, player.app_button_color)
-	_style_button(profile_button, player.app_button_color)
 	_style_button(expand_button, player.month_button_color)
 	# The page the whole month sits on: Page Image (calendar art) or a player's card.
 	var page := style.make_page_box()
@@ -303,9 +293,9 @@ func _style_button(button: Button, color: Color) -> void:
 	var font := player.font_or(phone_screen.style.ui_font)
 	if font:
 		button.add_theme_font_override("font", font)
-	button.add_theme_font_size_override("font_size", style.pick_size)
+	button.add_theme_font_size_override("font_size", style.button_size)
 	for color_name in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
-		button.add_theme_color_override(color_name, player.app_button_text_color)
+		button.add_theme_color_override(color_name, player.button_text_color)
 	button.add_theme_constant_override("outline_size", player.text_outline_width)
 	button.add_theme_color_override("font_outline_color", player.text_outline_color)
 

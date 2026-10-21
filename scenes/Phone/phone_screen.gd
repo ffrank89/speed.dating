@@ -14,7 +14,8 @@ extends Control
 ## Room Image, Wallpaper). Full guide: docs/guides/the-phone.md
 ##
 ## From code: await phone.raise() (phone up), await phone.lower() (phone down),
-## phone.app_rect() (where apps go, in screen pixels).
+## phone.app_rect() (where apps go, in screen pixels), await phone.switch_in(...) /
+## switch_out(...) (moving between open apps, like the iPhone's app switcher).
 
 ## The home bar at the bottom was clicked.
 signal home_pressed
@@ -39,8 +40,13 @@ enum Behind {
 @export var room_image: Texture2D
 ## This scene's own picture on the phone's screen, behind the app. Empty = Style → Wallpaper.
 @export var wallpaper: Texture2D
+## Which app this screen is (a file name in data/apps/, e.g. calendar): its icon and name
+## show above its card when you switch between apps. Empty = no icon or name.
+@export var app_name: String = ""
 
 var _minute := -1
+# The app switcher's parts, made the first time they're needed.
+var _switcher: Dictionary = {}
 
 ## The room behind the phone.
 @onready var room: TextureRect = %Room
@@ -84,10 +90,7 @@ func apply_style() -> void:
 	_place_phone()
 	edge.add_theme_stylebox_override("panel", style.make_edge_box())
 	edge.visible = style.edge_width > 0 and not style.frame_image
-	for side in [SIDE_LEFT, SIDE_TOP]:
-		body.set_offset(side, style.edge_width)
-	for side in [SIDE_RIGHT, SIDE_BOTTOM]:
-		body.set_offset(side, -style.edge_width)
+	_place_body()
 	body.add_theme_stylebox_override("panel", style.make_screen_box())
 	wallpaper_image.texture = wallpaper if wallpaper else style.wallpaper
 	wallpaper_image.visible = wallpaper_image.texture != null
@@ -180,6 +183,186 @@ func show_up() -> void:
 	_place_phone()
 	for part: CanvasItem in [dim, room]:
 		part.modulate.a = 1.0
+
+
+## Moving to this app from another one, like the iPhone's app switcher: `previous` (a
+## picture of the other app's screen) shrinks to a card, this app's card slides in
+## beside it and grows to fill the phone. `previous_app` / `this_app` give the icons and
+## names above the cards (either can be null). Its feel: data/app_transition_style.tres
+## → Switching Apps. Use with await.
+func switch_in(previous: Texture2D, previous_app: AppInfo, this_app: AppInfo) -> void:
+	await _switch(previous, previous_app, this_app, true)
+
+
+## Back to the other app: this app shrinks to a card and slides away, and `previous`
+## slides back and grows to fill the phone. Hide this screen afterwards.
+func switch_out(previous: Texture2D, previous_app: AppInfo, this_app: AppInfo) -> void:
+	await _switch(previous, previous_app, this_app, false)
+
+
+func _switch(previous: Texture2D, previous_app: AppInfo, this_app: AppInfo, coming_in: bool) -> void:
+	var feel: AppTransitionStyle = AppLauncher.style
+	show_up()
+	_build_switcher()
+	var parts := _switcher
+	parts.card_picture.texture = previous
+	_fill_label(parts.previous_label, previous_app, feel)
+	_fill_label(parts.this_label, this_app, feel)
+	for node: CanvasItem in [parts.background, parts.card, parts.rim, parts.previous_label, parts.this_label]:
+		node.visible = true
+	# Nothing outside the phone while the cards move.
+	phone.clip_contents = true
+	if feel.switch_sound:
+		sound.stream = feel.switch_sound
+		sound.volume_db = feel.volume_db
+		sound.play()
+	var total := feel.switch_shrink_seconds + feel.switch_slide_seconds + feel.switch_grow_seconds
+	_set_switch(0.0 if coming_in else 1.0)
+	var move := create_tween()
+	move.tween_method(_set_switch, 0.0 if coming_in else 1.0, 1.0 if coming_in else 0.0, total)
+	await move.finished
+	for node: CanvasItem in [parts.background, parts.card, parts.rim, parts.previous_label, parts.this_label]:
+		node.visible = false
+	parts.card_picture.texture = null
+	phone.clip_contents = false
+	body.scale = Vector2.ONE
+	body.modulate.a = 1.0
+	_place_body()
+
+
+# 0 = the other app fills the screen; 1 = this app does. In between: shrink to cards,
+# slide across, grow.
+func _set_switch(p: float) -> void:
+	var feel: AppTransitionStyle = AppLauncher.style
+	var parts := _switcher
+	var rect := _body_rect()
+	var total := feel.switch_shrink_seconds + feel.switch_slide_seconds + feel.switch_grow_seconds
+	var t := p * total
+	var shrink := clampf(t / feel.switch_shrink_seconds, 0.0, 1.0)
+	var slide := clampf((t - feel.switch_shrink_seconds) / feel.switch_slide_seconds, 0.0, 1.0)
+	var grow := clampf((t - feel.switch_shrink_seconds - feel.switch_slide_seconds) / feel.switch_grow_seconds, 0.0, 1.0)
+	shrink = ease(shrink, 0.4)
+	slide = ease(slide, -2.0)
+	grow = ease(grow, 0.4)
+	var small := feel.switch_card_scale
+	var step := rect.size.x * feel.switch_card_spacing
+	var middle := rect.get_center()
+
+	# The other app's card: shrinks, then slides off to the left.
+	var card_scale := lerpf(1.0, small, shrink)
+	_place_card(parts.card, rect, middle - Vector2(step * slide, 0.0), card_scale)
+	# This app's card: waits on the right, slides to the middle, then grows to fill.
+	var this_scale := lerpf(small, 1.0, grow)
+	_place_card(body, rect, middle + Vector2(step * (1.0 - slide), 0.0), this_scale)
+	body.modulate.a = shrink
+	# The icons and names over the cards, while they're cards.
+	var label_alpha := shrink * (1.0 - grow)
+	_place_label(parts.previous_label, rect, middle - Vector2(step * slide, 0.0), card_scale, label_alpha)
+	_place_label(parts.this_label, rect, middle + Vector2(step * (1.0 - slide), 0.0), this_scale, label_alpha)
+
+
+# A card (the other app's picture, or this app's screen) centred on `centre`, scaled.
+func _place_card(card: Control, rect: Rect2, centre: Vector2, card_scale: float) -> void:
+	card.size = rect.size
+	card.pivot_offset = rect.size / 2.0
+	card.position = centre - rect.size / 2.0
+	card.scale = Vector2.ONE * card_scale
+
+
+# An app's icon and name, just above its card's top left corner.
+func _place_label(label: Control, rect: Rect2, centre: Vector2, card_scale: float, alpha: float) -> void:
+	var card_size := rect.size * card_scale
+	label.reset_size()
+	label.position = centre - card_size / 2.0 - Vector2(0.0, label.size.y + 14.0)
+	label.modulate.a = alpha
+
+
+func _fill_label(label: HBoxContainer, app: AppInfo, feel: AppTransitionStyle) -> void:
+	var icon: TextureRect = label.get_child(0)
+	var words: Label = label.get_child(1)
+	icon.texture = app.icon if app else null
+	icon.custom_minimum_size = Vector2.ONE * feel.switch_icon_size
+	icon.visible = app != null and app.icon != null and feel.switch_icon_size > 0
+	words.text = app.app_name if app else ""
+	style.style_label(words, feel.switch_name_color, feel.switch_name_size)
+	label.visible = app != null
+
+
+# The screen's place inside the phone (inside its edge).
+func _body_rect() -> Rect2:
+	return Rect2(Vector2.ONE * style.edge_width, style.phone_size - Vector2.ONE * style.edge_width * 2.0)
+
+
+func _place_body() -> void:
+	for side in [SIDE_LEFT, SIDE_TOP]:
+		body.set_offset(side, style.edge_width)
+	for side in [SIDE_RIGHT, SIDE_BOTTOM]:
+		body.set_offset(side, -style.edge_width)
+
+
+# The app switcher's parts, inside the phone: a dark background and the other app's card
+# behind this app's screen; the phone's rim and the icons and names in front of it.
+func _build_switcher() -> void:
+	var feel: AppTransitionStyle = AppLauncher.style
+	if _switcher.is_empty():
+		var background := Panel.new()
+		background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var card := Panel.new()
+		card.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
+		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var picture := TextureRect.new()
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_SCALE
+		picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.add_child(picture)
+		var rim := Panel.new()
+		rim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		rim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_switcher = {"background": background, "card": card, "card_picture": picture, "rim": rim,
+			"previous_label": _make_label(), "this_label": _make_label()}
+		# Behind the screen: the background, then the other app's card.
+		phone.add_child(background)
+		phone.move_child(background, body.get_index())
+		phone.add_child(card)
+		phone.move_child(card, body.get_index())
+		# In front: the rim (so the cards never cover the phone's edge), the names.
+		phone.add_child(rim)
+		phone.move_child(rim, frame.get_index())
+		for label: Control in [_switcher.previous_label, _switcher.this_label]:
+			phone.add_child(label)
+			phone.move_child(label, frame.get_index())
+	var rect := _body_rect()
+	var back := style.make_screen_box()
+	back.bg_color = feel.switch_background
+	_switcher.background.add_theme_stylebox_override("panel", back)
+	_switcher.background.position = rect.position
+	_switcher.background.size = rect.size
+	_switcher.card.add_theme_stylebox_override("panel", style.make_screen_box())
+	var rim_box := StyleBoxFlat.new()
+	rim_box.draw_center = false
+	rim_box.border_color = style.edge_color
+	rim_box.set_border_width_all(style.edge_width + 1)
+	rim_box.set_corner_radius_all(style.corner + style.edge_width)
+	rim_box.anti_aliasing = true
+	_switcher.rim.add_theme_stylebox_override("panel", rim_box)
+
+
+func _make_label() -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 14)
+	var icon := TextureRect.new()
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	var words := Label.new()
+	words.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(words)
+	row.visible = false
+	return row
 
 
 func _process(_delta: float) -> void:

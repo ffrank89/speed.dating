@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bgn2jmt66pr2e"]
+[gd_scene load_steps=11 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_calendar"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/calendar_rules.tres" id="7_rules"]
 [ext_resource type="Resource" path="res://data/player_style.tres" id="8_player"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/Profile/ProfileApp.tscn" id="9_profile"]
+[ext_resource type="PackedScene" path="res://scenes/Debug/DebugNote.tscn" id="10_note"]
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3
@@ -27,6 +28,7 @@ messages = ExtResource("4_lines")
 [node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
 unique_name_in_owner = true
 layout_mode = 1
+app_name = "calendar"
 
 [node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
 layout_mode = 1
@@ -62,37 +64,22 @@ layout_mode = 2
 size_flags_vertical = 8
 text = "CHAPTER 1"
 
-[node name="DaysLeft" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "6 days to the boss"
-
-[node name="Buttons" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
-unique_name_in_owner = true
+[node name="InfoRow" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 16
 
-[node name="ContactsButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+[node name="DaysLeft" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/InfoRow"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-focus_mode = 0
-mouse_default_cursor_shape = 2
-text = "Contacts"
+text = "6 days to the boss"
+vertical_alignment = 1
 
-[node name="ProfileButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+[node name="ExpandButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/InfoRow"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-mouse_default_cursor_shape = 2
-text = "Profile"
-
-[node name="ExpandButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
 focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "Month ▾"
@@ -132,6 +119,16 @@ unique_name_in_owner = true
 
 [node name="ProfileApp" parent="." instance=ExtResource("9_profile")]
 unique_name_in_owner = true
+
+[node name="DebugNote" parent="." instance=ExtResource("10_note")]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 760.0
+offset_bottom = 230.0
+text = "DEBUG
+Press P to see your Profile
+Press C to see your Contacts"
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true

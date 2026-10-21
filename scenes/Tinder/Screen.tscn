@@ -19,6 +19,7 @@ style = ExtResource("3_style")
 [node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
 unique_name_in_owner = true
 layout_mode = 1
+app_name = "dating_app"
 
 [node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
 layout_mode = 1

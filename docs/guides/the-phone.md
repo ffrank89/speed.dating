@@ -59,6 +59,7 @@ it to set, for that scene only:
 | **Behind** | **Room**: your room, dimmed (the intro, dating app, calendar). **Dim**: whatever's underneath, dimmed (her card and microgames, over the date). **Nothing**: just the phone (Contacts, over the calendar's phone) |
 | **Room Image** | This scene's own room. Empty = the style's |
 | **Wallpaper** | This scene's own picture on the screen. Empty = the style's |
+| **App Name** | Which app this screen is (a file in `data/apps/`, e.g. `calendar`): its icon and name show above its card when you switch apps |
 
 ## Try it
 
@@ -101,15 +102,36 @@ The phone is shared; what's on each app is its own file:
 
 ## Your apps
 
-On the calendar, two more apps open on the phone, over it:
+On the calendar, two more apps are a key away:
 
-| App | Opens with | What's in it |
+| App | Key | What's in it |
 |---|---|---|
-| **Contacts** | **C**, or the calendar's **Contacts** button | Your party: [contacts.md](contacts.md) |
-| **Profile** | **P**, or the calendar's **Profile** button | Your stats: Culture, Intellect, Seduction and Heart, each with a bar |
+| **Contacts** | **C** | Your party: [contacts.md](contacts.md) |
+| **Profile** | **P** | Your stats: Culture, Intellect, Seduction and Heart, each with a bar |
 
-Press the key again, **Escape**, or the phone's home bar to close one. Only
-one opens at a time.
+The phone switches to them **like moving between open apps on an iPhone**:
+the calendar shrinks to a card, the app's card (its icon and name above it)
+slides in beside it and grows to fill the phone. The key again, **Escape**
+or the phone's home bar switches back. Press the other key while one is
+open to switch straight to the other. A **debug note** in the top left of
+the calendar screen lists the keys (it doesn't show in a finished build).
+
+**The switch's feel:** `data/app_transition_style.tres` → **Switching
+Apps**: on or off (**Switch Between Apps**; off = they open like any app),
+how small the cards get (**Switch Card Scale**), how far apart they are
+(**Switch Card Spacing**), the seconds for each part (shrink, slide,
+grow), the colour behind the cards, the icon and name above each card, and
+the sound (Kenney `switch_006` for now). The icons and names come from each
+app's file in `data/apps/` (`calendar.tres`, `contacts.tres`,
+`profile.tres`); the calendar's comes from its PhoneScreen's **App Name**.
+
+**The debug note** is `scenes/Debug/DebugNote.tscn`: click it in the
+calendar scene to change its **Text**. Drop it into any scene for another
+note; **Only While Testing** (on) hides it in a finished build.
+
+**The keys:** **Project Settings → Input Map** → `open_contacts` (C) and
+`open_profile` (P). Any scene with `ContactsApp.tscn` / `ProfileApp.tscn`
+in it gets them; for now that's the calendar.
 
 **Profile** is a light first version (`scenes/Phone/Profile/ProfileApp.tscn`,
 press **F6** to try it). Click its top node to change its words (**Title
@@ -147,10 +169,18 @@ To bring it up over real life, a programmer calls `await phone.raise()`
   `screen_rect()`, `app_rect()`, `make_screen_box()`, `make_edge_box()`,
   `style_label(label, color, size)`.
 - `PhoneScreen` (`scenes/Phone/phone_screen.gd`): `style`, `behind`,
-  `room_image`, `wallpaper`; `apply_style()`, `await raise()`,
-  `await lower()`, `show_up()`, `app_rect()`, `screen_rect()`; signals
+  `room_image`, `wallpaper`, `app_name`; `apply_style()`, `await raise()`,
+  `await lower()`, `show_up()`, `app_rect()`, `screen_rect()`,
+  `await switch_in(picture, previous_app, this_app)` /
+  `await switch_out(...)` (the app switcher); signals
   `home_pressed`, `raised`, `lowered`. Nodes: `room`, `dim`, `phone`,
   `body`, `screen` (put an app's nodes here), `home_bar`, `frame`.
+- `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`): the base of
+  `ContactsApp` and `ProfileApp`: `open_action`, `app_name`, `open()`,
+  `close()`; override `_show_now()`, `_hide_now()`, `_before_close()`,
+  `_escape_closes()`. Keys are read in `_input` (a tooltip would swallow
+  Escape otherwise). `AppLauncher.capture_rect(rect)` takes the picture of
+  the screen underneath.
 - `AppLauncher.phone_down(scene_path)`: phone down into a real-life scene.
   Apps open into `AppTransitionStyle.phone.screen_rect()` when **Open Into
   Phone** is on; `AppLauncher.home_rect()` is the bottom of the phone's
