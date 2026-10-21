@@ -1,6 +1,6 @@
 # 0062: The app switcher remembers the order you used apps in
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0068](0068-one-key-for-apps.md) (W flips through the apps instead of C and P; back is Escape or the home bar)
 - **Date:** 2026-10-21
 - **Affects:** [0060](0060-switching-apps.md), [the-phone.md](../guides/the-phone.md)
 

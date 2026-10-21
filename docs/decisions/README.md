@@ -57,13 +57,13 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0051](0051-player-cursor.md) | The player's cursor is a swappable style (Godot logo placeholder) | Accepted |
 | [0052](0052-result-is-her-contact-card.md) | The date's result is her filling in your Contacts (or not) | Accepted |
 | [0053](0053-full-date-flow.md) | A first date: opener, 5 exchanges (2 microgames), one of 3 closers; then party or gone, and back to the calendar | Accepted |
-| [0054](0054-party-is-your-contacts.md) | Your party is your phone's Contacts (press C on the calendar) | Accepted |
+| [0054](0054-party-is-your-contacts.md) | Your party is your phone's Contacts (press C on the calendar) | Accepted, amended by 0068 |
 | [0055](0055-calendar-revamp.md) | The calendar: a chapter strip in dialogue-box style, today's choices, the rest X'd out | Accepted, amended by 0059 |
 | [0056](0056-heart-meter-and-closing-her-card.md) | A heart meter on dates (a ring per heart, her colour); the player closes her card | Accepted |
 | [0057](0057-action-cursor.md) | The action cursor (S) for stage hazards | Accepted |
 | [0058](0058-phone-and-real-life.md) | On your phone (intro, dating app, calendar, Contacts, her card, microgames) or real life (dates, boss, hazards): one shared phone, phone down / up | Accepted |
 | [0059](0059-three-day-calendar.md) | The calendar shows three days, Balatro-style; the player's style decides its look; stats are a Profile app | Accepted |
-| [0060](0060-switching-apps.md) | Contacts (C) and Profile (P) by key with a debug note, switching like the iPhone's app switcher; choices are plain boxes | Accepted, amended by 0062 |
+| [0060](0060-switching-apps.md) | Contacts (C) and Profile (P) by key with a debug note, switching like the iPhone's app switcher; choices are plain boxes | Accepted, amended by 0062 and 0068 |
 | [0061](0061-f5-music-and-clean-up.md) | F5 plays the game and the window scales; a new music system; girls are only girl files; old code removed, every picture kept | Accepted |
 | [0062](0062-recent-apps-order.md) | The app switcher remembers the order you used apps in, like an iPhone; back goes to the app before | Accepted |
 | [0063](0063-attributes-one-to-nine.md) | The player's attributes go from 1 to 9 (one scale file); training +1, checks 1–9 | Accepted, amended by 0064 |
@@ -71,3 +71,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0065](0065-stat-slow-motion.md) | A stat can slow a stage hazard down: the fly moves (and buzzes) in slow motion with Perception above 5 | Accepted |
 | [0066](0066-fly-annoys-her.md) | A hazard sitting on her for a second annoys her: the date stops, she gets angry and says ".....ew", the date loses points | Accepted, amended by 0067 |
 | [0067](0067-annoyances-are-files.md) | How she reacts when annoyed is its own file (`data/annoyances/`); a hazard points at one; not in dialogue yet | Accepted |
+| [0068](0068-one-key-for-apps.md) | One key, W, flips through the phone's apps (Contacts, Profile, back to the calendar) instead of C and P | Accepted |

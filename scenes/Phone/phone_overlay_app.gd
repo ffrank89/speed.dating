@@ -1,16 +1,18 @@
 class_name PhoneOverlayApp
 extends CanvasLayer
-## An app that opens on the phone over another phone screen, with its own key: Contacts
-## (C) and Profile (P) over the calendar. It opens like moving between open apps on an
-## iPhone (the app switcher: data/app_transition_style.tres → Switching Apps), or, with
-## that off, like any app.
+## An app that opens on the phone over another phone screen: Contacts and Profile over
+## the calendar. One key (W, the switch_apps action) flips through them all: each press
+## goes to the next app, from the screen underneath (the calendar) to each of these in
+## the order they sit in the scene (top to bottom in the Scene panel), then back round to
+## the calendar. It opens like moving between open apps on an iPhone (the app switcher:
+## data/app_transition_style.tres → Switching Apps), or, with that off, like any app.
 ##
 ## Like an iPhone, the phone remembers the order you used its apps in (RecentApps).
-## Pressing an app's key makes the app you were on the most recent; the switcher's cards
-## are in that order (newest on the right), and the row slides to the app's card. Going
-## back (its key again, Escape or the phone's home bar) steps to the app you were on
-## before, like swiping back along the home bar: calendar → C → P, then Escape goes back
-## to Contacts, and Escape again to the calendar.
+## Switching makes the app you were on the most recent; the switcher's cards are in that
+## order (newest on the right), and the row slides to the next app's card. Going back
+## (Escape or the phone's home bar) steps to the app you were on before, like swiping
+## back along the home bar: calendar → W → W (Contacts, then Profile), then Escape goes
+## back to Contacts, and Escape again to the calendar.
 ##
 ## A scene that's one of these needs a PhoneScreen node (unique name %PhoneScreen, Behind
 ## = Nothing) with the app inside it. Override _show_now() / _hide_now() to fill it in.
@@ -19,7 +21,12 @@ extends CanvasLayer
 signal opened
 signal closed
 
-## The key that opens and closes it: an action in Project Settings → Input Map.
+## The key that flips through the apps on this screen (W): an action in Project Settings
+## → Input Map. Every app with the same key is in the round, in scene order. Empty = the
+## key skips this app.
+@export var switch_action: StringName = &"switch_apps"
+## Optional: a key of its own that opens and closes just this app (an action in Project
+## Settings → Input Map). Empty = none.
 @export var open_action: StringName = &""
 ## The app it is (its icon, name and launch screen): a file name in data/apps/.
 @export var app_name: String = ""
@@ -34,6 +41,9 @@ var _from := Rect2()
 
 func _enter_tree() -> void:
 	add_to_group(&"phone_overlay")
+	for action in [switch_action, open_action]:
+		if not action.is_empty() and not InputMap.has_action(action):
+			push_warning("%s: no input action \"%s\" (Project Settings → Input Map)." % [name, action])
 
 
 ## Opens it (switches to it) over what's on screen. Use with await.
@@ -166,6 +176,38 @@ func _switch_back() -> void:
 		going_to.overlay.opened.emit()
 
 
+# The switch key, from this app to the screen underneath (the calendar), like picking its
+# card in the app switcher: this app counts as used (the most recent), the row slides to
+# the screen's card, and it grows to fill the phone.
+func _switch_to_underneath() -> void:
+	if not visible or _busy or AppLauncher.is_busy():
+		return
+	var feel: AppTransitionStyle = AppLauncher.style
+	if not feel.switch_between_apps:
+		await close()
+		return
+	var recents := RecentApps.of(self)
+	if recents.busy:
+		return
+	var here := recents.find(self)
+	if here < 0:
+		# Opened while Switching Apps was off: it's the newest now.
+		recents.entries.push_front(RecentApps.Entry.new(self, _app()))
+		here = 0
+	recents.busy = true
+	_busy = true
+	_before_close()
+	recents.bring_to_front(here)
+	recents.entries[0].picture = await AppLauncher.capture_rect(phone_screen.screen_rect())
+	var to := recents.find(null)
+	await phone_screen.switch_apps(recents.cards(), 0, 0, to)
+	_hide_now()
+	recents.bring_to_front(to)
+	_busy = false
+	recents.busy = false
+	closed.emit()
+
+
 func _app() -> AppInfo:
 	return AppLauncher.get_app(app_name) if not app_name.is_empty() else null
 
@@ -178,10 +220,37 @@ func _open_overlay() -> PhoneOverlayApp:
 	return null
 
 
+# Where `action` (the switch key) goes next from what's on screen: the screen underneath
+# (null), then each of these with that key in scene order, then round again.
+func _next_app(action: StringName) -> PhoneOverlayApp:
+	var order: Array = [null]
+	var apps: Array = get_tree().get_nodes_in_group(&"phone_overlay")
+	apps.sort_custom(func(a: Node, b: Node) -> bool: return b.is_greater_than(a))
+	for app: PhoneOverlayApp in apps:
+		if app.switch_action == action:
+			order.append(app)
+	var on_screen: PhoneOverlayApp = self if visible else _open_overlay()
+	return order[(order.find(on_screen) + 1) % order.size()]
+
+
+func _pressed(event: InputEvent, action: StringName) -> bool:
+	return not action.is_empty() and InputMap.has_action(action) and event.is_action_pressed(action)
+
+
 # Keys are read here, before the rest of the screen: a tooltip showing under the mouse
-# would otherwise swallow Escape.
+# would otherwise swallow Escape. Every one of these reads the switch key; only the one
+# it concerns acts on it (the next app, or the app on screen going back to the screen
+# underneath).
 func _input(event: InputEvent) -> void:
-	if not open_action.is_empty() and InputMap.has_action(open_action) and event.is_action_pressed(open_action):
+	if _pressed(event, switch_action):
+		var next := _next_app(switch_action)
+		if next == self and not visible:
+			get_viewport().set_input_as_handled()
+			open()
+		elif next == null and visible:
+			get_viewport().set_input_as_handled()
+			_switch_to_underneath()
+	elif _pressed(event, open_action):
 		get_viewport().set_input_as_handled()
 		if visible:
 			close()

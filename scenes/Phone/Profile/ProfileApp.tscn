@@ -7,7 +7,6 @@
 [node name="ProfileApp" type="CanvasLayer"]
 layer = 19
 script = ExtResource("1_app")
-open_action = &"open_profile"
 app_name = "profile"
 
 [node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]

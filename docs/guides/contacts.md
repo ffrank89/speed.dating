@@ -3,8 +3,9 @@
 For writers, artists and designers. **No code needed.**
 
 Your party is the **Contacts** on your phone. Every girl who gave you her
-number on a date is saved there. That's who's in your party. Press **C** on
-the calendar to see them.
+number on a date is saved there. That's who's in your party. Press **W** on
+the calendar to see them (W flips through your apps: Contacts, Profile, then
+back to the calendar).
 
 ```
 Date ends ─► she types her number into a New Contact (or doesn't)
@@ -12,7 +13,7 @@ Date ends ─► she types her number into a New Contact (or doesn't)
                ├─ got her number → saved in Contacts, with the hearts she gave you
                └─ failed date    → gone for the run
 
-Calendar ─► press C ─► the phone switches to Contacts, like moving between
+Calendar ─► press W ─► the phone switches to Contacts, like moving between
                │         open apps on an iPhone
                │
                ├─ the list: A to Z under letter headers, each girl in her own box and
@@ -21,7 +22,8 @@ Calendar ─► press C ─► the phone switches to Contacts, like moving betwe
                ├─ click a girl ─► her saved card slides in: what your hearts unlocked
                │                  on her date, her number and address
                │                  "‹ Contacts" (or Escape) goes back
-               └─ C again, Escape, or the phone's home bar closes it back
+               ├─ Escape or the phone's home bar goes back to the app before
+               └─ W again goes on to Profile, then back to the calendar
 ```
 
 A girl in your contacts doesn't show up in the dating app any more:
@@ -32,12 +34,12 @@ she's taken.
 - **On its own:** open `scenes/Phone/Contacts/ContactsApp.tscn` and press
   **F6**. Click the top node → **Testing (F6)**: **Test Contacts** is who's
   in the list (Split Ends now; add girl files with **Add Element**), **Test
-  Hearts** is the hearts they each got. Press **C** to put it away and bring
+  Hearts** is the hearts they each got. Press **W** to put it away and bring
   it back.
 - **In the game:** play a date to the end and get her number. Back on the
-  calendar, press **C**.
+  calendar, press **W**.
 
-**Only on the calendar, for now.** C works on any screen that has
+**Only on the calendar, for now.** W reaches Contacts on any screen that has
 `ContactsApp.tscn` in it, and right now that's only the calendar.
 
 ## What her saved card shows
@@ -98,11 +100,20 @@ middle of the phone's screen) and closing back into it. See
 
 ## Changing the key
 
-**Project → Project Settings → Input Map** → `open_contacts` (C now). Add
-or change keys there; nothing else needs to change. (The ContactsApp node's
-**Open Action** names which action it listens for.)
+W is one key for all your apps: **Project → Project Settings → Input Map**
+→ `switch_apps` (W now). Add or change keys there; nothing else needs to
+change. Click the ContactsApp node (in `scenes/Calendar/calendar.tscn`):
 
-## Letting C work on another screen
+| Setting | What it does |
+|---|---|
+| **Switch Action** | The key that flips through the apps (`switch_apps`). Empty = W skips Contacts |
+| **Open Action** | Optional: a key of its own that opens and closes just Contacts (add an action in the Input Map, e.g. `open_contacts` on C, and type its name here). Empty now |
+
+**W's order** is the calendar, then the apps in the order they sit in the
+calendar scene (top to bottom in the Scene panel: ContactsApp, then
+ProfileApp). Drag ProfileApp above ContactsApp to visit Profile first.
+
+## Letting W reach Contacts on another screen
 
 Drag `scenes/Phone/Contacts/ContactsApp.tscn` into that screen's scene.
 That's all.
@@ -112,7 +123,7 @@ That's all.
 | Problem | Fix |
 |---|---|
 | She's not in the list | She didn't give her number (a failed date), or no date was played this run. Press **F5** and play one from the dating app. |
-| C does nothing | You're not on the calendar (only screens with `ContactsApp.tscn` in them), or `open_contacts` is missing from the Input Map (Godot prints a warning). |
+| W never reaches Contacts | You're not on the calendar (only screens with `ContactsApp.tscn` in them), ContactsApp's **Switch Action** is empty, or `switch_apps` is missing from the Input Map (Godot prints a warning). |
 | Her row looks like the dark default box | She has no **Dialogue Style** in her girl file. |
 
 ## Not built yet
@@ -131,7 +142,8 @@ synergy report.
   The date scene calls `add_party_member` when she gives her number.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
   layer 19) is a `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`):
-  `open_action` (`open_contacts`), `open()` / `close()` (the app switcher,
+  `switch_action` (`switch_apps`, W: the next app in scene order, round to
+  the screen underneath), optional `open_action`, `open()` / `close()` (the app switcher,
   `phone_screen.switch_apps()`, in the order of `RecentApps`; or `AppLauncher.open/close`, or
   `phone_screen.raise()` / `lower()`). Its phone is `phone_screen`
   (`PhoneScreen`, Behind = Nothing; its `home_pressed` closes it),

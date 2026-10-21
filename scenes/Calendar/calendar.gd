@@ -12,7 +12,7 @@ extends Control
 ## screen, like a boss fight, puts the phone down).
 ## "Month" swaps the cards for the whole month, small; days past this chapter show an X
 ## (data/calendar_rules.tres → Foresight Days lets you see further).
-## C and P switch to your other apps, Contacts and Profile (a debug note says so).
+## W flips through your other apps, Contacts and Profile (a debug note says so).
 ##
 ## Every part is swappable: the layout is this scene (PhoneScreen → Phone → Body →
 ## Screen), a day is Card Scene (DayCard.tscn), a choice is Choice Scene
