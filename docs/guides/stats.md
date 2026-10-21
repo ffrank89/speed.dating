@@ -67,6 +67,8 @@ and a dialogue check on it warns in Godot's Output panel and has no roll.
 | **Dialogue checks** | `[#check=strength:5, #value=2]`. Odds are your stat ÷ 5. The bubble shows the stat's icon and name. |
 | **Her Likes** | Her girl file → **Dating → Likes** → **Add Key/Value Pair**: a stat file, and 0–1 for how much she cares. An option checking a stat she likes is worth more. Stats she doesn't list are 0. |
 | **The date test bench** | A slider for each stat that's on. |
+| **Microgames** | An option's check sets its microgame's difficulty: `[#check=seduction:5, #microgame=light_cigarette]` is easiest at Seduction 5 or more, hardest at 1. Any stat works. |
+| **Stage hazards** | Each hazard's **Slow Motion**: a stat that slows it down. The fly moves in slow motion with Perception above 5 ([stage-hazards.md](stage-hazards.md)). |
 | **Any screen** | Drag `scenes/Stats/StatBars.tscn` into it (below). |
 
 ## Stat Bars: the list you can move

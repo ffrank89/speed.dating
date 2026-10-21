@@ -100,6 +100,26 @@ Click **Fly** (the top node):
 | **Shooing → Comeback Delay / Comeback Speed** | 0.5 / 700 | How long it stays dazed, then how fast it flies back to its path |
 | **Shooing → Off Screen Margin** | 60 | How far past the edge counts as "off screen" |
 
+## Slow motion: Perception
+
+**With Perception above 5, the fly moves in slow motion.** It flies,
+jitters, flaps and buzzes at half speed (the buzz an octave lower), and
+stays twice as long before it gives up. Waving at it still reads the mouse
+at full speed, so it's easier to catch.
+
+Every hazard has this, on its top node → **Slow Motion**:
+
+| Setting | Fly | What it does |
+|---|---|---|
+| **Slow Stat** | `data/stats/perception.tres` | The stat that slows it. Drag in any stat file to use another (e.g. Agility). Empty = never slowed |
+| **Slow Above** | 5 | It's slowed when the player's stat is above this (5 = at 6 or more) |
+| **Slow Speed** | 0.5 | How fast it goes in slow motion: 0.5 = half speed. 1 = no change |
+
+It checks the stat each time it turns up, from the date's stats: on the
+test bench, drag the **Perception** slider to 6 or more and press **Stage
+hazards now**. If the stat is switched off ([stats.md](stats.md)), it's never
+slowed. The fly has no buzz sound yet; once one is set, it slows down too.
+
 ## What shooing it earns
 
 Under **Reward**:
@@ -135,6 +155,7 @@ script, so nothing else is needed.
 | It never turns up | Check **Appears After Answers** against how many questions the dialogue has, and **Chance**. Or use the **Stage hazards now** button. |
 | Waving does nothing | Move faster than **Min Wave Speed** and come within **Shoo Radius**. Or raise **Shoo Strength**. |
 | It's too easy to shoo off | Raise **Air Drag** or lower **Shoo Strength**. |
+| It's in slow motion when it shouldn't be (or isn't when it should) | The player's **Slow Stat** (Perception) has to be *above* **Slow Above**: 6 or more for 5. On the test bench it's the slider. |
 | It flies somewhere odd | Check the path in `Fly.tscn`. It flies in from the screen edge nearest the path's **first** point. |
 | "no paths" warning | There's no Path2D under **Paths** and nothing in **Extra Paths**. |
 | No reaction | The **Reaction** name must match an animation in `data/reactions.tres` exactly. |
@@ -143,16 +164,23 @@ script, so nothing else is needed.
 
 - `StageHazard` (`scenes/Hazards/stage_hazard.gd`): a full-screen `Control`.
   Override `begin()`; call `clear()` (rewarded) or `leave()` (not). Also has
-  `time_to_go()`, `is_due(answers)`, signals `cleared` / `left`, the **When**
-  and **Reward** exports, and F6 self-play. A child named `DrawingGuide` is
+  `time_to_go()`, `is_due(answers)`, signals `cleared` / `left`, the **When**,
+  **Slow Motion** and **Reward** exports, and F6 self-play. Slow Motion:
+  `stats` (the date's, stat id → value; set by `StageHazards`), `time_scale`
+  (set on `appear()`: Slow Speed or 1; Leaves After Seconds is divided by it),
+  `is_slowed()`. A hazard multiplies its own timing by `time_scale`. A child named `DrawingGuide` is
   shown only when the scene is played on its own.
 - `StageHazards` (`scenes/Hazards/stage_hazards.gd`): instances its
   `hazards`, counts `OptionList.option_resolved`, brings on due hazards
   after their delay, freezes them while `MicrogameHost.is_active()`, plays
-  `cleared_sound`, and emits `hazard_cleared(hazard)`. The date applies the
+  `cleared_sound`, and emits `hazard_cleared(hazard)`. Its `stats` (from
+  `DateScene.stats`) go to each hazard as it turns up. The date applies the
   reward (`DateScorer.add_bonus`, `ReactionIcon.show_reaction`, the pose).
 - The fly (`scenes/Hazards/Fly/fly.gd`) moves through these states:
   - ENTERING: flies in from the nearest edge
   - FOLLOWING: Path2D curves, moved into screen space, plus `extra_paths`
   - PUSHED: velocity from the mouse's motion, slowed by drag; off screen = `clear()`
   - RETURNING, then LEAVING
+  - Its `_process` runs on `delta × time_scale` (the mouse on real time);
+    `begin()` sets the buzz's `pitch_scale` and any AnimatedSprite2D /
+    AnimationPlayer `speed_scale` under Body to `time_scale`.

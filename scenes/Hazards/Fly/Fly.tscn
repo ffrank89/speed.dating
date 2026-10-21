@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/Hazards/Fly/fly.gd" id="1_fly"]
 [ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
 [ext_resource type="Texture2D" path="res://assets/bedroom1.png" id="3_room"]
 [ext_resource type="Texture2D" path="res://assets/splitends/splitends_reach_update.png" id="4_her"]
+[ext_resource type="Resource" path="res://data/stats/perception.tres" id="5_perception"]
 
 [sub_resource type="Curve2D" id="Curve2D_head"]
 _data = {
@@ -32,6 +33,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fly")
+slow_stat = ExtResource("5_perception")
+slow_above = 5
+slow_speed = 0.5
 
 [node name="DrawingGuide" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.6)

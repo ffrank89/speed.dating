@@ -95,6 +95,7 @@ func begin() -> void:
 	# The player's own stats, with any set from outside (the test bench's sliders) on top.
 	stats = _player_stats().merged(stats, true)
 	scorer = DateScorer.new(rules, girl, stats)
+	stage_hazards.stats = stats
 	heart_meter.setup(girl)
 
 	_lines = dialogue if dialogue else girl.first_date_dialogue

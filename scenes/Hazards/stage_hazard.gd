@@ -11,9 +11,13 @@ extends Control
 ## A date lists its hazards on its StageHazards node. Press F6 on a hazard's scene to
 ## try it on its own, over and over. Full guide: docs/guides/stage-hazards.md
 ##
+## A stat can slow it down (Slow Motion): e.g. the fly moves in slow motion when the
+## player's Perception is above 5.
+##
 ## Making a new one: extend StageHazard, start it up in begin(), and call clear() when
 ## the player deals with it (or leave() when it goes away by itself). If it Needs Action
-## Cursor, check can_act() before letting the player deal with it.
+## Cursor, check can_act() before letting the player deal with it. For Slow Motion,
+## multiply its own timing by time_scale (and its sounds' pitch).
 
 ## Sent when the player deals with it (e.g. shoos the fly off screen).
 signal cleared(hazard: StageHazard)
@@ -37,6 +41,17 @@ signal left(hazard: StageHazard)
 ## Off = the normal cursor works too.
 @export var needs_action_cursor: bool = true
 
+@export_group("Slow Motion")
+## A stat that slows it down (drag one from data/stats/, e.g. perception.tres). When the
+## player's stat is above Slow Above, it moves, animates and sounds in slow motion, and
+## stays that much longer. Empty = never.
+@export var slow_stat: PlayerStat
+## It's slowed when the stat is above this: 5 = at 6 or more.
+@export_range(0, 100) var slow_above: int = 5
+## How fast it goes in slow motion: 0.5 = half speed, and its sounds half speed and an
+## octave lower. 1 = no change.
+@export_range(0.05, 1.0, 0.05) var slow_speed: float = 0.5
+
 @export_group("Reward")
 ## Points added to the date score when the player deals with it.
 @export_range(-10.0, 10.0, 0.5) var points: float = 1.0
@@ -54,6 +69,12 @@ signal left(hazard: StageHazard)
 
 ## True while it's on screen.
 var is_active := false
+## The player's stats on this date (stat id → value), handed over by the date (the test
+## bench's sliders included). Empty = the player's own.
+var stats: Dictionary = {}
+## How fast it runs this time it's on screen: 1 = normal, Slow Speed in slow motion.
+## Worked out each time it turns up.
+var time_scale := 1.0
 var _appearance := 0
 
 
@@ -66,6 +87,11 @@ func begin() -> void:
 ## only while the action cursor is on (S).
 func can_act() -> bool:
 	return not needs_action_cursor or PlayerCursor.action_mode
+
+
+## True if it's in slow motion this time (Slow Motion).
+func is_slowed() -> bool:
+	return time_scale < 1.0
 
 
 ## Override (optional): called when Leaves After Seconds runs out. Default: leave() at once.
@@ -95,10 +121,12 @@ func appear() -> void:
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
 	_appearance += 1
+	time_scale = slow_speed if _slowed_by_stat() else 1.0
 	begin()
 	if leaves_after_seconds > 0.0 and is_active:
 		var this_time := _appearance
-		get_tree().create_timer(leaves_after_seconds, false).timeout.connect(func() -> void:
+		# In slow motion it stays longer too.
+		get_tree().create_timer(leaves_after_seconds / time_scale, false).timeout.connect(func() -> void:
 			if is_active and _appearance == this_time:
 				time_to_go()
 		)
@@ -112,6 +140,15 @@ func is_due(answers: int) -> bool:
 	if again_every_answers > 0 and answers > appears_after_answers:
 		due = (answers - appears_after_answers) % again_every_answers == 0
 	return due and randf() <= chance
+
+
+# Slow Motion: the player's Slow Stat (on this date) is above Slow Above, and the stat is
+# on (data/stats/).
+func _slowed_by_stat() -> bool:
+	if not slow_stat or not StatList.get_default().is_active(slow_stat):
+		return false
+	var value: int = stats.get(slow_stat.id, PlayerManager.ensure_player().get_stat(slow_stat))
+	return value > slow_above
 
 
 func _finish() -> void:

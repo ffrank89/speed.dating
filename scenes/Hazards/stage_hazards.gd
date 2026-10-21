@@ -20,6 +20,9 @@ signal hazard_cleared(hazard: StageHazard)
 
 ## How many questions the player has answered on this date.
 var answers := 0
+## The player's stats on this date (stat id → value), set by the date. Each hazard gets
+## them when it turns up (e.g. for its Slow Motion). Empty = the player's own.
+var stats: Dictionary = {}
 var _hazards: Array[StageHazard] = []
 var _sound := AudioStreamPlayer.new()
 var _stopped := false
@@ -54,6 +57,7 @@ func stop() -> void:
 ## Brings on every hazard now, whatever the answer count (the test scene's debug button).
 func appear_all() -> void:
 	for hazard in _hazards:
+		hazard.stats = stats
 		hazard.appear()
 
 
@@ -80,6 +84,7 @@ func _on_answered(_response: DialogueResponse, _result: DateScorer.Result) -> vo
 func _bring_on(hazard: StageHazard) -> void:
 	if hazard.delay_seconds > 0.0:
 		await get_tree().create_timer(hazard.delay_seconds, false).timeout
+	hazard.stats = stats
 	hazard.appear()
 
 
