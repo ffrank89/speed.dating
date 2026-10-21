@@ -1,7 +1,8 @@
 class_name DateOption
 extends RefCounted
 ## One choice the player can pick, read from a dialogue response's tags:
-##   - Guess "The Unsinkable II". [#check=culture:40, #value=2]
+##   - Guess "The Unsinkable II". [#check=culture:4, #value=2]
+## The check's number is on the attributes' scale, 1-9 (data/attribute_rules.tres).
 ## No #check = no roll. No #value = worth 0.
 
 var response: DialogueResponse
@@ -28,6 +29,8 @@ static func from_response(r: DialogueResponse) -> DateOption:
 		option.requirement = int(parts[1]) if parts.size() > 1 else 0
 		if option.attribute == -1:
 			push_warning("Option \"%s\": unknown attribute in [#check=%s]. Use culture, intellect, seduction or heart." % [r.text, check])
+		elif option.requirement > Attr.rules().highest:
+			push_warning("Option \"%s\": [#check=%s] needs more than the highest attribute (%d), so it can never be met. Attributes are %d-%d." % [r.text, check, Attr.rules().highest, Attr.rules().lowest, Attr.rules().highest])
 	return option
 
 

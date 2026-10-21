@@ -60,7 +60,7 @@ extends Resource
 @export var font: Font
 @export_range(8, 120) var font_size: int = 38
 @export var text_color: Color = Color.WHITE
-## Colour of the attribute name and requirement, e.g. "Culture 40".
+## Colour of the attribute name and requirement, e.g. "Culture 4".
 @export var check_color: Color = Color(1, 1, 1, 0.65)
 ## Optional outline around each letter, which helps text read over busy pictures. 0 = none.
 @export_range(0, 20) var text_outline_width: int = 0

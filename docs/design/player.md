@@ -4,7 +4,9 @@
 
 - The player is a **stat sheet that dates test against**, not a fighter.
   Only the girls fight.
-- **Four attributes**: Culture, Intellect, Seduction, Heart (0–100 each).
+- **Four attributes**: Culture, Intellect, Seduction, Heart (1–9 each, so
+  they're easy to keep track of over a short run; the scale is
+  `data/attribute_rules.tres`).
   They decide which dialogue options are safe vs risky, how hard microgames
   are, which girls can appear, and part of player–girl synergy.
 - **Perks** are the player's build-arounds (see [perks.md](perks.md)).
@@ -30,10 +32,10 @@
 
 | Thing | Notes |
 |---|---|
-| `PlayerData.attributes: Dictionary[Attr, int]` | Clamped 0–100. |
+| `PlayerData.attributes: Dictionary[Attr, int]` | Clamped 1–9 (`AttributeRules`, `data/attribute_rules.tres`). Training is +1. |
 | `PlayerData.raise(a: Attr, amount: int)` | Only called through `RunState` so the signal fires. |
 | `PlayerPanel` (UI scene) | **Started as the Profile app** (P on the calendar, `scenes/Phone/Profile/ProfileApp.tscn`): your four attributes as bars. Perks and items: TBD. The old `player_panel.gd` was removed. |
-| Intro / starting stats | Today `IntroQuestions` sets stats (debug sets all to 100). TBD: keep the questionnaire, or random start, or pick a starting "archetype"? |
+| Intro / starting stats | Today `IntroQuestions` sets stats (debug sliders, starting at 9). TBD: keep the questionnaire, or random start, or pick a starting "archetype"? |
 | Attribute caps and starting values | TBD. Needs tuning with the date difficulty curve. |
 
 **Today:** `PlayerCharacter` (`scripts/characters/player_character.gd`, a

@@ -1,7 +1,8 @@
 extends Control
 ## The intro, on your phone: "Your Profile". For now it's a debug screen: set your four
 ## attributes with the sliders (or Randomize), then Start Dating! opens the calendar on
-## the phone, and the run begins.
+## the phone, and the run begins. The sliders go from the attributes' Lowest to Highest
+## (1-9, data/attribute_rules.tres) and start at Highest.
 ##
 ## The words are the settings below. The phone, its font, colours and your room behind
 ## it are data/phone_style.tres. Move the parts in this scene (PhoneScreen → Phone →
@@ -16,13 +17,8 @@ extends Control
 ## Size of each attribute's name and number.
 @export_range(8, 200) var stat_font_size: int = 44
 
-# Track player stats
-var player_stats = {
-	"Culture": 100,
-	"Intellect": 100,
-	"Seduction": 100,
-	"Heart": 100
-}
+# Track player stats, by name. They start at the highest (data/attribute_rules.tres).
+var player_stats = {}
 # Sliders for each stat
 var stat_sliders = {}
 
@@ -35,6 +31,8 @@ var stat_sliders = {}
 
 
 func _ready():
+	for attr in Attr.NAMES:
+		player_stats[Attr.display_name(attr)] = Attr.rules().highest
 	style_ui_elements()
 	setup_stats_interface()
 	randomize_button.pressed.connect(_on_randomize_pressed)
@@ -89,8 +87,8 @@ func setup_stats_interface():
 
 		# Create slider
 		var slider = HSlider.new()
-		slider.min_value = 0
-		slider.max_value = 100
+		slider.min_value = Attr.rules().lowest
+		slider.max_value = Attr.rules().highest
 		slider.value = player_stats[stat]
 		slider.step = 1
 		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -122,7 +120,7 @@ func setup_stats_interface():
 func _on_randomize_pressed():
 	# Generate random stats
 	for stat in player_stats.keys():
-		var random_value = randi_range(10, 90)
+		var random_value = randi_range(Attr.rules().lowest, Attr.rules().highest)
 		player_stats[stat] = random_value
 		stat_sliders[stat].value = random_value
 

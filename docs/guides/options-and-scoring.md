@@ -32,14 +32,14 @@ Tags in square brackets say what each one checks and what it's worth:
 
 ```
 Split Ends: My dad's boat has a name. Guess it.
-- Guess "The Unsinkable II". [#check=culture:40, #value=2]
+- Guess "The Unsinkable II". [#check=culture:4, #value=2]
 	if hit
 		Split Ends: [#react=exclamation] HOW did you know there was a first one?!
 	else
 		Split Ends: [#react=question] ...There wasn't a first one. Now I'm sad.
 - Guess "Boat". [#value=1]
 	Split Ends: Honestly? Respect.
-- Ask if she'll take you out on it sometime. [#check=seduction:70, #value=3]
+- Ask if she'll take you out on it sometime. [#check=seduction:7, #value=3]
 	if hit
 		Split Ends: [#react=heart] ...Yeah. Okay. I'd like that.
 	else
@@ -48,7 +48,7 @@ Split Ends: My dad's boat has a name. Guess it.
 
 | Tag | Meaning |
 |---|---|
-| `#check=culture:40` | This option tests **Culture** and needs **40**. Attributes: `culture`, `intellect`, `seduction`, `heart`. Leave `#check` out for an option with no roll. |
+| `#check=culture:4` | This option tests **Culture** and needs **4**. Attributes go from **1 to 9** (`data/attribute_rules.tres`), so a check is 1–9: 2–3 is easy, 4–6 is middling, 7–9 is hard. Attributes: `culture`, `intellect`, `seduction`, `heart`. Leave `#check` out for an option with no roll. |
 | `#value=2` | What it's worth if it lands, from **−3** (rude) to **+3** (perfect). Leave it out and it's worth 0. |
 | `if hit` / `else` | Her reply when the option lands / misses. Indent with **Tab**. Options without a check always "hit". |
 | `if missed` | The same as `else`, if it reads better. |
@@ -61,11 +61,12 @@ Split Ends: My dad's boat has a name. Guess it.
   (the widest is **Bubble Max Width** in the option style).
 - Write **2–4 options**. Players pick with keys 1–4, so a 5th can't be picked
   by number.
-- A tempting high-value option with a high requirement (`#check=seduction:70,
+- A tempting high-value option with a high requirement (`#check=seduction:7,
   #value=3`) next to a safe low-value one (`#value=1`) is what makes a choice
   interesting.
-- An option name that isn't an attribute (e.g. `#check=charm:40`) shows a
-  warning in Godot's Output panel and is treated as having no check.
+- An option name that isn't an attribute (e.g. `#check=charm:4`) shows a
+  warning in Godot's Output panel and is treated as having no check. So does
+  a check above 9 (an old 0–100 number like `:40`), which could never be met.
 
 ---
 
@@ -76,7 +77,7 @@ Everything below uses the numbers in `data/date_rules.tres` (next section).
 **1. The chance.** At or above the requirement: **100%**, no roll, no badge.
 Below it: your attribute ÷ the requirement.
 
-> Seduction **50**, option needs **70** → 50 ÷ 70 = **71%**
+> Seduction **5**, option needs **7** → 5 ÷ 7 = **71%**
 
 The chance never goes below **Min Chance** (5%) or above **Max Chance** (95%).
 
@@ -111,6 +112,13 @@ Click `data/date_rules.tres` in FileSystem. Hover any setting for help.
 | Likes Weight | 1.0 | make her likes matter more | make every girl score the same |
 | Miss Penalty | 0.5 | make risks riskier | make risks cheaper |
 | Min Miss Cost | 1.0 | make every miss sting | make small misses forgivable |
+
+**The attributes' scale:** `data/attribute_rules.tres`. **Lowest** (1) and
+**Highest** (9) are what an attribute can be: the intro's sliders, training
+and Profile's bars all use them. **Default Value** (5) is every attribute
+when a screen is played on its own (F6), and where the date test bench's
+sliders start. If you change the scale, rewrite the `#check` numbers in the
+dialogue to match.
 
 ---
 

@@ -41,7 +41,7 @@ signal date_finished(result: DateResult)
 ## Go back to the calendar after her contact card (off in the test bench).
 @export var go_to_calendar: bool = true
 
-## The player's attributes (Attr.Id → 0-100). Set before begin(); empty = the player's own.
+## The player's attributes (Attr.Id → 1-9). Set before begin(); empty = the player's own.
 var attributes: Dictionary = {}
 var scorer: DateScorer
 ## The pose names she has, in her girl file's order.
@@ -227,14 +227,16 @@ func _picked_girl() -> GirlData:
 	return PlayerManager.current_girl if PlayerManager.current_girl else fallback_girl
 
 
-# The player's attributes from their character, or 50 each if there isn't one yet.
+# The player's attributes from their character, or the Default Value each
+# (data/attribute_rules.tres) if there isn't one yet.
 func _player_attributes() -> Dictionary:
 	var values := {}
 	var player: PlayerCharacter = PlayerManager.player
+	var fallback := Attr.rules().default_value
 	for attr in Attr.Id.values():
-		values[attr] = 50
+		values[attr] = fallback
 		if player:
-			values[attr] = int(player.skills.get(Attr.display_name(attr), 50))
+			values[attr] = int(player.skills.get(Attr.display_name(attr), fallback))
 	return values
 
 

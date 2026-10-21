@@ -61,13 +61,14 @@ func select_girl(girl: GirlData) -> void:
 	current_girl = girl
 
 
-# The player, made with 50 in every attribute if there isn't one yet (e.g. when a
-# screen is played on its own with F6, without the intro).
+# The player, made with every attribute at the Default Value (data/attribute_rules.tres)
+# if there isn't one yet (e.g. when a screen is played on its own with F6, without the
+# intro).
 func ensure_player() -> PlayerCharacter:
 	if not player:
 		player = PlayerCharacter.new("Me!")
 		for skill in player.skills:
-			player.skills[skill] = 50
+			player.skills[skill] = Attr.rules().default_value
 	return player
 
 

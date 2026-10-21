@@ -10,4 +10,4 @@ icon = ExtResource("2_icon")
 days = 1
 weight = 1.0
 dialogue_title = "train"
-intellect = 5
+intellect = 1

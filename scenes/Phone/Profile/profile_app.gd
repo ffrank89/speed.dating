@@ -15,8 +15,6 @@ extends PhoneOverlayApp
 @export var title_text: String = "Profile"
 ## Under the title.
 @export var subtitle_text: String = "Your stats"
-## The highest an attribute can go (a full bar).
-@export var max_value: float = 100.0
 ## Where the attribute pictures come from (an option style's Attribute Icons).
 @export var icons_from: OptionListStyle
 ## Size of each attribute's name and number.
@@ -93,7 +91,8 @@ func _build_rows() -> void:
 		number.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		ui.style_label(number, ui.accent_color, stat_font_size)
 		line.add_child(number)
-		row.add_child(_bar(value / maxf(max_value, 1.0), ui.accent_color))
+		# A full bar is the highest an attribute goes (data/attribute_rules.tres).
+		row.add_child(_bar(value / maxf(Attr.rules().highest, 1.0), ui.accent_color))
 		stats.add_child(row)
 
 

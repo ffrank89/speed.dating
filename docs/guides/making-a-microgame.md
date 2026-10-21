@@ -14,7 +14,7 @@ phone gives a bigger screen). Build it tall, not wide.
 ## How it fits together
 
 ```
-Writer tags an option        - Light it for her. [#check=seduction:50, #value=2, #microgame=light_cigarette]
+Writer tags an option        - Light it for her. [#check=seduction:5, #value=2, #microgame=light_cigarette]
         │
 Player picks it              the bubble says PLAY instead of a % chance
         │
@@ -180,7 +180,7 @@ meter before time runs out.** Pieces you'll want:
   the mouse**.
 - **F6** on the date test bench: pick **"Light it for her."** when she asks for a light (or set
   the test bench's **Start Title** to `microgame_light_it`). Drag the **Seduction**
-  slider (top left) to change the difficulty: at 50 or more the player meets
+  slider (top left) to change the difficulty: at 5 or more the player meets
   the requirement and gets the easiest version.
 
 ## Mouse and keyboard
@@ -201,11 +201,11 @@ Every microgame must work with either. Two rules make that automatic:
 | Setting | Now | Meaning |
 |---|---|---|
 | Min Difficulty | 0.2 | The player meets the option's requirement |
-| Max Difficulty | 1.0 | The player has 0 of the attribute |
+| Max Difficulty | 1.0 | The player's attribute is the lowest (1) |
 | Unchecked Difficulty | 0.5 | The option has a microgame but no `#check` |
 
-In between it's a straight line: Seduction 25 against a requirement of 50
-gives 0.2 + (1.0 − 0.2) × 0.5 = **0.6**.
+In between it's a straight line: Seduction 3 against a requirement of 5 is
+halfway from 5 down to 1, so 0.2 + (1.0 − 0.2) × 0.5 = **0.6**.
 
 Your microgame decides what difficulty *means*. Make an easiest and a
 hardest number for each thing that should change, export them, and blend
@@ -234,7 +234,7 @@ and size.
 
 ```
 Split Ends: [#pose=cig] Got a light?
-- Light it for her. [#check=seduction:50, #value=2, #microgame=light_cigarette]
+- Light it for her. [#check=seduction:5, #value=2, #microgame=light_cigarette]
 	if hit
 		Split Ends: [#react=heart] ...Smooth.
 	else

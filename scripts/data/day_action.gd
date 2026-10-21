@@ -5,7 +5,7 @@ extends Resource
 ##
 ## An action is made of parts, all optional, so a new one needs no code. When it's
 ## picked, in this order:
-##   1. Attributes: it changes the player's attributes (e.g. Culture +5).
+##   1. Attributes: it changes the player's attributes (e.g. Culture +1).
 ##   2. Message: a line from dialogue/calendar.dialogue plays in the calendar's box.
 ##   3. Its days are used up, or, with Ends Chapter, the next chapter starts.
 ##   4. Opens: it opens a screen like an app (e.g. the dating app).
@@ -17,7 +17,7 @@ extends Resource
 
 ## What it's called on the calendar, e.g. "Date" or "Train Culture".
 @export var title: String = ""
-## The line under its title on today's choices. Empty = what it changes (e.g. "+5 Culture").
+## The line under its title on today's choices. Empty = what it changes (e.g. "Culture +1").
 @export_multiline var description: String = ""
 ## Its picture on the calendar.
 @export var icon: Texture2D
@@ -27,16 +27,18 @@ extends Resource
 @export_range(0.0, 10.0, 0.1) var weight: float = 1.0
 
 @export_group("Attributes")
-## How much it changes each of the player's attributes. 0 = no change; below 0 lowers it.
-@export_range(-100, 100) var culture: int = 0
-@export_range(-100, 100) var intellect: int = 0
-@export_range(-100, 100) var seduction: int = 0
-@export_range(-100, 100) var heart: int = 0
+## How much it changes each of the player's attributes (on their 1-9 scale). 0 = no
+## change; below 0 lowers it. An attribute never goes past the scale's Lowest or Highest
+## (data/attribute_rules.tres).
+@export_range(-9, 9, 1, "or_greater", "or_less") var culture: int = 0
+@export_range(-9, 9, 1, "or_greater", "or_less") var intellect: int = 0
+@export_range(-9, 9, 1, "or_greater", "or_less") var seduction: int = 0
+@export_range(-9, 9, 1, "or_greater", "or_less") var heart: int = 0
 
 @export_group("Message")
 ## The title in dialogue/calendar.dialogue that plays when you pick it (e.g. "train").
 ## Empty = no message. The lines can use {{action}} (its title), {{changes}}
-## ("Culture +5"), and {{attribute}} / {{amount}} (the first thing it changes).
+## ("Culture +1"), and {{attribute}} / {{amount}} (the first thing it changes).
 @export var dialogue_title: String = ""
 
 @export_group("Chapter")
@@ -70,7 +72,7 @@ func attribute_changes() -> Dictionary:
 	return changes
 
 
-## What it changes, in words: "Culture +5, Heart -2". Empty = nothing.
+## What it changes, in words: "Culture +1, Heart -1". Empty = nothing.
 func changes_text() -> String:
 	var parts: PackedStringArray = []
 	var changes := attribute_changes()

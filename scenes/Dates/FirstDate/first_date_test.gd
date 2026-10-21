@@ -13,13 +13,9 @@ extends Control
 ## The scoring and flow numbers (data/date_rules.tres).
 @export var rules: DateRules
 
-# Static so the sliders keep their values when the date restarts.
-static var attributes := {
-	Attr.Id.CULTURE: 50,
-	Attr.Id.INTELLECT: 50,
-	Attr.Id.SEDUCTION: 50,
-	Attr.Id.HEART: 50,
-}
+# Static so the sliders keep their values when the date restarts. They start at the
+# Default Value (data/attribute_rules.tres).
+static var attributes := {}
 
 @onready var date: DateScene = $Date
 @onready var girl_label: Label = %GirlLabel
@@ -33,6 +29,9 @@ static var attributes := {
 
 
 func _ready() -> void:
+	if attributes.is_empty():
+		for attr in Attr.Id.values():
+			attributes[attr] = Attr.rules().default_value
 	_build_sliders()
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	date.status_changed.connect(func(text: String) -> void: status_label.text = text)
@@ -66,7 +65,8 @@ func _build_sliders() -> void:
 		label.text = _slider_text(attr)
 
 		var slider := HSlider.new()
-		slider.max_value = 100
+		slider.min_value = Attr.rules().lowest
+		slider.max_value = Attr.rules().highest
 		slider.value = attributes[attr]
 		slider.custom_minimum_size.x = 400
 		slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER

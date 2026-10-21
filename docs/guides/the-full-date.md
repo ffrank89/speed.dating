@@ -63,7 +63,7 @@ Example exchange:
 ~ exchange_boat
 
 Split Ends: [#pose=point] Okay. Speed round. My dad's boat has a name. Guess it.
-- Guess "The Unsinkable II". [#check=culture:40, #value=2]
+- Guess "The Unsinkable II". [#check=culture:4, #value=2]
 	if hit
 		Split Ends: [#react=exclamation] HOW did you know there was a first one?!
 	else
@@ -165,7 +165,7 @@ once she has a **First Date Dialogue**: Smokey has a girl file
   `AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)` when **Go To
   Calendar** is on.
 - The girl comes from `PlayerManager.current_girl` (set by the dating app); the
-  player's attributes from `PlayerManager.player.skills` (50 each without
+  player's attributes from `PlayerManager.player.skills` (1–9; the Default Value, 5, each without
   a player).
 - `FirstDateTest` sets `girl`, `dialogue`, `only_title` and `attributes` on
   its Date (Auto Start and Go To Calendar off), then calls `begin()`.

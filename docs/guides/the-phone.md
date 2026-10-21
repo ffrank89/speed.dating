@@ -107,7 +107,7 @@ On the calendar, two more apps are a key away:
 | App | Key | What's in it |
 |---|---|---|
 | **Contacts** | **C** | Your party: [contacts.md](contacts.md) |
-| **Profile** | **P** | Your stats: Culture, Intellect, Seduction and Heart, each with a bar |
+| **Profile** | **P** | Your stats: Culture, Intellect, Seduction and Heart, each 1–9 with a bar |
 
 The phone switches to them **like moving between open apps on an iPhone**:
 the app you're on shrinks to a card, the row of open apps slides to the
@@ -156,8 +156,8 @@ in it gets them; for now that's the calendar.
 
 **Profile** is a light first version (`scenes/Phone/Profile/ProfileApp.tscn`,
 press **F6** to try it). Click its top node to change its words (**Title
-Text**, **Subtitle Text**), the highest an attribute goes (**Max Value**,
-100 = a full bar), sizes, and the empty part of the bars. The bars use the
+Text**, **Subtitle Text**), sizes, and the empty part of the bars. A full
+bar is the highest an attribute goes (9, from `data/attribute_rules.tres`). The bars use the
 phone's **Accent Color**; the pictures come from **Icons From** (the option
 style's **Attribute Icons**). Its icon and launch screen are
 `data/apps/profile.tres` (the Godot logo for now); its key is `open_profile`

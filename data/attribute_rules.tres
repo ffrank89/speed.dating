@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AttributeRules" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attribute_rules.gd" id="1_rules"]
+
+[resource]
+script = ExtResource("1_rules")
+lowest = 1
+highest = 9
+default_value = 5

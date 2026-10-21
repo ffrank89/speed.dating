@@ -8,7 +8,8 @@ extends RefCounted
 ##                        attribute ÷ requirement, clamped to min/max chance
 ##   points if it misses = −max(points × miss_penalty, min_miss_cost)
 ##   microgame difficulty = min_difficulty at or above the requirement, rising to
-##                          max_difficulty at 0 of the attribute
+##                          max_difficulty at the lowest attribute (1)
+## Attributes and requirements are on the 1-9 scale (data/attribute_rules.tres).
 
 ## What happened when an option was picked.
 class Result:
@@ -26,7 +27,7 @@ class Result:
 
 var rules: DateRules
 var girl: GirlData
-## Attr.Id -> the player's attribute value (0-100).
+## Attr.Id -> the player's attribute value (1-9).
 var attributes: Dictionary = {}
 var score := 0.0
 var rng := RandomNumberGenerator.new()
@@ -61,7 +62,10 @@ func difficulty_of(option: DateOption) -> float:
 	if not option.has_check() or option.requirement <= 0:
 		return rules.unchecked_difficulty
 	var have: int = attributes.get(option.attribute, 0)
-	var short_by := clampf(1.0 - float(have) / option.requirement, 0.0, 1.0)
+	# How far below the requirement, from 0 (meets it) to 1 (the lowest attribute).
+	var lowest := Attr.rules().lowest
+	var gap := float(option.requirement - lowest)
+	var short_by := clampf((option.requirement - have) / gap, 0.0, 1.0) if gap > 0.0 else 0.0
 	return lerpf(rules.min_difficulty, rules.max_difficulty, short_by)
 
 

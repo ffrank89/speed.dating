@@ -66,3 +66,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0060](0060-switching-apps.md) | Contacts (C) and Profile (P) by key with a debug note, switching like the iPhone's app switcher; choices are plain boxes | Accepted, amended by 0062 |
 | [0061](0061-f5-music-and-clean-up.md) | F5 plays the game and the window scales; a new music system; girls are only girl files; old code removed, every picture kept | Accepted |
 | [0062](0062-recent-apps-order.md) | The app switcher remembers the order you used apps in, like an iPhone; back goes to the app before | Accepted |
+| [0063](0063-attributes-one-to-nine.md) | The player's attributes go from 1 to 9 (one scale file); training +1, checks 1–9 | Accepted |

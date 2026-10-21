@@ -16,7 +16,7 @@ like the blinds in Balatro: **three days at a time**, stacked.
 │┃ │  [♥]  ││  [▣]  ││  [▣]  │ ┃│
 │┃ │ Date  ││ Train ││ Rest  │ ┃│
 │┃ │2 days ││ 1 day ││ 1 day │ ┃│
-│┃ │Swipe..││Cult+5 ││Nothin.│ ┃│
+│┃ │Swipe..││Cult+1 ││Nothin.│ ┃│
 │┃ └───────┘└───────┘└───────┘ ┃│
 │┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛│
 │┏ TUE  Upcoming ━━━━━━━━━━━━━━┓│  ← coming up (gold, dimmed)
@@ -34,9 +34,9 @@ like the blinds in Balatro: **three days at a time**, stacked.
   and **3** keys work too, left to right):
   - **Date** (2 days): opens the dating app on the phone. After the date
     you're back here, two days later.
-  - **Train** (1 day): raises an attribute by 5, with a line in the
-    calendar's box at the bottom of the phone ("You spend the day on your
-    Culture. Culture +5.").
+  - **Train** (1 day): raises an attribute by 1 (attributes go from 1 to
+    9), with a line in the calendar's box at the bottom of the phone ("You
+    spend the day on your Culture. Culture +1.").
   - **Rest** (1 day): a line, and the day passes. Perks, items and events
     come later.
   - **Boss** (the last day): for now a line, then the next chapter starts.
@@ -81,7 +81,8 @@ saved: to keep a picture, put it in `data/calendar_style.tres` → **Calendar
 Art** (or, for the room, `data/phone_style.tres` → **Your Room**).
 
 **On its own:** open `scenes/Calendar/calendar.tscn` and press **F6**.
-(Played without the intro, your attributes start at 50 each.)
+(Played without the intro, your attributes start at 5 each: the Default
+Value in `data/attribute_rules.tres`.)
 
 ## What's offered: `data/calendar_rules.tres`
 
@@ -112,14 +113,14 @@ The date, the trainings, rest and the boss are just different mixes:
 | | Days | Attributes | Message | Ends Chapter | Opens |
 |---|---|---|---|---|---|
 | Date | 2 | | | | the dating app |
-| Train Culture | 1 | Culture +5 | `train` | | |
+| Train Culture | 1 | Culture +1 | `train` | | |
 | Rest | 1 | | `rest` | | |
 | Boss | 1 | | `boss` | on | (the boss fight, later) |
 
 | Setting | What it does |
 |---|---|
 | **Title** | Its name on the calendar ("Date", "Train Culture") |
-| **Description** | The line under it on today's choices. Empty = what it changes ("Culture +5") |
+| **Description** | The line under it on today's choices. Empty = what it changes ("Culture +1") |
 | **Icon** | Its picture (on its day, and on today's choice) |
 | **Days** | How many days it uses up |
 | **Weight** | How often it's offered compared to the others (the date is 3, the rest are 1). 0 = never |
@@ -129,7 +130,7 @@ The date, the trainings, rest and the boss are just different mixes:
 | **Opens → Scene / App Name** | A screen it opens afterwards, and which app (in `data/apps/`) it opens like on the phone. Empty = it stays on the calendar |
 | **Opens → Real Life** | On = the screen is real life (a boss fight, say): the phone goes down into it instead of it opening as an app |
 
-**A new action** (e.g. "Go to a gig": 2 days, Culture +3, Heart +2, a
+**A new action** (e.g. "Go to a gig": 2 days, Culture +1, Heart +1, a
 line): duplicate `train_culture.tres`, change its settings, and add it to
 **Actions** in `data/calendar_rules.tres`. Nothing else.
 
@@ -138,8 +139,8 @@ line): duplicate `train_culture.tres`, change its settings, and add it to
 The lines for training, resting and the boss. **Placeholder** lines now.
 They play in the calendar's box at the bottom of the phone, over the days
 coming up. Click or press Space to go on. Lines without a `Name:` have no name tab. They can use
-`{{action}}` (its title), `{{changes}}` ("Culture +3, Heart +2"), and
-`{{attribute}}` / `{{amount}}` (the first thing it changes: Culture, 3):
+`{{action}}` (its title), `{{changes}}` ("Culture +1, Heart +1"), and
+`{{attribute}}` / `{{amount}}` (the first thing it changes: Culture, 1):
 
 ```
 ~ train

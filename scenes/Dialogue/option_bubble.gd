@@ -70,7 +70,7 @@ func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle
 	column.add_theme_constant_override("separation", 6)
 	add_child(column)
 
-	# Top row: attribute icon, "Culture 40", and the % badge.
+	# Top row: attribute icon, "Culture 4", and the % badge.
 	var header := HBoxContainer.new()
 	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_theme_constant_override("separation", 16)

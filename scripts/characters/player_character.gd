@@ -1,7 +1,8 @@
 class_name PlayerCharacter
 extends RefCounted
 ## The player: their name and attributes (skills: "Culture", "Intellect", "Seduction",
-## "Heart" → 0-100). Made by the intro (or PlayerManager.ensure_player()).
+## "Heart" → 1-9, the scale in data/attribute_rules.tres). Made by the intro (or
+## PlayerManager.ensure_player()).
 
 signal stats_changed
 
@@ -27,6 +28,7 @@ func get_skill(skill_name: String) -> int:
 	return skills.get(skill_name, 0)
 
 
+# Training raises it (or lowers it), never past the scale's Lowest or Highest.
 func increase_skill(skill_name: String, amount: int) -> void:
-	skills[skill_name] = skills.get(skill_name, 0) + amount
+	skills[skill_name] = Attr.rules().clamp_value(skills.get(skill_name, 0) + amount)
 	stats_changed.emit()
