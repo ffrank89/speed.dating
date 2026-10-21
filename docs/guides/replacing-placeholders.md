@@ -36,6 +36,7 @@ thing. **No code needed.**
 | **Your room** (behind the phone) | `assets/bedroom2.png` | `data/phone_style.tres` → **Your Room → Room Image** | Behind the phone on the intro, dating app and calendar |
 | **Phone up / down sounds** | Kenney stand-ins (`maximize_008`, `minimize_008`) | `data/phone_style.tres` → **Phone Up / Down → Up Sound / Down Sound** | Taking the phone out and putting it away |
 | **Dating app sounds** | Kenney stand-ins (`switch_005`, `confirmation_002`, `click_003`) | `data/dating_app_style.tres` → **Sounds** | Passing on a profile, Start Dating!, a button under the mouse |
+| **Stats hub swallow sound** | Kenney stand-in (`drop_004`) | `scenes/Stats/StatHub.tscn` → **Boost Animation → Swallow Sound** | The stats hub swallowing a trained stat's picture |
 | **App switch sound** | Kenney stand-in (`switch_006`) | `data/app_transition_style.tres` → **Switching Apps → Switch Sound** | Switching to Contacts or Profile and back |
 | **Contacts and Profile app icons** | `assets/placeholders/godot_logo.svg` | `data/apps/contacts.tres`, `data/apps/profile.tres` → **Icon** | The tiles Contacts and Profile (W) open from; Contacts' is also the app her card opens on at the end of a date |
 | **Music** | `assets/audio/loops/`: `second ss free loop.ogg` (`calendar`, `date`), `(FREE) 2hollis  Snow Strippers type beat keflavik.mp3` (`dating_app`), `real first loop poop.ogg` (`first_loop`, not used yet). Source and licence not recorded | `data/music.tres` → **Tracks** → a track → **Stream** | The music on each screen. See [music](music.md). |

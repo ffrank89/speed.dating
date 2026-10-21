@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/Stats/stat_hub.gd" id="1_hub"]
+[ext_resource type="Resource" path="res://data/player_style.tres" id="2_player"]
+[ext_resource type="Resource" path="res://data/phone_style.tres" id="3_phone"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/drop_004.wav" id="4_gulp"]
+
+[node name="StatHub" type="PanelContainer"]
+offset_right = 480.0
+offset_bottom = 800.0
+mouse_filter = 2
+script = ExtResource("1_hub")
+player_style = ExtResource("2_player")
+phone_style = ExtResource("3_phone")
+swallow_sound = ExtResource("4_gulp")
