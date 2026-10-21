@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="StatList" load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stat_list.gd" id="1_list"]
+[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="20_stat"]
+[ext_resource type="Resource" path="res://data/stats/culture.tres" id="2_culture"]
+[ext_resource type="Resource" path="res://data/stats/intellect.tres" id="3_intellect"]
+[ext_resource type="Resource" path="res://data/stats/seduction.tres" id="4_seduction"]
+[ext_resource type="Resource" path="res://data/stats/heart.tres" id="5_heart"]
+[ext_resource type="Resource" path="res://data/stats/strength.tres" id="6_strength"]
+[ext_resource type="Resource" path="res://data/stats/perception.tres" id="7_perception"]
+[ext_resource type="Resource" path="res://data/stats/endurance.tres" id="8_endurance"]
+[ext_resource type="Resource" path="res://data/stats/charisma.tres" id="9_charisma"]
+[ext_resource type="Resource" path="res://data/stats/intelligence.tres" id="10_intelligence"]
+[ext_resource type="Resource" path="res://data/stats/agility.tres" id="11_agility"]
+[ext_resource type="Resource" path="res://data/stats/luck.tres" id="12_luck"]
+
+[resource]
+script = ExtResource("1_list")
+stats = Array[ExtResource("20_stat")]([ExtResource("2_culture"), ExtResource("3_intellect"), ExtResource("4_seduction"), ExtResource("5_heart"), ExtResource("6_strength"), ExtResource("7_perception"), ExtResource("8_endurance"), ExtResource("9_charisma"), ExtResource("10_intelligence"), ExtResource("11_agility"), ExtResource("12_luck")])

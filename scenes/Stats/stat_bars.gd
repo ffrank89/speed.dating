@@ -1,28 +1,19 @@
 class_name StatBars
 extends VBoxContainer
-## A list of the player's stats, each with its picture, name, number (1-9) and a bar:
-## the four attributes, or the skills that are on (data/skills.tres). Profile shows one of
-## each. It's a scene of its own (scenes/Stats/StatBars.tscn), so it can go on any
-## screen: drag it in, pick what it Shows, and it fills itself in. refresh() shows the
+## A list of the player's stats, each with its picture, name, number (1-9) and a bar.
+## It shows every stat that's on (data/stats.tres), in that file's order, or just the ones
+## in Only These. It's a scene of its own (scenes/Stats/StatBars.tscn), so it can go on
+## any screen: drag it in and it fills itself in. Profile is one. refresh() shows the
 ## stats as they are now (Profile calls it each time it opens).
-## Full guide: docs/guides/skills.md
+## Full guide: docs/guides/stats.md
 
-enum Shows {
-	## Culture, Intellect, Seduction, Heart.
-	ATTRIBUTES,
-	## The skills that are on (data/skills.tres), in that file's order.
-	SKILLS,
-}
-
-## Which stats it lists.
-@export var shows: Shows = Shows.ATTRIBUTES
-## A heading above the list (e.g. "Skills"). Empty = none.
+## A heading above the list (e.g. "Stats"). Empty = none.
 @export var heading_text: String = ""
+## Only these stats (drag stat files from data/stats/ here), in this order. Empty = every
+## stat that's on. Stats that are off are left out either way.
+@export var only_these: Array[PlayerStat] = []
 ## The phone's look: its font, text colour and Accent Color (the numbers and bars).
 @export var phone_style: PhoneStyle
-## Where the attribute pictures come from (an option style's Attribute Icons). Skills
-## use their own Icon.
-@export var icons_from: OptionListStyle
 
 @export_group("Sizes")
 ## Size of the heading.
@@ -43,8 +34,8 @@ func _ready() -> void:
 	refresh()
 
 
-## Lists the stats as they are now. Hides itself when there's nothing to list (e.g. no
-## skills are on).
+## Lists the stats as they are now. Hides itself when there's nothing to list (every stat
+## it would show is off).
 func refresh() -> void:
 	for child in get_children():
 		remove_child(child)
@@ -68,15 +59,11 @@ func refresh() -> void:
 func _stats() -> Array[Dictionary]:
 	var list: Array[Dictionary] = []
 	var player := PlayerManager.ensure_player()
-	if shows == Shows.ATTRIBUTES:
-		for attr in Attr.NAMES:
-			var attr_name := Attr.display_name(attr)
-			list.append({"name": attr_name, "value": player.get_attribute(attr_name),
-				"icon": icons_from.icon_for(attr) if icons_from else null, "description": ""})
-	else:
-		for skill in SkillList.get_default().active():
-			list.append({"name": skill.display_name, "value": player.get_skill(skill),
-				"icon": skill.icon, "description": skill.description})
+	var all := StatList.get_default()
+	for stat in only_these if not only_these.is_empty() else all.stats:
+		if all.is_active(stat):
+			list.append({"name": stat.display_name, "value": player.get_stat(stat),
+				"icon": stat.icon, "description": stat.description})
 	return list
 
 
@@ -111,8 +98,8 @@ func _make_row(stat: Dictionary, ui: PhoneStyle) -> Control:
 	ui.style_label(number, ui.accent_color, font_size)
 	line.add_child(number)
 	if bar_height > 0:
-		# A full bar is the highest a stat goes (data/attribute_rules.tres).
-		row.add_child(_bar(float(stat.value) / maxf(Attr.rules().highest, 1.0), ui.accent_color))
+		# A full bar is the highest a stat goes (data/stats.tres).
+		row.add_child(_bar(float(stat.value) / maxf(StatList.get_default().highest, 1.0), ui.accent_color))
 	return row
 
 

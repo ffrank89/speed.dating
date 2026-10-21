@@ -5,7 +5,7 @@ player's choices on a date: how to write them, how they're scored, how to
 tune the numbers, and how to change how the option bubbles look, move and sound.
 
 See your changes the usual way: open the date test bench
-(`scenes/Dates/FirstDate/FirstDateTest.tscn`) and press **F6**. Drag the attribute sliders
+(`scenes/Dates/FirstDate/FirstDateTest.tscn`) and press **F6**. Drag the stat sliders
 (top left) to see how the odds change. How the whole date is put together
 (opener, exchanges, closers) is in [the-full-date.md](the-full-date.md).
 
@@ -48,7 +48,7 @@ Split Ends: My dad's boat has a name. Guess it.
 
 | Tag | Meaning |
 |---|---|
-| `#check=culture:4` | This option tests **Culture** and needs **4**. Attributes go from **1 to 9** (`data/attribute_rules.tres`), so a check is 1–9: 2–3 is easy, 4–6 is middling, 7–9 is hard. Attributes: `culture`, `intellect`, `seduction`, `heart`. A **skill** that's on works too, by its id: `#check=speech:5` ([skills.md](skills.md)). Leave `#check` out for an option with no roll. |
+| `#check=culture:4` | This option tests **Culture** and needs **4**. A check names any stat that's on by its id (`culture`, `intellect`, `seduction`, `heart`, `strength`, `perception`, `endurance`, `charisma`, `intelligence`, `agility`, `luck`: [stats.md](stats.md)). Stats go from **1 to 9** (`data/stats.tres`), so a check is 1–9: 2–3 is easy, 4–6 is middling, 7–9 is hard. Leave `#check` out for an option with no roll. |
 | `#value=2` | What it's worth if it lands, from **−3** (rude) to **+3** (perfect). Leave it out and it's worth 0. |
 | `if hit` / `else` | Her reply when the option lands / misses. Indent with **Tab**. Options without a check always "hit". |
 | `if missed` | The same as `else`, if it reads better. |
@@ -64,9 +64,10 @@ Split Ends: My dad's boat has a name. Guess it.
 - A tempting high-value option with a high requirement (`#check=seduction:7,
   #value=3`) next to a safe low-value one (`#value=1`) is what makes a choice
   interesting.
-- An option name that isn't an attribute (e.g. `#check=charm:4`) shows a
-  warning in Godot's Output panel and is treated as having no check. So does
-  a check above 9 (an old 0–100 number like `:40`), which could never be met.
+- A name that isn't a stat (e.g. `#check=charm:4`), or a stat that's off,
+  shows a warning in Godot's Output panel and is treated as having no check.
+  So does a check above 9 (an old 0–100 number like `:40`), which could never
+  be met.
 
 ---
 
@@ -75,19 +76,20 @@ Split Ends: My dad's boat has a name. Guess it.
 Everything below uses the numbers in `data/date_rules.tres` (next section).
 
 **1. The chance.** At or above the requirement: **100%**, no roll, no badge.
-Below it: your attribute ÷ the requirement.
+Below it: your stat ÷ the requirement.
 
 > Seduction **5**, option needs **7** → 5 ÷ 7 = **71%**
 
 The chance never goes below **Min Chance** (5%) or above **Max Chance** (95%).
 
 **2. What a hit earns.** The option's value, boosted by how much **she**
-likes that attribute (her **Likes** in her girl file, 0–1):
+likes that stat (her girl file → **Dating → Likes**: a stat and 0–1 each;
+a stat she doesn't list is 0):
 
 > value × (1 + her like × Likes Weight)
 > Split Ends likes Seduction **0.3**: +3 × (1 + 0.3 × 1.0) = **+3.9**
 
-So the same option is worth more to a girl who cares about that attribute.
+So the same option is worth more to a girl who cares about that stat.
 
 **3. What a miss costs.** A share of what it would have earned, never less
 than **Min Miss Cost**:
@@ -113,12 +115,11 @@ Click `data/date_rules.tres` in FileSystem. Hover any setting for help.
 | Miss Penalty | 0.5 | make risks riskier | make risks cheaper |
 | Min Miss Cost | 1.0 | make every miss sting | make small misses forgivable |
 
-**The attributes' scale:** `data/attribute_rules.tres`. **Lowest** (1) and
-**Highest** (9) are what an attribute can be: the intro's sliders, training
-and Profile's bars all use them. **Default Value** (5) is every attribute
-when a screen is played on its own (F6), and where the date test bench's
-sliders start. If you change the scale, rewrite the `#check` numbers in the
-dialogue to match.
+**The stats:** `data/stats.tres` holds every stat and the scale: **Lowest**
+(1) and **Highest** (9). The intro's sliders, training, Profile's bars and
+the test bench all use them; each stat starts at its own **Starting Value**
+(5). If you change the scale, rewrite the `#check` numbers in the dialogue to
+match. Turning stats on and off, and adding new ones: [stats.md](stats.md).
 
 ---
 
@@ -133,7 +134,7 @@ the edges.
   glows pink (**Dragging → Drop Outline Color**). Only her drawn pixels
   count, not the see-through space around her picture.
 - **Drag** a bubble anywhere else to throw it around. While it's dragged it
-  drops a trail of little copies of its attribute icon, which fade away.
+  drops a trail of little copies of its stat icon, which fade away.
   Letting go away from her doesn't pick it.
 - A bubble **stops drifting while the mouse is over it**, so it's easy to click.
 - Keys **1–4** still pick, and the arrow keys then Space/Enter still work.
@@ -170,8 +171,8 @@ picture frame, with the outline kept or dropped.
 | Risky Options | The outline and % badge colours for options the player might miss |
 | Microgame Options | The badge on options that play a microgame (**PLAY**) and its colours |
 | Roll | How long the numbers spin, the hit and miss colours, and the words (HIT / MISS) |
-| Attribute Icons | The small picture for each attribute, and its size. The drag trail uses these too. |
-| Dragging | Trail icon size, **Trail Spacing** (lower = more icons), how long each lasts, the icon for options with no attribute, how hard a bubble can be thrown, and **Drop On Her Picks** with its glow colour |
+| Stat Icons | The size of the stat's picture on a bubble. The picture itself is the stat's **Icon** (`data/stats/`); the drag trail uses it too. |
+| Dragging | Trail icon size, **Trail Spacing** (lower = more icons), how long each lasts, the icon for options with no stat, how hard a bubble can be thrown, and **Drop On Her Picks** with its glow colour |
 | Sounds | Hover, pick, roll tick, hit and miss sounds, and volume |
 
 **Picture bubbles:** drag a picture onto **Bubbles → Background Image**. If
@@ -181,12 +182,12 @@ its frame. Turn on **Keep Outline With Image** to draw the outline on top
 dropped, risky options are marked by their % badge only. **Hover Image** is
 optional; empty = the same picture.
 
-**Attribute icons:** Culture uses the statue and Heart the winged heart.
-**Intellect and Seduction show the Godot logo**, which is the placeholder for
-art that doesn't exist yet. Drag real art onto **Attribute Icons → Intellect
-Icon / Seduction Icon** to replace them. Square pictures work best. Options
-with no attribute drop **Dragging → Trail Fallback Icon** (also the Godot
-logo for now).
+**Stat icons:** each stat's picture is its own file's **Icon**
+(`data/stats/`). Culture uses the statue and Heart the winged heart; **the
+other stats show the Godot logo**, the placeholder for art that doesn't exist
+yet. Drag real art onto the stat's **Icon** to replace it. Square pictures
+work best. Options with no stat drop **Dragging → Trail Fallback Icon** (also
+the Godot logo for now).
 
 **Sounds:** hover, tick, hit and miss come from Kenney's Interface Sounds
 (CC0, `assets/audio/ui/kenney_interface_sounds/`). To try others, drag any
@@ -210,9 +211,10 @@ Double-click it to open the **SpriteFrames** panel at the bottom of Godot.
 
 | Problem | Fix |
 |---|---|
-| No % badge on an option I expected to be risky | The player's attribute is at or above the requirement, so it can't miss. Lower the slider to test. |
+| No % badge on an option I expected to be risky | The player's stat is at or above the requirement, so it can't miss. Lower the slider to test. |
 | Her reply is the same whatever happens | Use `if hit` / `else` under the option, with the replies indented one Tab further. |
-| "unknown attribute" warning | The `#check=` name must be `culture`, `intellect`, `seduction` or `heart`. |
+| "no stat called…" warning | The `#check=` name must be a stat's **Id** from `data/stats/` (e.g. `culture`, `strength`). |
+| "…which is off" warning | That stat's **Enabled** is off ([stats.md](stats.md)), so the option has no roll. |
 | Reaction doesn't show | The name in `[#react=…]` must match an animation in `data/reactions.tres` exactly. |
 | Number keys don't pick | Only options 1–4 have keys. Also, picks are ignored for a moment (**Input Delay** on OptionList) right after options appear, so players mashing Space don't pick by accident. |
 | Bubbles float over the dialogue box or off where I can't see them | Resize **OptionList** in the scene: bubbles stay inside its rectangle. |

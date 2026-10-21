@@ -1,5 +1,5 @@
 extends Node
-## PlayerManager (autoload): this run's state. The player and their attributes, the
+## PlayerManager (autoload): this run's state. The player and their stats, the
 ## run's calendar, the girl picked in the dating app, your party (the girls saved in your
 ## contacts) and the girls who are gone for the run.
 
@@ -61,14 +61,11 @@ func select_girl(girl: GirlData) -> void:
 	current_girl = girl
 
 
-# The player, made with every attribute at the Default Value (data/attribute_rules.tres)
-# if there isn't one yet (e.g. when a screen is played on its own with F6, without the
-# intro).
+# The player, made with every stat at its Starting Value (data/stats/) if there isn't one
+# yet (e.g. when a screen is played on its own with F6, without the intro).
 func ensure_player() -> PlayerCharacter:
 	if not player:
 		player = PlayerCharacter.new("Me!")
-		for attribute in player.attributes:
-			player.attributes[attribute] = Attr.rules().default_value
 	return player
 
 

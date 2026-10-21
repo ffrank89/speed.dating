@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GirlData" load_steps=32 format=3 uid="uid://dglthbg00jke5"]
+[gd_resource type="Resource" script_class="GirlData" load_steps=37 format=3 uid="uid://dglthbg00jke5"]
 
 [ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="1_wf6us"]
 [ext_resource type="Resource" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
@@ -18,6 +18,11 @@
 [ext_resource type="Texture2D" uid="uid://b6sulnifbnexx" path="res://assets/spitEndsGif2/sprite2.png" id="16_pic2"]
 [ext_resource type="Texture2D" uid="uid://dwtixb03eft71" path="res://assets/spitEndsGif2/sprite3.png" id="17_pic3"]
 [ext_resource type="Texture2D" uid="uid://cjl6tnrtv8pjc" path="res://assets/spitEndsGif2/sprite4.png" id="18_pic4"]
+[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="89_stat_script"]
+[ext_resource type="Resource" path="res://data/stats/culture.tres" id="90_culture"]
+[ext_resource type="Resource" path="res://data/stats/intellect.tres" id="91_intellect"]
+[ext_resource type="Resource" path="res://data/stats/seduction.tres" id="92_seduction"]
+[ext_resource type="Resource" path="res://data/stats/heart.tres" id="93_heart"]
 
 [sub_resource type="Resource" id="Resource_qbi5r"]
 script = ExtResource("3_hgqhe")
@@ -148,7 +153,9 @@ voice = SubResource("Resource_s0o2p")
 first_date_dialogue = ExtResource("14_first_date")
 microgames = Array[PackedScene]([])
 affection_thresholds = Array[int]([3, 6, 9])
-likes_culture = 0.2
-likes_intellect = 0.3
-likes_seduction = 0.3
-likes_heart = 0.2
+likes = Dictionary[ExtResource("89_stat_script"), float]({
+ExtResource("90_culture"): 0.2,
+ExtResource("91_intellect"): 0.3,
+ExtResource("92_seduction"): 0.3,
+ExtResource("93_heart"): 0.2
+})

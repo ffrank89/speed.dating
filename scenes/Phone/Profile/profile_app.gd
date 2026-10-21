@@ -1,16 +1,17 @@
 class_name ProfileApp
 extends PhoneOverlayApp
-## Your Profile, an app on your phone: your four attributes (Culture, Intellect,
-## Seduction, Heart) and your skills (the ones that are on in data/skills.tres), each
-## 1-9 with a bar. Press P (the open_profile action) on the calendar and the phone
-## switches to it, like moving between open apps on an iPhone (the same way as Contacts);
-## P again, Escape or the phone's home bar goes back to the app you were on before.
+## Your Profile, an app on your phone: your stats (every one that's on in
+## data/stats.tres), each 1-9 with a bar. Press P (the open_profile action) on the
+## calendar and the phone switches to it, like moving between open apps on an iPhone
+## (the same way as Contacts); P again, Escape or the phone's home bar goes back to the
+## app you were on before.
 ##
-## The lists are Stat Bars (scenes/Stats/StatBars.tscn): click Attributes or Skills in
-## this scene (PhoneScreen → Phone → Body → Screen → Margin → Column → Scroll → Stats) to
-## change their sizes, heading or pictures, or to move them. The list scrolls when it's
-## taller than the phone. The phone (screen, font, accent colour) is
-## data/phone_style.tres; the words are the settings below. Press F6 to try it.
+## The list is Stat Bars (scenes/Stats/StatBars.tscn): click StatBars in this scene
+## (PhoneScreen → Phone → Body → Screen → Margin → Column → Scroll → Stats) to change its
+## sizes or heading, or to show only some stats. Drop in another to split them into
+## groups. The list scrolls when it's taller than the phone. The phone (screen, font,
+## accent colour) is data/phone_style.tres; the words are the settings below. Press F6
+## to try it.
 
 ## The big title.
 @export var title_text: String = "Profile"

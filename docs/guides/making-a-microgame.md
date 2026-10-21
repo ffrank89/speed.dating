@@ -31,7 +31,7 @@ DateScorer                   pass = hit, fail = miss (points as usual)
 Dialogue                     her "if hit" or "else" reply
 ```
 
-The player's attribute against the option's `#check` sets the
+The player's stat against the option's `#check` sets the
 **difficulty** (0 = easiest, 1 = hardest) instead of the odds.
 
 ## Files
@@ -43,7 +43,7 @@ The player's attribute against the option's `#check` sets the
 | `scenes/Microgames/MicrogameHost.tscn` | The shared frame, on the phone. Move the **Banner**, **TimerBar** and **Stamp** here (under **PhoneScreen → Phone → Body → Screen**). |
 | `data/microgames.tres` | The list of microgames by name. A dialogue tag `[#microgame=name]` looks the name up here. |
 | `data/microgame_style.tres` | How the frame looks and sounds (no code). |
-| `data/date_rules.tres` → **Microgames** | How the player's attribute turns into difficulty. |
+| `data/date_rules.tres` → **Microgames** | How the player's stat turns into difficulty. |
 | `dialogue/split_ends/first_date.dialogue` | Her first date. The `~ microgame_...` exchanges have a microgame option; 2 play per date ([the-full-date.md](the-full-date.md)). |
 
 ## Try the example first
@@ -201,7 +201,7 @@ Every microgame must work with either. Two rules make that automatic:
 | Setting | Now | Meaning |
 |---|---|---|
 | Min Difficulty | 0.2 | The player meets the option's requirement |
-| Max Difficulty | 1.0 | The player's attribute is the lowest (1) |
+| Max Difficulty | 1.0 | The player's stat is the lowest (1) |
 | Unchecked Difficulty | 0.5 | The option has a microgame but no `#check` |
 
 In between it's a straight line: Seduction 3 against a requirement of 5 is

@@ -34,7 +34,7 @@ like the blinds in Balatro: **three days at a time**, stacked.
   and **3** keys work too, left to right):
   - **Date** (2 days): opens the dating app on the phone. After the date
     you're back here, two days later.
-  - **Train** (1 day): raises an attribute by 1 (attributes go from 1 to
+  - **Train** (1 day): raises a stat by 1 (stats go from 1 to
     9), with a line in the calendar's box at the bottom of the phone ("You
     spend the day on your Culture. Culture +1.").
   - **Rest** (1 day): a line, and the day passes. Perks, items and events
@@ -81,8 +81,8 @@ saved: to keep a picture, put it in `data/calendar_style.tres` → **Calendar
 Art** (or, for the room, `data/phone_style.tres` → **Your Room**).
 
 **On its own:** open `scenes/Calendar/calendar.tscn` and press **F6**.
-(Played without the intro, your attributes start at 5 each: the Default
-Value in `data/attribute_rules.tres`.)
+(Played without the intro, each stat starts at its **Starting Value**, 5:
+[stats.md](stats.md).)
 
 ## What's offered: `data/calendar_rules.tres`
 
@@ -103,15 +103,14 @@ offer the same days.
 One file each. An action is **made of parts, all optional**, so a new one
 needs no code. When it's picked, in this order:
 
-1. **Attributes** and **Skills:** it changes the player's attributes (and
-   skills: [skills.md](skills.md)).
+1. **Stats:** it changes the player's stats ([stats.md](stats.md)).
 2. **Message:** a line from `dialogue/calendar.dialogue` plays.
 3. Its **days** are used up, or with **Ends Chapter** the next chapter starts.
 4. **Opens:** it opens a screen like an app.
 
 The date, the trainings, rest and the boss are just different mixes:
 
-| | Days | Attributes | Message | Ends Chapter | Opens |
+| | Days | Stats | Message | Ends Chapter | Opens |
 |---|---|---|---|---|---|
 | Date | 2 | | | | the dating app |
 | Train Culture | 1 | Culture +1 | `train` | | |
@@ -122,19 +121,19 @@ The date, the trainings, rest and the boss are just different mixes:
 |---|---|
 | **Title** | Its name on the calendar ("Date", "Train Culture") |
 | **Description** | The line under it on today's choices. Empty = what it changes ("Culture +1") |
-| **Skills** | Skills it changes: **Add Key/Value Pair**, drag a skill file from `data/skills/` on the left, the amount on the right (e.g. Speech 1). Skills that are off are left alone ([skills.md](skills.md)) |
 | **Icon** | Its picture (on its day, and on today's choice) |
 | **Days** | How many days it uses up |
 | **Weight** | How often it's offered compared to the others (the date is 3, the rest are 1). 0 = never |
-| **Attributes → Culture / Intellect / Seduction / Heart** | How much it changes each one. 0 = no change; below 0 lowers it |
+| **Stats** | Which stats it changes, and by how much: **Add Key/Value Pair**, drag a stat file from `data/stats/` on the left, type the amount on the right (Train Culture is Culture 1; below 0 lowers it). Stats that are off are left alone |
 | **Message → Dialogue Title** | Which title in `dialogue/calendar.dialogue` plays. Empty = none |
 | **Chapter → Ends Chapter** | For the boss day: the next chapter starts instead of using up days. Put that action in the rules' **Boss** slot |
 | **Opens → Scene / App Name** | A screen it opens afterwards, and which app (in `data/apps/`) it opens like on the phone. Empty = it stays on the calendar |
 | **Opens → Real Life** | On = the screen is real life (a boss fight, say): the phone goes down into it instead of it opening as an app |
 
-**A new action** (e.g. "Go to a gig": 2 days, Culture +1, Heart +1, a
-line): duplicate `train_culture.tres`, change its settings, and add it to
-**Actions** in `data/calendar_rules.tres`. Nothing else.
+**A new action** (e.g. "Go to a gig": 2 days, Culture +1, Charisma +1, a
+line): duplicate `train_culture.tres`, change its settings (its **Stats**:
+Culture 1 and Charisma 1), and add it to **Actions** in
+`data/calendar_rules.tres`. Nothing else. A "Hit the gym" action is Strength 1.
 
 ## What the calendar says: `dialogue/calendar.dialogue`
 
@@ -142,13 +141,13 @@ The lines for training, resting and the boss. **Placeholder** lines now.
 They play in the calendar's box at the bottom of the phone, over the days
 coming up. Click or press Space to go on. Lines without a `Name:` have no name tab. They can use
 `{{action}}` (its title), `{{changes}}` ("Culture +1, Heart +1"), and
-`{{attribute}}` / `{{amount}}` (the first thing it changes: Culture, 1):
+`{{stat}}` / `{{amount}}` (the first thing it changes: Culture, 1):
 
 ```
 ~ train
 
-You spend the day on your {{attribute}}.
-{{attribute}} +{{amount}}.
+You spend the day on your {{stat}}.
+{{stat}} +{{amount}}.
 => END
 ```
 
@@ -229,7 +228,7 @@ yet).
   `is_boss(number)`. Each chapter's days are planned the first time
   they're needed. `RunCalendar.Day`: `options`, `spent_on`, `continued`.
 - `DayAction` (`scripts/data/day_action.gd`): parts, applied by
-  `CalendarScene._on_picked` in order (`attribute_changes()`, the message,
+  `CalendarScene._on_picked` in order (`stat_changes()`, the message,
   `spend()` or `next_chapter()`, then `AppLauncher.open_scene(app_name,
   scene)`, or `AppLauncher.phone_down(scene)` with `real_life`).
   `CalendarRules`, `CalendarStyle` (`words(text, blanks)`, `weekday(n)`).

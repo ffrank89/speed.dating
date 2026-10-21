@@ -70,12 +70,12 @@ func setup(p_option: DateOption, index: int, chance: int, style: OptionListStyle
 	column.add_theme_constant_override("separation", 6)
 	add_child(column)
 
-	# Top row: attribute (or skill) icon, "Culture 4", and the % badge.
+	# Top row: the stat's icon, "Culture 4", and the % badge.
 	var header := HBoxContainer.new()
 	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_theme_constant_override("separation", 16)
 	column.add_child(header)
-	var icon := option.check_icon(style)
+	var icon := option.check_icon()
 	if icon:
 		var picture := TextureRect.new()
 		picture.texture = icon

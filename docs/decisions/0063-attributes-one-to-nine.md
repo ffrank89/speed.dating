@@ -1,6 +1,6 @@
 # 0063: The player's attributes go from 1 to 9
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0064](0064-stats-are-data.md) (the scale is in `data/stats.tres` now; stats start at their own Starting Value)
 - **Date:** 2026-10-21
 - **Affects:** [player.md](../design/player.md), [dates.md](../design/dates.md), [0016](0016-risky-attribute-checks.md), [0044](0044-date-scoring-formula.md)
 

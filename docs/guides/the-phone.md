@@ -107,7 +107,7 @@ On the calendar, two more apps are a key away:
 | App | Key | What's in it |
 |---|---|---|
 | **Contacts** | **C** | Your party: [contacts.md](contacts.md) |
-| **Profile** | **P** | Your stats: Culture, Intellect, Seduction and Heart, then your skills ([skills.md](skills.md)), each 1–9 with a bar |
+| **Profile** | **P** | Your stats (every one that's on: [stats.md](stats.md)), each 1–9 with a bar |
 
 The phone switches to them **like moving between open apps on an iPhone**:
 the app you're on shrinks to a card, the row of open apps slides to the
@@ -156,13 +156,13 @@ in it gets them; for now that's the calendar.
 
 **Profile** is a light first version (`scenes/Phone/Profile/ProfileApp.tscn`,
 press **F6** to try it). Click its top node to change its words (**Title
-Text**, **Subtitle Text**). Its two lists, **Attributes** and **Skills**,
-are Stat Bars (`scenes/Stats/StatBars.tscn`): click one (inside **Column →
-Scroll → Stats**) for its sizes, heading and pictures, or drag it to move it
-([skills.md](skills.md) → The lists). The list scrolls when it's taller than
-the phone. A full bar is the highest a stat goes (9, from
-`data/attribute_rules.tres`); the bars use the phone's **Accent Color**. Its
-icon and launch screen are
+Text**, **Subtitle Text**). Its list is Stat Bars
+(`scenes/Stats/StatBars.tscn`): click **StatBars** (inside **Column → Scroll →
+Stats**) for its sizes and heading, to show only some stats, or drag it to
+move it ([stats.md](stats.md) → Stat Bars). The list scrolls when it's taller
+than the phone. A full bar is the highest a stat goes (9, from
+`data/stats.tres`); the bars use the phone's **Accent Color**. Its icon and
+launch screen are
 `data/apps/profile.tres` (the Godot logo for now); its key is `open_profile`
 in **Project Settings → Input Map**.
 

@@ -11,8 +11,8 @@
 - **Each turn:**
   1. She says a line and changes pose. Letters type out one at a time, each
      with a little sound in **her voice** (Animalese-style).
-  2. You pick an option. Each option shows its attribute check. Options above
-     your attributes **stay clickable but show a % chance** (Disco
+  2. You pick an option. Each option shows its stat check. Options above
+     your stats **stay clickable but show a % chance** (Disco
      Elysium–style): hit for the full reward, miss and lose points. Perks
      can add or remove options.
   3. Some options start a **microgame**: a WarioWare-style test of a few
@@ -27,7 +27,7 @@
 
 ### Shared functions it uses
 
-- `RunState.get_attribute(a)`, `RunState.perks`, `RunState.inventory`
+- `RunState.get_stat(stat)`, `RunState.perks`, `RunState.inventory`
 - `RunState.apply_date_result(result)`
 - `SceneRouter.go_to(:calendar)`
 - Perk hooks: `modify_options`, `modify_microgame`, `modify_score`
@@ -47,8 +47,8 @@
 |---|---|
 | `DateScene` (root `Control`) | **Built (M4).** `scenes/Dates/Date/Date.tscn` + `date_scene.gd`. Plans the date from her first-date file's titles (`~ opener`, 5 of `~ exchange_…` / `~ microgame_…` with 2 microgame ones, no repeats, then `~ closer_failed` / `~ closer_no_hearts` / `~ closer_hearts`), ends on her contact card, emits `DateResult` (`got_number`, `affection`), puts her in the party or marks her gone for the run (`PlayerManager.mark_gone`, the dating app skips her), and opens the calendar. Opened by the dating app; the test bench `FirstDateTest.tscn` wraps it with debug sliders. Guide: [the-full-date.md](../guides/the-full-date.md), decision [0053](../decisions/0053-full-date-flow.md). |
 | `DateScorer` | **Built (M2).** One score per date (`scripts/date/date_scorer.gd`): `chance_of`, `points_if_hit`, `resolve`. Points = value × (1 + her like × likes_weight); miss = −max(points × miss_penalty, min_miss_cost). Numbers in `data/date_rules.tres` (`DateRules`). Perks' `modify_score` hook still to come. |
-| Odds | **Built (M2).** At or above the requirement: no roll. Below: `chance = attribute ÷ requirement` (both 1–9), clamped 5–95%, shown on the button. |
-| `OptionList` + `DateOption` + `DateState` | **Built (M2).** Options parsed from response tags (`#check`, `#value`, `#microgame`); shown as floating bubbles (`OptionBubble`) that pop out above her head, drift, and can be dragged to drop a trail of attribute icons; dropping one on her picks it; styled by `OptionListStyle` (`data/option_styles/default.tres`, or her own **Option Style**), which has the same box options as her dialogue style; roll animation; `if hit` / `else` in dialogue via `DateState`. `ReactionIcon` plays `[#react=…]` from `data/reactions.tres`. Guide: [options-and-scoring.md](../guides/options-and-scoring.md). |
+| Odds | **Built (M2).** At or above the requirement: no roll. Below: `chance = stat ÷ requirement` (both 1–9), clamped 5–95%, shown on the button. |
+| `OptionList` + `DateOption` + `DateState` | **Built (M2).** Options parsed from response tags (`#check`, `#value`, `#microgame`); shown as floating bubbles (`OptionBubble`) that pop out above her head, drift, and can be dragged to drop a trail of stat icons; dropping one on her picks it; styled by `OptionListStyle` (`data/option_styles/default.tres`, or her own **Option Style**), which has the same box options as her dialogue style; roll animation; `if hit` / `else` in dialogue via `DateState`. `ReactionIcon` plays `[#react=…]` from `data/reactions.tres`. Guide: [options-and-scoring.md](../guides/options-and-scoring.md). |
 | `DateScorer.hearts()` | **Built.** 0–3: how many of her Affection Thresholds the score reached. |
 | `HeartMeter` + `HeartRing` | **Built.** Top right of a date: one ring per heart (Affection Thresholds) filling with the score in her Meter Color; the grey heart turns to colour with a sound when a ring fills. `data/heart_meter_style.tres`. Guide: [heart-meter.md](../guides/heart-meter.md), decision [0056](../decisions/0056-heart-meter-and-closing-her-card.md). |
 | `ContactCard` (result screen) | **Built.** The date ends on an iPhone New Contact screen in her dialogue style: she types her name (❤️ on a great date), number and address, or types and deletes her name. Opens like an app (`data/apps/contacts.tres`). Guide: [result-screen.md](../guides/result-screen.md), decision [0052](../decisions/0052-result-is-her-contact-card.md). |
@@ -73,7 +73,7 @@ var pointer: Vector2         # mouse, or arrow keys / WASD
 func is_pointing_at(node: Control) -> bool
 ```
 
-`difficulty` (0–1) comes from the player's attribute against the option's
+`difficulty` (0–1) comes from the player's stat against the option's
 requirement (`date_rules.tres` → Microgames). `modifiers` comes from perks
 (e.g. Sleepy: `{"extra_time": 1.5}`; the host already adds `extra_time` to
 the timer).
@@ -84,7 +84,7 @@ the timer).
 |---|---|---|
 | Girl poses and date backgrounds | `GirlPortrait`, the date's Background | See [girls.md](girls.md) |
 | Reaction icons (exclamation, question, heart, anger…) | `ReactionIcon` (`data/reactions.tres`) | Some exist: `exclamation point gif`, `question mark gif`, `anger icon`, `love stat` |
-| Option bubbles with attribute icon and odds | `OptionBubble` (`data/option_styles/`) | Built; Intellect and Seduction icons are the Godot logo |
+| Option bubbles with stat icon and odds | `OptionBubble` (`data/option_styles/`) | Built; Intellect and Seduction icons are the Godot logo |
 | Affection meter | `HeartMeter` | Built ([heart-meter.md](../guides/heart-meter.md)); uses the love react heart |
 | Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
@@ -95,5 +95,5 @@ the timer).
 
 - **Skill Test**: this *is* the moment-to-moment game.
 - **Relationships**: recruits girls and raises Affection.
-- **Build**: earns perks and attribute gains.
+- **Build**: earns perks and stat gains.
 - **Content Pipeline**: dialogue is written in plain text by a non-Godot writer.

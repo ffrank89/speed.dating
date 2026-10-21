@@ -5,12 +5,12 @@
 # choices were. Each title is a Day Action's Dialogue Title (data/day_actions/...).
 # Lines without a "Name:" are narration: no name tab.
 # Lines can use {{action}} (its title, e.g. Train Culture), {{changes}} (Culture +1, or more than
-# one: Culture +1, Heart +1), and {{attribute}} (Culture) / {{amount}} (1): the first thing it changes.
+# one: Culture +1, Heart +1), and {{stat}} (Culture) / {{amount}} (1): the first thing it changes.
 
 ~ train
 
-You spend the day on your {{attribute}}.
-{{attribute}} +{{amount}}.
+You spend the day on your {{stat}}.
+{{stat}} +{{amount}}.
 => END
 
 ~ rest

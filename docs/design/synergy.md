@@ -7,7 +7,7 @@
 - **Girl–girl synergy**: shared **tags** at thresholds, like Teamfight
   Tactics traits (2 Artsy girls → bonus, 4 → bigger bonus). No hand-written
   pairs or rivalries.
-- **Player–girl synergy**: her **Affection**, how well **your attributes
+- **Player–girl synergy**: her **Affection**, how well **your stats
   match her preferences**, and **perks that interact with her tags**
   (Inebriated boosts Stoner girls). Multiplies that girl's stats.
 - Because Tinder profiles show tags, **choosing who to date is choosing

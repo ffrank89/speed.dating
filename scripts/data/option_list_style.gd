@@ -60,7 +60,7 @@ extends Resource
 @export var font: Font
 @export_range(8, 120) var font_size: int = 38
 @export var text_color: Color = Color.WHITE
-## Colour of the attribute name and requirement, e.g. "Culture 4".
+## Colour of the stat name and requirement, e.g. "Culture 4".
 @export var check_color: Color = Color(1, 1, 1, 0.65)
 ## Optional outline around each letter, which helps text read over busy pictures. 0 = none.
 @export_range(0, 20) var text_outline_width: int = 0
@@ -96,24 +96,20 @@ extends Resource
 ## Word shown when a risky option misses.
 @export var miss_text: String = "MISS"
 
-@export_group("Attribute Icons")
-## Small picture shown on options that check this attribute.
-@export var culture_icon: Texture2D
-@export var intellect_icon: Texture2D
-@export var seduction_icon: Texture2D
-@export var heart_icon: Texture2D
-## Size of the attribute icons, in pixels.
+@export_group("Stat Icons")
+## Size of the little picture on an option that checks a stat, in pixels. The picture is
+## the stat's own Icon (data/stats/).
 @export_range(16, 200) var icon_size: int = 64
 
 @export_group("Dragging")
 ## Size of the little icons a bubble drops while it's dragged, in pixels.
-## Each bubble drops its attribute icon (see Attribute Icons above).
+## Each bubble drops the icon of the stat it checks (its file in data/stats/).
 @export_range(8, 200) var trail_icon_size: int = 44
 ## Distance the mouse moves between two trail icons, in pixels. Lower = more icons.
 @export_range(10, 400) var trail_spacing: int = 60
 ## How long each trail icon lasts before it fades away, in seconds.
 @export_range(0.1, 5.0, 0.05) var trail_seconds: float = 0.9
-## Icon dropped by options with no attribute check.
+## Icon dropped by options with no stat check.
 @export var trail_fallback_icon: Texture2D
 ## Fastest a bubble can be thrown when it's let go, in pixels per second. 0 = no throwing.
 @export_range(0.0, 5000.0, 50.0) var max_throw_speed: float = 1400.0
@@ -135,19 +131,6 @@ extends Resource
 ## Played when a risky option misses.
 @export var miss_sound: AudioStream
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0
-
-
-func icon_for(attribute: int) -> Texture2D:
-	match attribute:
-		Attr.Id.CULTURE:
-			return culture_icon
-		Attr.Id.INTELLECT:
-			return intellect_icon
-		Attr.Id.SEDUCTION:
-			return seduction_icon
-		Attr.Id.HEART:
-			return heart_icon
-	return null
 
 
 ## A bubble's background: her picture if one is set, otherwise the flat colour with

@@ -1,6 +1,8 @@
-[gd_resource type="Resource" script_class="DayAction" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="DayAction" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/day_action.gd" id="1_action"]
+[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="8_stat_script"]
+[ext_resource type="Resource" path="res://data/stats/culture.tres" id="9_culture"]
 [ext_resource type="Texture2D" path="res://assets/culture stat gif/culturestat.png" id="2_icon"]
 
 [resource]
@@ -10,4 +12,6 @@ icon = ExtResource("2_icon")
 days = 1
 weight = 1.0
 dialogue_title = "train"
-culture = 1
+stats = Dictionary[ExtResource("8_stat_script"), int]({
+ExtResource("9_culture"): 1
+})

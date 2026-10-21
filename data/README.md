@@ -9,9 +9,8 @@ Hover over any setting to see what it does.
 | `girls/` | One file per girl, everything about her: name, age, bio, interests and picture (her dating-app profile), her contact card, poses (each with its own size, nudge and flip), background, dialogue style, option style (optional), voice and first-date lines. Who's on the dating app: `scenes/Tinder/Screen.tscn` → **Girls**. |
 | `dialogue_styles/` | How each girl's dialogue box looks: colours, outline, font, name plate. `default.tres` is for anyone without their own. |
 | `option_styles/` | How the player's choice bubbles look, float and sound, including the roll and the drag trail. `default.tres` is shared; a girl can have her own. |
-| `attribute_rules.tres` | The scale of the player's four attributes: **1 to 9** (Lowest, Highest), and the value they start at when a screen is played on its own (Default Value). The intro, training, Profile, the date test bench and the `#check` numbers in dialogue all use it. |
-| `skills.tres` | **The player's skills** (Fallout: New Vegas's set): which ones the game has, their order, and **Skills On** (all of them on or off). |
-| `skills/` | One file per skill: its id (for dialogue checks), name, **Enabled**, description, icon and starting value. |
+| `stats.tres` | **The player's stats**: every stat in order (Culture, Intellect, Seduction, Heart, and S.P.E.C.I.A.L.: Strength, Perception, Endurance, Charisma, Intelligence, Agility, Luck) and their scale, **1 to 9**. |
+| `stats/` | One file per stat: its id (for dialogue checks), name, **Enabled** (switch it off to try the game without it), description, icon and starting value. |
 | `date_rules.tres` | How a date runs and scores: how many exchanges (and how many are microgames), the opener and closer names, odds limits, how much her likes matter, what a miss costs, how hard microgames get, and what her contact card shows. |
 | `phone_style.tres` | **The player's phone**, shared by every phone screen (intro, dating app, calendar, Contacts, her card, microgames): its size and place, screen colour, wallpaper, rim, phone art, status bar, home bar, font, the room behind it, and how it comes up and goes down. |
 | `dating_app_style.tres` | The dating app: its words, her profile card (in her dialogue style, or plain), the Pass / Start buttons, the swipe, and sounds. |
@@ -33,7 +32,7 @@ Hover over any setting to see what it does.
 intro, then the calendar). Every screen can also be played on its own:
 open it and press **F6**. For dates, the test bench
 `scenes/Dates/FirstDate/FirstDateTest.tscn` plays a whole date with sliders
-for the player's attributes.
+for the player's stats.
 
 **Step-by-step guides** in `docs/guides/` (in the project folder, or on GitHub):
 
@@ -52,6 +51,6 @@ for the player's attributes.
 | `stage-hazards.md` | Things that turn up during a date (the fly) |
 | `making-a-microgame.md` | Making a new microgame, step by step |
 | `cursor.md` | The player's cursor |
-| `skills.md` | The player's skills: turning them on and off, where they plug in |
+| `stats.md` | The player's stats: switching them on and off, adding new ones, where they're used |
 | `music.md` | The music on each screen |
 | `replacing-placeholders.md` | Every placeholder picture (the Godot logo), sound and music, and how to swap in the real ones |

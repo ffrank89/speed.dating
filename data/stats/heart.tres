@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PlayerStat" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="1_stat"]
+[ext_resource type="Texture2D" uid="uid://bo4pjjnso1fti" path="res://assets/lovestat gif/lovestat.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_stat")
+id = &"heart"
+display_name = "Heart"
+description = "Kindness and sincerity: actually caring."
+icon = ExtResource("2_icon")

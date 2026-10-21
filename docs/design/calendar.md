@@ -11,7 +11,7 @@
   | -------------- | ------------------------------------------ | --------------------------- |
   | Date           | Pick 1 of 2–3 random profiles, or skip    | Tinder screen → Date Scene |
   | Follow-up date | Date a party member to raise her Affection | Date Scene                  |
-  | Train          | Add points to one attribute                | *animation* Back to calendar        |
+  | Train          | Add points to one stat                | *animation* Back to calendar        |
   | Rest / event   | A perk, an item or a random event          | *animation* Back to calendar            |
   | Boss           | Forced on the last day                     | Contacts (pick the lineup) → Boss Scene  |
 - **Which actions appear on which days is generated per run**, so no two
@@ -41,7 +41,7 @@
 ### Shared functions it uses
 
 - `RunState.advance_day()`, `RunState.day`, `RunState.chapter`
-- `RunState.raise_attribute(a, n)` (training), `add_perk`, `add_item` (events)
+- `RunState.raise_stat(stat, n)` (training), `add_perk`, `add_item` (events)
 - `RunState.break_up(member)` (party screen)
 - `Synergy.calculate(...)` (party screen)
 - `SceneRouter.go_to(...)`
@@ -59,11 +59,11 @@
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CalendarScene`                                                | **Rebuilt** (`scenes/Calendar/calendar.gd`): `DayCard` per day on the main view (today and the next two), `DayChoice` per choice, `DayBox` per day in the month, lines from `dialogue/calendar.dialogue`. Reads `RunCalendar` (on `PlayerManager` until `RunState` exists). |
 | `ScheduleGenerator.generate(chapter, rng) -> Array[DayAction]` | **Built as `RunCalendar`** (`scripts/calendar/run_calendar.gd`): each day draws Options Per Day actions by Weight, the boss on the last day (`data/calendar_rules.tres`). Rules like "at least 2 date days" still TBD. |
-| `DayAction` (`Resource`)                                     | **Built** (`scripts/data/day_action.gd`, files in `data/day_actions/`): made of optional parts, applied in order: attribute changes, a message (`dialogue/calendar.dialogue`), days used up or **Ends Chapter**, then a screen it **Opens** like an app. Date, train, rest and boss are mixes of these; follow-ups and events will be too. |
+| `DayAction` (`Resource`)                                     | **Built** (`scripts/data/day_action.gd`, files in `data/day_actions/`): made of optional parts, applied in order: stat changes, a message (`dialogue/calendar.dialogue`), days used up or **Ends Chapter**, then a screen it **Opens** like an app. Date, train, rest and boss are mixes of these; follow-ups and events will be too. |
 | Day selection rule                                               | New Dates take 2 or more days. Training takes 1.  Breakups take 1 day but Breakups + New Date take as much as a New Date does. **Built:** each `DayAction` has **Days** (date 2, training 1); it must end before the boss day. Breakups TBD. |
 | `TinderScreen`                                                 | **Built** as the dating app (`scenes/Tinder/Screen.tscn`, [dating-app.md](../guides/dating-app.md)): an app on the phone, one girl's profile at a time from her girl file (name, age, bio, interests, picture), Pass or Start. Who's on it is its **Girls** list for now; `GirlPool.offer(2–3)` and **tags** are still to come. |
 | `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, pulled up with **C** on the calendar: it opens on the phone like an app, over the calendar. Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
-| Training screen                                                  | TBD. For now a train action raises one attribute by its Amount (5) with a line from `dialogue/calendar.dialogue`; there's one action per attribute. |
+| Training screen                                                  | TBD. For now a train action raises one stat by 1 (its **Stats**) with a line from `dialogue/calendar.dialogue`; there's one per first-build stat (Culture, Intellect, Seduction, Heart), none yet for S.P.E.C.I.A.L. |
 | Event pool                                                       | TBD. Random events and their rewards.                                                                                                                                           |
 | Month/chapter display                                            | **Built:** "CHAPTER n" next to the title (off by default); the **Month ▾** button swaps the day cards for the whole month, 4 weeks (Calendar Days 28). `january.png` is only the calendar app's icon now. |
 

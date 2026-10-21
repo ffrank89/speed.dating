@@ -60,16 +60,11 @@ size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 70
 
-[node name="Attributes" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Stats" instance=ExtResource("3_bars")]
+[node name="StatBars" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Stats" instance=ExtResource("3_bars")]
 layout_mode = 2
-
-[node name="Skills" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Stats" instance=ExtResource("3_bars")]
-layout_mode = 2
-shows = 1
-heading_text = "Skills"
-font_size = 38
-icon_size = 56
-bar_height = 16
-row_gap = 26
+font_size = 46
+icon_size = 72
+bar_height = 22
+row_gap = 38
 
 [editable path="PhoneScreen"]

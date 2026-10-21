@@ -1,10 +1,9 @@
 extends Control
-## The intro, on your phone: "Your Profile". For now it's a debug screen: set your four
-## attributes and your skills with the sliders (or Randomize), then Start Dating! opens
-## the calendar on the phone, and the run begins. The sliders go from Lowest to Highest
-## (1-9, data/attribute_rules.tres); the attributes start at Highest, each skill at its
-## Starting Value. Only the skills that are on (data/skills.tres) are listed. The list
-## scrolls when it's taller than the phone.
+## The intro, on your phone: "Your Profile". For now it's a debug screen: set your stats
+## with the sliders (or Randomize), then Start Dating! opens the calendar on the phone,
+## and the run begins. There's a slider for every stat that's on (data/stats.tres), from
+## Lowest to Highest (1-9), starting at the stat's Starting Value. The list scrolls when
+## it's taller than the phone.
 ##
 ## The words are the settings below. The phone, its font, colours and your room behind
 ## it are data/phone_style.tres. Move the parts in this scene (PhoneScreen → Phone →
@@ -16,18 +15,12 @@ extends Control
 @export var hint_text: String = "Debug: set your stats"
 @export var randomize_text: String = "Randomize Stats"
 @export var start_text: String = "Start Dating!"
-## Above the skills' sliders.
-@export var skills_heading_text: String = "Skills"
-## Size of each attribute's name and number.
-@export_range(8, 200) var stat_font_size: int = 44
-## Size of each skill's name and number.
-@export_range(8, 200) var skill_font_size: int = 34
+## Size of each stat's name and number.
+@export_range(8, 200) var stat_font_size: int = 40
 
-# Track player stats, by name. They start at the highest (data/attribute_rules.tres).
+# The stats that are on (PlayerStat → value), from their Starting Value.
 var player_stats = {}
-# The skills that are on (PlayerSkill → value), from their Starting Value.
-var skill_stats = {}
-# Sliders for each stat (attribute name or PlayerSkill)
+# Sliders for each stat (PlayerStat → HSlider)
 var stat_sliders = {}
 
 @onready var phone_screen: PhoneScreen = %PhoneScreen
@@ -39,10 +32,8 @@ var stat_sliders = {}
 
 
 func _ready():
-	for attr in Attr.NAMES:
-		player_stats[Attr.display_name(attr)] = Attr.rules().highest
-	for skill in SkillList.get_default().active():
-		skill_stats[skill] = skill.starting_value
+	for stat in StatList.get_default().active():
+		player_stats[stat] = stat.starting_value
 	style_ui_elements()
 	setup_stats_interface()
 	randomize_button.pressed.connect(_on_randomize_pressed)
@@ -79,21 +70,13 @@ func _style_button(button: Button, fill: Color, ink: Color) -> void:
 
 
 func setup_stats_interface():
-	var ui := phone_screen.style
 	# Clear any existing children
 	for child in stats_container.get_children():
 		child.queue_free()
 
-	# A slider for each attribute, then each skill that's on.
-	for stat in player_stats.keys():
-		_add_slider(stat, stat, player_stats, stat_font_size)
-	if not skill_stats.is_empty():
-		var heading := Label.new()
-		heading.text = skills_heading_text
-		ui.style_label(heading, ui.ui_text_color, stat_font_size)
-		stats_container.add_child(heading)
-		for skill: PlayerSkill in skill_stats:
-			_add_slider(skill, skill.display_name, skill_stats, skill_font_size)
+	# A slider for each stat that's on.
+	for stat: PlayerStat in player_stats:
+		_add_slider(stat, stat.display_name, player_stats, stat_font_size)
 
 
 # One row: the stat's name, its slider and its number. `values[key]` follows the slider.
@@ -108,8 +91,8 @@ func _add_slider(key, label_text: String, values: Dictionary, font_size: int) ->
 	ui.style_label(label, ui.ui_text_color, font_size)
 
 	var slider = HSlider.new()
-	slider.min_value = Attr.rules().lowest
-	slider.max_value = Attr.rules().highest
+	slider.min_value = StatList.get_default().lowest
+	slider.max_value = StatList.get_default().highest
 	slider.value = values[key]
 	slider.step = 1
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -139,16 +122,14 @@ func _add_slider(key, label_text: String, values: Dictionary, font_size: int) ->
 func _on_randomize_pressed():
 	# Generate random stats (the sliders update the values).
 	for key in stat_sliders:
-		stat_sliders[key].value = randi_range(Attr.rules().lowest, Attr.rules().highest)
+		stat_sliders[key].value = randi_range(StatList.get_default().lowest, StatList.get_default().highest)
 
 
 func _on_start_dating_pressed():
 	# A new player with the stats from the sliders.
 	var new_player = PlayerCharacter.new("Me!")
-	for stat in player_stats:
-		new_player.attributes[stat] = player_stats[stat]
-	for skill: PlayerSkill in skill_stats:
-		new_player.skills[skill.id] = skill_stats[skill]
+	for stat: PlayerStat in player_stats:
+		new_player.stats[stat.id] = player_stats[stat]
 	PlayerManager.player = new_player
 
 	# The run starts on the calendar, opening on the phone (a date day opens the dating

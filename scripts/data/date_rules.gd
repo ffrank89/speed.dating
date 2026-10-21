@@ -33,7 +33,7 @@ extends Resource
 ## How hard an option's microgame is (0 = easiest, 1 = hardest) when the player meets
 ## its requirement. Below the requirement it gets harder, up to Max Difficulty.
 @export_range(0.0, 1.0, 0.05) var min_difficulty: float = 0.2
-## How hard it is when the player's attribute is the lowest (1).
+## How hard it is when the player's stat is the lowest (1).
 @export_range(0.0, 1.0, 0.05) var max_difficulty: float = 1.0
 ## How hard it is for an option with a microgame but no #check.
 @export_range(0.0, 1.0, 0.05) var unchecked_difficulty: float = 0.5
@@ -50,8 +50,8 @@ extends Resource
 
 @export_group("Points")
 ## How much her likes boost an option's points. An option is worth
-## value × (1 + her like for that attribute × Likes Weight).
-## 0 = her likes don't matter. 1 = an attribute she likes at 1.0 doubles the points.
+## value × (1 + her like for that stat × Likes Weight).
+## 0 = her likes don't matter. 1 = a stat she likes at 1.0 doubles the points.
 @export_range(0.0, 3.0, 0.05) var likes_weight: float = 1.0
 ## How much a missed risky option costs, as a share of what it would have earned.
 ## 0.5 = a +3 option that misses costs half as much (-1.5). 1.0 = it costs the full 3.

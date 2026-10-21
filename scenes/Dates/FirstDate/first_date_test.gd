@@ -1,8 +1,8 @@
 extends Control
 ## Test bench for a date: the real date scene (the Date node, scenes/Dates/Date/Date.tscn)
 ## plus a debug panel. Press F6 here.
-## The sliders stand in for the player's attributes. The date stays here when it's over
-## instead of going to the calendar; press Restart to play another.
+## The sliders stand in for the player's stats (the ones that are on). The date stays
+## here when it's over instead of going to the calendar; press Restart to play another.
 
 @export var girl: GirlData
 ## The dialogue to play. Empty = the girl's First Date Dialogue.
@@ -13,9 +13,9 @@ extends Control
 ## The scoring and flow numbers (data/date_rules.tres).
 @export var rules: DateRules
 
-# Static so the sliders keep their values when the date restarts. They start at the
-# Default Value (data/attribute_rules.tres).
-static var attributes := {}
+# Static so the sliders keep their values when the date restarts. Stat id → value; each
+# starts at its stat's Starting Value (data/stats/).
+static var stats := {}
 
 @onready var date: DateScene = $Date
 @onready var girl_label: Label = %GirlLabel
@@ -29,9 +29,9 @@ static var attributes := {}
 
 
 func _ready() -> void:
-	if attributes.is_empty():
-		for attr in Attr.Id.values():
-			attributes[attr] = Attr.rules().default_value
+	for stat in StatList.get_default().active():
+		if not stats.has(stat.id):
+			stats[stat.id] = stat.starting_value
 	_build_sliders()
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	date.status_changed.connect(func(text: String) -> void: status_label.text = text)
@@ -44,7 +44,7 @@ func _ready() -> void:
 	if rules:
 		date.rules = rules
 	date.only_title = start_title
-	date.attributes = attributes
+	date.stats = stats
 	date.begin()
 	if not date.girl:
 		pose_button.disabled = true
@@ -58,22 +58,23 @@ func _ready() -> void:
 
 
 func _build_sliders() -> void:
-	for attr in Attr.Id.values():
+	var list := StatList.get_default()
+	for stat in list.active():
 		var row := HBoxContainer.new()
 		var label := Label.new()
 		label.custom_minimum_size.x = 260
-		label.text = _slider_text(attr)
+		label.text = _slider_text(stat)
 
 		var slider := HSlider.new()
-		slider.min_value = Attr.rules().lowest
-		slider.max_value = Attr.rules().highest
-		slider.value = attributes[attr]
+		slider.min_value = list.lowest
+		slider.max_value = list.highest
+		slider.value = stats[stat.id]
 		slider.custom_minimum_size.x = 400
 		slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		slider.focus_mode = Control.FOCUS_NONE
 		slider.value_changed.connect(func(value: float) -> void:
-			attributes[attr] = int(value)
-			label.text = _slider_text(attr)
+			stats[stat.id] = int(value)
+			label.text = _slider_text(stat)
 		)
 
 		row.add_child(label)
@@ -81,5 +82,5 @@ func _build_sliders() -> void:
 		sliders.add_child(row)
 
 
-func _slider_text(attr: Attr.Id) -> String:
-	return "%s  %d" % [Attr.display_name(attr), attributes[attr]]
+func _slider_text(stat: PlayerStat) -> String:
+	return "%s  %d" % [stat.display_name, stats[stat.id]]

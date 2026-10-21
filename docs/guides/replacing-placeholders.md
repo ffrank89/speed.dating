@@ -16,8 +16,7 @@ thing. **No code needed.**
 
 | What | Placeholder file(s) | Plugged in at | Used for |
 |---|---|---|---|
-| **Intellect icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Intellect Icon** | The little picture on options that check Intellect |
-| **Seduction icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Attribute Icons → Seduction Icon** | The little picture on options that check Seduction |
+| **Stat icons** (all but Culture and Heart: Intellect, Seduction and the seven S.P.E.C.I.A.L. stats) | `assets/placeholders/godot_logo.svg` | Each stat's file in `data/stats/` → **Icon** | Profile, and the little picture on options that check that stat. See [stats](stats.md). |
 | **App icons** (calendar, dating app, date, boss, microgame) | Our existing icons: `assets/january.png`, `lovestat gif/lovestat.png`, `love stat/love react1.png`, `sword stat/sword stat.png`, `exclamation point gif/surprise1.png` | Each file in `data/apps/` → **Icon** (and **Launch Image**) | The tile that grows into the screen when an app opens. See [phone apps](phone-apps.md). |
 | **Contact card typing sounds** | Kenney stand-ins (`click_002`, `click_005`, `switch_002`, `drop_003`, `confirmation_003`, `minimize_002`) | `data/contact_card_style.tres` → **Sounds** | The key clicks as she types her number |
 | **Contacts app taps** | Kenney stand-ins (`select_001`, `back_001`) | `data/contact_card_style.tres` → **Sounds → Open Contact Sound / Back Sound** | Opening a girl's contact in your Contacts, and going back to the list |
@@ -38,11 +37,10 @@ thing. **No code needed.**
 | **Phone up / down sounds** | Kenney stand-ins (`maximize_008`, `minimize_008`) | `data/phone_style.tres` → **Phone Up / Down → Up Sound / Down Sound** | Taking the phone out and putting it away |
 | **Dating app sounds** | Kenney stand-ins (`switch_005`, `confirmation_002`, `click_003`) | `data/dating_app_style.tres` → **Sounds** | Passing on a profile, Start Dating!, a button under the mouse |
 | **App switch sound** | Kenney stand-in (`switch_006`) | `data/app_transition_style.tres` → **Switching Apps → Switch Sound** | Switching to Contacts or Profile and back |
-| **Skill icons** (all 13) | `assets/placeholders/godot_logo.svg` | Each file in `data/skills/` → **Icon** | Profile, the intro and option bubbles that check a skill. See [skills](skills.md). |
 | **Contacts and Profile app icons** | `assets/placeholders/godot_logo.svg` | `data/apps/contacts.tres`, `data/apps/profile.tres` → **Icon** | The tiles Contacts (C) and Profile (P) open from; Contacts' is also the app her card opens on at the end of a date |
 | **Music** | `assets/audio/loops/`: `second ss free loop.ogg` (`calendar`, `date`), `(FREE) 2hollis  Snow Strippers type beat keflavik.mp3` (`dating_app`), `real first loop poop.ogg` (`first_loop`, not used yet). Source and licence not recorded | `data/music.tres` → **Tracks** → a track → **Stream** | The music on each screen. See [music](music.md). |
 | **Template microgame target** | `assets/placeholders/godot_logo.svg` | `scenes/Microgames/_template/TemplateMicrogame.tscn` → **PlayArea/Target** | The thing you catch in the example microgame. Copies of the template start with it too. |
-| **Trail fallback icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Dragging → Trail Fallback Icon** | The little icons dropped when dragging an option with no attribute check |
+| **Trail fallback icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Dragging → Trail Fallback Icon** | The little icons dropped when dragging an option with no stat check |
 | **Letter sounds** (her voice) | `assets/audio/voice/default/a.wav` … `z.wav` (26 files) | Each girl's file → **Dialogue → Voice → Letter Sounds Folder** | One short sound per letter as her text types out |
 
 Not placeholders: the option **select** click
@@ -128,8 +126,9 @@ Things to know:
 
 ## Art tips
 
-- **Attribute icons:** square pictures work best (the current Culture and
-  Heart icons are 100 × 100). Size on the buttons is **Attribute Icons →
-  Icon Size**.
+- **Stat icons:** square pictures work best (the current Culture and
+  Heart icons are 100 × 100). Each goes in its stat's file
+  (`data/stats/`) → **Icon**. Size on the option bubbles is
+  `data/option_styles/default.tres` → **Stat Icons → Icon Size**.
 - When a placeholder is replaced, update the table at the top of this page,
   so it always shows what's left.

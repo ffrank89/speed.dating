@@ -8,13 +8,13 @@
   - `PartyMember`: created for *this run* when her date succeeds (she's
     saved in your Contacts). It holds her Affection, HP and buffs.
 - Girls carry **tags** (e.g. stoner, artsy, chaotic) that drive girl–girl
-  synergy, and **preferences** (which attributes she likes) that drive
+  synergy, and **preferences** (which stats she likes) that drive
   player–girl synergy and date scoring.
 - Each girl also has **battle stats** and a **type** (Brainy, Wild, Sweet or
   Artsy; placeholder names) that decides whether she crits or fumbles
   against each boss. She has **written lines** for those moments. No unique
   abilities in the first build (see [boss.md](boss.md)).
-- Some girls **unlock** only when the player hits an attribute or perk
+- Some girls **unlock** only when the player hits a stat or perk
   threshold.
 - First build: **3 girls with full art** (Split Ends, Smokey, +1) and
   **~3 art-less test girls** with tags, for testing synergy and the fight.
@@ -40,11 +40,11 @@
 | Group | Fields | Read by |
 |---|---|---|
 | Identity | **Built:** `id`, `display_name`, `age`, `bio`, `interests`, `profile_picture: SpriteFrames` | The dating app |
-| Unlock | `unlock_requirement` (attribute or perk threshold, optional) | Tinder offer generator |
+| Unlock | `unlock_requirement` (stat or perk threshold, optional) | Tinder offer generator |
 | Full art | `poses: Dictionary[String, GirlPose]` (each: `image`, `scale`, `offset`, `flip`), `default_pose`, `date_background` | Date Scene (`GirlPortrait`) |
 | Pixel art | `battle_sprites: SpriteFrames` (idle, attack, hurt, knocked_out) | Party panel, Boss Scene |
 | Dialogue | `dialogue_style: DialogueBoxStyle` (box, outline, font, name plate), `voice: GirlVoice`, `first_date_dialogue: DialogueResource` | Date Scene (`DialogueBox`) |
-| Dating | `likes_culture` … `likes_heart` (0–1), `microgames: Array[PackedScene]`, `item_reactions`, `affection_thresholds: Array[int]` | Date Scene, Synergy |
+| Dating | **Built:** `likes: Dictionary[PlayerStat, float]` (0–1 per stat; unlisted = 0), `microgames: Array[PackedScene]`, `item_reactions`, `affection_thresholds: Array[int]` | Date Scene, Synergy |
 | Battle | `hp`, `attack`, `type: GirlType`, `barks` (per boss: crit and fumble lines) | Boss Scene |
 | Synergy | `tags: Array[TagData]` | Synergy |
 | Contact card | **Built:** `phone_number`, `address`, optional `contact_photo`, `traits: Array[GirlTrait]` (kind, title, description, icon; placeholder until tags and type exist as data) | End-of-date contact card ([result-screen.md](../guides/result-screen.md)) |
