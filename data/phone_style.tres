@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PhoneStyle" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/phone_style.gd" id="1_style"]
+[ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/bedroom2.png" id="3_room"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/maximize_008.wav" id="4_up"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/minimize_008.wav" id="5_down"]
+
+[resource]
+script = ExtResource("1_style")
+ui_font = ExtResource("2_font")
+room_image = ExtResource("3_room")
+up_sound = ExtResource("4_up")
+down_sound = ExtResource("5_down")

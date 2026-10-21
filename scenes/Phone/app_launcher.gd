@@ -3,26 +3,42 @@ extends CanvasLayer
 ## everything that opens like an app: the calendar, the dating app, a new date, the boss
 ## fight and microgames.
 ##
-## Opening: the app's icon grows from where the player tapped until it fills the screen
-## with the app's launch screen (the screen behind zooms and dims), the swap happens
-## underneath, then the launch screen fades to show the app.
+## Opening: the app's icon grows from where the player tapped until it fills the phone's
+## screen with the app's launch screen (what was on the phone zooms and dims), the swap
+## happens underneath, then the launch screen fades to show the app.
 ## Closing: the app shrinks back into its icon.
+## Phone down: going from the phone into real life (a date), the phone drops out of view
+## and real life is there behind it.
 ##
 ## Apps are files in data/apps/ (icon, launch screen, sounds). The animation's timing and
-## feel are in data/app_transition_style.tres. Full guide: docs/guides/phone-apps.md
+## feel are in data/app_transition_style.tres; the phone is data/phone_style.tres.
+## Full guides: docs/guides/phone-apps.md, docs/guides/the-phone.md
 ##
 ## From code (an app is its file name in data/apps/, or an AppInfo):
 ##   AppLauncher.open_scene("calendar", "res://scenes/Calendar/calendar.tscn")
 ##   await AppLauncher.open(app, func(): show_my_overlay(), from_rect)
 ##   await AppLauncher.close(app, func(): hide_my_overlay(), to_rect)
+##   AppLauncher.phone_down("res://scenes/Dates/FirstDate/SplitEndsFirstDate.tscn")
 
 ## Sent when an open or close animation starts and ends.
 signal opening(app: AppInfo)
 signal opened(app: AppInfo)
 signal closing(app: AppInfo)
 signal closed(app: AppInfo)
+## Sent when the phone has gone down into real life.
+signal phone_went_down
 
 const APPS_FOLDER := "res://data/apps/"
+# Draws a picture with a see-through hole (the phone's screen) in it.
+const HOLE_SHADER := """
+shader_type canvas_item;
+uniform vec4 hole = vec4(0.0);
+void fragment() {
+	if (UV.x > hole.x && UV.x < hole.x + hole.z && UV.y > hole.y && UV.y < hole.y + hole.w) {
+		COLOR.a = 0.0;
+	}
+}
+"""
 
 ## How every app opens and closes (data/app_transition_style.tres).
 @export var style: AppTransitionStyle
@@ -36,12 +52,20 @@ var _last_tap := Vector2.ZERO
 var _last_tap_time := -100.0
 
 @onready var blocker: Control = $Blocker
-@onready var behind: TextureRect = $Behind
-@onready var dim: ColorRect = $Dim
+## A picture of the whole screen, around the phone: it fades to the new scene's (your room
+## after a date), or stays put when that's the same.
+@onready var outside: TextureRect = $Outside
+## The phone's screen (or the whole screen): what's in it zooms and dims as an app opens.
+@onready var window: Panel = $Window
+@onready var behind: TextureRect = $Window/Behind
+@onready var dim: ColorRect = $Window/Dim
 @onready var tile: Panel = $Tile
 @onready var content: TextureRect = $Tile/Content
 @onready var icon: TextureRect = $Tile/Icon
 @onready var frame: TextureRect = $Frame
+## Phone down: a picture of the phone, dropping away.
+@onready var drop: Panel = $Drop
+@onready var drop_picture: TextureRect = $Drop/Picture
 @onready var sound: AudioStreamPlayer = $Sound
 
 
@@ -49,6 +73,10 @@ func _ready() -> void:
 	if not style:
 		style = AppTransitionStyle.new()
 	frame.texture = style.device_frame
+	var hole := ShaderMaterial.new()
+	hole.shader = Shader.new()
+	hole.shader.code = HOLE_SHADER
+	outside.material = hole
 	_hide_all()
 
 
@@ -86,11 +114,16 @@ func open(app: Variant, swap: Callable, from := Rect2()) -> void:
 	_closing = false
 	_from = from if from.has_area() else _tap_rect()
 	_to = style.screen_rect(_screen_size())
+	_place_window()
 
 	# What's on screen now becomes the picture behind the growing icon.
-	behind.texture = await _screenshot()
-	behind.pivot_offset = _from.get_center()
-	behind.visible = behind.texture != null
+	var shot := await _screenshot()
+	behind.texture = shot
+	behind.pivot_offset = _from.get_center() - window.position
+	behind.visible = shot != null
+	outside.texture = shot
+	outside.visible = shot != null and style.into_phone()
+	outside.modulate.a = 1.0
 	content.texture = info.launch_image
 	content.visible = info.launch_image != null
 	icon.texture = info.icon
@@ -113,6 +146,8 @@ func open(app: Variant, swap: Callable, from := Rect2()) -> void:
 	reveal.tween_property(tile, "modulate:a", 0.0, style.reveal_seconds)
 	reveal.tween_property(dim, "modulate:a", 0.0, style.reveal_seconds)
 	reveal.tween_property(frame, "modulate:a", 0.0, style.reveal_seconds)
+	# Around the phone, the old screen fades into the new one (if it changed).
+	reveal.tween_property(outside, "modulate:a", 0.0, maxf(style.reveal_seconds, 0.3))
 	await reveal.finished
 	_hide_all()
 	_busy = false
@@ -132,9 +167,11 @@ func close(app: Variant, swap: Callable, to := Rect2()) -> void:
 	_closing = true
 	_from = to if to.has_area() else _default_rect()
 	_to = style.screen_rect(_screen_size())
+	_place_window()
 
 	# A picture of the app shrinks while the real screen behind is already back.
-	content.texture = await _screenshot()
+	var shot := await _screenshot()
+	content.texture = _crop(shot, _to) if style.into_phone() else shot
 	content.visible = content.texture != null
 	icon.texture = info.icon
 	icon.visible = info.icon != null
@@ -168,7 +205,7 @@ func _set_progress(p: float) -> void:
 	var icon_radius := style.icon_corner * minf(_from.size.x, _from.size.y)
 	var box := StyleBoxFlat.new()
 	box.anti_aliasing = true
-	box.set_corner_radius_all(int(lerpf(icon_radius, style.screen_corner, p)))
+	box.set_corner_radius_all(int(lerpf(icon_radius, style.open_corner(), p)))
 	# The tile's colour turns from the icon's background into the launch screen.
 	box.bg_color = _app.icon_background.lerp(_app.launch_color, clampf(p * 2.0, 0.0, 1.0))
 	tile.add_theme_stylebox_override("panel", box)
@@ -194,6 +231,51 @@ func _set_progress(p: float) -> void:
 	frame.modulate.a = 1.0
 
 
+## Phone down: from a phone screen into real life. The phone drops off the bottom of the
+## screen while what was around it fades into `scene_path` (e.g. her date), which is
+## already there behind it. Its feel and sound: data/phone_style.tres → Phone Up / Down.
+func phone_down(scene_path: String) -> void:
+	ResourceLoader.load_threaded_request(scene_path)
+	if _busy:
+		await _change_scene(scene_path)
+		return
+	_busy = true
+	var phone := style.phone if style.phone else PhoneStyle.new()
+	var screen_size := _screen_size()
+	var shot := await _screenshot()
+	var phone_rect := phone.phone_rect(screen_size)
+
+	# The whole screen as it was, minus the phone, and the phone cut out of it on top.
+	outside.texture = shot
+	outside.visible = shot != null
+	outside.modulate.a = 1.0
+	_cut_hole(phone_rect)
+	var edge := phone.make_edge_box()
+	edge.draw_center = true
+	drop.add_theme_stylebox_override("panel", edge)
+	drop.position = phone_rect.position
+	drop.size = phone_rect.size
+	drop.pivot_offset = phone_rect.size / 2.0
+	drop.rotation_degrees = 0.0
+	drop_picture.texture = shot
+	drop_picture.position = -phone_rect.position
+	drop_picture.size = screen_size
+	visible = true
+	blocker.visible = true
+	drop.visible = shot != null
+
+	await _change_scene(scene_path)
+	_play(phone.down_sound, phone.volume_db)
+	var down := create_tween().set_parallel().set_trans(phone.down_transition).set_ease(phone.down_ease)
+	down.tween_property(drop, "position:y", screen_size.y + phone.frame_spill + 60.0, phone.down_seconds)
+	down.tween_property(drop, "rotation_degrees", -phone.tilt_degrees, phone.down_seconds)
+	down.tween_property(outside, "modulate:a", 0.0, phone.down_seconds).set_trans(Tween.TRANS_LINEAR)
+	await down.finished
+	_hide_all()
+	_busy = false
+	phone_went_down.emit()
+
+
 func _change_scene(scene_path: String) -> void:
 	while ResourceLoader.load_threaded_get_status(scene_path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await get_tree().process_frame
@@ -213,6 +295,42 @@ func _screenshot() -> Texture2D:
 	return ImageTexture.create_from_image(image) if image else null
 
 
+# Just the part of `shot` inside `rect` (screen pixels).
+func _crop(shot: Texture2D, rect: Rect2) -> Texture2D:
+	if not shot:
+		return null
+	var part := AtlasTexture.new()
+	part.atlas = shot
+	part.region = rect
+	return part
+
+
+# The window that zooms and dims: the phone's screen (cut to its rounded corners), or
+# the whole screen. Around the phone, the picture of the old screen has a hole for it.
+func _place_window() -> void:
+	var screen_size := _screen_size()
+	var rect := _to if style.into_phone() else Rect2(Vector2.ZERO, screen_size)
+	window.position = rect.position
+	window.size = rect.size
+	var shape := StyleBoxFlat.new()
+	shape.set_corner_radius_all(style.open_corner() if style.into_phone() else 0)
+	shape.anti_aliasing = true
+	window.add_theme_stylebox_override("panel", shape)
+	behind.position = -rect.position
+	behind.size = screen_size
+	dim.position = Vector2.ZERO
+	dim.size = rect.size
+	_cut_hole(rect)
+
+
+# The picture of the old screen doesn't cover `rect` (screen pixels).
+func _cut_hole(rect: Rect2) -> void:
+	var screen_size := _screen_size()
+	var hole := Vector4(rect.position.x / screen_size.x, rect.position.y / screen_size.y,
+		rect.size.x / screen_size.x, rect.size.y / screen_size.y)
+	(outside.material as ShaderMaterial).set_shader_parameter("hole", hole)
+
+
 ## Where an app opens from when it isn't given a rectangle: a recent click, or Default
 ## Origin (e.g. after a key press). Keep it to close the app back into the same place.
 func origin_rect() -> Rect2:
@@ -228,7 +346,7 @@ func _tap_rect() -> Rect2:
 
 
 func _default_rect() -> Rect2:
-	return _square_at(_screen_size() * style.default_origin)
+	return _square_at(style.origin_point(_screen_size()))
 
 
 func _square_at(point: Vector2) -> Rect2:
@@ -257,6 +375,7 @@ func _screen_size() -> Vector2:
 func _show_layers() -> void:
 	visible = true
 	blocker.visible = true
+	window.visible = true
 	tile.visible = true
 	tile.modulate.a = 1.0
 	tile.scale = Vector2.ONE
@@ -269,16 +388,21 @@ func _show_layers() -> void:
 func _hide_all() -> void:
 	visible = false
 	blocker.visible = false
+	window.visible = false
+	outside.visible = false
+	outside.texture = null
 	behind.visible = false
 	behind.texture = null
 	content.texture = null
 	tile.visible = false
 	dim.visible = false
 	frame.visible = false
+	drop.visible = false
+	drop_picture.texture = null
 
 
-func _play(stream: AudioStream) -> void:
+func _play(stream: AudioStream, volume_db := INF) -> void:
 	if stream:
 		sound.stream = stream
-		sound.volume_db = style.volume_db
+		sound.volume_db = style.volume_db if volume_db == INF else volume_db
 		sound.play()

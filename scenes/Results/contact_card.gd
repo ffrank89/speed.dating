@@ -1,6 +1,7 @@
 class_name ContactCard
 extends CanvasLayer
-## The end-of-date result: an iPhone "New Contact" screen.
+## The end-of-date result: an iPhone "New Contact" screen, on the player's phone. The
+## date brings the phone up over itself (phone up) to show it.
 ##   Failed date: she types "not a chance!" as her name and taps Cancel. Nothing else.
 ##   Otherwise: she types her name (in her font); her traits pop into their fields under
 ##   it (boop, boop, boop); she types her number and address and taps Done. Which traits
@@ -11,13 +12,14 @@ extends CanvasLayer
 ## When she's done, the card waits for the player to click Done (it glows green under
 ## the mouse) or press Escape (Style → Closing → Close By Hand).
 ##
-## The boxes, her font and text colour come from her dialogue style; everything else is
-## Style (data/contact_card_style.tres). Her name, number, address and traits come from
+## The boxes, her font and text colour come from her dialogue style; the phone, its
+## screen colour and the phone's own font are the phone's style (data/phone_style.tres);
+## everything else is Style (data/contact_card_style.tres). Her name, number, address and traits come from
 ## her girl file (Contact Card); her Number Threshold (Dating) decides a failed date.
 ## Move or resize the rows in this scene. Press F6 to watch it with the Testing settings.
 ##
-## From code: show_card(girl, rules), then var got_number: bool = await play(hearts)
-## (hearts = -1 for a failed date).
+## From code: show_card(girl, rules), await phone_screen.raise(), then
+## var got_number: bool = await play(hearts) (hearts = -1 for a failed date).
 ## Her saved contact in the Contacts app: show_saved(girl, hearts, rules) fills it in at
 ## once, with "‹ Contacts" to go back (back_pressed).
 ## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
@@ -54,8 +56,10 @@ var _done_pulse: Tween
 # Trait pops get their own player, so their rising pitch doesn't bend the key clicks.
 var _boop := AudioStreamPlayer.new()
 
-@onready var dim: ColorRect = %Dim
-@onready var sheet: Panel = %Sheet
+## The phone the card is on (its look: data/phone_style.tres).
+@onready var phone_screen: PhoneScreen = %PhoneScreen
+## Everything on the card, inside the phone's screen.
+@onready var content: Control = %Margin
 @onready var cancel: Label = %Cancel
 @onready var title: Label = %Title
 @onready var done: Label = %Done
@@ -98,6 +102,8 @@ func _ready() -> void:
 	done.gui_input.connect(_on_done_input)
 	done.mouse_entered.connect(_on_done_hover.bind(true))
 	done.mouse_exited.connect(_on_done_hover.bind(false))
+	# Once she's done, the phone's home bar closes the card too, like Done.
+	phone_screen.home_pressed.connect(_close_now)
 	if get_parent() == get_tree().root:
 		_play_alone.call_deferred()
 	else:
@@ -336,7 +342,7 @@ func _build_traits() -> void:
 		var kind := Label.new()
 		kind.text = info.kind
 		kind.custom_minimum_size = Vector2(170, 0)
-		_font(kind, style.ui_font, style.ui_font_size, accent)
+		_font(kind, phone_screen.style.ui_font, phone_screen.style.ui_font_size, accent)
 		row.add_child(kind)
 		var words := VBoxContainer.new()
 		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -525,13 +531,7 @@ func _apply_style() -> void:
 	var accent := _box.name_plate_color
 	var her_font := _her_font()
 
-	dim.color = style.behind_dim
-	var sheet_box := StyleBoxFlat.new()
-	sheet_box.bg_color = style.sheet_color
-	sheet_box.set_corner_radius_all(style.sheet_corner)
-	sheet_box.anti_aliasing = true
-	sheet.add_theme_stylebox_override("panel", sheet_box)
-
+	var ui := phone_screen.style
 	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.add_theme_stylebox_override("panel", _box.make_box())
 		group.queue_redraw()
@@ -545,11 +545,11 @@ func _apply_style() -> void:
 		label.add_theme_constant_override("outline_size", _box.text_outline_width)
 		label.add_theme_color_override("font_outline_color", _box.text_outline_color)
 
-	_font(title, style.ui_font, style.ui_font_size, style.ui_text_color)
-	_font(result, style.ui_font, style.ui_font_size, style.ui_text_color)
-	result.custom_minimum_size.y = style.ui_font_size * 1.6
+	_font(title, ui.ui_font, ui.ui_font_size, ui.ui_text_color)
+	_font(result, ui.ui_font, ui.ui_font_size, ui.ui_text_color)
+	result.custom_minimum_size.y = ui.ui_font_size * 1.6
 	for label: Label in [cancel, done, add_photo, phone_kind, address_kind]:
-		_font(label, style.ui_font, style.ui_font_size, accent)
+		_font(label, ui.ui_font, ui.ui_font_size, accent)
 	title.text = style.title
 	cancel.text = style.cancel_text
 	done.text = style.done_text
@@ -629,6 +629,10 @@ func _play_alone() -> void:
 	if not test_girl:
 		push_warning("ContactCard: set Testing → Test Girl to play it on its own.")
 		return
+	# On its own there's no date behind it: your room instead.
+	phone_screen.behind = PhoneScreen.Behind.ROOM
+	phone_screen.apply_style()
 	show_card(test_girl, DateRules.new())
+	await phone_screen.raise()
 	var got_number := await play(test_hearts)
 	print("ContactCard: %s -> %s" % ["failed date" if test_hearts < 0 else "%d hearts" % test_hearts, "got her number" if got_number else "no number"])

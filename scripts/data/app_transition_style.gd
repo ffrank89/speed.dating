@@ -1,8 +1,10 @@
 @tool
 class_name AppTransitionStyle
 extends Resource
-## How every app opens and closes: the iPhone-style animation used for the calendar,
-## the dating app, starting a date, the boss fight and microgames.
+## How every app opens and closes: the iPhone-style animation used for the intro, the
+## calendar, the dating app, Contacts and microgames. Apps open inside the phone's
+## screen (Screen → Open Into Phone). Going into real life (a date) isn't an app: the
+## phone goes down instead (data/phone_style.tres → Phone Up / Down).
 ## One shared file: data/app_transition_style.tres. Each app's own look (icon, launch
 ## screen, sounds) is in its file in data/apps/. Full guide: docs/guides/phone-apps.md
 
@@ -32,18 +34,24 @@ extends Resource
 ## 0 = always open from Default Origin.
 @export_range(0.0, 10.0, 0.1) var tap_memory_seconds: float = 1.5
 ## Where apps open from when there was no recent click (e.g. a key press), as a share
-## of the screen. (0.5, 0.85) = the middle of the bottom, like the iPhone's dock.
+## of the phone's screen (or the whole screen with Open Into Phone off).
+## (0.5, 0.85) = the middle of the bottom, like the iPhone's dock.
 @export var default_origin: Vector2 = Vector2(0.5, 0.85)
 
 @export_group("Screen")
-## Where an open app ends up, in pixels in from each edge of the screen. All 0 = the
-## whole screen. Raise them to open apps into a phone screen drawn in the scene.
+## On = apps open inside the phone's screen (Phone below), and grow from inside it when
+## nothing was clicked. Off = they fill the whole screen, minus the insets below.
+@export var open_into_phone: bool = true
+## The phone apps open into (data/phone_style.tres).
+@export var phone: PhoneStyle
+## Only with Open Into Phone off: where an open app ends up, in pixels in from each edge
+## of the screen. All 0 = the whole screen.
 @export var screen_inset_left: int = 0
 @export var screen_inset_top: int = 0
 @export var screen_inset_right: int = 0
 @export var screen_inset_bottom: int = 0
-## How rounded an open app's corners are, in pixels (like the phone screen's corners).
-## 0 = square, right for the whole screen.
+## Only with Open Into Phone off: how rounded an open app's corners are, in pixels.
+## 0 = square, right for the whole screen. (Into the phone, it's the phone's Corner.)
 @export_range(0, 400) var screen_corner: int = 0
 ## Optional: phone art (e.g. an iPhone frame) drawn over everything while an app opens
 ## or closes. It's stretched to fill the screen, so draw it at 3000 × 1700.
@@ -62,8 +70,27 @@ extends Resource
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0
 
 
+## True when apps open inside the phone.
+func into_phone() -> bool:
+	return open_into_phone and phone != null
+
+
 ## The rectangle an open app fills, in screen pixels.
 func screen_rect(screen_size: Vector2) -> Rect2:
+	if into_phone():
+		return phone.screen_rect(screen_size)
 	var top_left := Vector2(screen_inset_left, screen_inset_top)
 	var bottom_right := screen_size - Vector2(screen_inset_right, screen_inset_bottom)
 	return Rect2(top_left, bottom_right - top_left)
+
+
+## How rounded an open app's corners are, in pixels.
+func open_corner() -> int:
+	return phone.corner if into_phone() else screen_corner
+
+
+## Where apps open from when nothing was clicked: Default Origin, inside the phone's
+## screen (Open Into Phone) or the whole screen.
+func origin_point(screen_size: Vector2) -> Vector2:
+	var area := phone.screen_rect(screen_size) if into_phone() else Rect2(Vector2.ZERO, screen_size)
+	return area.position + area.size * default_origin

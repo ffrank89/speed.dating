@@ -1,17 +1,19 @@
 class_name ContactsApp
 extends CanvasLayer
 ## Your party, as the Contacts on your phone: every girl who gave you her number is
-## saved here. Press C (the open_contacts action) and it opens over the screen like an
-## iPhone app, the same way a microgame opens over the date (data/apps/contacts.tres),
-## growing from the bottom middle of the screen (or a click from a moment ago).
+## saved here. Press C (the open_contacts action) and it opens inside the phone like an
+## iPhone app (data/apps/contacts.tres), growing from the bottom of the phone's screen
+## (or a click from a moment ago).
 ## Click a girl to open her contact (her card as she filled it in on the date: what your
 ## hearts unlocked, her number and address); "‹ Contacts" goes back. C again, Escape or
-## the bar at the bottom closes it back into where it came from.
+## the phone's home bar closes it back into where it came from.
 ##
 ## C works on any screen that has this scene in it. For now that's only the calendar.
 ##
-## The look, words and sounds are data/contact_card_style.tres → Contacts App; each row
-## and her card use her dialogue style. Move or resize the list in this scene.
+## The phone (its screen colour, font, status bar) is data/phone_style.tres; the list's
+## words, sizes and sounds are data/contact_card_style.tres → Contacts App; each row and
+## her card use her dialogue style. Move or resize the list in this scene (PhoneScreen →
+## Phone → Body → Screen → Margin).
 ## Press F6 to try it with the Testing settings.
 ## Full guide: docs/guides/contacts.md
 
@@ -43,15 +45,15 @@ var _busy := false
 # Where it opened from, so it closes back into the same place.
 var _from := Rect2()
 
-@onready var dim: ColorRect = %Dim
-@onready var sheet: Panel = %Sheet
+## The phone the list is on (its look: data/phone_style.tres).
+@onready var phone_screen: PhoneScreen = %PhoneScreen
+## Everything on the list, inside the phone's screen.
+@onready var content: Control = %Margin
 @onready var title: Label = %Title
 @onready var scroll: ScrollContainer = %Scroll
 @onready var list: VBoxContainer = %List
 @onready var empty: Label = %Empty
 @onready var count: Label = %Count
-@onready var home_bar: Control = %HomeBar
-@onready var home_pill: Panel = %HomePill
 @onready var card: ContactCard = %ContactCard
 @onready var sound: AudioStreamPlayer = %Sound
 
@@ -62,10 +64,13 @@ func _ready() -> void:
 	if not rules:
 		rules = DateRules.new()
 	card.style = style
-	# The list is already dimming what's behind; her card sits on the list.
-	card.dim.visible = false
+	# Her card sits on the list, on the same phone: nothing behind it.
+	card.phone_screen.behind = PhoneScreen.Behind.NOTHING
+	card.phone_screen.apply_style()
 	card.back_pressed.connect(_back_to_list)
-	home_bar.gui_input.connect(_on_home_bar_input)
+	# The home bar closes Contacts, from the list or from her card.
+	phone_screen.home_pressed.connect(close)
+	card.phone_screen.home_pressed.connect(close)
 	if not InputMap.has_action(open_action):
 		push_warning("ContactsApp: no input action \"%s\" (Project Settings → Input Map)." % open_action)
 	if get_parent() == get_tree().root:
@@ -74,8 +79,8 @@ func _ready() -> void:
 		visible = false
 
 
-## Opens Contacts like an iPhone app (Style → Open As App), or slides it up from the
-## bottom. Use with await to wait for it.
+## Opens Contacts like an iPhone app inside the phone (Style → Open As App), or brings
+## the phone up with it. Use with await to wait for it.
 func open() -> void:
 	if visible or _busy or AppLauncher.is_busy():
 		return
@@ -85,12 +90,12 @@ func open() -> void:
 		await AppLauncher.open(app_name, show_list, _from)
 	else:
 		show_list()
-		await _slide_sheet(true)
+		await phone_screen.raise()
 	_busy = false
 
 
-## Closes Contacts (and her card, if it's open) back into where it opened from, or
-## slides it back down.
+## Closes Contacts (and her card, if it's open) back into where it opened from, or puts
+## the phone back down.
 func close() -> void:
 	if not visible or _busy or AppLauncher.is_busy():
 		return
@@ -98,7 +103,8 @@ func close() -> void:
 	if style.open_as_app:
 		await AppLauncher.close(app_name, hide_list, _from)
 	else:
-		await _slide_sheet(false)
+		card.visible = false
+		await phone_screen.lower()
 		hide_list()
 	_busy = false
 	closed.emit()
@@ -113,37 +119,29 @@ func show_list(members: Array[PartyMember] = []) -> void:
 	_apply_style()
 	_build_rows()
 	card.visible = false
-	sheet.position = Vector2(_sheet_x(), _sheet_y())
-	sheet.modulate = Color.WHITE
-	dim.modulate.a = 1.0
+	content.position.x = 0.0
+	content.modulate = Color.WHITE
+	phone_screen.show_up()
 	scroll.scroll_vertical = 0
 	visible = true
 
 
-## Hides the list (and her card) at once, without sliding.
+## Hides the list (and her card) at once.
 func hide_list() -> void:
 	card.visible = false
 	visible = false
 
 
 func _apply_style() -> void:
-	var box := StyleBoxFlat.new()
-	box.bg_color = style.sheet_color
-	box.set_corner_radius_all(style.sheet_corner)
-	box.anti_aliasing = true
-	sheet.add_theme_stylebox_override("panel", box)
-	dim.color = style.behind_dim
-	_font(title, style.ui_font, int(style.ui_font_size * 1.9), style.ui_text_color)
+	var ui := phone_screen.style
+	ui.style_label(title, ui.ui_text_color, ui.title_font_size)
 	title.text = style.list_title
-	var faint := Color(style.ui_text_color, 0.45)
-	_font(empty, style.ui_font, style.ui_font_size, faint)
+	var faint := Color(ui.ui_text_color, 0.45)
+	ui.style_label(empty, faint)
 	empty.text = style.no_contacts_text
-	_font(count, style.ui_font, style.ui_font_size, faint)
-	var pill := StyleBoxFlat.new()
-	pill.bg_color = Color(style.ui_text_color, 0.85)
-	pill.set_corner_radius_all(100)
-	pill.anti_aliasing = true
-	home_pill.add_theme_stylebox_override("panel", pill)
+	ui.style_label(count, faint)
+	for label: Label in [title, empty, count]:
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 # One row per girl, A to Z, each in her own box style and font, under letter headers.
@@ -160,7 +158,8 @@ func _build_rows() -> void:
 		if style.section_letters and first != letter:
 			letter = first
 			var header := Label.new()
-			_font(header, style.ui_font, style.ui_font_size, Color(style.ui_text_color, 0.45))
+			var ui := phone_screen.style
+			_font(header, ui.ui_font, ui.ui_font_size, Color(ui.ui_text_color, 0.45))
 			header.text = letter
 			list.add_child(header)
 		list.add_child(_make_row(member))
@@ -276,52 +275,23 @@ func _back_to_list() -> void:
 	card.visible = false
 
 
-# Her card sliding in over the list (or back out).
+# Her card sliding in over the list (or back out), on the same phone: the card fades in
+# as what's on it slides across, and the list behind moves aside and greys a little.
 func _slide(opening: bool) -> void:
 	_busy = true
-	var push := sheet.size.x * 0.25
+	var push := content.size.x * 0.25
 	if opening:
-		card.offset.x = push
-		card.sheet.modulate.a = 0.0
+		card.content.position.x = push
+		card.phone_screen.modulate.a = 0.0
 	var slide := create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	slide.tween_property(card, "offset:x", 0.0 if opening else push, style.slide_seconds)
-	slide.tween_property(card.sheet, "modulate:a", 1.0 if opening else 0.0, style.slide_seconds)
-	slide.tween_property(sheet, "position:x", _sheet_x() - (push * 0.4 if opening else 0.0), style.slide_seconds)
-	slide.tween_property(sheet, "modulate", Color(0.85, 0.85, 0.85) if opening else Color.WHITE, style.slide_seconds)
+	slide.tween_property(card.content, "position:x", 0.0 if opening else push, style.slide_seconds)
+	slide.tween_property(card.phone_screen, "modulate:a", 1.0 if opening else 0.0, style.slide_seconds)
+	slide.tween_property(content, "position:x", -push * 0.4 if opening else 0.0, style.slide_seconds)
+	slide.tween_property(content, "modulate", Color(0.85, 0.85, 0.85) if opening else Color.WHITE, style.slide_seconds)
 	await slide.finished
+	card.content.position.x = 0.0
+	card.phone_screen.modulate.a = 1.0
 	_busy = false
-
-
-# With Open As App off: up from below the screen (opening) or back down (closing),
-# with the dim fading.
-func _slide_sheet(opening: bool) -> void:
-	var rest := _sheet_y()
-	var away := sheet.get_parent_area_size().y + 40.0
-	if opening:
-		sheet.position.y = away
-		dim.modulate.a = 0.0
-	var slide := create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC) \
-		.set_ease(Tween.EASE_OUT if opening else Tween.EASE_IN)
-	slide.tween_property(sheet, "position:y", rest if opening else away, style.open_seconds)
-	slide.tween_property(dim, "modulate:a", 1.0 if opening else 0.0, style.open_seconds)
-	if card.visible and not opening:
-		slide.tween_property(card, "offset:y", away - rest, style.open_seconds)
-	await slide.finished
-	card.offset.y = 0.0
-
-
-# Where the sheet sits when nothing has pushed it aside.
-func _sheet_x() -> float:
-	return sheet.get_parent_area_size().x * sheet.anchor_left + sheet.offset_left
-
-
-func _sheet_y() -> float:
-	return sheet.get_parent_area_size().y * sheet.anchor_top + sheet.offset_top
-
-
-func _on_home_bar_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		close()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -352,11 +322,15 @@ func _play(stream: AudioStream) -> void:
 		sound.play()
 
 
-# F6: the test contacts slide up; press C to put them away and bring them back.
+# F6: the test contacts open; press C to put them away and bring them back.
 func _play_alone() -> void:
+	# On its own there's no phone screen behind it: your room instead.
+	phone_screen.behind = PhoneScreen.Behind.ROOM
+	phone_screen.apply_style()
 	for girl in test_contacts:
 		if girl:
 			_test_members.append(PartyMember.new(girl, test_hearts))
 	if _test_members.is_empty():
 		push_warning("ContactsApp: no Testing → Test Contacts, so the list shows your (empty) party.")
+	visible = false
 	open()

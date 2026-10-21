@@ -179,8 +179,9 @@ func _closer_title() -> String:
 	return rules.closer_hearts_title
 
 
-# The date's over: open Contacts like an app, and she types in her number (or doesn't).
-# Then she joins the party or is gone for the run, and it's back to the calendar.
+# The date's over: phone up, with a new contact on it, and she types in her number (or
+# doesn't). Then she joins the party or is gone for the run, and the calendar opens on
+# the phone.
 func _end_date() -> void:
 	if _ended or not scorer:
 		return
@@ -192,7 +193,8 @@ func _end_date() -> void:
 	var hearts := scorer.hearts() if scorer.gives_number() else -1
 	var how := "failed" if hearts < 0 else "%d of 3 hearts" % hearts
 	status_changed.emit("Date over: %s" % how)
-	await AppLauncher.open("contacts", contact_card.show_card.bind(girl, rules))
+	contact_card.show_card(girl, rules)
+	await contact_card.phone_screen.raise()
 	await contact_card.play(hearts)
 
 	var result := DateResult.new()
@@ -201,11 +203,14 @@ func _end_date() -> void:
 	result.affection = maxi(hearts, 0)
 	result.got_number = hearts >= 0
 	_apply_to_run(result)
-	await AppLauncher.close("contacts", func() -> void: contact_card.visible = false)
 	status_changed.emit("Date over: %s, %s." % [how, "she's in" if result.got_number else "she's gone for the run"])
 	date_finished.emit(result)
 	if go_to_calendar:
+		# The phone stays up: the calendar opens on it, and your room comes back around it.
 		AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)
+	else:
+		await contact_card.phone_screen.lower()
+		contact_card.visible = false
 
 
 # She gave you her number: she's saved in your contacts (your party), with her hearts.

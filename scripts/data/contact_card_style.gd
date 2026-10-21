@@ -5,21 +5,11 @@ extends Resource
 ## Contact" screen where she types in, or doesn't, her name, number and address), and
 ## your Contacts, where your party is saved (press C on the calendar: the list, and each
 ## girl's saved card).
-## The boxes, her font and text colour come from HER dialogue style; this file sets
-## everything else. One file: data/contact_card_style.tres.
+## The boxes, her font and text colour come from HER dialogue style; the phone, its
+## screen colour and the phone's own font (Cancel, New Contact, the grey hints) are the
+## phone's style (data/phone_style.tres); this file sets everything else.
+## One file: data/contact_card_style.tres.
 ## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
-
-@export_group("Sheet")
-## The phone screen's background (iPhone's light grey).
-@export var sheet_color: Color = Color("#f2f2f7")
-## How rounded the sheet's corners are, in pixels.
-@export_range(0, 300) var sheet_corner: int = 70
-## Laid over the date behind the sheet.
-@export var behind_dim: Color = Color(0, 0, 0, 0.55)
-## Font for the iPhone's own words (Cancel, New Contact, the grey hints). Empty = Godot's default.
-@export var ui_font: Font
-@export_range(8, 200) var ui_font_size: int = 44
-@export var ui_text_color: Color = Color(0.1, 0.1, 0.12)
 
 @export_group("Words")
 @export var title: String = "New Contact"
@@ -103,12 +93,11 @@ extends Resource
 @export var close_sound: AudioStream
 
 @export_group("Contacts App")
-## On = pressing C opens your Contacts like an iPhone app, the same way a microgame opens
-## over the date, and closes it back (its icon and launch screen: data/apps/contacts.tres;
-## the feel: data/app_transition_style.tres). Off = it slides up from the bottom.
+## On = pressing C opens your Contacts like an iPhone app inside the phone, and closes
+## it back (its icon and launch screen: data/apps/contacts.tres; the feel:
+## data/app_transition_style.tres). Off = the phone comes up with Contacts on it
+## (data/phone_style.tres → Phone Up / Down).
 @export var open_as_app: bool = true
-## Only used with Open As App off: seconds to slide up (and back down).
-@export_range(0.0, 1.0, 0.05) var open_seconds: float = 0.35
 ## The big title at the top of the list.
 @export var list_title: String = "Contacts"
 ## Top left of a saved contact: goes back to the list.

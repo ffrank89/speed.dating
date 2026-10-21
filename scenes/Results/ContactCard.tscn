@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/Results/contact_card.gd" id="1_card"]
 [ext_resource type="Resource" path="res://data/contact_card_style.tres" id="2_style"]
 [ext_resource type="Resource" path="res://data/girls/split_ends.tres" id="3_girl"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="4_phone"]
 
 [node name="ContactCard" type="CanvasLayer"]
 layer = 20
@@ -10,31 +11,12 @@ script = ExtResource("1_card")
 style = ExtResource("2_style")
 test_girl = ExtResource("3_girl")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="PhoneScreen" parent="." instance=ExtResource("4_phone")]
 unique_name_in_owner = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.55)
+behind = 1
 
-[node name="Sheet" type="Panel" parent="."]
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
 unique_name_in_owner = true
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -800.0
-offset_right = 500.0
-offset_bottom = 800.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Margin" type="MarginContainer" parent="Sheet"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,63 +25,63 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 56
-theme_override_constants/margin_top = 50
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 56
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_bottom = 20
 
-[node name="Column" type="VBoxContainer" parent="Sheet/Margin"]
+[node name="Column" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 34
 
-[node name="Header" type="HBoxContainer" parent="Sheet/Margin/Column"]
+[node name="Header" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Cancel" type="Label" parent="Sheet/Margin/Column/Header"]
+[node name="Cancel" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Header"]
 unique_name_in_owner = true
 layout_mode = 2
 pivot_offset = Vector2(80, 30)
 text = "Cancel"
 
-[node name="Title" type="Label" parent="Sheet/Margin/Column/Header"]
+[node name="Title" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Header"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "New Contact"
 horizontal_alignment = 1
 
-[node name="Done" type="Label" parent="Sheet/Margin/Column/Header"]
+[node name="Done" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Header"]
 unique_name_in_owner = true
 layout_mode = 2
 pivot_offset = Vector2(60, 30)
 text = "Done"
 
-[node name="Scroll" type="ScrollContainer" parent="Sheet/Margin/Column"]
+[node name="Scroll" type="ScrollContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 
-[node name="Body" type="VBoxContainer" parent="Sheet/Margin/Column/Scroll"]
+[node name="Body" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 34
 
-[node name="PhotoRow" type="CenterContainer" parent="Sheet/Margin/Column/Scroll/Body"]
+[node name="PhotoRow" type="CenterContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Circle" type="Panel" parent="Sheet/Margin/Column/Scroll/Body/PhotoRow"]
+[node name="Circle" type="Panel" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/PhotoRow"]
 unique_name_in_owner = true
 clip_children = 2
 custom_minimum_size = Vector2(280, 280)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Initials" type="Label" parent="Sheet/Margin/Column/Scroll/Body/PhotoRow/Circle"]
+[node name="Initials" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/PhotoRow/Circle"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -111,7 +93,7 @@ text = "SE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Photo" type="TextureRect" parent="Sheet/Margin/Column/Scroll/Body/PhotoRow/Circle"]
+[node name="Photo" type="TextureRect" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/PhotoRow/Circle"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -123,41 +105,41 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="AddPhoto" type="Label" parent="Sheet/Margin/Column/Scroll/Body"]
+[node name="AddPhoto" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Add Photo"
 horizontal_alignment = 1
 
-[node name="NameGroup" type="PanelContainer" parent="Sheet/Margin/Column/Scroll/Body"]
+[node name="NameGroup" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Rows" type="VBoxContainer" parent="Sheet/Margin/Column/Scroll/Body/NameGroup"]
+[node name="Rows" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="FirstRow" type="HBoxContainer" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows"]
+[node name="FirstRow" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 
-[node name="FirstName" type="Label" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
+[node name="FirstName" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 text = "First name"
 vertical_alignment = 1
 
-[node name="HeartText" type="Label" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
+[node name="HeartText" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 vertical_alignment = 1
 
-[node name="HeartIcon" type="Control" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
+[node name="HeartIcon" type="Control" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(72, 72)
@@ -165,10 +147,10 @@ layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="HeartSprite" type="AnimatedSprite2D" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow/HeartIcon"]
+[node name="HeartSprite" type="AnimatedSprite2D" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow/HeartIcon"]
 unique_name_in_owner = true
 
-[node name="Heart" type="TextureRect" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
+[node name="Heart" type="TextureRect" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows/FirstRow"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(60, 60)
@@ -178,92 +160,92 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Line1" type="ColorRect" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows"]
+[node name="Line1" type="ColorRect" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="LastName" type="Label" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows"]
+[node name="LastName" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 text = "Last name"
 vertical_alignment = 1
 
-[node name="Line2" type="ColorRect" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows"]
+[node name="Line2" type="ColorRect" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Company" type="Label" parent="Sheet/Margin/Column/Scroll/Body/NameGroup/Rows"]
+[node name="Company" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/NameGroup/Rows"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 text = "Company"
 vertical_alignment = 1
 
-[node name="TraitsGroup" type="PanelContainer" parent="Sheet/Margin/Column/Scroll/Body"]
+[node name="TraitsGroup" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TraitRows" type="VBoxContainer" parent="Sheet/Margin/Column/Scroll/Body/TraitsGroup"]
+[node name="TraitRows" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/TraitsGroup"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="PhoneGroup" type="PanelContainer" parent="Sheet/Margin/Column/Scroll/Body"]
+[node name="PhoneGroup" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Row" type="HBoxContainer" parent="Sheet/Margin/Column/Scroll/Body/PhoneGroup"]
+[node name="Row" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/PhoneGroup"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 30
 
-[node name="PhoneKind" type="Label" parent="Sheet/Margin/Column/Scroll/Body/PhoneGroup/Row"]
+[node name="PhoneKind" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/PhoneGroup/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 96)
 layout_mode = 2
 text = "mobile"
 vertical_alignment = 1
 
-[node name="Phone" type="Label" parent="Sheet/Margin/Column/Scroll/Body/PhoneGroup/Row"]
+[node name="Phone" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/PhoneGroup/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
 vertical_alignment = 1
 
-[node name="AddressGroup" type="PanelContainer" parent="Sheet/Margin/Column/Scroll/Body"]
+[node name="AddressGroup" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Row" type="HBoxContainer" parent="Sheet/Margin/Column/Scroll/Body/AddressGroup"]
+[node name="Row" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/AddressGroup"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 30
 
-[node name="AddressKind" type="Label" parent="Sheet/Margin/Column/Scroll/Body/AddressGroup/Row"]
+[node name="AddressKind" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/AddressGroup/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 96)
 layout_mode = 2
 text = "home"
 vertical_alignment = 1
 
-[node name="Address" type="Label" parent="Sheet/Margin/Column/Scroll/Body/AddressGroup/Row"]
+[node name="Address" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Scroll/Body/AddressGroup/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
 vertical_alignment = 1
 
-[node name="Result" type="Label" parent="Sheet/Margin/Column"]
+[node name="Result" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 horizontal_alignment = 1
@@ -277,3 +259,5 @@ mouse_filter = 2
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+
+[editable path="PhoneScreen"]
