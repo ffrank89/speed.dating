@@ -45,7 +45,9 @@ func setup(style: CalendarStyle, day_action: DayAction, key_number: int, does_fi
 	_box_style = style.box_style if style.box_style else DialogueBoxStyle.new()
 	action = day_action
 	fits = does_fit
-	add_theme_stylebox_override("panel", _box_style.make_box())
+	var box := _box_style.make_box()
+	box.set_content_margin_all(style.choice_padding)
+	add_theme_stylebox_override("panel", box)
 
 	key.visible = style.show_keys
 	key.add_theme_stylebox_override("panel", _box_style.make_name_plate())

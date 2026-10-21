@@ -45,11 +45,14 @@ extends Resource
 @export var ends_chapter: bool = false
 
 @export_group("Opens")
-## A screen it opens afterwards, like an app (the date opens the dating app).
-## Empty = it stays on the calendar.
+## A screen it opens afterwards, like an app on the phone (the date opens the dating
+## app). Empty = it stays on the calendar.
 @export_file("*.tscn") var scene: String = ""
 ## Which app it opens like (a file name in data/apps/: its icon and launch screen).
 @export var app_name: String = ""
+## On = Scene is real life (e.g. a boss fight): the phone goes down into it instead of
+## the screen opening as an app (data/phone_style.tres → Phone Up / Down).
+@export var real_life: bool = false
 
 
 ## What it changes, as {Attr.Id: amount}, leaving out the zeros.

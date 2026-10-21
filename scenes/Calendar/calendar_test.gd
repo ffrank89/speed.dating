@@ -4,18 +4,19 @@ extends Control
 ## Top row, the calendar itself (try art the way the iPhone frame will be tried):
 ##   Page ◀ ▶   pictures for the calendar's page (Page Images; "None" = the box style)
 ##   Days ◀ ▶   pictures for each day's box (Day Images; "None" = the box style)
-##   Scene ◀ ▶  pictures behind the whole screen (Scene Backgrounds; "None" = the pattern)
+##   Room ◀ ▶   pictures behind the phone (Rooms; "None" = data/phone_style.tres → Room Image)
 ## Second row, the run:
 ##   New calendar, Skip day, Boss day, Foresight (open the whole month to see it)
 ## F1 hides the bars. Nothing here is saved: the files keep their settings. To keep a
-## picture, put it in data/calendar_style.tres → Calendar Art (or Background).
+## picture, put it in data/calendar_style.tres → Calendar Art (or, for the room,
+## data/phone_style.tres → Your Room).
 
 ## Pictures to try as the calendar's page. Add more with Add Element.
 @export var page_images: Array[Texture2D] = []
 ## Pictures to try as each day's box.
 @export var day_images: Array[Texture2D] = []
-## Pictures to try behind the whole screen.
-@export var scene_backgrounds: Array[Texture2D] = []
+## Pictures to try behind the phone (your room).
+@export var rooms: Array[Texture2D] = []
 
 # Which picture each flipper is on (-1 = none). Static, so New calendar keeps them.
 static var _picks := {"page": 0, "day": -1, "scene": -1}
@@ -56,7 +57,7 @@ func _pictures(slot: String) -> Array[Texture2D]:
 			return page_images
 		"day":
 			return day_images
-	return scene_backgrounds
+	return rooms
 
 
 # Steps through the pictures, with "None" (-1) before the first one.
@@ -75,7 +76,8 @@ func _picked(slot: String) -> Texture2D:
 func _apply_art() -> void:
 	calendar.style.page_image = _picked("page")
 	calendar.style.day_image = _picked("day")
-	calendar.style.background_image = _picked("scene")
+	calendar.phone_screen.room_image = _picked("scene")
+	calendar.phone_screen.apply_style()
 	for label: Label in [%PageLabel, %DayLabel, %SceneLabel]:
 		var picture := _picked(label.get_meta("slot"))
 		label.text = picture.resource_path.get_file() if picture else "None"

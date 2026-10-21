@@ -118,7 +118,8 @@ func open(app: Variant, swap: Callable, from := Rect2()) -> void:
 
 	# What's on screen now becomes the picture behind the growing icon.
 	var shot := await _screenshot()
-	behind.texture = shot
+	# Inside the phone, just its screen zooms (not the phone's edge or your room).
+	behind.texture = _crop(shot, window.get_rect()) if style.into_phone() else shot
 	behind.pivot_offset = _from.get_center() - window.position
 	behind.visible = shot != null
 	outside.texture = shot
@@ -316,8 +317,8 @@ func _place_window() -> void:
 	shape.set_corner_radius_all(style.open_corner() if style.into_phone() else 0)
 	shape.anti_aliasing = true
 	window.add_theme_stylebox_override("panel", shape)
-	behind.position = -rect.position
-	behind.size = screen_size
+	behind.position = Vector2.ZERO if style.into_phone() else -rect.position
+	behind.size = rect.size if style.into_phone() else screen_size
 	dim.position = Vector2.ZERO
 	dim.size = rect.size
 	_cut_hole(rect)
