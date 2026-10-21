@@ -19,3 +19,7 @@ Changing to a separate scene per microgame and back.
 ## Revisit when
 
 A microgame needs something the date scene can't keep running underneath (e.g. a full-screen 3D moment).
+
+## Note (2026-10-21)
+
+Microgames now play on the player's phone, which comes up over the date ([0058](0058-phone-and-real-life.md)). The play area is the phone's screen (964 × 1414, portrait).

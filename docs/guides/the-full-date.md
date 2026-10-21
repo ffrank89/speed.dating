@@ -5,13 +5,13 @@ For writers and designers. **No code needed.**
 A first date now plays from start to finish:
 
 ```
-Dating app: Start ─► her room opens like an app
+Dating app: Start ─► phone down: her room is there (real life)
                       │
                       ├─ the opener
                       ├─ 5 exchanges, drawn at random, no repeats
                       │    (2 of them microgame exchanges, 3 regular ones, shuffled)
                       ├─ one closer, picked by how it went
-                      └─ her contact card (she gives you her number, or doesn't)
+                      └─ phone up: her contact card (she gives you her number, or doesn't)
                            │
                            ├─ got her number → saved in your Contacts (your party)
                            └─ failed date    → she's gone for the run
@@ -117,8 +117,9 @@ Then:
 | She gave her number (0 hearts or more) | She's saved in your **Contacts** (press C on the calendar): that's your party ([contacts.md](contacts.md)). The dating app stops offering her. |
 | Failed (no number) | She's **gone for the run**: the dating app skips her from now on. If no one's left, it says "No one left to swipe on." |
 
-Then the game goes back to the calendar, which opens like an app
-(`data/apps/calendar.tres`).
+Then the calendar opens on the phone like an app
+(`data/apps/calendar.tres`), and your room comes back around it
+([the-phone.md](the-phone.md)).
 
 ## Where things sit
 
@@ -156,9 +157,10 @@ file with **girl_data_path**. Smokey has none yet.
 - `DateScene` (`scenes/Dates/Date/date_scene.gd`): `begin()` plans the titles
   (`_plan_titles()`), plays each with `DialogueBox.start()` and moves on when
   `finished` fires; then the closer (`_closer_title()`), then `_end_date()`:
-  `AppLauncher.open("contacts")`, `ContactCard.play(hearts)`, a `DateResult`
+  `contact_card.show_card()` and `contact_card.phone_screen.raise()` (phone
+  up), `ContactCard.play(hearts)`, a `DateResult`
   (`got_number`, `affection`, `score`), `PlayerManager.add_party_member()` or
-  `mark_gone()`, `AppLauncher.close`, `date_finished(result)`, and
+  `mark_gone()`, `date_finished(result)`, and
   `AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)` when **Go To
   Calendar** is on.
 - The girl comes from `PlayerManager.current_date.girl_data_path`; the

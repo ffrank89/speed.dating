@@ -13,6 +13,12 @@
   them **autobattle** the boss. You never fight.
 - Win and you move on to the next chapter. Lose and the run ends. A run is
   about 30 minutes.
+- **On your phone or in real life:** the calendar, the dating app, Contacts,
+  her contact card and microgames are apps on the player's phone (portrait,
+  your room behind it); dates, boss fights and stage hazards are real life.
+  Starting a date puts the phone down; the end brings it back up
+  ([decision 0058](../decisions/0058-phone-and-real-life.md),
+  [the-phone.md](../guides/the-phone.md)).
 
 ```mermaid
 flowchart LR

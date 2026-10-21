@@ -31,7 +31,10 @@ thing. **No code needed.**
 | **The cursor** | `assets/placeholders/godot_logo.svg` | `data/cursors/default.tres` → **Pointer → Image** (set **Hotspot** to the clicking pixel) | The player's mouse cursor everywhere. See [the cursor guide](cursor.md). |
 | **The fly** (stage hazard) | `assets/placeholders/godot_logo.svg` | `scenes/Hazards/Fly/Fly.tscn` → **Body → Sprite** → Texture (or swap for an AnimatedSprite2D) | The fly that buzzes around her. Draw it facing right. |
 | **Fly buzz** | none (silent) | `Fly.tscn` → top node → **Sounds → Buzz Sound** | A looping buzz while it's on screen |
-| **iPhone frame** | none (nothing drawn) | `data/app_transition_style.tres` → **Screen → Device Frame** | Phone art drawn over the screen while apps open and close |
+| **The phone** | none (a plain dark rim, iPhone-grey screen) | `data/phone_style.tres` → **Phone → Phone Art → Frame Image** (and **Wallpaper**) | The player's phone on every phone screen. See [the phone](the-phone.md). |
+| **Your room** (behind the phone) | `assets/bedroom2.png` | `data/phone_style.tres` → **Your Room → Room Image** | Behind the phone on the intro, dating app and calendar |
+| **Phone up / down sounds** | Kenney stand-ins (`maximize_008`, `minimize_008`) | `data/phone_style.tres` → **Phone Up / Down → Up Sound / Down Sound** | Taking the phone out and putting it away |
+| **Dating app sounds** | Kenney stand-ins (`switch_005`, `confirmation_002`, `click_003`) | `data/dating_app_style.tres` → **Sounds** | Passing on a profile, Start Dating!, a button under the mouse |
 | **Template microgame target** | `assets/placeholders/godot_logo.svg` | `scenes/Microgames/_template/TemplateMicrogame.tscn` → **PlayArea/Target** | The thing you catch in the example microgame. Copies of the template start with it too. |
 | **Trail fallback icon** | `assets/placeholders/godot_logo.svg` | `data/option_styles/default.tres` → **Dragging → Trail Fallback Icon** | The little icons dropped when dragging an option with no attribute check |
 | **Letter sounds** (her voice) | `assets/audio/voice/default/a.wav` … `z.wav` (26 files) | Each girl's file → **Dialogue → Voice → Letter Sounds Folder** | One short sound per letter as her text types out |
