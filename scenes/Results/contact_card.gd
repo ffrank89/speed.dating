@@ -8,6 +8,8 @@ extends CanvasLayer
 ##   data/date_rules.tres → Result; below that a field says "you dont know me like that!".
 ##   A heart after her name at Heart Emoji At Hearts (3).
 ## The middle scrolls to follow her, so there's room for any number of traits.
+## When she's done, the card waits for the player to click the ✕ (top right of the card)
+## or press Escape (Style → Closing → Close By Hand).
 ##
 ## The boxes, her font and text colour come from her dialogue style; everything else is
 ## Style (data/contact_card_style.tres). Her name, number, address and traits come from
@@ -24,6 +26,8 @@ extends CanvasLayer
 signal finished(got_number: bool)
 ## Her saved contact's "‹ Contacts" was clicked (or Escape pressed).
 signal back_pressed
+## The player closed the finished card (the ✕, or Escape).
+signal closed_by_player
 
 const DEFAULT_BOX_STYLE := "res://data/dialogue_styles/default.tres"
 
@@ -45,6 +49,7 @@ var _typed := {}
 var _hints := {}
 var _time := 0.0
 var _saved := false
+var _waiting_to_close := false
 # Trait pops get their own player, so their rising pitch doesn't bend the key clicks.
 var _boop := AudioStreamPlayer.new()
 
@@ -77,6 +82,10 @@ var _boop := AudioStreamPlayer.new()
 @onready var result: Label = %Result
 @onready var caret: ColorRect = %Caret
 @onready var sound: AudioStreamPlayer = %Sound
+@onready var close_button: Control = %Close
+@onready var close_backing: Panel = %CloseBacking
+@onready var close_image: TextureRect = %CloseImage
+@onready var close_sprite: AnimatedSprite2D = %CloseSprite
 
 
 func _ready() -> void:
@@ -89,6 +98,7 @@ func _ready() -> void:
 	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.draw.connect(_draw_outline.bind(group))
 	cancel.gui_input.connect(_on_cancel_input)
+	close_button.gui_input.connect(_on_close_input)
 	if get_parent() == get_tree().root:
 		_play_alone.call_deferred()
 	else:
@@ -111,6 +121,8 @@ func show_card(girl: GirlData, rules: DateRules = null) -> void:
 	# The result line keeps its space from the start, so the card doesn't jump when it appears.
 	result.text = ""
 	caret.visible = false
+	close_button.visible = false
+	_waiting_to_close = false
 	_build_traits()
 	scroll.scroll_vertical = 0
 	visible = true
@@ -157,9 +169,83 @@ func play(hearts: int) -> bool:
 		caret.visible = false
 		await _tap(cancel, style.cancel_sound)
 		result.text = style.no_number_text
-	await _wait(style.end_hold_seconds)
+	if style.close_by_hand:
+		await _wait_for_close()
+	else:
+		await _wait(style.end_hold_seconds)
 	finished.emit(gives_number)
 	return gives_number
+
+
+# The ✕ appears on the card; the player closes it (click it, or Escape).
+func _wait_for_close() -> void:
+	# On the card's top-right corner (a little in from it, so it stays on screen), on a
+	# round button.
+	close_button.size = Vector2.ONE * style.close_size
+	close_button.position = Vector2(sheet.size.x - close_button.size.x * 0.6, -close_button.size.y * 0.35)
+	close_button.pivot_offset = close_button.size / 2.0
+	var backing := StyleBoxFlat.new()
+	backing.bg_color = style.close_backing_color
+	backing.border_color = style.close_backing_outline
+	backing.set_border_width_all(4 if style.close_backing_outline.a > 0.0 else 0)
+	backing.set_corner_radius_all(1000)
+	backing.anti_aliasing = true
+	close_backing.add_theme_stylebox_override("panel", backing)
+	close_backing.visible = style.close_backing_color.a > 0.0
+	# The ✕ sits inside the round button with a little room around it.
+	var inset := style.close_size * (0.2 if close_backing.visible else 0.0)
+	close_image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	close_image.set_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, int(inset))
+	close_image.texture = style.close_image
+	close_sprite.position = close_button.size / 2.0
+	close_sprite.visible = false
+	if style.close_animation:
+		# The ✕ draws itself once, then stays.
+		var frames := style.close_animation.duplicate() as SpriteFrames
+		var animation := StringName(style.close_animation_name)
+		if animation.is_empty() or not frames.has_animation(animation):
+			animation = frames.get_animation_names()[0]
+		frames.set_animation_loop(animation, false)
+		var picture := frames.get_frame_texture(animation, 0)
+		var side := maxf(picture.get_width(), picture.get_height()) if picture else float(style.close_size)
+		close_sprite.sprite_frames = frames
+		close_sprite.scale = Vector2.ONE * ((style.close_size - inset * 2.0) / side)
+		close_sprite.visible = true
+		close_image.visible = false
+		close_sprite.play(animation)
+		close_sprite.animation_finished.connect(_settle_close_icon, CONNECT_ONE_SHOT)
+	else:
+		close_image.visible = true
+	close_button.scale = Vector2.ZERO
+	close_button.visible = true
+	create_tween().tween_property(close_button, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_waiting_to_close = true
+	await closed_by_player
+
+
+# After the ✕ has drawn itself: Close Image takes over (or the last frame stays).
+func _settle_close_icon() -> void:
+	close_image.visible = style.close_image != null
+	close_sprite.visible = style.close_image == null
+
+
+func _close_now() -> void:
+	if not _waiting_to_close:
+		return
+	_waiting_to_close = false
+	_play(style.close_sound)
+	var press := create_tween()
+	press.tween_property(close_button, "scale", Vector2(1.2, 1.2), 0.06)
+	press.tween_property(close_button, "scale", Vector2.ZERO, 0.12)
+	await press.finished
+	close_button.visible = false
+	closed_by_player.emit()
+
+
+func _on_close_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		close_button.accept_event()
+		_close_now()
 
 
 func _process(delta: float) -> void:
@@ -422,7 +508,12 @@ func _on_cancel_input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _saved and visible and event.is_action_pressed("ui_cancel"):
+	if not visible or not event.is_action_pressed("ui_cancel"):
+		return
+	if _waiting_to_close:
+		get_viewport().set_input_as_handled()
+		_close_now()
+	elif _saved:
 		get_viewport().set_input_as_handled()
 		_go_back()
 

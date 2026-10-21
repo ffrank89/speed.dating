@@ -34,6 +34,7 @@ data/girls/split_ends.tres
    │                     ├─ Box: colours, outline, corners (or a picture)
    │                     ├─ Text: font → assets/fonts/patrick_hand/…ttf
    │                     ├─ Name Plate
+   │                     ├─ Heart Meter: her colour on the date's heart meter
    │                     └─ Next Arrow
    ├─ Voice           →  pitch, speed, letter sounds folder → assets/audio/voice/default/
    └─ First Date Dialogue → dialogue/split_ends/….dialogue
@@ -55,6 +56,8 @@ data/girls/split_ends.tres
 | Padding | Space between the box edge and the text. |
 
 The **Text**, **Name Plate** and **Next Arrow** sections work the same way.
+**Heart Meter → Meter Color** is the colour her [heart meter](heart-meter.md)
+rings fill with on her dates.
 
 ## Use a picture as her box
 

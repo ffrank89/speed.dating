@@ -60,6 +60,7 @@ var _ended := false
 @onready var dialogue_box: DialogueBox = $DialogueBox
 @onready var option_list: OptionList = $OptionList
 @onready var stage_hazards: StageHazards = $StageHazards
+@onready var heart_meter: HeartMeter = $HeartMeter
 @onready var contact_card: ContactCard = $ContactCard
 
 
@@ -93,6 +94,7 @@ func begin() -> void:
 	if attributes.is_empty():
 		attributes = _player_attributes()
 	scorer = DateScorer.new(rules, girl, attributes)
+	heart_meter.setup(girl)
 
 	_lines = dialogue if dialogue else girl.first_date_dialogue
 	if not _lines:
@@ -242,6 +244,7 @@ func _on_option_resolved(response: DialogueResponse, result: DateScorer.Result) 
 	_state.hit = result.hit
 	_state.last_points = result.points
 	_state.score = scorer.score
+	heart_meter.show_score(scorer.score)
 	var how := "rolled %d vs %d%%, %s" % [result.roll, result.chance, "hit" if result.hit else "miss"] if result.rolled else "no roll"
 	if result.played:
 		how = "microgame %s" % ("passed" if result.hit else "failed")
@@ -255,6 +258,7 @@ func _on_hazard_cleared(hazard: StageHazard) -> void:
 		return
 	scorer.add_bonus(hazard.points)
 	_state.score = scorer.score
+	heart_meter.show_score(scorer.score)
 	if not hazard.reaction.is_empty():
 		reaction_icon.show_reaction(hazard.reaction)
 	if not hazard.pose.is_empty():
