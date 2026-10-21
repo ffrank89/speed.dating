@@ -1,8 +1,10 @@
 class_name Microgame
 extends Control
 ## The base every microgame extends. A microgame is a short test (5 seconds by default)
-## played over the date when the player picks an option tagged [#microgame=name].
-## Passing counts as a hit, failing as a miss.
+## played on the phone over the date when the player picks an option tagged
+## [#microgame=name]. Passing counts as a hit, failing as a miss.
+## It fills the phone's screen (about 964 × 1414 pixels with the phone in
+## data/phone_style.tres), so build it tall, not wide.
 ##
 ## The shared frame (dim, banner, timer bar, NICE/OOPS stamp) is drawn for you by
 ## MicrogameHost. A microgame only has to:
@@ -102,6 +104,8 @@ func _notification(what: int) -> void:
 func _play_alone() -> void:
 	var host: MicrogameHost = load(HOST_SCENE).instantiate()
 	get_tree().root.add_child(host)
+	# On the host's phone, as in the game.
+	host.hold(self)
 	var passed: bool = await host.run(self, test_difficulty)
 	print("%s: %s at difficulty %.2f" % [name, "PASSED" if passed else "FAILED", test_difficulty])
 	if replay_after_test:

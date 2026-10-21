@@ -338,6 +338,12 @@ func origin_rect() -> Rect2:
 	return _tap_rect()
 
 
+## Default Origin: the bottom middle of the phone's screen (like the iPhone's dock),
+## whatever was clicked.
+func home_rect() -> Rect2:
+	return _default_rect()
+
+
 # Where an app opens from with no rectangle given: a recent click, or Default Origin.
 func _tap_rect() -> Rect2:
 	var recent := Time.get_ticks_msec() / 1000.0 - _last_tap_time <= style.tap_memory_seconds

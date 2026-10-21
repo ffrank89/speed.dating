@@ -1,25 +1,27 @@
 @tool
 class_name MicrogameStyle
 extends Resource
-## How the frame around every microgame looks and sounds: the dimmed date behind it,
-## the instruction banner, the timer bar, the pass/fail stamp and the keyboard pointer.
+## How the frame around every microgame looks and sounds: the dimmed date behind the
+## phone, the instruction banner, the timer bar, the pass/fail stamp and the keyboard
+## pointer. Microgames play on the phone (data/phone_style.tres: its size, how it comes
+## up and goes down).
 ## One shared file: data/microgame_style.tres. Hover any setting to see what it does.
 ##
-## Where each part sits on screen is set in the scene scenes/Microgames/MicrogameHost.tscn
-## (click Banner, TimerBar or Stamp there and move it). Each microgame sets its own banner
+## Where each part sits on the phone is set in the scene scenes/Microgames/MicrogameHost.tscn
+## (PhoneScreen → Phone → Body → Screen: click Banner, TimerBar or Stamp and move it). Each microgame sets its own banner
 ## words and length. Full guide: docs/guides/making-a-microgame.md
 
 @export_group("Opening")
-## Open microgames like an iPhone app: the picked option grows into the microgame, and
-## it shrinks back afterwards (the same animation as the calendar and the dating app;
-## its feel is in data/app_transition_style.tres, its icon in the microgame's App).
-## Off = a plain fade.
+## Once the phone is up, open the microgame on it like an iPhone app, and shrink it back
+## afterwards (the same animation as the calendar and the dating app; its feel is in
+## data/app_transition_style.tres, its icon in the microgame's App). Off = a plain fade.
 @export var open_as_app: bool = true
-## Only used with Open As App off: seconds the dim and the microgame take to fade in and out.
+## Only used with Open As App off: seconds the microgame takes to fade in and out on the phone.
 @export_range(0.0, 2.0, 0.05) var fade_seconds: float = 0.2
 
 @export_group("Dim")
-## Colour laid over the date while a microgame plays. Lower the A (alpha) to see more of the date.
+## Colour laid over the date while the phone is up for a microgame. Lower the A (alpha)
+## to see more of the date.
 @export var dim_color: Color = Color(0.03, 0.02, 0.06, 0.72)
 
 @export_group("Banner")
@@ -28,7 +30,7 @@ extends Resource
 @export_range(0.0, 3.0, 0.05) var banner_seconds: float = 0.8
 ## Leave empty to use Godot's default font.
 @export var banner_font: Font
-@export_range(8, 400) var banner_font_size: int = 150
+@export_range(8, 400) var banner_font_size: int = 120
 @export var banner_text_color: Color = Color.WHITE
 ## Outline around each letter. 0 = none.
 @export_range(0, 60) var banner_outline_width: int = 28
@@ -68,7 +70,7 @@ extends Resource
 @export var fail_color: Color = Color("#ff5a5a")
 ## Leave empty to use the banner font.
 @export var stamp_font: Font
-@export_range(8, 600) var stamp_font_size: int = 240
+@export_range(8, 600) var stamp_font_size: int = 200
 @export_range(0, 60) var stamp_outline_width: int = 32
 @export var stamp_outline_color: Color = Color.WHITE
 ## Optional: pictures to show instead of the words.

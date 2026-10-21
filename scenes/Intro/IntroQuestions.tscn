@@ -1,66 +1,73 @@
-[gd_scene load_steps=4 format=3 uid="uid://efp3ydwobkem"]
+[gd_scene load_steps=3 format=3 uid="uid://efp3ydwobkem"]
 
 [ext_resource type="Script" uid="uid://c0osn8ak6ofih" path="res://scenes/Intro/intro_questions.gd" id="1_72tvp"]
-[ext_resource type="PackedScene" uid="uid://dshri7i831rjb" path="res://spritebackground.tscn" id="2_isxcp"]
-[ext_resource type="PackedScene" uid="uid://qit272pittup" path="res://image_scenes/split_ends_ui/sprite2/split_ends_sprite.tscn" id="2_wnd8f"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
 
 [node name="IntroQuestions" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_72tvp")
 
-[node name="Background2" parent="." instance=ExtResource("2_isxcp")]
+[node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
+unique_name_in_owner = true
 layout_mode = 1
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 56
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 56
+theme_override_constants/margin_bottom = 30
+
+[node name="Column" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin"]
 layout_mode = 2
-offset_top = 31.0
-offset_right = 97.0
-offset_bottom = 31.0
+mouse_filter = 2
+theme_override_constants/separation = 24
 
-[node name="TitleLabel" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="ProgressBar" type="ProgressBar" parent="."]
-layout_mode = 0
-offset_right = 4.0
-offset_bottom = 27.0
-
-[node name="QuestionContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="QuestionLabel" type="Label" parent="QuestionContainer"]
+[node name="TitleLabel" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Your Results"
+text = "Your Profile"
 
-[node name="OptionsContainer" type="VBoxContainer" parent="QuestionContainer"]
+[node name="Hint" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
+text = "Debug: set your stats"
+autowrap_mode = 3
 
-[node name="StatsInputContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="FinalScreen" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 66.0
-
-[node name="ResultLabel" type="Label" parent="FinalScreen"]
+[node name="StatsInputContainer" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/separation = 30
 
-[node name="StartDatingButton" type="Button" parent="FinalScreen"]
+[node name="Spacer" type="Control" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
 layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
 
-[node name="ResultTitle" type="Label" parent="FinalScreen"]
+[node name="RandomizeButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Randomize Stats"
 
-[node name="StatsContainer" type="VBoxContainer" parent="FinalScreen"]
+[node name="StartDatingButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Start Dating!"
 
-[node name="SplitEndsSpriteContainer" parent="." instance=ExtResource("2_wnd8f")]
-layout_mode = 0
+[editable path="PhoneScreen"]

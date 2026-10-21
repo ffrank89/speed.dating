@@ -1,13 +1,15 @@
 class_name MicrogameHost
 extends CanvasLayer
-## Plays microgames over the date, inside the shared frame: opens the microgame like an
-## iPhone app (AppLauncher, from the option the player picked), shows its banner
-## ("LIGHT IT!"), runs the timer bar, freezes it on a win or loss, stamps NICE/OOPS,
-## then closes it back into its icon.
+## Plays microgames on the player's phone, over the date: the phone comes up (the date
+## dims behind it), the microgame opens on it like an iPhone app (AppLauncher), shows its
+## banner ("LIGHT IT!"), runs the timer bar, freezes it on a win or loss, stamps
+## NICE/OOPS, closes back into its icon, and the phone goes back down.
 ##
-## Its look and sounds come from Style (data/microgame_style.tres). Where the banner,
-## timer bar and stamp sit is set in this scene: click them and move them.
-## From code: var passed: bool = await host.play("light_cigarette", difficulty, {}, from_rect)
+## Its look and sounds come from Style (data/microgame_style.tres); the phone and how it
+## comes up are data/phone_style.tres. Where the banner, timer bar and stamp sit is set
+## in this scene (PhoneScreen → Phone → Body → Screen): click them and move them.
+## A microgame fills the phone's screen (GameSlot).
+## From code: var passed: bool = await host.play("light_cigarette", difficulty)
 ## Full guide: docs/guides/making-a-microgame.md
 
 ## Sent when a microgame's timer starts, and when it's won or lost.
@@ -29,15 +31,17 @@ var _low := false
 var _next_tick := 0
 var _pointer_from_keys := false
 
-@onready var dim: ColorRect = $Dim
-@onready var game_slot: Control = $GameSlot
-@onready var timer_bar: Panel = $TimerBar
-@onready var timer_fill: Panel = $TimerBar/Fill
-@onready var banner: PanelContainer = $Banner
-@onready var banner_text: Label = $Banner/Text
-@onready var stamp: Control = $Stamp
-@onready var stamp_image: TextureRect = $Stamp/Image
-@onready var stamp_text: Label = $Stamp/Text
+## The phone the microgame plays on.
+@onready var phone_screen: PhoneScreen = %PhoneScreen
+## Where the microgame goes: the phone's screen.
+@onready var game_slot: Control = %GameSlot
+@onready var timer_bar: Panel = %TimerBar
+@onready var timer_fill: Panel = %Fill
+@onready var banner: PanelContainer = %Banner
+@onready var banner_text: Label = %BannerText
+@onready var stamp: Control = %Stamp
+@onready var stamp_image: TextureRect = %StampImage
+@onready var stamp_text: Label = %StampText
 @onready var pointer_marker: Panel = $PointerMarker
 @onready var pointer_image: TextureRect = $PointerMarker/Image
 @onready var sound: AudioStreamPlayer = $Sound
@@ -48,7 +52,7 @@ func _ready() -> void:
 		style = MicrogameStyle.new()
 	_apply_style()
 	_hide_frame()
-	dim.visible = false
+	phone_screen.visible = false
 
 
 ## True from the moment play() starts until the date is back (stage hazards freeze meanwhile).
@@ -61,11 +65,9 @@ func has_game(game_name: String) -> bool:
 	return library != null and library.has_game(game_name)
 
 
-## Plays the named microgame over the date and returns whether the player passed.
-## Use with await. An unknown name counts as a fail (with a warning).
-## `from` = where it opens from and closes back into, in screen pixels (e.g. the
-## picked option). Empty = where the player last clicked.
-func play(game_name: String, difficulty: float, modifiers: Dictionary = {}, from := Rect2()) -> bool:
+## Plays the named microgame on the phone over the date and returns whether the player
+## passed. Use with await. An unknown name counts as a fail (with a warning).
+func play(game_name: String, difficulty: float, modifiers: Dictionary = {}) -> bool:
 	if not has_game(game_name):
 		push_warning("MicrogameHost: no microgame named \"%s\" in data/microgames.tres." % game_name)
 		return false
@@ -78,38 +80,49 @@ func play(game_name: String, difficulty: float, modifiers: Dictionary = {}, from
 	game_slot.add_child(game)
 	_active = true
 
+	# Phone up, then the microgame opens on it from the bottom of its screen.
+	await phone_screen.raise()
+	var home: Rect2 = AppLauncher.home_rect()
 	var show_game := func() -> void:
-		dim.visible = true
-		dim.modulate.a = 1.0
 		game.visible = true
 		game.modulate.a = 1.0
 	if style.open_as_app:
-		await AppLauncher.open(app, show_game, from)
+		await AppLauncher.open(app, show_game, home)
 	else:
 		show_game.call()
-		dim.modulate.a = 0.0
 		game.modulate.a = 0.0
-		var fade_in := create_tween().set_parallel()
-		fade_in.tween_property(dim, "modulate:a", 1.0, style.fade_seconds)
+		var fade_in := create_tween()
 		fade_in.tween_property(game, "modulate:a", 1.0, style.fade_seconds)
+		await fade_in.finished
 
 	var passed := await run(game, difficulty, modifiers)
 
 	var hide_game := func() -> void:
 		game.visible = false
-		dim.visible = false
 		_hide_frame()
 	if style.open_as_app:
-		await AppLauncher.close(app, hide_game, from)
+		await AppLauncher.close(app, hide_game, home)
 	else:
 		var fade_out := create_tween().set_parallel()
-		for part: CanvasItem in [dim, game, stamp, timer_bar]:
+		for part: CanvasItem in [game, stamp, timer_bar]:
 			fade_out.tween_property(part, "modulate:a", 0.0, style.fade_seconds)
 		await fade_out.finished
 		hide_game.call()
+	# Phone down: back to the date.
+	await phone_screen.lower()
 	game.queue_free()
 	_active = false
 	return passed
+
+
+## Puts a microgame that's on its own (F6) on this host's phone, up and in place, with
+## your room behind it.
+func hold(game: Microgame) -> void:
+	phone_screen.behind = PhoneScreen.Behind.ROOM
+	phone_screen.apply_style()
+	phone_screen.show_up()
+	game.reparent(game_slot, false)
+	game.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 ## Runs a microgame that's already on screen: banner, timer, stamp. Returns whether
@@ -223,7 +236,8 @@ func _show_stamp(passed: bool) -> void:
 
 
 func _apply_style() -> void:
-	dim.color = style.dim_color
+	# Over the date: the microgame's own dim (Style → Dim), not the phone's.
+	phone_screen.dim.color = style.dim_color
 
 	var banner_box := style.make_box(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0, style.banner_image, style.banner_image_corner_size)
 	banner_box.set_content_margin_all(style.banner_padding)

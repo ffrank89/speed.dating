@@ -291,9 +291,8 @@ func _pick(index: int) -> void:
 	var result: DateScorer.Result
 	if _games[index]:
 		# The microgame replaces the roll: passing is a hit, failing a miss.
-		# It opens like an app from the picked bubble, and closes back into it.
-		var from := _bubbles[index].get_global_rect()
-		var passed: bool = await microgame_host.play(option.microgame, _scorer.difficulty_of(option), {}, from)
+		# It plays on the phone, which comes up over the date.
+		var passed: bool = await microgame_host.play(option.microgame, _scorer.difficulty_of(option))
 		result = _scorer.resolve_microgame(option, passed)
 	else:
 		result = _scorer.resolve(option)
