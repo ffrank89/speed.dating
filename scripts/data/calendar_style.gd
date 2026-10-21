@@ -34,11 +34,6 @@ extends Resource
 @export var upcoming_text: String = "Upcoming"
 ## On a day too far ahead to see.
 @export var hidden_text: String = "Can't see that far ahead"
-## The button on each of today's choices.
-@export var pick_text: String = "Pick"
-## The calendar's buttons that open your other apps (C and P do the same).
-@export var contacts_button_text: String = "Contacts"
-@export var profile_button_text: String = "Profile"
 ## The button that opens the whole month, and closes it again.
 @export var expand_text: String = "Month ▾"
 @export var collapse_text: String = "Days ▴"
@@ -90,8 +85,6 @@ extends Resource
 @export var show_offers: bool = true
 ## The text that pops up when the mouse rests on a day (what it offers).
 @export var show_tooltips: bool = true
-## The Contacts and Profile buttons at the top.
-@export var show_app_buttons: bool = true
 ## "6 days to the boss" above the days.
 @export var show_days_left: bool = true
 ## The "See the whole month" button.
@@ -149,19 +142,17 @@ extends Resource
 @export_group("Today's Choices")
 ## The bubbles on today's card, side by side.
 ## Size of each choice's picture.
-@export_range(16, 400) var choice_icon_size: int = 130
+@export_range(16, 400) var choice_icon_size: int = 160
 ## Size of each choice's title.
 @export_range(8, 200) var choice_title_size: int = 40
 ## Size of the lines under it (how many days, what it does).
 @export_range(8, 200) var choice_detail_size: int = 26
-## Size of the Pick button's word.
-@export_range(8, 200) var pick_size: int = 34
 ## Space inside each choice's panel, in pixels.
 @export_range(0, 100) var choice_padding: int = 16
 ## Space between the choices, in pixels.
 @export_range(0, 100) var choice_gap: int = 16
-## Show the 1, 2, 3 key next to each choice.
-@export var show_keys: bool = true
+## Size of the Month button's word.
+@export_range(8, 200) var button_size: int = 34
 
 @export_group("Sounds")
 ## The mouse moving onto a choice.

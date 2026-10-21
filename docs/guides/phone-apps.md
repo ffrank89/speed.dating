@@ -16,6 +16,12 @@ It's one shared animation (`AppLauncher`), used by:
 | A microgame (once the phone is up over the date) | the microgame's **App**, or `data/apps/microgame.tres` | The bottom of the phone's screen, and closes back into it |
 | Your **Contacts** (press **C** on the calendar) | `data/apps/contacts.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
 
+**Switching between open apps** (Contacts and Profile over the calendar,
+with C and P) looks like the iPhone's app switcher instead: the screen
+shrinks to a card and the next app's card slides in and grows
+([the-phone.md](the-phone.md) → Your apps; settings: **Switching Apps**
+below).
+
 Going into **real life** isn't an app: a date starts with **phone down**
 (the phone drops away and the date is there), and the end of a date brings
 the **phone up** with her card on it ([the-phone.md](the-phone.md)).
@@ -57,6 +63,7 @@ Square icons work best; the corners are rounded for you.
 | Closing | The same for shrinking back |
 | Icon | The size of the icon when nothing was tapped, how rounded icons are (0.225 ≈ iPhone), how long a click is remembered, and **Default Origin**, where apps open from after a key press (bottom middle, like the dock) |
 | Screen | **Open Into Phone** (on): apps open inside the phone's screen (**Phone**: `data/phone_style.tres`), with its rounded corners, and Default Origin is inside the phone. Off: apps fill the whole screen minus the insets (and **Screen Corner**). **Device Frame**: optional art drawn over everything while apps open and close (3000 × 1700); with the phone, use the phone's own **Phone Art** instead. |
+| Switching Apps | Contacts and Profile switching in like the app switcher: on/off, card size and spacing, the seconds to shrink, slide and grow, the colour behind the cards, the icon and name above each card, the sound |
 | Behind | How much what's behind zooms (1.08; inside the phone, just the phone's screen) and the colour it dims to |
 | Sounds | The default open and close sounds (Kenney Interface Sounds) |
 

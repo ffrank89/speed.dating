@@ -296,6 +296,11 @@ func _screenshot() -> Texture2D:
 	return ImageTexture.create_from_image(image) if image else null
 
 
+## A picture of what's on screen now, inside `rect` (screen pixels). Use with await.
+func capture_rect(rect: Rect2) -> Texture2D:
+	return _crop(await _screenshot(), rect)
+
+
 # Just the part of `shot` inside `rect` (screen pixels).
 func _crop(shot: Texture2D, rect: Rect2) -> Texture2D:
 	if not shot:

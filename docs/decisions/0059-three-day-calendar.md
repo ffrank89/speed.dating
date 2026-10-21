@@ -43,3 +43,7 @@ phone sideways for the calendar; stats in the calendar's header.
 A chunky or pixel font is chosen (the player's style → **Font**), the
 player's style grows to cover more of the player's things (their option
 bubbles, the phone), or Profile needs more than the four attributes.
+
+## Note (2026-10-21)
+
+The Contacts and Profile buttons and the Pick buttons are gone: C and P switch apps like the iPhone's app switcher, and choices are plain boxes ([0060](0060-switching-apps.md)).

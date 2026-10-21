@@ -1,12 +1,12 @@
 class_name ContactsApp
-extends CanvasLayer
+extends PhoneOverlayApp
 ## Your party, as the Contacts on your phone: every girl who gave you her number is
-## saved here. Press C (the open_contacts action) and it opens inside the phone like an
-## iPhone app (data/apps/contacts.tres), growing from the bottom of the phone's screen
-## (or a click from a moment ago).
+## saved here. Press C (the open_contacts action) and the phone switches to it, like
+## moving between open apps on an iPhone (data/app_transition_style.tres → Switching
+## Apps; its icon and name: data/apps/contacts.tres).
 ## Click a girl to open her contact (her card as she filled it in on the date: what your
 ## hearts unlocked, her number and address); "‹ Contacts" goes back. C again, Escape or
-## the phone's home bar closes it back into where it came from.
+## the phone's home bar switches back.
 ##
 ## C works on any screen that has this scene in it. For now that's only the calendar.
 ##
@@ -19,14 +19,7 @@ extends CanvasLayer
 
 ## A girl's contact was opened.
 signal contact_opened(member: PartyMember)
-## Contacts closed.
-signal closed
 
-## The key that opens and closes Contacts: an action in Project Settings → Input Map
-## (open_contacts = C).
-@export var open_action: StringName = &"open_contacts"
-## The app it opens as (its icon and launch screen): a file name in data/apps/.
-@export var app_name: String = "contacts"
 ## How the list and the cards look and sound (data/contact_card_style.tres).
 @export var style: ContactCardStyle
 ## Which hearts unlock what on her card (data/date_rules.tres → Result).
@@ -41,12 +34,7 @@ signal closed
 var _members: Array[PartyMember] = []
 # Played on its own (F6): the test contacts, shown instead of your party.
 var _test_members: Array[PartyMember] = []
-var _busy := false
-# Where it opened from, so it closes back into the same place.
-var _from := Rect2()
 
-## The phone the list is on (its look: data/phone_style.tres).
-@onready var phone_screen: PhoneScreen = %PhoneScreen
 ## Everything on the list, inside the phone's screen.
 @onready var content: Control = %Margin
 @onready var title: Label = %Title
@@ -59,7 +47,6 @@ var _from := Rect2()
 
 
 func _ready() -> void:
-	add_to_group(&"phone_overlay")
 	if not style:
 		style = ContactCardStyle.new()
 	if not rules:
@@ -80,35 +67,26 @@ func _ready() -> void:
 		visible = false
 
 
-## Opens Contacts like an iPhone app inside the phone (Style → Open As App), or brings
-## the phone up with it. Use with await to wait for it.
-func open() -> void:
-	if visible or _busy or AppLauncher.is_busy() or _other_app_open():
-		return
-	_busy = true
-	if style.open_as_app:
-		_from = AppLauncher.origin_rect()
-		await AppLauncher.open(app_name, show_list, _from)
-	else:
-		show_list()
-		await phone_screen.raise()
-	_busy = false
+func _show_now() -> void:
+	show_list()
 
 
-## Closes Contacts (and her card, if it's open) back into where it opened from, or puts
-## the phone back down.
-func close() -> void:
-	if not visible or _busy or AppLauncher.is_busy():
-		return
-	_busy = true
-	if style.open_as_app:
-		await AppLauncher.close(app_name, hide_list, _from)
-	else:
-		card.visible = false
-		await phone_screen.lower()
-		hide_list()
-	_busy = false
-	closed.emit()
+func _hide_now() -> void:
+	hide_list()
+
+
+# Her card goes away first, so it's the list that switches back.
+func _before_close() -> void:
+	card.visible = false
+
+
+func _open_as_app() -> bool:
+	return style.open_as_app
+
+
+# Escape on her card goes back to the list (the card handles it).
+func _escape_closes() -> bool:
+	return not card.visible
 
 
 ## Shows the list at once, without the open animation. `members` = who's in it;
@@ -293,27 +271,6 @@ func _slide(opening: bool) -> void:
 	card.content.position.x = 0.0
 	card.phone_screen.modulate.a = 1.0
 	_busy = false
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if InputMap.has_action(open_action) and event.is_action_pressed(open_action):
-		get_viewport().set_input_as_handled()
-		if visible:
-			close()
-		else:
-			open()
-	# Escape on her card goes back (the card handles it); on the list it slides it away.
-	elif visible and not card.visible and event.is_action_pressed("ui_cancel"):
-		get_viewport().set_input_as_handled()
-		close()
-
-
-# Another of your apps (Profile) is already open over this screen.
-func _other_app_open() -> bool:
-	for app in get_tree().get_nodes_in_group(&"phone_overlay"):
-		if app != self and app.visible:
-			return true
-	return false
 
 
 func _font(label: Label, font: Font, font_size: int, color: Color) -> void:

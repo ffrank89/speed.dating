@@ -9,8 +9,7 @@ like the blinds in Balatro: **three days at a time**, stacked.
 ```
 ┌───────────────────────────────┐
 │ Calendar                      │
-│ 6 days to the boss            │
-│ [Contacts] [Profile] [Month ▾]│
+│ 6 days to the boss   [Month ▾]│
 │┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓│  ← today (blue border)
 │┃ MON · TODAY                 ┃│
 │┃ ┌───────┐┌───────┐┌───────┐ ┃│
@@ -18,7 +17,6 @@ like the blinds in Balatro: **three days at a time**, stacked.
 │┃ │ Date  ││ Train ││ Rest  │ ┃│
 │┃ │2 days ││ 1 day ││ 1 day │ ┃│
 │┃ │Swipe..││Cult+5 ││Nothin.│ ┃│
-│┃ │1 [Pick]│2 [Pick]│3 [Pick]┃│
 │┃ └───────┘└───────┘└───────┘ ┃│
 │┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛│
 │┏ TUE  Upcoming ━━━━━━━━━━━━━━┓│  ← coming up (gold, dimmed)
@@ -30,9 +28,10 @@ like the blinds in Balatro: **three days at a time**, stacked.
 └───────────────────────────────┘
 ```
 
-- **Today's card** is on top, with its 2-3 choices side by side: a big
-  picture, the title, how many days it takes, what it does, and a **Pick**
-  button. Click Pick (or the bubble, or press **1**, **2** or **3**):
+- **Today's card** is on top, with its 2-3 choices side by side, each a box
+  with a big picture, the title, how many days it takes and what it does.
+  The box under the mouse lights up; click it to pick it (the **1**, **2**
+  and **3** keys work too, left to right):
   - **Date** (2 days): opens the dating app on the phone. After the date
     you're back here, two days later.
   - **Train** (1 day): raises an attribute by 5, with a line in the
@@ -42,18 +41,20 @@ like the blinds in Balatro: **three days at a time**, stacked.
     come later.
   - **Boss** (the last day): for now a line, then the next chapter starts.
   A choice that doesn't fit before the boss day (a 2-day date on the day
-  before it) says **Not enough days left** and its Pick is greyed out.
+  before it) is faded and says **Not enough days left**.
 - **The next two days** are dimmed and marked **Upcoming**, with little
   pictures of what they'll offer. When the boss is one of them, its card is
   red. A day past this chapter shows an **X**: **Can't see that far ahead**.
-- After a day passes, the cards slide up into place.
+- After a day passes, the new cards fade in, one after another.
 - Each card's **border and name tab** say what the day is: blue for today,
   gold for coming up, red for the boss, grey for an X.
 - **Month ▾** swaps the cards for the whole month, small, four weeks of it
   (gone days faded, every day past this chapter an X). Escape or **Days ▴**
   closes it.
-- **Contacts** (or **C**) opens your [Contacts](contacts.md); **Profile**
-  (or **P**) opens your stats ([the-phone.md](the-phone.md) → Your apps).
+- **C** switches to your [Contacts](contacts.md) and **P** to your Profile
+  (your stats), like moving between open apps on an iPhone
+  ([the-phone.md](the-phone.md) → Your apps). A **debug note** in the top
+  left of the screen says so (it doesn't show in a finished build).
 
 The run starts here: after the intro ("Your Profile"), the calendar opens on
 the phone.
@@ -168,19 +169,20 @@ dialogue-box style, [dialogue-box.md](dialogue-box.md)).
 | Cards | **Card Color** (dark slate), **Panel Color** (the darker panels for each choice), **Corner**, **Border Width** (the coloured border), **Shadow Color** / **Shadow Offset** |
 | Day Colours | **Today Color** (blue), **Upcoming Color** (gold), **Boss Color** (red), **Hidden Color** (an X), **Past Color** (the month), how faded upcoming days are (**Upcoming Alpha**) and gone days in the month (**Past Alpha**) |
 | Words | **Font** (empty = the phone's font; drop a chunky or pixel font here for more of a Balatro feel), **Text Color**, **Faint Text Color** (the lines under titles, "Upcoming"), **Text Outline Width** / **Color** (a dark edge around the words) |
-| Buttons | **Pick Color** (orange), **Pick Text Color**, **Blocked Color** (a choice that doesn't fit), **App Button Color** (Contacts and Profile, red), **Month Button Color** (orange), **Button Corner**, **Button Depth** (the darker edge under each button) |
+| Choices | **Choice Hover Color** (orange: the border a choice gets under the mouse) and **Choice Hover Width** |
+| Buttons | **Month Button Color** (orange), **Button Text Color**, **Button Corner**, **Button Depth** (the darker edge under the button) |
 
 **The calendar's style:** `data/calendar_style.tres`:
 
 | Section | What's in it |
 |---|---|
-| Words | The title ("Calendar"), "{days} days to the boss" / "1 day to the boss", "Boss day", "CHAPTER {chapter}", "{weekday} · TODAY" and "{weekday}" (the tabs), "Upcoming", "Can't see that far ahead", "Pick", "Contacts", "Profile", "Month ▾" / "Days ▴", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run) |
+| Words | The title ("Calendar"), "{days} days to the boss" / "1 day to the boss", "Boss day", "CHAPTER {chapter}", "{weekday} · TODAY" and "{weekday}" (the tabs), "Upcoming", "Can't see that far ahead", "Month ▾" / "Days ▴", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run) |
 | Calendar Art | **Page Image**: the page the whole month sits on. **Day Image**: a picture for each day's card and each day in the month (replaces the player's card; its words use **Day Text Color**). Margins (pixels that never stretch) and **Page Padding** |
-| What Shows | **CHAPTER 1** next to the title (off), day numbers in the month (off), the **BOSS** caption in the month (off), weekdays, the offer pictures, the pop-up text over a day, the **Contacts / Profile** buttons, "days to the boss", the Month button, the line under each choice |
-| Three Days | **Upcoming Days** (2: how many days after today show), the gap between cards, the padding inside them, the tab size, the size of an upcoming day's pictures and words, the boss's picture size, how fast the cards slide in |
+| What Shows | **CHAPTER 1** next to the title (off), day numbers in the month (off), the **BOSS** caption in the month (off), weekdays, the offer pictures, the pop-up text over a day, "days to the boss", the Month button, the line under each choice |
+| Three Days | **Upcoming Days** (2: how many days after today show), the gap between cards, the padding inside them, the tab size, the size of an upcoming day's pictures and words, the boss's picture size, how fast the cards fade in |
 | Month | The whole month's squares: **Month Day Size** (106×150), the gap, weekday size, picture sizes, how much today grows, how fast the weeks pop in |
 | Days | The padding inside the month's page and each square, the number size, the **Hidden Mark** (the X, now the X art from `assets/x1/`) |
-| Today's Choices | Picture (130), title, detail and Pick sizes, the padding inside each bubble and the gap between them; show the 1/2/3 keys or not |
+| Today's Choices | Picture (160), title and detail sizes, the padding inside each box and the gap between them; the Month button's word size |
 | Sounds | Hover, pick, blocked, opening the month, a day passing. Kenney stand-ins for now. |
 
 **Where things sit:** four scenes, each with its parts as nodes you can
@@ -188,9 +190,9 @@ move, resize or reorder:
 
 | Scene | What's in it |
 |---|---|
-| `scenes/Calendar/calendar.tscn` | The calendar on the phone. Inside **PhoneScreen → Phone → Body → Screen → Margin → Column**: **TitleRow** (Title, ChapterLabel), **DaysLeft**, **Buttons** (Contacts, Profile, Month), **Cards** (the day cards go here), **MonthBox** (the whole month, in **Days**). The **DialogueBox** for the calendar's lines is at the bottom of the phone's screen. **ContactsApp** and **ProfileApp** are your other apps. |
+| `scenes/Calendar/calendar.tscn` | The calendar on the phone. Inside **PhoneScreen → Phone → Body → Screen → Margin → Column**: **TitleRow** (Title, ChapterLabel), **InfoRow** (DaysLeft and the Month button), **Cards** (the day cards go here), **MonthBox** (the whole month, in **Days**). The **DialogueBox** for the calendar's lines is at the bottom of the phone's screen. **ContactsApp** and **ProfileApp** are your other apps; **DebugNote** is the note in the top left. |
 | `scenes/Calendar/DayCard.tscn` | One day's card: **Tab** (weekday) and **Status** ("Upcoming"), **Choices** (today's bubbles go here), **Offers** (what a day coming up offers), **Boss** (picture, BOSS, what it does), **Hidden** (the X) |
-| `scenes/Calendar/DayChoice.tscn` | One of today's choices: **Icon**, **Title**, **Days**, **Detail**, and at the bottom **Key** (1/2/3) and **Pick** |
+| `scenes/Calendar/DayChoice.tscn` | One of today's choices: **Icon**, **Title**, **Days**, **Detail** |
 | `scenes/Calendar/DayBox.tscn` | A day in the whole month: **Tab** (weekday), **Box**, and in the box **Number**, **Offers**, **Picture** (what a gone day was spent on, or the boss), **BossLabel**, **HiddenMark** / **HiddenText** (the X) |
 
 **Your own design:** duplicate `DayCard.tscn`, `DayChoice.tscn` or
@@ -232,7 +234,7 @@ yet).
   instances `card_scene` (`DayCard.setup(style, player_style, number, day,
   today, boss_day, seen, font)`) for today and the next **Upcoming Days**,
   and fills today's `card.choices` with `choice_scene` (`DayChoice.setup(style,
-  player_style, action, key, fits, font)`); `_build_month()` instances
+  player_style, action, fits, font)`); `_build_month()` instances
   `month_day_scene` (`DayBox.setup(style, player_style, number, day, look,
   boss_day, font)`). Its phone is `phone_screen`; `contacts` and `profile`
   are the overlay apps. The date comes back with

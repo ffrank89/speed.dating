@@ -4,7 +4,7 @@ For writers, artists and designers. **No code needed.**
 
 Your party is the **Contacts** on your phone. Every girl who gave you her
 number on a date is saved there. That's who's in your party. Press **C** on
-the calendar (or its **Contacts** button) to see them.
+the calendar to see them.
 
 ```
 Date ends ─► she types her number into a New Contact (or doesn't)
@@ -12,8 +12,8 @@ Date ends ─► she types her number into a New Contact (or doesn't)
                ├─ got her number → saved in Contacts, with the hearts she gave you
                └─ failed date    → gone for the run
 
-Calendar ─► press C ─► Contacts opens on the phone like an iPhone app
-               │         (over the calendar app, the same phone)
+Calendar ─► press C ─► the phone switches to Contacts, like moving between
+               │         open apps on an iPhone
                │
                ├─ the list: A to Z under letter headers, each girl in her own box and
                │  font, her initials (or photo), a heart if she gave you one;
@@ -88,13 +88,12 @@ is her girl file → **Contact Card → Contact Photo** (empty = her initials).
 **Where things sit:** open `ContactsApp.tscn`: the list is under
 **PhoneScreen → Phone → Body → Screen → Margin → Column**.
 
-**How it opens:** the same open-app animation as a microgame and every
-other app. Its icon and launch screen are `data/apps/contacts.tres` (the
-Godot logo on the iPhone grey for now); the feel (timing, zoom, dim) is
-`data/app_transition_style.tres`. A key press has no click to grow from, so
-it grows from **Default Origin** there (the bottom middle of the phone's
-screen, like the iPhone's dock), or from where you clicked if that was a
-moment ago, and it closes back into the same spot. See
+**How it opens:** like moving between open apps on an iPhone (the app
+switcher: [the-phone.md](the-phone.md) → Your apps). Its icon and name above
+its card are `data/apps/contacts.tres` (the Godot logo for now). With
+**Switching Apps** off in `data/app_transition_style.tres`, it opens with the
+open-app animation instead, growing from **Default Origin** (the bottom
+middle of the phone's screen) and closing back into it. See
 [phone apps](phone-apps.md).
 
 ## Changing the key
@@ -132,12 +131,12 @@ synergy report.
   she's already there), `is_in_party(date_name)`, signal `party_changed`.
   The date scene calls `add_party_member` when she gives her number.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
-  layer 19): listens for `open_action` (`open_contacts`) in
-  `_unhandled_input`; `open()` / `close()` use `AppLauncher.open/close`
-  (from `AppLauncher.origin_rect()`, kept to close back into) or
-  `phone_screen.raise()` / `lower()`. Its phone is `phone_screen`
+  layer 19) is a `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`):
+  `open_action` (`open_contacts`), `open()` / `close()` (the app switcher,
+  `phone_screen.switch_in/out`; or `AppLauncher.open/close`, or
+  `phone_screen.raise()` / `lower()`). Its phone is `phone_screen`
   (`PhoneScreen`, Behind = Nothing; its `home_pressed` closes it),
   `show_list(members)` / `hide_list()` show it at once; signals
-  `contact_opened(member)`, `closed`. It holds a
+  `contact_opened(member)`, `opened`, `closed`. It holds a
   `ContactCard` (layer 20) and calls `ContactCard.show_saved(girl, hearts,
   rules)`, which sends `back_pressed`.
