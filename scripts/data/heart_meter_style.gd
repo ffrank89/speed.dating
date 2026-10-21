@@ -22,8 +22,13 @@ extends Resource
 @export_range(0.0, 3.0, 0.05) var fill_seconds: float = 0.6
 
 @export_group("Heart")
-## The heart in the middle of each ring.
+## The heart in the middle of each ring (still, and the grey one before it's won).
 @export var heart_image: Texture2D
+## Optional: an animated heart that plays once its ring is full (now the "heart"
+## reaction in data/reactions.tres). Empty = Heart Image stays still.
+@export var heart_animation: SpriteFrames
+## Which animation in Heart Animation. Empty = its first one.
+@export var heart_animation_name: String = "heart"
 ## The heart before its ring is full. Empty = Heart Image in grey.
 @export var empty_heart_image: Texture2D
 ## Size of the heart, in pixels.

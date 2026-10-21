@@ -21,3 +21,8 @@ offset_bottom = 113.0
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="HeartSprite" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+position = Vector2(75, 75)
