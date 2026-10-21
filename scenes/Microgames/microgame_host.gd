@@ -80,7 +80,9 @@ func play(game_name: String, difficulty: float, modifiers: Dictionary = {}) -> b
 	game_slot.add_child(game)
 	_active = true
 
-	# Phone up, then the microgame opens on it from the bottom of its screen.
+	# Phone up (the music gets quieter), then the microgame opens on it from the bottom of
+	# its screen.
+	Music.quieter(true)
 	await phone_screen.raise()
 	var home: Rect2 = AppLauncher.home_rect()
 	var show_game := func() -> void:
@@ -108,7 +110,8 @@ func play(game_name: String, difficulty: float, modifiers: Dictionary = {}) -> b
 			fade_out.tween_property(part, "modulate:a", 0.0, style.fade_seconds)
 		await fade_out.finished
 		hide_game.call()
-	# Phone down: back to the date.
+	# Phone down: back to the date, and the music back up.
+	Music.quieter(false)
 	await phone_screen.lower()
 	game.queue_free()
 	_active = false

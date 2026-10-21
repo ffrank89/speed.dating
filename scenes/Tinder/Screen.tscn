@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://bebvepqudrn"]
+[gd_scene load_steps=8 format=3 uid="uid://bebvepqudrn"]
 
 [ext_resource type="Script" uid="uid://sygajrejivmv" path="res://scenes/Tinder/screen.gd" id="1_8no1u"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
 [ext_resource type="Resource" path="res://data/dating_app_style.tres" id="3_style"]
 [ext_resource type="Script" uid="uid://b8trp801kymm7" path="res://scenes/Tinder/icon_panel.gd" id="4_photo"]
+[ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
+[ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="5_split_ends"]
+[ext_resource type="Resource" path="res://data/girls/smokey.tres" id="6_smokey"]
+[ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="7_girl_data"]
 
 [node name="DatingApp" type="Control"]
 layout_mode = 3
@@ -15,6 +19,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_8no1u")
 style = ExtResource("3_style")
+girls = Array[ExtResource("7_girl_data")]([ExtResource("5_split_ends"), ExtResource("6_smokey")])
 
 [node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
 unique_name_in_owner = true
@@ -122,5 +127,8 @@ text = "Start Dating!"
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+
+[node name="MusicCue" parent="." instance=ExtResource("90_music")]
+track = "dating_app"
 
 [editable path="PhoneScreen"]

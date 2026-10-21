@@ -4,8 +4,8 @@ For writers, artists and designers. **No code needed.** This covers the
 player's choices on a date: how to write them, how they're scored, how to
 tune the numbers, and how to change how the option bubbles look, move and sound.
 
-See your changes the usual way: press **F5** (the test bench,
-`scenes/Dates/FirstDate/FirstDateTest.tscn`). Drag the attribute sliders
+See your changes the usual way: open the date test bench
+(`scenes/Dates/FirstDate/FirstDateTest.tscn`) and press **F6**. Drag the attribute sliders
 (top left) to see how the odds change. How the whole date is put together
 (opener, exchanges, closers) is in [the-full-date.md](the-full-date.md).
 

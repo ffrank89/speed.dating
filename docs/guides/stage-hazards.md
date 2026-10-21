@@ -21,7 +21,8 @@ a point. If you stop, it flies back to its path.
   picture of her room and her, so you can see your paths against the date.
   Press **S**, shoo it off, and it comes back a second later. The Output
   panel prints `CLEARED`.
-- **In the date:** press **F5** and answer one question. A second later the
+- **In the date:** press **F6** on the date test bench
+  (`scenes/Dates/FirstDate/FirstDateTest.tscn`) and answer one question. A second later the
   fly turns up. Press **S** and shoo it off: the score goes up by 1 and she
   shows a heart.
   The debug panel's **Stage hazards now** button brings it on at once.

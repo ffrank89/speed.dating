@@ -12,3 +12,8 @@ Third-party material in this project and its licence.
 
 Placeholder letter sounds in `assets/audio/voice/default/` were generated for
 this project and are meant to be replaced (see `docs/guides/replacing-placeholders.md`).
+
+**Not yet confirmed:** where these came from and their licence aren't
+recorded, so they can't ship until they are: the music loops in
+`assets/audio/loops/` (placeholders, see `docs/guides/music.md`), the option
+click `assets/audio/clicks/clickApr42025.ogg`, and `assets/sexpistols.png`.

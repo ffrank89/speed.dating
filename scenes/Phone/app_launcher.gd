@@ -18,7 +18,7 @@ extends CanvasLayer
 ##   AppLauncher.open_scene("calendar", "res://scenes/Calendar/calendar.tscn")
 ##   await AppLauncher.open(app, func(): show_my_overlay(), from_rect)
 ##   await AppLauncher.close(app, func(): hide_my_overlay(), to_rect)
-##   AppLauncher.phone_down("res://scenes/Dates/FirstDate/SplitEndsFirstDate.tscn")
+##   AppLauncher.phone_down("res://scenes/Dates/Date/Date.tscn")
 
 ## Sent when an open or close animation starts and ends.
 signal opening(app: AppInfo)
@@ -301,13 +301,16 @@ func capture_rect(rect: Rect2) -> Texture2D:
 	return _crop(await _screenshot(), rect)
 
 
-# Just the part of `shot` inside `rect` (screen pixels).
+# Just the part of `shot` inside `rect` (screen pixels). The picture can be smaller or
+# bigger than the screen's 3000 × 1700 when the window is scaled, so the rectangle is
+# scaled to match it.
 func _crop(shot: Texture2D, rect: Rect2) -> Texture2D:
 	if not shot:
 		return null
+	var to_picture := Vector2(shot.get_size()) / _screen_size()
 	var part := AtlasTexture.new()
 	part.atlas = shot
-	part.region = rect
+	part.region = Rect2(rect.position * to_picture, rect.size * to_picture)
 	return part
 
 

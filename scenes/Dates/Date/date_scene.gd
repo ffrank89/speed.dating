@@ -15,7 +15,7 @@ extends Control
 ## for the run if the date failed, and the game goes back to the calendar.
 ##
 ## The game opens this scene from the dating app, with the girl picked there. To test,
-## press F5: scenes/Dates/FirstDate/FirstDateTest.tscn wraps this with a debug panel.
+## press F6 on scenes/Dates/FirstDate/FirstDateTest.tscn: it wraps this with a debug panel.
 ## Full guide: docs/guides/the-full-date.md
 
 ## Something to tell the tester (shown in the test bench's debug panel).
@@ -25,10 +25,10 @@ signal score_changed(text: String)
 ## The date is over and her contact card has closed.
 signal date_finished(result: DateResult)
 
-## Who the date is with. Empty = the girl picked in the dating app (her date character's
-## Girl Data Path), or Fallback Girl if she has no girl file yet.
+## Who the date is with. Empty = the girl picked in the dating app, or Fallback Girl if
+## no one was picked (the scene played on its own).
 @export var girl: GirlData
-## Used when the picked girl has no girl file yet.
+## Used when no one was picked in the dating app (e.g. F6 on this scene).
 @export var fallback_girl: GirlData
 ## The dialogue to play. Empty = the girl's First Date Dialogue.
 @export var dialogue: DialogueResource
@@ -216,23 +216,15 @@ func _end_date() -> void:
 # She gave you her number: she's saved in your contacts (your party), with her hearts.
 # A failed date means she's gone for the run.
 func _apply_to_run(result: DateResult) -> void:
-	var picked: DateCharacter = PlayerManager.current_date
-	if not picked:
-		return
 	if result.got_number:
-		PlayerManager.add_party_member(girl, result.affection, picked)
+		PlayerManager.add_party_member(girl, result.affection)
 	else:
-		PlayerManager.mark_gone(picked)
+		PlayerManager.mark_gone(girl)
 
 
-# The girl picked in the dating app, by her date character's Girl Data Path.
+# The girl picked in the dating app, or Fallback Girl if no one was.
 func _picked_girl() -> GirlData:
-	var picked: DateCharacter = PlayerManager.current_date
-	if picked and not picked.girl_data_path.is_empty():
-		return load(picked.girl_data_path)
-	if picked:
-		push_warning("Date: %s has no girl file yet; using Fallback Girl." % picked.name)
-	return fallback_girl
+	return PlayerManager.current_girl if PlayerManager.current_girl else fallback_girl
 
 
 # The player's attributes from their character, or 50 each if there isn't one yet.

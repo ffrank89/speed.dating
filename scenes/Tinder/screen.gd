@@ -1,25 +1,26 @@
 extends Control
 ## The dating app, on your phone: one girl's profile at a time (her picture, name, age,
-## bio and interests). Pass ("Ewwwwwww....") swipes her away for the next one; Start
-## Dating! puts the phone down and the date with her begins (phone down: real life).
-## Girls in your Contacts, and girls whose first date failed, aren't shown. When there's
-## no one left, Start goes back to the calendar.
+## bio and interests, from her girl file). Pass ("Ewwwwwww....") swipes her away for the
+## next one; Start Dating! puts the phone down and the date with her begins (phone down:
+## real life). Girls in your Contacts, girls whose first date failed, and girls with no
+## First Date Dialogue yet aren't shown. When there's no one left, Start goes back to the
+## calendar.
 ##
 ## The phone (screen, font, your room behind it) is data/phone_style.tres; the app's
 ## look, words and sounds are Style (data/dating_app_style.tres); move or resize the
 ## parts in this scene (PhoneScreen → Phone → Body → Screen → Margin).
-## Who's in it: Character Classes below. Full guide: docs/guides/dating-app.md
+## Who's in it: Girls below. Full guide: docs/guides/dating-app.md
 
 ## The app's look, words and sounds (data/dating_app_style.tres).
 @export var style: DatingAppStyle
+## Everyone on the app, in order: drag girl files (data/girls/) here.
+@export var girls: Array[GirlData] = []
+## The date that starts when you press Start Dating! (with the girl on screen).
+@export_file("*.tscn") var date_scene: String = "res://scenes/Dates/Date/Date.tscn"
 
-# Character classes to load profiles from
-var character_classes = [
-	SplitEndsCharacter,
-	SmokeyCharacter
-]
-var characters = []  # Will store loaded instances of character classes
-var current_profile_index = 0
+# The girls you can swipe on now.
+var _profiles: Array[GirlData] = []
+var _index := 0
 var _busy := false
 
 @onready var phone_screen: PhoneScreen = %PhoneScreen
@@ -39,7 +40,7 @@ var _busy := false
 func _ready():
 	if not style:
 		style = DatingAppStyle.new()
-	load_characters()
+	_load_profiles()
 	update_display()
 	start_button.pressed.connect(_on_start_pressed)
 	pass_button.pressed.connect(_on_next_pressed)
@@ -48,37 +49,34 @@ func _ready():
 	card.resized.connect(func() -> void: card.pivot_offset = card.size / 2.0)
 
 
-func load_characters():
-	# Create instances of each character class
-	for char_class in character_classes:
-		var character = char_class.create_default()
-		# A girl whose first date failed is gone for the run; one in your contacts is taken.
-		var player_manager = get_node("/root/PlayerManager")
-		if player_manager.is_gone(character.name) or player_manager.is_in_party(character.name):
-			continue
-		characters.append(character)
+func _load_profiles() -> void:
+	for girl in girls:
+		# No first date yet = nothing to play. In your contacts = taken. A failed first
+		# date = gone for the run.
+		if girl and girl.first_date_dialogue and not PlayerManager.is_in_party(girl) and not PlayerManager.is_gone(girl):
+			_profiles.append(girl)
 
 
 func update_display():
 	_apply_style()
-	if characters.is_empty():
+	if _profiles.is_empty():
 		# Everyone's taken or gone: Start goes back to the calendar instead.
 		card.visible = false
 		empty.visible = true
 		pass_button.visible = false
 		start_button.text = style.back_text
 		return
-	var character = characters[current_profile_index]
-	_apply_card_style(character)
-	photo.update_display(character.icon_path)
-	name_label.text = character.name + style.age_text.format({"age": character.age})
-	bio.text = character.bio
-	bio.visible = not character.bio.is_empty()
+	var girl := _profiles[_index]
+	_apply_card_style(girl)
+	photo.update_display(girl.profile_picture)
+	name_label.text = girl.display_name + style.age_text.format({"age": girl.age})
+	bio.text = girl.bio
+	bio.visible = not girl.bio.is_empty()
 	interests_title.text = style.interests_title
-	interests_title.visible = not character.interests.is_empty()
-	interests.text = "\n".join(character.interests.map(func(interest) -> String: return style.bullet + interest))
-	interests.visible = not character.interests.is_empty()
-	pass_button.disabled = characters.size() < 2
+	interests_title.visible = not girl.interests.is_empty()
+	interests.text = "\n".join(girl.interests.map(func(interest: String) -> String: return style.bullet + interest))
+	interests.visible = not girl.interests.is_empty()
+	pass_button.disabled = _profiles.size() < 2
 
 
 # The phone's font for the title and the empty message; the buttons from Style.
@@ -108,11 +106,8 @@ func _apply_style() -> void:
 
 
 # Her card in her own dialogue style (Use Her Style), or the plain card.
-func _apply_card_style(character) -> void:
-	var box_style: DialogueBoxStyle = null
-	if style.use_her_style:
-		var girl: GirlData = load(character.girl_data_path) if not character.girl_data_path.is_empty() else null
-		box_style = ContactCard.box_style_of(girl)
+func _apply_card_style(girl: GirlData) -> void:
+	var box_style: DialogueBoxStyle = ContactCard.box_style_of(girl) if style.use_her_style else null
 	var ui := phone_screen.style
 	var font: Font = box_style.text_font() if box_style else ui.ui_font
 	var ink: Color = box_style.text_color if box_style else style.card_text_color
@@ -153,7 +148,7 @@ func _font(label: Label, font: Font, font_size: int, color: Color) -> void:
 
 # Pass: her card swipes off to the left, turning, and the next one comes in.
 func _on_next_pressed():
-	if _busy or characters.size() < 2:
+	if _busy or _profiles.size() < 2:
 		return
 	_busy = true
 	_play(style.pass_sound)
@@ -162,7 +157,7 @@ func _on_next_pressed():
 	away.tween_property(card, "rotation_degrees", -style.swipe_tilt, style.swipe_seconds)
 	away.tween_property(card, "modulate:a", 0.0, style.swipe_seconds)
 	await away.finished
-	current_profile_index = (current_profile_index + 1) % characters.size()
+	_index = (_index + 1) % _profiles.size()
 	update_display()
 	# Wait a frame so the column has put the card back in place.
 	(card.get_parent() as Container).queue_sort()
@@ -179,15 +174,14 @@ func _on_next_pressed():
 func _on_start_pressed():
 	if _busy or AppLauncher.is_busy():
 		return
-	var player_manager = get_node("/root/PlayerManager")
-	if characters.is_empty():
-		AppLauncher.open_scene("calendar", player_manager.CALENDAR, start_button.get_global_rect())
+	if _profiles.is_empty():
+		AppLauncher.open_scene("calendar", PlayerManager.CALENDAR, start_button.get_global_rect())
 		return
 	_busy = true
 	_play(style.start_sound)
-	player_manager.select_date(characters[current_profile_index])
+	PlayerManager.select_girl(_profiles[_index])
 	# Phone down: real life, the date with her.
-	AppLauncher.phone_down(player_manager.current_date.first_date_path)
+	AppLauncher.phone_down(date_scene)
 
 
 func _play(stream: AudioStream) -> void:

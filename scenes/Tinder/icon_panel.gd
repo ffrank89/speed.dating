@@ -1,6 +1,6 @@
 extends Panel
-## Her picture on her dating profile: her animated sprite (her date character's icon_path,
-## a SpriteFrames file), in the middle, scaled to fit. The dating app sets its look
+## Her picture on her dating profile: her animated sprite (her girl file's Profile
+## Picture), in the middle, scaled to fit. The dating app sets its look
 ## (data/dating_app_style.tres → Profile Card).
 
 ## How much of the box her picture fills (1 = touches the edges).
@@ -18,14 +18,11 @@ func _ready() -> void:
 		add_child(animated_sprite)
 
 
-## Shows the SpriteFrames file at `frames_path`, playing.
-func update_display(frames_path: String) -> void:
-	if ResourceLoader.exists(frames_path):
-		animated_sprite.sprite_frames = load(frames_path)
+## Shows these frames, playing. Null = an empty box.
+func update_display(frames: SpriteFrames) -> void:
+	animated_sprite.sprite_frames = frames
+	if frames:
 		animated_sprite.play()
-	else:
-		animated_sprite.sprite_frames = null
-		push_error("Dating app: no picture at \"%s\"." % frames_path)
 
 
 func _process(_delta: float) -> void:

@@ -17,10 +17,11 @@
 - **Which actions appear on which days is generated per run**, so no two
   chapters play the same.
 - **Built (2026-10-20, [0055](../decisions/0055-calendar-revamp.md)):** the
-  calendar in its own dialogue-box style. The top box is this chapter (7
-  days, the boss on the last); "See the whole month" opens the rest, X'd out
-  past this chapter (Foresight Days, for a future "see the future"
-  ability). Each day offers 2–3 actions, picked at random per run; pick one
+  calendar in its own dialogue-box style, a chapter of 7 days with the boss
+  on the last; the whole month (28 days) is X'd out past this chapter
+  (Foresight Days, for a future "see the future" ability). Since
+  [0059](../decisions/0059-three-day-calendar.md) it's three day cards on the
+  phone, with the month behind the **Month ▾** button (below). Each day offers 2–3 actions, picked at random per run; pick one
   and it uses its days (date 2, training 1, rest 1). Training, rest and the
   boss are placeholders. Guide: [the-calendar.md](../guides/the-calendar.md).
 - **On the phone (2026-10-21, [0058](../decisions/0058-phone-and-real-life.md),
@@ -56,25 +57,25 @@
 
 | Thing                                                            | Notes                                                                                                                                                                           |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CalendarScene`                                                | **Rebuilt** (`scenes/Calendar/calendar.gd`): `DayBox` per day, `DayChoice` per choice, lines from `dialogue/calendar.dialogue`. Reads `RunCalendar` (on `PlayerManager` until `RunState` exists). |
+| `CalendarScene`                                                | **Rebuilt** (`scenes/Calendar/calendar.gd`): `DayCard` per day on the main view (today and the next two), `DayChoice` per choice, `DayBox` per day in the month, lines from `dialogue/calendar.dialogue`. Reads `RunCalendar` (on `PlayerManager` until `RunState` exists). |
 | `ScheduleGenerator.generate(chapter, rng) -> Array[DayAction]` | **Built as `RunCalendar`** (`scripts/calendar/run_calendar.gd`): each day draws Options Per Day actions by Weight, the boss on the last day (`data/calendar_rules.tres`). Rules like "at least 2 date days" still TBD. |
 | `DayAction` (`Resource`)                                     | **Built** (`scripts/data/day_action.gd`, files in `data/day_actions/`): made of optional parts, applied in order: attribute changes, a message (`dialogue/calendar.dialogue`), days used up or **Ends Chapter**, then a screen it **Opens** like an app. Date, train, rest and boss are mixes of these; follow-ups and events will be too. |
 | Day selection rule                                               | New Dates take 2 or more days. Training takes 1.  Breakups take 1 day but Breakups + New Date take as much as a New Date does. **Built:** each `DayAction` has **Days** (date 2, training 1); it must end before the boss day. Breakups TBD. |
-| `TinderScreen`                                                 | Exists (`scenes/Tinder`). Shows `GirlPool.offer(2–3)` with name, bio, interests, **tags**. Skip option.<br />Is a Phone App Screen. Overlays on top of the calendar. |
+| `TinderScreen`                                                 | **Built** as the dating app (`scenes/Tinder/Screen.tscn`, [dating-app.md](../guides/dating-app.md)): an app on the phone, one girl's profile at a time from her girl file (name, age, bio, interests, picture), Pass or Start. Who's on it is its **Girls** list for now; `GirlPool.offer(2–3)` and **tags** are still to come. |
 | `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, pulled up with **C** on the calendar: it opens on the phone like an app, over the calendar. Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
 | Training screen                                                  | TBD. For now a train action raises one attribute by its Amount (5) with a line from `dialogue/calendar.dialogue`; there's one action per attribute. |
 | Event pool                                                       | TBD. Random events and their rewards.                                                                                                                                           |
-| Month/chapter display                                            | **Built:** "CHAPTER n" on a name tab over the week (off by default); the whole calendar is 4 weeks (Calendar Days 28). `january.png` is no longer used. |
+| Month/chapter display                                            | **Built:** "CHAPTER n" next to the title (off by default); the **Month ▾** button swaps the day cards for the whole month, 4 weeks (Calendar Days 28). `january.png` is only the calendar app's icon now. |
 
 ## Art needed
 
 | Asset                                                                       | Used by                           | Status                                                                                   |
 | --------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------- |
-| Calendar boxes                                                              | `CalendarScene`, `DayBox`, `DayChoice` | No art needed: drawn from `data/dialogue_styles/calendar.tres` (a picture box works too). The old `january.png` page isn't used. |
+| Calendar boxes                                                              | `CalendarScene`, `DayCard`, `DayBox`, `DayChoice` | No art needed: drawn in the player's style (`data/player_style.tres`; **Calendar Art** in `data/calendar_style.tres` takes pictures). The old `january.png` page isn't used. |
 | Day action icons: date, train ×4, rest, boss (follow-up, event later) | Each file in `data/day_actions/` → **Icon** | Placeholders from our icons: love react (date), culturestat, lovestat (heart), sleepy, sword stat (boss); **Godot logo** for Intellect and Seduction training. |
-| "Day done" X                                                                | `DayButtonContainer`            | Exists (`x1`)                                                                          |
+| "Can't see that far" X                                                      | `DayCard`, `DayBox` (**Hidden Mark**) | Exists (`assets/x1/`)                                                                  |
 | Boss preview card                                                           | Calendar header from day 1        | TBD                                                                                      |
-| Tinder profile card + swipe UI                                              | `TinderScreen`                  | Exists (placeholder)                                                                     |
+| Dating-app profile card + swipe                                             | `TinderScreen` (the dating app) | Built; no art needed (her card is in her dialogue style). Her picture is her girl file's **Profile Picture**. |
 | Tag icons                                                                   | Tinder card, Contacts (her card)  | TBD (shared with[girls.md](girls.md))                                                     |
 | Lineup slots                                                                | `ContactsApp`                   | The list needs no art. Lineup slots TBD. |
 

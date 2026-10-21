@@ -25,16 +25,16 @@ one ring per heart.
 
 ## Try it
 
-- **Test bench:** press **F5** (or open `scenes/Dates/FirstDate/FirstDateTest.tscn`
-  and press **F6**). It plays a whole date with the debug sliders for the
+- **Test bench:** open `scenes/Dates/FirstDate/FirstDateTest.tscn` and press
+  **F6**. It plays a whole date with the debug sliders for the
   player's attributes. At the end it stays put instead of going to the
   calendar. **Restart** plays another, with a new draw.
   - **End date now** jumps straight to her contact card.
   - To play just one title, click the top node and type it in **Start Title**
     (e.g. `exchange_boat`). Empty = the whole date.
-  - **Dialogue** plays another file (e.g. `m3_test.dialogue`, with
-    **Start Title** `start`). Empty = her own first date.
-- **In the game:** calendar → a date day → the dating app → **Start**.
+  - **Dialogue** plays another .dialogue file. Empty = her own first date.
+- **In the game:** press **F5** (the whole game, from the intro): calendar
+  → a date day → the dating app → **Start**.
 
 ## Her first-date file
 
@@ -134,12 +134,13 @@ The top **Date** node's settings:
 | Setting | What it does |
 |---|---|
 | **Girl** | Who the date is with. Empty = the girl picked in the dating app. |
-| **Fallback Girl** | Used when the picked girl has no girl file yet (Smokey, for now, gets Split Ends). |
+| **Fallback Girl** | Used when no one was picked in the dating app (F6 on `Date.tscn`) |
 | **Dialogue** | Empty = her **First Date Dialogue** |
 | **Rules** | `data/date_rules.tres` |
 
-A girl's date character (`scripts/characters/girls/`) points to her girl
-file with **girl_data_path**. Smokey has none yet.
+The dating app picks the girl (her girl file). A girl only shows up there
+once she has a **First Date Dialogue**: Smokey has a girl file
+(`data/girls/smokey.tres`) but no first date yet, so she's hidden for now.
 
 ## Something's wrong
 
@@ -150,7 +151,7 @@ file with **girl_data_path**. Smokey has none yet.
 | The date never ends, or skips a part | A title is missing its `=> END`. |
 | No closer, straight to her card | That closer's title is missing; Godot prints which one. |
 | "No dialogue" in the debug panel | Set her girl file → **Dialogue → First Date Dialogue**. |
-| Smokey's date is Split Ends | She has no girl file yet (**Fallback Girl**). |
+| Smokey isn't on the dating app | She has no **First Date Dialogue** yet. |
 
 ## For programmers
 
@@ -163,10 +164,10 @@ file with **girl_data_path**. Smokey has none yet.
   `mark_gone()`, `date_finished(result)`, and
   `AppLauncher.open_scene("calendar", PlayerManager.CALENDAR)` when **Go To
   Calendar** is on.
-- The girl comes from `PlayerManager.current_date.girl_data_path`; the
+- The girl comes from `PlayerManager.current_girl` (set by the dating app); the
   player's attributes from `PlayerManager.player.skills` (50 each without
   a player).
 - `FirstDateTest` sets `girl`, `dialogue`, `only_title` and `attributes` on
   its Date (Auto Start and Go To Calendar off), then calls `begin()`.
-- Date music: `MusicManager` is switched off (all commented out), so dates
-  have no music loop yet.
+- Date music: the scene's **MusicCue** plays the `date` track
+  ([music.md](music.md)).

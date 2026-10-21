@@ -87,7 +87,7 @@ extends Resource
 @export var show_tooltips: bool = true
 ## "6 days to the boss" above the days.
 @export var show_days_left: bool = true
-## The "See the whole month" button.
+## The Month button ("Month ▾"), which swaps the day cards for the whole month.
 @export var show_expand_button: bool = true
 ## The line under each choice's title (its description and how many days).
 @export var show_details: bool = true
@@ -112,7 +112,7 @@ extends Resource
 @export_range(0.0, 2.0, 0.05) var slide_seconds: float = 0.35
 
 @export_group("Month")
-## The whole month, when "See the whole month" is open (scenes/Calendar/DayBox.tscn).
+## The whole month, when the Month button is open (scenes/Calendar/DayBox.tscn).
 ## Size of each day's box, in pixels.
 @export var month_day_size: Vector2 = Vector2(106, 150)
 ## Space between the days, in pixels.

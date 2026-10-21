@@ -1,5 +1,5 @@
 # Split Ends' first date.
-# TEST POOL: these are placeholder lines (some from m2_test) until the real pool is written.
+# TEST POOL: these are placeholder lines until the real pool is written.
 #
 # How a date plays (names and numbers: data/date_rules.tres → Flow):
 #   ~ opener                 always first
@@ -12,7 +12,7 @@
 #     ~ closer_hearts        1 heart or more
 #   then her contact card.
 # End every title with => END. Add as many exchanges as you like; the plan is 12,
-# 2-3 of them microgame ones. Option tags: see m2_test.dialogue and m3_test.dialogue.
+# 2-3 of them microgame ones. Option tags: see docs/guides/options-and-scoring.md.
 
 ~ opener
 

@@ -32,13 +32,14 @@
 |---|---|
 | `PlayerData.attributes: Dictionary[Attr, int]` | Clamped 0–100. |
 | `PlayerData.raise(a: Attr, amount: int)` | Only called through `RunState` so the signal fires. |
-| `PlayerPanel` (UI scene) | Shows attributes, perks, inventory. Exists today as `player_panel.gd`. Rewire to `RunState` signals. |
+| `PlayerPanel` (UI scene) | **Started as the Profile app** (P on the calendar, `scenes/Phone/Profile/ProfileApp.tscn`): your four attributes as bars. Perks and items: TBD. The old `player_panel.gd` was removed. |
 | Intro / starting stats | Today `IntroQuestions` sets stats (debug sets all to 100). TBD: keep the questionnaire, or random start, or pick a starting "archetype"? |
 | Attribute caps and starting values | TBD. Needs tuning with the date difficulty curve. |
 
-**Migrating:** `PlayerCharacter` (a `Node`) becomes `PlayerData` (a
-`Resource`). `get_skill_level` / `increase_skill` map to `RunState`
-calls.
+**Today:** `PlayerCharacter` (`scripts/characters/player_character.gd`, a
+small `RefCounted`: `name`, `skills`, `get_skill()`, `increase_skill()`),
+held by `PlayerManager.player`. Later it becomes `PlayerData` on
+`RunState`.
 
 ## Art needed
 
@@ -46,8 +47,8 @@ calls.
 |---|---|---|
 | Attribute icons ×4 (Culture, Intellect, Seduction, Heart) | `PlayerPanel`, dialogue option buttons (shows the check), Tinder unlock hints | Partly exists: `culture stat gif`, `lovestat gif`, others in `assets/` |
 | Attribute-up feedback (sparkle / number pop) | Calendar training result, `DateResult` summary | TBD |
-| Player panel frame | `PlayerPanel` | Exists (placeholder) |
-| Item icons | `InventoryUI`, item reactions in the date | Exists: `ItemIcon` scene + baggy/weed/cigs/lighter art |
+| Player panel frame | The Profile app | No art needed (the phone's look) |
+| Item icons | Items (TBD), item reactions in the date | Art exists: `drugs.png`, `weed.png`, `cig_gif`, `loghter.png`. The old inventory code was removed (2026-10-21) |
 | Player portrait? | `PlayerPanel` | TBD. Do we ever show the player? |
 
 ## Systems it's part of

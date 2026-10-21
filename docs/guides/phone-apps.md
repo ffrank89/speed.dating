@@ -14,7 +14,7 @@ It's one shared animation (`AppLauncher`), used by:
 | The calendar (after the intro, and after a date) | `data/apps/calendar.tres` | Where the player clicked, or the bottom of the phone's screen |
 | The dating app (a **Date** on the calendar) | `data/apps/dating_app.tres` | The Date choice (the app named in `data/day_actions/date.tres`) |
 | A microgame (once the phone is up over the date) | the microgame's **App**, or `data/apps/microgame.tres` | The bottom of the phone's screen, and closes back into it |
-| Your **Contacts** (press **C** on the calendar) | `data/apps/contacts.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
+| Your **Contacts** and **Profile** (**C** / **P** on the calendar), only when **Switching Apps** is off (below) | `data/apps/contacts.tres`, `data/apps/profile.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
 
 **Switching between open apps** (Contacts and Profile over the calendar,
 with C and P) looks like the iPhone's app switcher instead: the screen

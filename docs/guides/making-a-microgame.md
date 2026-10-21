@@ -44,7 +44,7 @@ The player's attribute against the option's `#check` sets the
 | `data/microgames.tres` | The list of microgames by name. A dialogue tag `[#microgame=name]` looks the name up here. |
 | `data/microgame_style.tres` | How the frame looks and sounds (no code). |
 | `data/date_rules.tres` → **Microgames** | How the player's attribute turns into difficulty. |
-| `dialogue/split_ends/first_date.dialogue` | Her first date. The `~ microgame_...` exchanges have a microgame option; 2 play per date ([the-full-date.md](the-full-date.md)). `m3_test.dialogue` has the older test lines. |
+| `dialogue/split_ends/first_date.dialogue` | Her first date. The `~ microgame_...` exchanges have a microgame option; 2 play per date ([the-full-date.md](the-full-date.md)). |
 
 ## Try the example first
 
@@ -56,7 +56,7 @@ The player's attribute against the option's `#check` sets the
 2. Click the top node (**TemplateMicrogame**). In the Inspector, change
    **Testing (F6) → Test Difficulty** to 0 and then 1, and press F6 again to
    feel the difference.
-3. Press **F5** to play a date and pick **"Catch the lighter she tosses
+3. Press **F6** on the date test bench (`scenes/Dates/FirstDate/FirstDateTest.tscn`) and pick **"Catch the lighter she tosses
    you."** when she says "Think fast!" The phone comes up over the date with
    the same microgame on it, and her reply depends on whether you caught it. To skip straight
    to it: open `FirstDateTest.tscn`, click the top node and set **Start
@@ -96,7 +96,7 @@ Click the top node. Under **Frame**:
 Click `data/microgames.tres` → **Games** → **Add Key/Value Pair** → type
 `light_cigarette` on the left → drag `LightCigarette.tscn` onto the right.
 
-That's the name the test dialogue already uses, so **"Light it for her."**
+That's the name her first date already uses, so **"Light it for her."**
 plays your microgame from now on (until now it rolled, with a warning in the
 Output panel).
 
@@ -178,7 +178,7 @@ meter before time runs out.** Pieces you'll want:
   fair at 1.
 - Try it with **only the keyboard** (arrows/WASD + Space) and with **only
   the mouse**.
-- **F5**: pick **"Light it for her."** when she asks for a light (or set
+- **F6** on the date test bench: pick **"Light it for her."** when she asks for a light (or set
   the test bench's **Start Title** to `microgame_light_it`). Drag the **Seduction**
   slider (top left) to change the difficulty: at 50 or more the player meets
   the requirement and gets the easiest version.

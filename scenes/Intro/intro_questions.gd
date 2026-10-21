@@ -128,21 +128,12 @@ func _on_randomize_pressed():
 
 
 func _on_start_dating_pressed():
-	# Get the PlayerManager singleton
-	var player_manager = get_node("/root/PlayerManager")
-
-	# Create a new player with custom stats
+	# A new player with the stats from the sliders.
 	var new_player = PlayerCharacter.new("Me!")
-
-	# Set the stats based on slider values
 	for stat in player_stats:
 		new_player.skills[stat] = player_stats[stat]
-
-	print("Debug mode - Player stats set to:", player_stats)
-
-	# Replace the player in PlayerManager
-	player_manager.player = new_player
+	PlayerManager.player = new_player
 
 	# The run starts on the calendar, opening on the phone (a date day opens the dating
 	# app from there).
-	AppLauncher.open_scene("calendar", player_manager.CALENDAR, start_button.get_global_rect())
+	AppLauncher.open_scene("calendar", PlayerManager.CALENDAR, start_button.get_global_rect())

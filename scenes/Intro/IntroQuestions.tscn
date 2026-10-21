@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://efp3ydwobkem"]
+[gd_scene load_steps=4 format=3 uid="uid://efp3ydwobkem"]
 
 [ext_resource type="Script" uid="uid://c0osn8ak6ofih" path="res://scenes/Intro/intro_questions.gd" id="1_72tvp"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
+[ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 
 [node name="IntroQuestions" type="Control"]
 layout_mode = 3
@@ -69,5 +70,8 @@ custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Start Dating!"
+
+[node name="MusicCue" parent="." instance=ExtResource("90_music")]
+track = "calendar"
 
 [editable path="PhoneScreen"]

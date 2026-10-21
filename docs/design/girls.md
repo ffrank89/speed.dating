@@ -39,7 +39,7 @@
 
 | Group | Fields | Read by |
 |---|---|---|
-| Identity | `id`, `display_name`, `age`, `bio`, `interests` | Tinder screen |
+| Identity | **Built:** `id`, `display_name`, `age`, `bio`, `interests`, `profile_picture: SpriteFrames` | The dating app |
 | Unlock | `unlock_requirement` (attribute or perk threshold, optional) | Tinder offer generator |
 | Full art | `poses: Dictionary[String, GirlPose]` (each: `image`, `scale`, `offset`, `flip`), `default_pose`, `date_background` | Date Scene (`GirlPortrait`) |
 | Pixel art | `battle_sprites: SpriteFrames` (idle, attack, hurt, knocked_out) | Party panel, Boss Scene |
@@ -51,8 +51,7 @@
 
 **`PartyMember` fields:** `girl: GirlData`, `affection: int (0–3)`,
 `current_hp`, `buffs: Array`, `follow_ups_done: int`. **Started**
-(`scripts/data/party_member.gd`): `girl`, `affection`, and `profile` (her
-dating-app entry). Each one is a contact in your phone's Contacts app
+(`scripts/data/party_member.gd`): `girl` and `affection`. Each one is a contact in your phone's Contacts app
 ([contacts.md](../guides/contacts.md)).
 
 | Function | Notes |
@@ -62,19 +61,21 @@ dating-app entry). Each one is a contact in your phone's Contacts app
 | `GirlPool.offer(count, run_state) -> Array[GirlData]` | Picks 2–3 random eligible girls: not in the party, not gone, unlock met. TBD where this lives (Calendar or its own script). |
 | Ability system | Not in the first build. Later: Super Auto Pets–style triggers (start of battle, when hurt, when ally faints…). |
 
-**Migrating:** `DateCharacter` (a `Node` with a subclass per girl, e.g.
-`SmokeyCharacter`) becomes `smokey.tres` / `split_ends.tres`. Today's
-`compatibility_weights` become `preferences`; `poses` and
-`first_date_background` move over directly; `max_turns` and
-`success_threshold` become `affection_thresholds` (and a shared turn count).
+**Done (2026-10-21, [0061](../decisions/0061-f5-music-and-clean-up.md)):**
+the old `DateCharacter` classes (one per girl) are gone. Everything about a
+girl is her girl file: `data/girls/split_ends.tres` and
+`data/girls/smokey.tres`. Her dating-app profile (age, bio, interests,
+**Profile Picture**) is in **Identity**; the dating app lists girl files in
+its **Girls**. Smokey has her profile, poses and background but no first
+date yet, so the dating app hides her.
 
 ## Art needed
 
 | Asset | Per girl | Used by | Status |
 |---|---|---|---|
-| Full-art poses | ~4–5 | `DatePresenter` changes pose each turn | Split Ends: 5+; Smokey: 4; girl 3: TBD |
+| Full-art poses | ~4–5 | `GirlPortrait`, changed by `[#pose=...]` in her lines | Split Ends: 7; Smokey: 4 (`assets/green_girl/`); girl 3: TBD |
 | Date background | 1+ | Date Scene | Some exist (`picnic_bg.jpg`, `bedroom1.png`, …) |
-| Profile picture | 1 | Tinder screen | TBD (could reuse a pose) |
+| Profile picture | 1 | The dating app (**Profile Picture**) | Split Ends and Smokey: their animated pixel sprites |
 | Pixel sprite: idle, attack, hurt, knocked out | 1 set | Boss Scene lineup, party panel | Split Ends and Smokey have one pixel sprite each, **no battle animations yet** |
 | Tag icons | per tag, shared | Tinder profile, party screen, synergy panel | TBD |
 | Type icons ×4 | shared | Tinder profile, party screen, boss preview | TBD (listed in [boss.md](boss.md)) |

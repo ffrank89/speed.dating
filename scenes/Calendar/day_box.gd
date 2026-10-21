@@ -1,6 +1,6 @@
 class_name DayBox
 extends Control
-## One day in the whole month ("See the whole month"): a small square in the player's
+## One day in the whole month (the Month button): a small square in the player's
 ## style (data/player_style.tres: its border colour says what the day is: today, coming
 ## up, the boss, gone, or too far ahead to see) with its weekday on a name tab and what's
 ## on it.

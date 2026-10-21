@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scenes/Dates/Date/date_scene.gd" id="1_date"]
 [ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="2_girl"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/Hazards/Fly/Fly.tscn" id="12_fly"]
 [ext_resource type="PackedScene" path="res://scenes/Results/ContactCard.tscn" id="13_card"]
 [ext_resource type="PackedScene" path="res://scenes/Dates/HeartMeter/HeartMeter.tscn" id="14_meter"]
+[ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 
 [node name="Date" type="Control"]
 layout_mode = 3
@@ -96,3 +97,6 @@ layout_mode = 1
 [node name="MicrogameHost" parent="." instance=ExtResource("10_microgames")]
 
 [node name="ContactCard" parent="." instance=ExtResource("13_card")]
+
+[node name="MusicCue" parent="." instance=ExtResource("90_music")]
+track = "date"

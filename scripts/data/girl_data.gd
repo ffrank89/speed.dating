@@ -11,11 +11,15 @@ extends Resource
 ## Her name as players see it, on her profile and her name plate.
 ## Dialogue lines must use exactly this name, e.g. "Split Ends: Hi!".
 @export var display_name: String
+## Shown after her name on her dating profile ("Split Ends, 24").
 @export var age: int = 0
 ## Her dating-profile bio.
 @export_multiline var bio: String
 ## Shown on her dating profile.
 @export var interests: Array[String] = []
+## Her picture on her dating profile: an animated sprite. Click it to edit its frames in
+## the SpriteFrames panel at the bottom of Godot.
+@export var profile_picture: SpriteFrames
 
 @export_group("Contact Card")
 ## What she types as her phone number when she gives it to you at the end of a date.

@@ -53,7 +53,7 @@
 | `HeartMeter` + `HeartRing` | **Built.** Top right of a date: one ring per heart (Affection Thresholds) filling with the score in her Meter Color; the grey heart turns to colour with a sound when a ring fills. `data/heart_meter_style.tres`. Guide: [heart-meter.md](../guides/heart-meter.md), decision [0056](../decisions/0056-heart-meter-and-closing-her-card.md). |
 | `ContactCard` (result screen) | **Built.** The date ends on an iPhone New Contact screen in her dialogue style: she types her name (❤️ on a great date), number and address, or types and deletes her name. Opens like an app (`data/apps/contacts.tres`). Guide: [result-screen.md](../guides/result-screen.md), decision [0052](../decisions/0052-result-is-her-contact-card.md). |
 | `GirlPortrait` | **Built.** `scenes/Dates/Portrait/girl_portrait.gd`. Shows a `GirlPose` with its own scale (from her feet), offset and flip. Together with `ReactionIcon` it replaced the old `DatePresenter` (removed). |
-| `DialogueHistory` | Exists (`scenes/Dates/BaseDate/dialogue_history.gd`), kept for the M4 scroll-back log. The old `DialogueOptionUI` / `DialogueDataUI` were removed: `OptionList` and `DialogueBox` replace them. |
+| `DialogueHistory` | TBD (the M4 scroll-back log). The old unused `dialogue_history.gd` was removed in the 2026-10-21 clean-up ([0061](../decisions/0061-f5-music-and-clean-up.md)); it's in the git history if it's wanted. `OptionList` and `DialogueBox` replaced the old `DialogueOptionUI` / `DialogueDataUI`. |
 | Dialogue Manager integration | **v3.10.5** (the Godot 4.4 version). Lines and options in `.dialogue` files. Tags: `[#pose=cig]`, `[#react=heart]` on her lines; `[#check=culture:40, #value=2, #microgame=light_cigarette]` on options. |
 | `DialogueBox` + `VoicePlayer` | **Built (M1).** `scenes/Dialogue/DialogueBox.tscn`. Typewriter via the addon's `DialogueLabel`; restyles per speaker from her `DialogueBoxStyle` (box colour/outline or a 9-slice picture, font, name plate, next arrow). `VoicePlayer` plays a letter sound on each `spoke` signal. `GirlVoice`: `letter_sounds_folder`, `pitch`, `pitch_variance`, `seconds_per_letter`, `letters_per_sound`, `volume_db`. Guide: [dialogue-box.md](../guides/dialogue-box.md). |
 | Microgame framework | **Built (M3 setup).** Opens like an iPhone app from the picked bubble ([0049](../decisions/0049-open-like-an-iphone-app.md)). `Microgame` base (`scenes/Microgames/microgame.gd`), `MicrogameHost` overlay (dim, banner, timer bar, NICE/OOPS stamp; look in `data/microgame_style.tres`), library `data/microgames.tres` (name → scene), `microgame_press` / `microgame_up…right` input actions and a keyboard-steerable `pointer`, F6 plays one alone on a loop. `OptionList` plays an option's microgame instead of the roll; `DateScorer.difficulty_of()` / `resolve_microgame()`. Template: `scenes/Microgames/_template/` (CATCH IT!). Guide: [making-a-microgame.md](../guides/making-a-microgame.md). |
@@ -82,10 +82,10 @@ the timer).
 
 | Asset | Used by | Status |
 |---|---|---|
-| Girl poses and date backgrounds | `DatePresenter` | See [girls.md](girls.md) |
-| Reaction icons (exclamation, question, heart, anger…) | `DatePresenter.show_reaction` | Some exist: `exclamation point gif`, `question mark gif`, `anger icon` |
-| Option buttons with attribute icon and risk tint | `DialogueOptionUI` | TBD (needs a "risky" look) |
-| Score pop / Affection meter | `ScoreDisplay`, compatibility meter | Placeholder exists |
+| Girl poses and date backgrounds | `GirlPortrait`, the date's Background | See [girls.md](girls.md) |
+| Reaction icons (exclamation, question, heart, anger…) | `ReactionIcon` (`data/reactions.tres`) | Some exist: `exclamation point gif`, `question mark gif`, `anger icon`, `love stat` |
+| Option bubbles with attribute icon and odds | `OptionBubble` (`data/option_styles/`) | Built; Intellect and Seduction icons are the Godot logo |
+| Affection meter | `HeartMeter` | Built ([heart-meter.md](../guides/heart-meter.md)); uses the love react heart |
 | Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
 | Stage hazard art: the fly (and wing-flap frames), a buzz loop | `Fly.tscn` → Body/Sprite, Sounds → Buzz Sound | Not made. Godot logo placeholder. |

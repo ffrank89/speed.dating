@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GirlData" load_steps=27 format=3 uid="uid://dglthbg00jke5"]
+[gd_resource type="Resource" script_class="GirlData" load_steps=32 format=3 uid="uid://dglthbg00jke5"]
 
 [ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="1_wf6us"]
 [ext_resource type="Resource" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
@@ -14,6 +14,10 @@
 [ext_resource type="Script" uid="uid://yvy4bgbrod73" path="res://scripts/data/girl_voice.gd" id="12_13src"]
 [ext_resource type="Script" path="res://scripts/data/girl_trait.gd" id="13_trait"]
 [ext_resource type="Resource" path="res://dialogue/split_ends/first_date.dialogue" id="14_first_date"]
+[ext_resource type="Texture2D" uid="uid://diydmun1v6c7e" path="res://assets/spitEndsGif2/sprite1.png" id="15_pic1"]
+[ext_resource type="Texture2D" uid="uid://b6sulnifbnexx" path="res://assets/spitEndsGif2/sprite2.png" id="16_pic2"]
+[ext_resource type="Texture2D" uid="uid://dwtixb03eft71" path="res://assets/spitEndsGif2/sprite3.png" id="17_pic3"]
+[ext_resource type="Texture2D" uid="uid://cjl6tnrtv8pjc" path="res://assets/spitEndsGif2/sprite4.png" id="18_pic4"]
 
 [sub_resource type="Resource" id="Resource_qbi5r"]
 script = ExtResource("3_hgqhe")
@@ -97,6 +101,26 @@ kind = "ability"
 title = "Coming later"
 description = "Abilities aren't in the first build."
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_profile"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_pic1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_pic2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_pic3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_pic4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [resource]
 script = ExtResource("11_v70mn")
 id = &"split_ends"
@@ -107,6 +131,7 @@ address = "Flat 2B, 14 Safety Pin Lane"
 traits = Array[ExtResource("13_trait")]([SubResource("Trait_type"), SubResource("Trait_punk"), SubResource("Trait_smoker"), SubResource("Trait_ability")])
 bio = "(pretending to be) reading books lol"
 interests = Array[String](["yapping", "birds are NOT real!!!", "Vintage shopping", "fixing up my dads boat ;P"])
+profile_picture = SubResource("SpriteFrames_profile")
 poses = Dictionary[String, ExtResource("3_hgqhe")]({
 "backshot": SubResource("Resource_qbi5r"),
 "cig": SubResource("Resource_xjjpa"),

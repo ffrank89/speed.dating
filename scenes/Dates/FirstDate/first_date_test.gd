@@ -1,6 +1,6 @@
 extends Control
 ## Test bench for a date: the real date scene (the Date node, scenes/Dates/Date/Date.tscn)
-## plus a debug panel. Press F5 (it's the main scene) or F6 here.
+## plus a debug panel. Press F6 here.
 ## The sliders stand in for the player's attributes. The date stays here when it's over
 ## instead of going to the calendar; press Restart to play another.
 
@@ -8,7 +8,7 @@ extends Control
 ## The dialogue to play. Empty = the girl's First Date Dialogue.
 @export var dialogue: DialogueResource
 ## Empty = the whole date (opener, 5 exchanges, closer, contact card).
-## A title (e.g. "start" in the m2/m3 test files) = play just that one, then the card.
+## A title (e.g. "opener") = play just that one, then the card.
 @export var start_title: String = ""
 ## The scoring and flow numbers (data/date_rules.tres).
 @export var rules: DateRules
