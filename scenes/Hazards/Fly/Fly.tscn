@@ -36,6 +36,7 @@ script = ExtResource("1_fly")
 slow_stat = ExtResource("5_perception")
 slow_above = 5
 slow_speed = 0.5
+annoy_seconds = 1.0
 
 [node name="DrawingGuide" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.6)

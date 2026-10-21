@@ -13,6 +13,10 @@ extends StageHazard
 ## flies, jitters, flaps and buzzes at half speed (the buzz an octave lower), and stays
 ## twice as long. Waving at it still reads the mouse at full speed.
 ##
+## Annoying Her (also on the top node): if it stays on her (her drawn pixels) for a
+## second, the date stops for a moment, she gets angry, says ".....ew" and the date loses
+## a point. Shoo it before then.
+##
 ## Press F6 on this scene to try it on its own. Full guide: docs/guides/stage-hazards.md
 
 enum State { ENTERING, FOLLOWING, PUSHED, RETURNING, LEAVING }
@@ -141,6 +145,8 @@ func _process(real_delta: float) -> void:
 				return
 
 	_draw_body()
+	# Sitting on her too long annoys her (counted in real seconds).
+	track_annoying(body.global_position, real_delta)
 
 
 # A wave of the mouse close by pushes it the way the mouse is moving (and away from it).

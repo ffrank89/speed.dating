@@ -1,7 +1,9 @@
 class_name DateScene
 extends Control
 ## A whole date: her room and her, the dialogue, the player's option bubbles, microgames,
-## stage hazards, and her contact card at the end.
+## stage hazards, and her contact card at the end. A hazard that annoys her (the fly
+## sitting on her) stops the date for a moment: she reacts, says so in a bubble (Bark),
+## and the date loses points.
 ##
 ## How a date plays, from her first-date .dialogue file (title names and numbers are in
 ## data/date_rules.tres → Flow):
@@ -54,10 +56,13 @@ var _titles: Array[String] = []
 var _closer_done := false
 var _started := false
 var _ended := false
+# How many hazards are holding the date still right now (see _on_hazard_annoyed).
+var _held := 0
 
 @onready var background: TextureRect = $Background
 @onready var portrait: GirlPortrait = $Portrait
 @onready var reaction_icon: ReactionIcon = $ReactionIcon
+@onready var bark: Bark = $Bark
 @onready var dialogue_box: DialogueBox = $DialogueBox
 @onready var option_list: OptionList = $OptionList
 @onready var stage_hazards: StageHazards = $StageHazards
@@ -73,6 +78,7 @@ func _ready() -> void:
 	option_list.option_resolved.connect(_on_option_resolved)
 	dialogue_box.finished.connect(_next_title)
 	stage_hazards.hazard_cleared.connect(_on_hazard_cleared)
+	stage_hazards.hazard_annoyed.connect(_on_hazard_annoyed)
 	if auto_start:
 		begin.call_deferred()
 
@@ -264,6 +270,35 @@ func _on_hazard_cleared(hazard: StageHazard) -> void:
 	if not hazard.pose.is_empty():
 		show_pose(hazard.pose)
 	score_changed.emit("Date score: %.1f   (last: %+.1f, %s cleared)" % [scorer.score, hazard.points, hazard.name])
+
+
+# A stage hazard annoyed her (e.g. the fly sat on her for a second): her dialogue and the
+# options stop, she reacts and says so (the hazard's Annoy Line, in the Bark bubble),
+# the date loses its Annoy Points, and after Annoy Pause Seconds everything carries on.
+func _on_hazard_annoyed(hazard: StageHazard) -> void:
+	if not scorer or _ended:
+		return
+	_held += 1
+	for part: Node in [dialogue_box, option_list]:
+		part.process_mode = Node.PROCESS_MODE_DISABLED
+	var started := Time.get_ticks_msec()
+	if not hazard.annoy_reaction.is_empty():
+		reaction_icon.show_reaction(hazard.annoy_reaction)
+	if not hazard.annoy_pose.is_empty():
+		show_pose(hazard.annoy_pose)
+	if not hazard.annoy_line.is_empty():
+		await bark.say(hazard.annoy_line, girl)
+	scorer.add_bonus(-hazard.annoy_points)
+	_state.score = scorer.score
+	heart_meter.show_score(scorer.score)
+	score_changed.emit("Date score: %.1f   (last: %+.1f, %s annoyed her)" % [scorer.score, -hazard.annoy_points, hazard.name])
+	var left := hazard.annoy_pause_seconds - (Time.get_ticks_msec() - started) / 1000.0
+	if left > 0.0:
+		await get_tree().create_timer(left).timeout
+	_held -= 1
+	if _held == 0:
+		for part: Node in [dialogue_box, option_list]:
+			part.process_mode = Node.PROCESS_MODE_INHERIT
 
 
 func _on_pose_requested(speaker: GirlData, pose_name: String) -> void:

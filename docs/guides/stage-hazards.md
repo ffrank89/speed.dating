@@ -13,7 +13,8 @@ The first one is the **fly** (`scenes/Hazards/Fly/Fly.tscn`). It flies in from
 the edge of the screen and buzzes along a path you drew. Press **S** to
 switch to the **action cursor**, then **wave it at the fly** to shoo it
 ([the cursor guide](cursor.md)). Shoo it **off the screen**, and she reacts and the date gets
-a point. If you stop, it flies back to its path.
+a point. If you stop, it flies back to its path. If it sits on her for a
+second, she says ".....ew" and the date loses a point (below).
 
 ## Try it
 
@@ -120,6 +121,38 @@ test bench, drag the **Perception** slider to 6 or more and press **Stage
 hazards now**. If the stat is switched off ([stats.md](stats.md)), it's never
 slowed. The fly has no buzz sound yet; once one is set, it slows down too.
 
+## Annoying her: the fly sitting on her
+
+**If the fly stays on her for a second, she's annoyed.** The date stops for
+a moment: her dialogue and the option bubbles freeze, she shows the
+**anger** reaction and says **".....ew"** in a little bubble by her head (in
+her own box style and voice), and the date loses **1 point** (the heart
+meter drains). Then the date carries on. "On her" means her drawn pixels,
+not the see-through space around her, and it has to stay there the whole
+second: moving off her starts the count again. Shoo it before then.
+
+Every hazard has this, on its top node → **Annoying Her**:
+
+| Setting | Fly | What it does |
+|---|---|---|
+| **Annoy Seconds** | 1 | How long it has to stay on her. 0 = it never annoys her |
+| **Annoy Limit** | 1 | How many times it can annoy her each time it turns up |
+| **Annoy Points** | 1 | Points taken off the date score |
+| **Annoy Reaction** | anger | Her reaction (a name in `data/reactions.tres`). Empty = none |
+| **Annoy Line** | .....ew | What she says in the bubble. Empty = nothing |
+| **Annoy Pose** | (empty) | A pose she switches to (from her girl file). Empty = no change |
+| **Annoy Pause Seconds** | 1 | How long the date stops (at least as long as her line takes to type) |
+
+**Her bubble** is the date's **Bark** node (`scenes/Dates/Date/Date.tscn` →
+**Bark**, a `scenes/Dates/Bark/Bark.tscn`): move or resize it to change where
+it appears (the bubble sits at its bottom, centred). Click it for how fast
+her line types (**Seconds Per Letter**), how long it stays up (**Seconds
+Shown**), the size of her words (0 = her style's) and the pop.
+
+**Try it:** on the date test bench, press **Stage hazards now** and leave
+the fly alone until it drifts over her (the **AroundHerHead** path goes
+past her face).
+
 ## What shooing it earns
 
 Under **Reward**:
@@ -155,6 +188,8 @@ script, so nothing else is needed.
 | It never turns up | Check **Appears After Answers** against how many questions the dialogue has, and **Chance**. Or use the **Stage hazards now** button. |
 | Waving does nothing | Move faster than **Min Wave Speed** and come within **Shoo Radius**. Or raise **Shoo Strength**. |
 | It's too easy to shoo off | Raise **Air Drag** or lower **Shoo Strength**. |
+| It never annoys her | Its **Annoy Seconds** is 0, it never stays on her drawn pixels for that long without a break, or it already annoyed her **Annoy Limit** times this time. |
+| It annoys her too easily | Raise **Annoy Seconds**. |
 | It's in slow motion when it shouldn't be (or isn't when it should) | The player's **Slow Stat** (Perception) has to be *above* **Slow Above**: 6 or more for 5. On the test bench it's the slider. |
 | It flies somewhere odd | Check the path in `Fly.tscn`. It flies in from the screen edge nearest the path's **first** point. |
 | "no paths" warning | There's no Path2D under **Paths** and nothing in **Extra Paths**. |
@@ -168,13 +203,23 @@ script, so nothing else is needed.
   **Slow Motion** and **Reward** exports, and F6 self-play. Slow Motion:
   `stats` (the date's, stat id → value; set by `StageHazards`), `time_scale`
   (set on `appear()`: Slow Speed or 1; Leaves After Seconds is divided by it),
-  `is_slowed()`. A hazard multiplies its own timing by `time_scale`. A child named `DrawingGuide` is
+  `is_slowed()`. A hazard multiplies its own timing by `time_scale`.
+  Annoying Her: `her` (the date's `GirlPortrait`, set by `StageHazards`),
+  `track_annoying(point, real_delta)` (call each frame; uses
+  `GirlPortrait.is_point_on_her()`), signal `annoyed(hazard)`. A child named `DrawingGuide` is
   shown only when the scene is played on its own.
 - `StageHazards` (`scenes/Hazards/stage_hazards.gd`): instances its
   `hazards`, counts `OptionList.option_resolved`, brings on due hazards
   after their delay, freezes them while `MicrogameHost.is_active()`, plays
-  `cleared_sound`, and emits `hazard_cleared(hazard)`. Its `stats` (from
-  `DateScene.stats`) go to each hazard as it turns up. The date applies the
+  `cleared_sound`, and emits `hazard_cleared(hazard)` and
+  `hazard_annoyed(hazard)`. Its `stats` (from `DateScene.stats`) go to each
+  hazard as it turns up; its `portrait` to each hazard's `her`.
+- `DateScene._on_hazard_annoyed(hazard)`: sets `DialogueBox` and `OptionList`
+  to `PROCESS_MODE_DISABLED`, shows the reaction and pose, `await
+  bark.say(line, girl)`, `scorer.add_bonus(-annoy_points)`, waits out
+  `annoy_pause_seconds`, then lets them run again.
+- `Bark` (`scenes/Dates/Bark/bark.gd`): `say(text, girl)` (her
+  `DialogueBoxStyle` box and font, her `GirlVoice` via a `VoicePlayer`). The date applies the
   reward (`DateScorer.add_bonus`, `ReactionIcon.show_reaction`, the pose).
 - The fly (`scenes/Hazards/Fly/fly.gd`) moves through these states:
   - ENTERING: flies in from the nearest edge

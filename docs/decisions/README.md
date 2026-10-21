@@ -69,3 +69,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0063](0063-attributes-one-to-nine.md) | The player's attributes go from 1 to 9 (one scale file); training +1, checks 1–9 | Accepted, amended by 0064 |
 | [0064](0064-stats-are-data.md) | Stats are data: the first four plus S.P.E.C.I.A.L., each switchable on or off; no skills | Accepted |
 | [0065](0065-stat-slow-motion.md) | A stat can slow a stage hazard down: the fly moves (and buzzes) in slow motion with Perception above 5 | Accepted |
+| [0066](0066-fly-annoys-her.md) | A hazard sitting on her for a second annoys her: the date stops, she gets angry and says ".....ew", the date loses points | Accepted |

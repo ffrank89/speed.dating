@@ -12,17 +12,22 @@ extends Control
 ## try it on its own, over and over. Full guide: docs/guides/stage-hazards.md
 ##
 ## A stat can slow it down (Slow Motion): e.g. the fly moves in slow motion when the
-## player's Perception is above 5.
+## player's Perception is above 5. It can annoy her (Annoying Her): e.g. the fly sitting
+## on her for a second makes the date stop while she says ".....ew" and loses points.
 ##
 ## Making a new one: extend StageHazard, start it up in begin(), and call clear() when
 ## the player deals with it (or leave() when it goes away by itself). If it Needs Action
 ## Cursor, check can_act() before letting the player deal with it. For Slow Motion,
-## multiply its own timing by time_scale (and its sounds' pitch).
+## multiply its own timing by time_scale (and its sounds' pitch). For Annoying Her, call
+## track_annoying() each frame with where it is.
 
 ## Sent when the player deals with it (e.g. shoos the fly off screen).
 signal cleared(hazard: StageHazard)
 ## Sent when it goes away on its own (no reward).
 signal left(hazard: StageHazard)
+## Sent when it has been over her for Annoy Seconds: the date stops for a moment, she
+## reacts and the date loses Annoy Points.
+signal annoyed(hazard: StageHazard)
 
 @export_group("When")
 ## It turns up after the player has answered this many questions on a date.
@@ -52,6 +57,24 @@ signal left(hazard: StageHazard)
 ## octave lower. 1 = no change.
 @export_range(0.05, 1.0, 0.05) var slow_speed: float = 0.5
 
+@export_group("Annoying Her")
+## Seconds it has to stay over her (her drawn pixels, not the space around her) before
+## it annoys her: the date stops for a moment (her dialogue and the options freeze), she
+## reacts, says Annoy Line, and the date loses Annoy Points. 0 = it never annoys her.
+@export_range(0.0, 30.0, 0.1) var annoy_seconds: float = 0.0
+## How many times it can annoy her each time it turns up.
+@export_range(1, 20) var annoy_limit: int = 1
+## Points taken off the date score when it annoys her.
+@export_range(0.0, 10.0, 0.5) var annoy_points: float = 1.0
+## Her reaction: a name in data/reactions.tres (anger, question...). Empty = none.
+@export var annoy_reaction: String = "anger"
+## What she says, in a little bubble by her head (the date's Bark). Empty = nothing.
+@export var annoy_line: String = ".....ew"
+## Optional: a pose she switches to (a pose name from her girl file). Empty = no change.
+@export var annoy_pose: String = ""
+## How long the date stops, in seconds (at least as long as her line takes).
+@export_range(0.0, 10.0, 0.1) var annoy_pause_seconds: float = 1.0
+
 @export_group("Reward")
 ## Points added to the date score when the player deals with it.
 @export_range(-10.0, 10.0, 0.5) var points: float = 1.0
@@ -75,6 +98,13 @@ var stats: Dictionary = {}
 ## How fast it runs this time it's on screen: 1 = normal, Slow Speed in slow motion.
 ## Worked out each time it turns up.
 var time_scale := 1.0
+## Her portrait on the date (set by StageHazards), to tell when it's over her. Null = it
+## can't annoy her (e.g. played on its own).
+var her: GirlPortrait
+# Annoying Her: seconds it's been over her without a break, and how often it has annoyed
+# her this time.
+var _over_her := 0.0
+var _annoyances := 0
 var _appearance := 0
 
 
@@ -92,6 +122,22 @@ func can_act() -> bool:
 ## True if it's in slow motion this time (Slow Motion).
 func is_slowed() -> bool:
 	return time_scale < 1.0
+
+
+## Annoying Her: call each frame with where it is (in screen pixels) and the real seconds
+## passed. Once it's been over her (her drawn pixels) for Annoy Seconds without a break,
+## it annoys her: annoyed is sent. Moving off her starts the count again.
+func track_annoying(point: Vector2, real_delta: float) -> void:
+	if annoy_seconds <= 0.0 or not her or not is_active or _annoyances >= annoy_limit:
+		return
+	if not her.is_point_on_her(point):
+		_over_her = 0.0
+		return
+	_over_her += real_delta
+	if _over_her >= annoy_seconds:
+		_over_her = 0.0
+		_annoyances += 1
+		annoyed.emit(self)
 
 
 ## Override (optional): called when Leaves After Seconds runs out. Default: leave() at once.
@@ -121,6 +167,8 @@ func appear() -> void:
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
 	_appearance += 1
+	_over_her = 0.0
+	_annoyances = 0
 	time_scale = slow_speed if _slowed_by_stat() else 1.0
 	begin()
 	if leaves_after_seconds > 0.0 and is_active:
