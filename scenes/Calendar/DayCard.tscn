@@ -1,0 +1,105 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/Calendar/day_card.gd" id="1_card"]
+
+[node name="DayCard" type="PanelContainer"]
+offset_right = 884.0
+offset_bottom = 220.0
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("1_card")
+
+[node name="Column" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="HBoxContainer" parent="Column"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Tab" type="PanelContainer" parent="Column/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TabLabel" type="Label" parent="Column/Header/Tab"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MON · TODAY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Status" type="Label" parent="Column/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Upcoming"
+vertical_alignment = 1
+
+[node name="Choices" type="HBoxContainer" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Offers" type="HBoxContainer" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="Boss" type="HBoxContainer" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="BossIcon" type="TextureRect" parent="Column/Boss"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BossWords" type="VBoxContainer" parent="Column/Boss"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 1
+
+[node name="BossTitle" type="Label" parent="Column/Boss/BossWords"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "BOSS"
+
+[node name="BossDetail" type="Label" parent="Column/Boss/BossWords"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Not built yet: on to the next chapter"
+autowrap_mode = 3
+
+[node name="Hidden" type="HBoxContainer" parent="Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="HiddenMark" type="TextureRect" parent="Column/Hidden"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HiddenWords" type="Label" parent="Column/Hidden"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Can't see that far ahead"
+vertical_alignment = 1

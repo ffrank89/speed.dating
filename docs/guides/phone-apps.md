@@ -3,26 +3,29 @@
 For artists and designers. **No code needed** to change how apps look or
 feel; one line of code to make something new open like an app.
 
-Everything that "opens" in the game opens like an app on an iPhone: the
-app's icon grows from where the player tapped until it fills the screen with
-the app's **launch screen**, the screen behind zooms and dims, and then the
-real screen appears. Closing shrinks it back into its icon. It's one shared
-animation (`AppLauncher`), used by:
+Every app on the player's phone opens like an app on an iPhone: the app's
+icon grows from where the player tapped until it fills **the phone's
+screen** with the app's **launch screen**, what was on the phone zooms and
+dims, and then the real app appears. Closing shrinks it back into its icon.
+It's one shared animation (`AppLauncher`), used by:
 
 | What opens | App file | Opens from |
 |---|---|---|
-| The calendar (after the intro, and after a date) | `data/apps/calendar.tres` | Where the player clicked |
+| The calendar (after the intro, and after a date) | `data/apps/calendar.tres` | Where the player clicked, or the bottom of the phone's screen |
 | The dating app (a **Date** on the calendar) | `data/apps/dating_app.tres` | The Date choice (the app named in `data/day_actions/date.tres`) |
-| A new date (Start on a profile) | `data/apps/date.tres` | The **Start** button |
-| A microgame | the microgame's **App**, or `data/apps/microgame.tres` | The picked option bubble, and closes back into it |
-| The boss fight | `data/apps/boss.tres` | Ready for when the boss scene exists (see below) |
-| Her contact card at the end of a date | `data/apps/contacts.tres` | Where the player clicked |
+| A microgame (once the phone is up over the date) | the microgame's **App**, or `data/apps/microgame.tres` | The bottom of the phone's screen, and closes back into it |
 | Your **Contacts** (press **C** on the calendar) | `data/apps/contacts.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
+
+Going into **real life** isn't an app: a date starts with **phone down**
+(the phone drops away and the date is there), and the end of a date brings
+the **phone up** with her card on it ([the-phone.md](the-phone.md)).
+`data/apps/date.tres` and `boss.tres` are kept for icons, but nothing opens
+them like apps any more.
 
 ## Try it
 
 Open `scenes/Phone/PhoneAppsTest.tscn` and press **F6**: a pretend home
-screen with one icon per file in `data/apps/`. Click one to open it, and
+screen on the phone with one icon per file in `data/apps/`. Click one to open it, and
 press **Home** (or Escape) to close it. Tune things while it runs.
 
 ## Change an app's look
@@ -53,29 +56,34 @@ Square icons work best; the corners are rounded for you.
 | Opening | How long the icon takes to grow (0.5 s), the shape of the motion (Expo + Out feels like an iPhone), how long the launch screen stays, how long it fades |
 | Closing | The same for shrinking back |
 | Icon | The size of the icon when nothing was tapped, how rounded icons are (0.225 ≈ iPhone), how long a click is remembered, and **Default Origin**, where apps open from after a key press (bottom middle, like the dock) |
-| Screen | Where an open app ends up. All insets 0 = the whole screen. Raise them (and **Screen Corner**) to open apps into a phone screen. **Device Frame**: optional iPhone art drawn over everything while apps open and close (3000 × 1700, with a see-through screen). |
-| Behind | How much the screen behind zooms (1.08) and the colour it dims to |
+| Screen | **Open Into Phone** (on): apps open inside the phone's screen (**Phone**: `data/phone_style.tres`), with its rounded corners, and Default Origin is inside the phone. Off: apps fill the whole screen minus the insets (and **Screen Corner**). **Device Frame**: optional art drawn over everything while apps open and close (3000 × 1700); with the phone, use the phone's own **Phone Art** instead. |
+| Behind | How much what's behind zooms (1.08; inside the phone, just the phone's screen) and the colour it dims to |
 | Sounds | The default open and close sounds (Kenney Interface Sounds) |
 
 ## Give a microgame its own app
 
 Click the microgame's top node → **Frame → App** → drag in an app file
 (make one by duplicating `data/apps/microgame.tres`). Empty = the shared
-microgame app. Turn the whole thing off with `data/microgame_style.tres` →
-**Opening → Open As App** (it fades instead).
+microgame app. Turn the opening off with `data/microgame_style.tres` →
+**Opening → Open As App** (it fades in on the phone instead).
 
 ## Make something new open like an app
 
 1. Make its app file: right-click any file in `data/apps/` → **Duplicate…**,
    name it (lowercase, no spaces), and change its icon and colours.
-2. Wherever the game changes to that scene, use one line:
+2. Build the scene on the phone ([the-phone.md](the-phone.md) → A new phone
+   screen), and wherever the game changes to it, use one line:
 
 ```gdscript
-AppLauncher.open_scene("boss", "res://scenes/Boss/Boss.tscn")
+AppLauncher.open_scene("notes", "res://scenes/Notes/Notes.tscn")
 ```
 
-`"boss"` is the file name in `data/apps/`. Add a rectangle to open from a
-particular button: `AppLauncher.open_scene("boss", path, button.get_global_rect())`.
+`"notes"` is the file name in `data/apps/`. Add a rectangle to open from a
+particular button: `AppLauncher.open_scene("notes", path, button.get_global_rect())`.
+
+A **real-life** scene (the boss fight) uses phone down instead:
+`AppLauncher.phone_down("res://scenes/Boss/Boss.tscn")`, or a day action
+with **Opens → Real Life** on.
 
 For things that appear over the current scene instead of replacing it (like
 microgames):
@@ -101,19 +109,27 @@ screen is built from these.
 | The app grows from the wrong place | It grows from the last click (within **Tap Memory Seconds**) or from **Default Origin**. Pass a rectangle to open from a particular button. |
 | The icon art looks squashed or tiny | Square art works best. Lower **Icon Padding** for bigger art. |
 | Clicking does nothing for half a second | Clicks are blocked while an app opens or closes, on purpose. Make it faster with **Opening → Open Seconds**. |
+| Apps fill the whole screen, not the phone | **Screen → Open Into Phone** is off, or **Phone** is empty. |
 
 ## For programmers
 
 - `AppLauncher` (autoload, `scenes/Phone/AppLauncher.tscn`, a `CanvasLayer`
   on layer 100): `open_scene(app, path, from)`, `open(app, swap, from)`,
-  `close(app, swap, to)`, `get_app(name)`, `is_busy()`; signals `opening`,
-  `opened`, `closing`, `closed`. `app` is an `AppInfo` or a file name in
-  `data/apps/`.
-- Opening screenshots the current screen (the "behind" layer), grows the
-  tile, calls `swap` once the tile covers its target, then fades the tile.
-  `open_scene` loads the scene on a thread while the tile grows.
+  `close(app, swap, to)`, `phone_down(scene_path)`, `get_app(name)`,
+  `is_busy()`, `origin_rect()`, `home_rect()`; signals `opening`, `opened`,
+  `closing`, `closed`, `phone_went_down`. `app` is an `AppInfo` or a file
+  name in `data/apps/`.
+- Opening screenshots the current screen: the phone's screen part zooms and
+  dims in **Window** (cut to the phone's rounded screen), and **Outside**
+  (the rest, with a hole for the phone) fades into the new scene after the
+  swap. It grows the tile, calls `swap` once the tile covers its target,
+  then fades the tile. `open_scene` loads the scene on a thread while the
+  tile grows.
+- `phone_down` screenshots the screen, cuts the phone out into **Drop**,
+  changes scene underneath, then drops the phone and fades **Outside**.
 - Closing screenshots the app into the tile, calls `swap` (so the live
   screen behind is back), then shrinks the tile into `to`.
 - Wired in: `intro_questions.gd` (→ calendar), `calendar.gd` (a Date choice
-  opens its action's **App Name** and **Scene**), `screen.gd` (Start → date),
-  `date_scene.gd` (→ calendar), `ContactsApp` (C), `MicrogameHost.play(..., from)`.
+  opens its action's **App Name** and **Scene**; **Real Life** → phone
+  down), `screen.gd` (Start → `phone_down` into the date), `date_scene.gd`
+  (her card → calendar), `ContactsApp` (C), `MicrogameHost.play()`.

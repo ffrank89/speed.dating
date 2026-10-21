@@ -8,6 +8,9 @@ extends Control
 ## Sent when the player deals with a hazard. The date adds its points and shows her reaction.
 signal hazard_cleared(hazard: StageHazard)
 
+## While it runs, S switches to the action cursor (PlayerCursor), which hazards like the
+## fly need; not during microgames, and not once stop() is called (the date's over).
+
 ## The hazards this date can have (scenes from scenes/Hazards/).
 @export var hazards: Array[PackedScene] = []
 ## Counts the player's answers (the date's OptionList).
@@ -19,6 +22,7 @@ signal hazard_cleared(hazard: StageHazard)
 var answers := 0
 var _hazards: Array[StageHazard] = []
 var _sound := AudioStreamPlayer.new()
+var _stopped := false
 
 
 func _ready() -> void:
@@ -34,6 +38,17 @@ func _ready() -> void:
 		_hazards.append(hazard)
 	if option_list:
 		option_list.option_resolved.connect(_on_answered)
+	PlayerCursor.action_allowed = true
+
+
+func _exit_tree() -> void:
+	PlayerCursor.action_allowed = false
+
+
+## The date's over: no more hazards, and the action cursor goes back to normal.
+func stop() -> void:
+	_stopped = true
+	PlayerCursor.action_allowed = false
 
 
 ## Brings on every hazard now, whatever the answer count (the test scene's debug button).
@@ -44,6 +59,10 @@ func appear_all() -> void:
 
 func _process(_delta: float) -> void:
 	var frozen := microgame_host != null and microgame_host.is_active()
+	# No action cursor during a microgame (S moves down there) or after the date.
+	var allowed := not frozen and not _stopped
+	if PlayerCursor.action_allowed != allowed:
+		PlayerCursor.action_allowed = allowed
 	for hazard in _hazards:
 		if hazard.is_active:
 			hazard.process_mode = Node.PROCESS_MODE_DISABLED if frozen else Node.PROCESS_MODE_INHERIT
@@ -51,6 +70,8 @@ func _process(_delta: float) -> void:
 
 func _on_answered(_response: DialogueResponse, _result: DateScorer.Result) -> void:
 	answers += 1
+	if _stopped:
+		return
 	for hazard in _hazards:
 		if hazard.is_due(answers):
 			_bring_on(hazard)

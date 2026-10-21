@@ -22,3 +22,7 @@ test_girl = ExtResource("3_girl")
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+
+[node name="FillSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+max_polyphony = 3

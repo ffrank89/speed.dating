@@ -6,10 +6,35 @@ extends CanvasLayer
 ## Default Cursor Shape is Pointing Hand, e.g. option bubbles and app icons), while the
 ## button is held, and while dragging. Change the default in this scene's Style slot,
 ## or switch from code: PlayerCursor.use(load("res://data/cursors/other.tres")).
+##
+## The action cursor (stage hazard cursor): while something allows it (a date's stage
+## hazards), the Action Key (S) switches to Action Style and back. Things like the fly
+## can only be dealt with while it's on.
 ## Full guide: docs/guides/cursor.md
+
+## Sent when the action cursor turns on or off.
+signal action_mode_changed(on: bool)
 
 ## The cursor to use (a file from data/cursors/).
 @export var style: CursorStyle
+## The action cursor, for dealing with stage hazards (data/cursors/action.tres).
+@export var action_style: CursorStyle
+## The key that switches to the action cursor and back: an action in Project Settings →
+## Input Map (action_cursor = S).
+@export var action_key: StringName = &"action_cursor"
+
+## True while the action cursor is on.
+var action_mode := false
+## Whether the Action Key works right now. A date's stage hazards turn this on (and off
+## during microgames and when the date ends). Turning it off turns the action cursor off.
+var action_allowed := false:
+	set(value):
+		action_allowed = value
+		if not value:
+			set_action_mode(false)
+
+# The normal cursor (what Style was set to), shown whenever the action cursor is off.
+var _normal_style: CursorStyle
 
 var _pressed := false
 var _drawn: TextureRect
@@ -28,8 +53,29 @@ func _ready() -> void:
 	use(style)
 
 
-## Switches to another cursor (null = the computer's normal arrow).
+## Switches to another normal cursor (null = the computer's normal arrow).
 func use(new_style: CursorStyle) -> void:
+	_normal_style = new_style
+	if not action_mode:
+		_show(new_style)
+
+
+## Turns the action cursor on or off.
+func set_action_mode(on: bool) -> void:
+	if on == action_mode:
+		return
+	action_mode = on
+	_show(action_style if on and action_style else _normal_style)
+	action_mode_changed.emit(on)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if action_allowed and InputMap.has_action(action_key) and event.is_action_pressed(action_key):
+		get_viewport().set_input_as_handled()
+		set_action_mode(not action_mode)
+
+
+func _show(new_style: CursorStyle) -> void:
 	style = new_style
 	_shown_texture = null
 	_drawn.visible = false
@@ -41,6 +87,7 @@ func use(new_style: CursorStyle) -> void:
 	if style.drawn_in_game:
 		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		_drawn.visible = true
+		_drawn.modulate = style.tint
 	else:
 		_set_system_cursors()
 
@@ -98,6 +145,12 @@ func _sized(texture: Texture2D) -> Image:
 		push_warning("PlayerCursor: cursor pictures can be at most 256 × 256 after Size; shrinking it.")
 		target /= too_big
 	picture.resize(maxi(int(target.x), 1), maxi(int(target.y), 1), Image.INTERPOLATE_LANCZOS)
+	if style.tint != Color.WHITE:
+		if picture.get_format() != Image.FORMAT_RGBA8:
+			picture.convert(Image.FORMAT_RGBA8)
+		for y in picture.get_height():
+			for x in picture.get_width():
+				picture.set_pixel(x, y, picture.get_pixel(x, y) * style.tint)
 	return picture
 
 

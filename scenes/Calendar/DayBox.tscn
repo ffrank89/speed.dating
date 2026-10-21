@@ -52,7 +52,7 @@ layout_mode = 2
 text = "1"
 horizontal_alignment = 1
 
-[node name="Offers" type="HBoxContainer" parent="Inner/Box/Column"]
+[node name="Offers" type="VBoxContainer" parent="Inner/Box/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2

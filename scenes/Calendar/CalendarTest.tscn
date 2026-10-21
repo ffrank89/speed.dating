@@ -27,34 +27,33 @@ grow_vertical = 2
 script = ExtResource("1_test")
 page_images = Array[Texture2D]([ExtResource("10_january"), ExtResource("11_paper"), ExtResource("12_logo"), ExtResource("13_poster")])
 day_images = Array[Texture2D]([ExtResource("11_paper"), ExtResource("12_logo"), ExtResource("10_january")])
-scene_backgrounds = Array[Texture2D]([ExtResource("3_dusk"), ExtResource("4_day"), ExtResource("5_picnic"), ExtResource("6_bedroom1"), ExtResource("7_bedroom2"), ExtResource("8_room"), ExtResource("9_pattern")])
+rooms = Array[Texture2D]([ExtResource("3_dusk"), ExtResource("4_day"), ExtResource("5_picnic"), ExtResource("6_bedroom1"), ExtResource("7_bedroom2"), ExtResource("8_room"), ExtResource("9_pattern")])
 
 [node name="Calendar" parent="." instance=ExtResource("2_calendar")]
 layout_mode = 1
 
 [node name="Bars" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 30.0
-offset_top = 12.0
-offset_right = -30.0
-offset_bottom = 132.0
-grow_horizontal = 2
+layout_mode = 0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 900.0
+offset_bottom = 400.0
 theme = SubResource("Theme_bar")
-theme_override_constants/separation = 4
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Bars"]
+layout_mode = 2
+text = "CALENDAR TEST (F1 hides)"
 
 [node name="ArtBar" type="PanelContainer" parent="Bars"]
 layout_mode = 2
+size_flags_horizontal = 0
 
-[node name="Row" type="HBoxContainer" parent="Bars/ArtBar"]
+[node name="Row" type="GridContainer" parent="Bars/ArtBar"]
 layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Title" type="Label" parent="Bars/ArtBar/Row"]
-layout_mode = 2
-text = "CALENDAR TEST (F1 hides)   "
+theme_override_constants/h_separation = 12
+columns = 4
 
 [node name="PageTitle" type="Label" parent="Bars/ArtBar/Row"]
 layout_mode = 2
@@ -82,7 +81,7 @@ text = " ▶ "
 
 [node name="DayTitle" type="Label" parent="Bars/ArtBar/Row"]
 layout_mode = 2
-text = "   Days"
+text = "Days"
 
 [node name="DayPrevious" type="Button" parent="Bars/ArtBar/Row"]
 unique_name_in_owner = true
@@ -106,7 +105,7 @@ text = " ▶ "
 
 [node name="SceneTitle" type="Label" parent="Bars/ArtBar/Row"]
 layout_mode = 2
-text = "   Scene"
+text = "Room"
 
 [node name="ScenePrevious" type="Button" parent="Bars/ArtBar/Row"]
 unique_name_in_owner = true
@@ -132,9 +131,10 @@ text = " ▶ "
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Row" type="HBoxContainer" parent="Bars/RunBar"]
+[node name="Row" type="GridContainer" parent="Bars/RunBar"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/h_separation = 12
+columns = 3
 
 [node name="NewCalendar" type="Button" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true
@@ -159,7 +159,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Foresight: 0 days"
-horizontal_alignment = 2
 
 [node name="Foresight" type="HSlider" parent="Bars/RunBar/Row"]
 unique_name_in_owner = true

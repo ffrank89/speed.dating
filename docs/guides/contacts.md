@@ -4,7 +4,7 @@ For writers, artists and designers. **No code needed.**
 
 Your party is the **Contacts** on your phone. Every girl who gave you her
 number on a date is saved there. That's who's in your party. Press **C** on
-the calendar to see them.
+the calendar (or its **Contacts** button) to see them.
 
 ```
 Date ends ─► she types her number into a New Contact (or doesn't)
@@ -12,8 +12,8 @@ Date ends ─► she types her number into a New Contact (or doesn't)
                ├─ got her number → saved in Contacts, with the hearts she gave you
                └─ failed date    → gone for the run
 
-Calendar ─► press C ─► Contacts opens over the calendar like an iPhone app
-               │         (the same way a microgame opens over the date)
+Calendar ─► press C ─► Contacts opens on the phone like an iPhone app
+               │         (over the calendar app, the same phone)
                │
                ├─ the list: A to Z under letter headers, each girl in her own box and
                │  font, her initials (or photo), a heart if she gave you one;
@@ -21,7 +21,7 @@ Calendar ─► press C ─► Contacts opens over the calendar like an iPhone a
                ├─ click a girl ─► her saved card slides in: what your hearts unlocked
                │                  on her date, her number and address
                │                  "‹ Contacts" (or Escape) goes back
-               └─ C again, Escape, or the bar at the bottom closes it back
+               └─ C again, Escape, or the phone's home bar closes it back
 ```
 
 A girl in your contacts doesn't show up in the dating app any more:
@@ -64,8 +64,7 @@ A saved card doesn't show the empty **Last name** and **Company** rows, the
 
 | Setting | Now | What it does |
 |---|---|---|
-| **Open As App** | on | On = it opens like an iPhone app, the same as a microgame over the date. Off = it slides up from the bottom instead. |
-| **Open Seconds** | 0.35 | With Open As App off: how long it takes to slide up (and back down) |
+| **Open As App** | on | On = it opens like an iPhone app inside the phone. Off = the phone comes up with Contacts on it (phone up). |
 | **List Title** | Contacts | The big title at the top |
 | **Back Text** | ‹ Contacts | Top left of her saved card |
 | **No Contacts Text** | No Contacts | The list when your party is empty |
@@ -78,22 +77,25 @@ A saved card doesn't show the empty **Last name** and **Company** rows, the
 **Sounds** in the same file: **Open Contact Sound** (clicking a girl,
 Kenney `select_001` for now) and **Back Sound** (`back_001`).
 
-The rest of the look is shared with the end-of-date card: the sheet's
-colour and corners, the font for the phone's own words, the heart. Each
-row and her card use **her dialogue style** (box, outline, font, colours),
-so changing her dialogue box changes her contact too. Her photo is her girl
-file → **Contact Card → Contact Photo** (empty = her initials).
+**The phone** (its screen colour, corners, status bar, home bar, and the
+font for the phone's own words: the title, the count, the letters) is
+`data/phone_style.tres`, shared by every phone screen
+([the-phone.md](the-phone.md)). The heart is shared with the end-of-date
+card. Each row and her card use **her dialogue style** (box, outline, font,
+colours), so changing her dialogue box changes her contact too. Her photo
+is her girl file → **Contact Card → Contact Photo** (empty = her initials).
 
-**Where things sit:** open `ContactsApp.tscn` and move or resize **Sheet**,
-or the rows under **Sheet → Margin → Column**.
+**Where things sit:** open `ContactsApp.tscn`: the list is under
+**PhoneScreen → Phone → Body → Screen → Margin → Column**.
 
 **How it opens:** the same open-app animation as a microgame and every
 other app. Its icon and launch screen are `data/apps/contacts.tres` (the
 Godot logo on the iPhone grey for now); the feel (timing, zoom, dim) is
 `data/app_transition_style.tres`. A key press has no click to grow from, so
-it grows from **Default Origin** there (the middle of the bottom, like the
-iPhone's dock), or from where you clicked if that was a moment ago, and it
-closes back into the same spot. See [phone apps](phone-apps.md).
+it grows from **Default Origin** there (the bottom middle of the phone's
+screen, like the iPhone's dock), or from where you clicked if that was a
+moment ago, and it closes back into the same spot. See
+[phone apps](phone-apps.md).
 
 ## Changing the key
 
@@ -132,7 +134,9 @@ synergy report.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
   layer 19): listens for `open_action` (`open_contacts`) in
   `_unhandled_input`; `open()` / `close()` use `AppLauncher.open/close`
-  (from `AppLauncher.origin_rect()`, kept to close back into) or slide the sheet,
+  (from `AppLauncher.origin_rect()`, kept to close back into) or
+  `phone_screen.raise()` / `lower()`. Its phone is `phone_screen`
+  (`PhoneScreen`, Behind = Nothing; its `home_pressed` closes it),
   `show_list(members)` / `hide_list()` show it at once; signals
   `contact_opened(member)`, `closed`. It holds a
   `ContactCard` (layer 20) and calls `ContactCard.show_saved(girl, hearts,

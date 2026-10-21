@@ -1,7 +1,8 @@
 extends Control
-## Test bench for the "open app" animation: a pretend home screen with one icon per file
-## in data/apps/. Click an icon to open its app (a placeholder screen in its launch colour),
-## then press Home (or Escape) to close it back into its icon. Press F6 to run it.
+## Test bench for the "open app" animation: a pretend home screen on the phone, with one
+## icon per file in data/apps/. Click an icon to open its app inside the phone (a
+## placeholder screen in its launch colour), then press Home, Escape or the phone's home
+## bar to close it back into its icon. Press F6 to run it.
 ## Tune the feel in data/app_transition_style.tres and each app in data/apps/.
 
 var _open_icon: AppIcon
@@ -15,6 +16,7 @@ var _open_icon: AppIcon
 func _ready() -> void:
 	app_screen.visible = false
 	home_button.pressed.connect(_go_home)
+	%PhoneScreen.home_pressed.connect(_go_home)
 	for file in DirAccess.get_files_at(AppLauncher.APPS_FOLDER):
 		if not file.ends_with(".tres"):
 			continue

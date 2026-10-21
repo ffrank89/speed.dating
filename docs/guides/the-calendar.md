@@ -2,68 +2,82 @@
 
 For writers, artists and designers. **No code needed.**
 
-The calendar is the run's hub. It's drawn in its own **dialogue-box style**,
-so it matches the dialogue boxes: boxes, outlines, font, and name tabs.
+The calendar is the run's hub, and an **app on your phone** (portrait, with
+your room dimmed behind it: [the-phone.md](the-phone.md)). It's laid out
+like the blinds in Balatro: **three days at a time**, stacked.
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│ 5 days to the boss                See the whole month ▾ │
-│  MON    TUE    WED    THU    FRI    SAT    SUN          │
-│ ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌────┐        │
-│ │ ✓ │  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │▣▣▣│  │ ⚔  │        │
-│ └───┘  └───┘  └───┘  └───┘  └───┘  └───┘  └────┘        │
-└─────────────────────────────────────────────────────────┘
-
-┌ TODAY · TUE ────────────────────────────────────────────┐
-│ [1] ♥ Date            [2] Train Culture   [3] Rest      │
-│     2 days · Swipe…       1 day · +5…         1 day · … │
-└─────────────────────────────────────────────────────────┘
+┌───────────────────────────────┐
+│ Calendar                      │
+│ 6 days to the boss            │
+│ [Contacts] [Profile] [Month ▾]│
+│┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓│  ← today (blue border)
+│┃ MON · TODAY                 ┃│
+│┃ ┌───────┐┌───────┐┌───────┐ ┃│
+│┃ │  [♥]  ││  [▣]  ││  [▣]  │ ┃│
+│┃ │ Date  ││ Train ││ Rest  │ ┃│
+│┃ │2 days ││ 1 day ││ 1 day │ ┃│
+│┃ │Swipe..││Cult+5 ││Nothin.│ ┃│
+│┃ │1 [Pick]│2 [Pick]│3 [Pick]┃│
+│┃ └───────┘└───────┘└───────┘ ┃│
+│┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛│
+│┏ TUE  Upcoming ━━━━━━━━━━━━━━┓│  ← coming up (gold, dimmed)
+│┃      ♥      ▣      ▣        ┃│
+│┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛│
+│┏ SUN  Upcoming ━━━━━━━━━━━━━━┓│  ← the boss (red)
+│┃  ⚔  BOSS                    ┃│
+│┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛│
+└───────────────────────────────┘
 ```
 
-- **The top box** is this chapter: its days, each with its weekday on a name
-  tab and little pictures of what it offers. Today is bigger and
-  highlighted, days gone are faded with what you spent them on, and the
-  **boss** sits on the last day from day one.
-- **See the whole month** opens up the rest of the calendar, four weeks of
-  it. Every day past this chapter shows an **X**: you can't see that far
-  ahead (yet). Escape or **Just this week** closes it.
-- **Today's choices** sit at the bottom. Click one, or press **1**, **2** or
-  **3**:
-  - **Date** (2 days): opens the dating app. After the date you're back
-    here, two days later.
+- **Today's card** is on top, with its 2-3 choices side by side: a big
+  picture, the title, how many days it takes, what it does, and a **Pick**
+  button. Click Pick (or the bubble, or press **1**, **2** or **3**):
+  - **Date** (2 days): opens the dating app on the phone. After the date
+    you're back here, two days later.
   - **Train** (1 day): raises an attribute by 5, with a line in the
-    calendar's box ("You spend the day on your Culture. Culture +5.").
+    calendar's box at the bottom of the phone ("You spend the day on your
+    Culture. Culture +5.").
   - **Rest** (1 day): a line, and the day passes. Perks, items and events
     come later.
   - **Boss** (the last day): for now a line, then the next chapter starts.
   A choice that doesn't fit before the boss day (a 2-day date on the day
-  before it) is faded and says **Not enough days left**.
-- Days have **no numbers**, just their weekday (**What Shows → Show Day
-  Numbers** brings them back).
-- **C** opens your [Contacts](contacts.md), as before.
+  before it) says **Not enough days left** and its Pick is greyed out.
+- **The next two days** are dimmed and marked **Upcoming**, with little
+  pictures of what they'll offer. When the boss is one of them, its card is
+  red. A day past this chapter shows an **X**: **Can't see that far ahead**.
+- After a day passes, the cards slide up into place.
+- Each card's **border and name tab** say what the day is: blue for today,
+  gold for coming up, red for the boss, grey for an X.
+- **Month ▾** swaps the cards for the whole month, small, four weeks of it
+  (gone days faded, every day past this chapter an X). Escape or **Days ▴**
+  closes it.
+- **Contacts** (or **C**) opens your [Contacts](contacts.md); **Profile**
+  (or **P**) opens your stats ([the-phone.md](the-phone.md) → Your apps).
 
-The run starts here: after the intro questions, the game opens the calendar.
+The run starts here: after the intro ("Your Profile"), the calendar opens on
+the phone.
 
 ## Try it
 
 **The test bench:** open `scenes/Calendar/CalendarTest.tscn` and press
 **F6**. It's for trying **art on the calendar itself**, the way the iPhone
-frame will be tried. Two bars across the top:
+frame will be tried. The buttons are top left, beside the phone:
 
 | | |
 |---|---|
-| **Page ◀ ▶** | Pictures for the calendar's page, the thing the days sit on (**Page Images**: the old January desk calendar, a blank white page, the Godot logo, the poster). **None** = the box style. |
-| **Days ◀ ▶** | Pictures for each day's box (**Day Images**). **None** = the box style. |
-| **Scene ◀ ▶** | Pictures behind the whole screen (**Scene Backgrounds**). **None** = the animated pattern. |
+| **Page ◀ ▶** | Pictures for the page the whole month sits on (**Page Images**). Open **Month ▾** to see it. **None** = a card in the player's style. |
+| **Days ◀ ▶** | Pictures for each day's card (**Day Images**). **None** = the player's style. |
+| **Room ◀ ▶** | Pictures behind the phone (**Rooms**). **None** = the room in `data/phone_style.tres`. |
 | **New calendar** | A new run's calendar, with new random choices |
 | **Skip day** | Uses up today without doing anything |
 | **Boss day** | Jumps to the boss day |
-| **Foresight** | How many days past this chapter you can see. Open the whole month to see them. |
+| **Foresight** | How many days past this chapter you can see |
 
 To try your own pictures: click the test bench's top node and **Add
 Element** to its lists. **F1** hides the bars. Nothing on the test bench is
 saved: to keep a picture, put it in `data/calendar_style.tres` → **Calendar
-Art** (or **Background**).
+Art** (or, for the room, `data/phone_style.tres` → **Your Room**).
 
 **On its own:** open `scenes/Calendar/calendar.tscn` and press **F6**.
 (Played without the intro, your attributes start at 50 each.)
@@ -76,7 +90,7 @@ Art** (or **Background**).
 | **Boss** | `boss.tres` | The boss day's action |
 | **Actions** | date, 4 trainings, rest | Everything a day can offer. Add one with **Add Element** and drag in a file from `data/day_actions/` |
 | **Options Per Day** | 3 | How many choices each day has (no repeats in a day) |
-| **Calendar Days** | 28 | How many days **See the whole month** shows |
+| **Calendar Days** | 28 | How many days **Month ▾** shows |
 | **Foresight Days** | 0 | How many days past this chapter you can see. 0 = they're all X's. A "see into the future" ability would raise this; then those days show what they'll offer, boss days included. |
 
 Each day's choices are drawn at random when the run starts, so no two runs
@@ -111,7 +125,8 @@ The date, the trainings, rest and the boss are just different mixes:
 | **Attributes → Culture / Intellect / Seduction / Heart** | How much it changes each one. 0 = no change; below 0 lowers it |
 | **Message → Dialogue Title** | Which title in `dialogue/calendar.dialogue` plays. Empty = none |
 | **Chapter → Ends Chapter** | For the boss day: the next chapter starts instead of using up days. Put that action in the rules' **Boss** slot |
-| **Opens → Scene / App Name** | A screen it opens afterwards, and which app (in `data/apps/`) it opens like. Empty = it stays on the calendar |
+| **Opens → Scene / App Name** | A screen it opens afterwards, and which app (in `data/apps/`) it opens like on the phone. Empty = it stays on the calendar |
+| **Opens → Real Life** | On = the screen is real life (a boss fight, say): the phone goes down into it instead of it opening as an app |
 
 **A new action** (e.g. "Go to a gig": 2 days, Culture +3, Heart +2, a
 line): duplicate `train_culture.tres`, change its settings, and add it to
@@ -120,8 +135,8 @@ line): duplicate `train_culture.tres`, change its settings, and add it to
 ## What the calendar says: `dialogue/calendar.dialogue`
 
 The lines for training, resting and the boss. **Placeholder** lines now.
-They play in the calendar's box, where today's choices were. Click or press
-Space to go on. Lines without a `Name:` have no name tab. They can use
+They play in the calendar's box at the bottom of the phone, over the days
+coming up. Click or press Space to go on. Lines without a `Name:` have no name tab. They can use
 `{{action}}` (its title), `{{changes}}` ("Culture +3, Heart +2"), and
 `{{attribute}}` / `{{amount}}` (the first thing it changes: Culture, 3):
 
@@ -135,37 +150,54 @@ You spend the day on your {{attribute}}.
 
 ## How it looks
 
-**The boxes, font and name tabs:** `data/dialogue_styles/calendar.tres`. It
-has the same settings as a girl's dialogue style (colour, outline, corners,
-picture box, font, name tab), so everything in
-[dialogue-box.md](dialogue-box.md) works here too. It starts as a copy of
-the default style.
+Three files, so each kind of change has one home:
 
-**Everything else:** `data/calendar_style.tres`:
+| File | What it decides |
+|---|---|
+| `data/player_style.tres` | **The look**: the cards' colours, font, borders, corners, shadow, the day colours, the buttons. The player's own style, the way each girl's dialogue style decides her boxes. |
+| `data/calendar_style.tres` | **The layout and words**: sizes, which parts show, how many days come up, the words, calendar art and sounds |
+| `data/phone_style.tres` | The phone, the title's font and your room behind it ([the-phone.md](the-phone.md)) |
+
+The calendar's lines play in `data/dialogue_styles/calendar.tres` (a
+dialogue-box style, [dialogue-box.md](dialogue-box.md)).
+
+**The player's style:** `data/player_style.tres`:
 
 | Section | What's in it |
 |---|---|
-| Words | "CHAPTER {chapter}", "{days} days to the boss", "TODAY · {weekday}", "See the whole month ▾", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run). Leave a blank out and it's just not shown |
-| Background | **Background Image**: a picture behind the whole screen (empty = the animated pattern), and **Background Dim** over it so the calendar stands out |
-| Calendar Art | Art for the calendar itself, like the iPhone frame. **Page Image**: the page the days sit on (empty = the box style). **Page Image Margin**: pixels at each edge that never stretch (a spiral binding, a border); 0 = the whole picture stretches. **Page Padding**: where the days sit on the page (left, top, right, bottom). **Page Text Color**: the words on the page. **Day Image** / **Day Image Margin** / **Day Text Color**: the same for each day's box |
-| What Shows | Switch parts on and off: the **CHAPTER 1** tab (off), **Show Day Numbers** (off), the **BOSS** caption (off), weekdays, the offer pictures, the pop-up text over a day, "days to the boss", the "See the whole month" button, the line under each choice |
-| Days | Each day's size (**Day Size** 330×300, and **Month Day Size** 300×250 when the whole month is open so it fits), the gap between them, the padding inside, number and weekday sizes, picture sizes (**Offer Icon Size** 84, **Spent Icon Size** 150 for a spent day, the boss and the X), how faded past days are, today's growth and highlight colour, the **Hidden Mark** (the X, now the X art from `assets/x1/`), how fast the weeks pop in |
-| Today's Choices | Picture, title and detail sizes; show the 1/2/3 keys or not |
-| Sounds | Hover, pick, blocked, opening the whole month, a day being crossed off. Kenney stand-ins for now. |
+| Cards | **Card Color** (dark slate), **Panel Color** (the darker panels for each choice), **Corner**, **Border Width** (the coloured border), **Shadow Color** / **Shadow Offset** |
+| Day Colours | **Today Color** (blue), **Upcoming Color** (gold), **Boss Color** (red), **Hidden Color** (an X), **Past Color** (the month), how faded upcoming days are (**Upcoming Alpha**) and gone days in the month (**Past Alpha**) |
+| Words | **Font** (empty = the phone's font; drop a chunky or pixel font here for more of a Balatro feel), **Text Color**, **Faint Text Color** (the lines under titles, "Upcoming"), **Text Outline Width** / **Color** (a dark edge around the words) |
+| Buttons | **Pick Color** (orange), **Pick Text Color**, **Blocked Color** (a choice that doesn't fit), **App Button Color** (Contacts and Profile, red), **Month Button Color** (orange), **Button Corner**, **Button Depth** (the darker edge under each button) |
 
-**Where things sit:** three scenes, each with its parts as nodes you can
+**The calendar's style:** `data/calendar_style.tres`:
+
+| Section | What's in it |
+|---|---|
+| Words | The title ("Calendar"), "{days} days to the boss" / "1 day to the boss", "Boss day", "CHAPTER {chapter}", "{weekday} · TODAY" and "{weekday}" (the tabs), "Upcoming", "Can't see that far ahead", "Pick", "Contacts", "Profile", "Month ▾" / "Days ▴", "1 day" / "{days} days", "Not enough days left", "BOSS", and the weekdays. The blanks: `{chapter}`, `{days}`, `{weekday}`, `{day}` (the day's number in the run) |
+| Calendar Art | **Page Image**: the page the whole month sits on. **Day Image**: a picture for each day's card and each day in the month (replaces the player's card; its words use **Day Text Color**). Margins (pixels that never stretch) and **Page Padding** |
+| What Shows | **CHAPTER 1** next to the title (off), day numbers in the month (off), the **BOSS** caption in the month (off), weekdays, the offer pictures, the pop-up text over a day, the **Contacts / Profile** buttons, "days to the boss", the Month button, the line under each choice |
+| Three Days | **Upcoming Days** (2: how many days after today show), the gap between cards, the padding inside them, the tab size, the size of an upcoming day's pictures and words, the boss's picture size, how fast the cards slide in |
+| Month | The whole month's squares: **Month Day Size** (106×150), the gap, weekday size, picture sizes, how much today grows, how fast the weeks pop in |
+| Days | The padding inside the month's page and each square, the number size, the **Hidden Mark** (the X, now the X art from `assets/x1/`) |
+| Today's Choices | Picture (130), title, detail and Pick sizes, the padding inside each bubble and the gap between them; show the 1/2/3 keys or not |
+| Sounds | Hover, pick, blocked, opening the month, a day passing. Kenney stand-ins for now. |
+
+**Where things sit:** four scenes, each with its parts as nodes you can
 move, resize or reorder:
 
 | Scene | What's in it |
 |---|---|
-| `scenes/Calendar/calendar.tscn` | The whole screen. **Background** (the pattern) / **BackgroundImage** / **BackgroundDim** behind. **Top** holds the days (centred in the space above today's choices); **TodayPanel** is today's choices; the **DialogueBox** for the calendar's lines sits in the same spot |
-| `scenes/Calendar/DayBox.tscn` | One day: **Tab** (weekday), **Box**, and inside it **Number**, **Offers** (the little pictures), **Picture** (what a past day was spent on, or the boss), **BossLabel**, **HiddenMark** / **HiddenText** (the X) |
-| `scenes/Calendar/DayChoice.tscn` | One of today's choices: **Key** (1/2/3), **Icon**, **Title**, **Detail** |
+| `scenes/Calendar/calendar.tscn` | The calendar on the phone. Inside **PhoneScreen → Phone → Body → Screen → Margin → Column**: **TitleRow** (Title, ChapterLabel), **DaysLeft**, **Buttons** (Contacts, Profile, Month), **Cards** (the day cards go here), **MonthBox** (the whole month, in **Days**). The **DialogueBox** for the calendar's lines is at the bottom of the phone's screen. **ContactsApp** and **ProfileApp** are your other apps. |
+| `scenes/Calendar/DayCard.tscn` | One day's card: **Tab** (weekday) and **Status** ("Upcoming"), **Choices** (today's bubbles go here), **Offers** (what a day coming up offers), **Boss** (picture, BOSS, what it does), **Hidden** (the X) |
+| `scenes/Calendar/DayChoice.tscn` | One of today's choices: **Icon**, **Title**, **Days**, **Detail**, and at the bottom **Key** (1/2/3) and **Pick** |
+| `scenes/Calendar/DayBox.tscn` | A day in the whole month: **Tab** (weekday), **Box**, and in the box **Number**, **Offers**, **Picture** (what a gone day was spent on, or the boss), **BossLabel**, **HiddenMark** / **HiddenText** (the X) |
 
-**Your own design:** duplicate `DayBox.tscn` (or `DayChoice.tscn`), change
-it (keep the node names), then click the calendar's top node and drop it
-into **Day Scene** (or **Choice Scene**). The calendar's **Rules**,
-**Style** and **Messages** slots swap the other files the same way.
+**Your own design:** duplicate `DayCard.tscn`, `DayChoice.tscn` or
+`DayBox.tscn`, change it (keep the node names), then click the calendar's
+top node and drop it into **Card Scene**, **Choice Scene** or **Month Day
+Scene**. The calendar's **Style**, **Player Style**, **Rules** and
+**Messages** slots swap the other files the same way.
 
 ## Something's wrong
 
@@ -194,12 +226,20 @@ yet).
 - `DayAction` (`scripts/data/day_action.gd`): parts, applied by
   `CalendarScene._on_picked` in order (`attribute_changes()`, the message,
   `spend()` or `next_chapter()`, then `AppLauncher.open_scene(app_name,
-  scene)`). `CalendarRules`, `CalendarStyle` (`words(text, blanks)`,
-  `weekday(n)`).
-- `CalendarScene` (`scenes/Calendar/calendar.gd`) instances `day_scene`
-  (`DayBox`) and `choice_scene` (`DayChoice`), adds them, then calls their
-  `setup()`. The date scene comes back with
+  scene)`, or `AppLauncher.phone_down(scene)` with `real_life`).
+  `CalendarRules`, `CalendarStyle` (`words(text, blanks)`, `weekday(n)`).
+- `CalendarScene` (`scenes/Calendar/calendar.gd`): `_build_cards()`
+  instances `card_scene` (`DayCard.setup(style, player_style, number, day,
+  today, boss_day, seen, font)`) for today and the next **Upcoming Days**,
+  and fills today's `card.choices` with `choice_scene` (`DayChoice.setup(style,
+  player_style, action, key, fits, font)`); `_build_month()` instances
+  `month_day_scene` (`DayBox.setup(style, player_style, number, day, look,
+  boss_day, font)`). Its phone is `phone_screen`; `contacts` and `profile`
+  are the overlay apps. The date comes back with
   `AppLauncher.open_scene("calendar", ...)`. `PlayerManager.get_calendar(rules)`.
+- `PlayerStyle` (`scripts/data/player_style.gd`): `day_color(today, boss,
+  hidden, past)`, `make_card(edge, padding)`, `make_panel()`, `make_tab()`,
+  `make_button(color, state)`, `style_label(label, fallback_font, size, color)`.
 - `PlayerManager.ensure_player()` makes a player with 50s when there isn't
   one. The old `current_day` / `advance_day()` / `calendar_action()` are
   gone.

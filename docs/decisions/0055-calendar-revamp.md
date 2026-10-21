@@ -26,3 +26,7 @@ A month grid as the main view; one day at a time (Persona-style); a fixed schedu
 ## Revisit when
 
 Follow-up dates, events (perks and items), the training screen or the boss fight are built, or a foresight ability exists.
+
+## Note (2026-10-21)
+
+The layout changed again: three day cards stacked, Balatro-style, with the look in the player's style ([0059](0059-three-day-calendar.md)).

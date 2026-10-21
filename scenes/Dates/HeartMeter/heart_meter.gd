@@ -29,6 +29,8 @@ var _thresholds: Array[int] = []
 var _rings: Array[HeartRing] = []
 
 @onready var sound: AudioStreamPlayer = %Sound
+## The filling ticks get their own player, so they don't cut off the heart sound.
+@onready var fill_player: AudioStreamPlayer = %FillSound
 
 
 func _ready() -> void:
@@ -52,6 +54,7 @@ func setup(girl: GirlData) -> void:
 		add_child(ring)
 		ring.setup(style, box_style.meter_color)
 		ring.heart_won.connect(_on_heart_won)
+		ring.ticked.connect(_on_ticked)
 		_rings.append(ring)
 	show_score(0.0, false)
 
@@ -70,6 +73,17 @@ func show_score(score: float, animate := true) -> void:
 ## How many hearts the rings show now.
 func hearts() -> int:
 	return _rings.filter(func(ring: HeartRing) -> bool: return ring.won).size()
+
+
+# A filling (or draining) tick, higher the fuller the ring.
+func _on_ticked(amount: float, filling: bool) -> void:
+	var stream := style.fill_sound if filling else style.drain_sound
+	if not stream:
+		return
+	fill_player.stream = stream
+	fill_player.volume_db = style.fill_volume_db
+	fill_player.pitch_scale = lerpf(style.fill_pitch_start, style.fill_pitch_end, clampf(amount, 0.0, 1.0))
+	fill_player.play()
 
 
 func _on_heart_won() -> void:

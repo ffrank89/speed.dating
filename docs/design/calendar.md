@@ -23,6 +23,12 @@
   ability). Each day offers 2–3 actions, picked at random per run; pick one
   and it uses its days (date 2, training 1, rest 1). Training, rest and the
   boss are placeholders. Guide: [the-calendar.md](../guides/the-calendar.md).
+- **On the phone (2026-10-21, [0058](../decisions/0058-phone-and-real-life.md),
+  [0059](../decisions/0059-three-day-calendar.md)):** the calendar is an app
+  on the player's portrait phone, laid out like Balatro's blinds: three day
+  cards stacked (today with its choices, then two "Upcoming"), and the whole
+  month as a small grid. Its look is the player's style
+  (`data/player_style.tres`). Your stats are their own app, **Profile** (P).
 - On the calendar, **press C** for your **Contacts** (the party screen,
   [0054](../decisions/0054-party-is-your-contacts.md)): every girl who gave
   you her number, and her saved card. **Built:** the list and her card.
@@ -55,10 +61,10 @@
 | `DayAction` (`Resource`)                                     | **Built** (`scripts/data/day_action.gd`, files in `data/day_actions/`): made of optional parts, applied in order: attribute changes, a message (`dialogue/calendar.dialogue`), days used up or **Ends Chapter**, then a screen it **Opens** like an app. Date, train, rest and boss are mixes of these; follow-ups and events will be too. |
 | Day selection rule                                               | New Dates take 2 or more days. Training takes 1.  Breakups take 1 day but Breakups + New Date take as much as a New Date does. **Built:** each `DayAction` has **Days** (date 2, training 1); it must end before the boss day. Breakups TBD. |
 | `TinderScreen`                                                 | Exists (`scenes/Tinder`). Shows `GirlPool.offer(2–3)` with name, bio, interests, **tags**. Skip option.<br />Is a Phone App Screen. Overlays on top of the calendar. |
-| `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, pulled up with **C** on the calendar: it opens over the calendar like an app, the way a microgame opens over the date. Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
+| `ContactsApp` (the party screen)                               | **Built.** `scenes/Phone/Contacts/ContactsApp.tscn`, pulled up with **C** on the calendar: it opens on the phone like an app, over the calendar. Lists `PlayerManager.party` A to Z in each girl's style; clicking one slides in her saved `ContactCard`. Guide: [contacts.md](../guides/contacts.md), decision [0054](../decisions/0054-party-is-your-contacts.md). Break-ups, lineup pick and synergy report: TBD. |
 | Training screen                                                  | TBD. For now a train action raises one attribute by its Amount (5) with a line from `dialogue/calendar.dialogue`; there's one action per attribute. |
 | Event pool                                                       | TBD. Random events and their rewards.                                                                                                                                           |
-| Month/chapter display                                            | **Built:** "CHAPTER n" on the strip's name tab; the whole calendar is 4 weeks (Calendar Days 28). `january.png` is no longer used. |
+| Month/chapter display                                            | **Built:** "CHAPTER n" on a name tab over the week (off by default); the whole calendar is 4 weeks (Calendar Days 28). `january.png` is no longer used. |
 
 ## Art needed
 

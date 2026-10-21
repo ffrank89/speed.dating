@@ -5,21 +5,11 @@ extends Resource
 ## Contact" screen where she types in, or doesn't, her name, number and address), and
 ## your Contacts, where your party is saved (press C on the calendar: the list, and each
 ## girl's saved card).
-## The boxes, her font and text colour come from HER dialogue style; this file sets
-## everything else. One file: data/contact_card_style.tres.
+## The boxes, her font and text colour come from HER dialogue style; the phone, its
+## screen colour and the phone's own font (Cancel, New Contact, the grey hints) are the
+## phone's style (data/phone_style.tres); this file sets everything else.
+## One file: data/contact_card_style.tres.
 ## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
-
-@export_group("Sheet")
-## The phone screen's background (iPhone's light grey).
-@export var sheet_color: Color = Color("#f2f2f7")
-## How rounded the sheet's corners are, in pixels.
-@export_range(0, 300) var sheet_corner: int = 70
-## Laid over the date behind the sheet.
-@export var behind_dim: Color = Color(0, 0, 0, 0.55)
-## Font for the iPhone's own words (Cancel, New Contact, the grey hints). Empty = Godot's default.
-@export var ui_font: Font
-@export_range(8, 200) var ui_font_size: int = 44
-@export var ui_text_color: Color = Color(0.1, 0.1, 0.12)
 
 @export_group("Words")
 @export var title: String = "New Contact"
@@ -88,32 +78,26 @@ extends Resource
 @export_range(16, 200) var trait_icon_size: int = 64
 
 @export_group("Closing")
-## On = when she's done, the card stays until the player clicks the ✕ (top right of the
+## On = when she's done, the card stays until the player clicks Done (top right of the
 ## card) or presses Escape. Off = it closes by itself after End Hold Seconds.
 @export var close_by_hand: bool = true
-## The ✕ picture.
-@export var close_image: Texture2D
-## Optional: an animated ✕ that plays once when it appears (e.g. the X drawing itself,
-## icons/x/x.tres). Wins over Close Image while it plays, then stays on its last frame.
-@export var close_animation: SpriteFrames
-## Which animation in Close Animation. Empty = its first one.
-@export var close_animation_name: String = ""
-## Size of the ✕, in pixels.
-@export_range(16, 400) var close_size: int = 130
-## A round button behind the ✕ so it shows up on anything. A = how solid; 0 = none.
-@export var close_backing_color: Color = Color(1, 1, 1, 0.95)
-## The line around that round button. A = 0 for none.
-@export var close_backing_outline: Color = Color(0, 0, 0, 0.25)
-## Clicking the ✕ (or Escape).
+## Done's colour while the mouse is over it.
+@export var done_hover_color: Color = Color(0.2, 0.85, 0.4)
+## How far Done's glow spreads while the mouse is over it, in pixels. 0 = no glow.
+@export_range(0, 40) var done_glow_size: int = 14
+## How strong the glow is (0-1).
+@export_range(0.0, 1.0, 0.05) var done_glow_strength: float = 0.4
+## Done gently pulses while it's waiting to be clicked, so the player sees it's a button.
+@export var done_pulse: bool = true
+## Clicking Done (or Escape).
 @export var close_sound: AudioStream
 
 @export_group("Contacts App")
-## On = pressing C opens your Contacts like an iPhone app, the same way a microgame opens
-## over the date, and closes it back (its icon and launch screen: data/apps/contacts.tres;
-## the feel: data/app_transition_style.tres). Off = it slides up from the bottom.
+## On = pressing C opens your Contacts like an iPhone app inside the phone, and closes
+## it back (its icon and launch screen: data/apps/contacts.tres; the feel:
+## data/app_transition_style.tres). Off = the phone comes up with Contacts on it
+## (data/phone_style.tres → Phone Up / Down).
 @export var open_as_app: bool = true
-## Only used with Open As App off: seconds to slide up (and back down).
-@export_range(0.0, 1.0, 0.05) var open_seconds: float = 0.35
 ## The big title at the top of the list.
 @export var list_title: String = "Contacts"
 ## Top left of a saved contact: goes back to the list.

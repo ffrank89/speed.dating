@@ -1,12 +1,14 @@
 class_name HeartRing
 extends Control
 ## One ring of the heart meter: it fills clockwise from the top, and the heart in its
-## middle is grey until it's full. The meter builds these from HeartRing.tscn; move or
+## middle is grey until it's full; then it turns to colour (and plays Heart Animation). The meter builds these from HeartRing.tscn; move or
 ## resize the Heart there. Its look is data/heart_meter_style.tres, its colour her
 ## dialogue style's Meter Color.
 
 ## Sent when the ring fills and the heart turns to colour.
 signal heart_won
+## Sent as the ring fills (or empties) past each Fill Tick Every step. `amount` = how full.
+signal ticked(amount: float, filling: bool)
 
 # A heart shown in grey (a picture's colours turned to shades of grey).
 const GREY := "shader_type canvas_item;\nvoid fragment() {\n\tfloat g = dot(COLOR.rgb, vec3(0.299, 0.587, 0.114));\n\tCOLOR.rgb = vec3(g);\n}\n"
@@ -14,6 +16,7 @@ const GREY := "shader_type canvas_item;\nvoid fragment() {\n\tfloat g = dot(COLO
 ## How full the ring looks now, 0-1.
 var fill := 0.0:
 	set(value):
+		_tick_past(fill, value)
 		fill = value
 		queue_redraw()
 ## Whether its heart has been won.
@@ -23,8 +26,12 @@ var _style: HeartMeterStyle
 var _color := Color.WHITE
 var _tween: Tween
 var _grey := ShaderMaterial.new()
+# True while the ring slides to a new amount (ticks only sound then, not on a jump).
+var _sliding := false
 
 @onready var heart: TextureRect = %Heart
+## The animated heart, shown instead of Heart once the ring is full (Heart Animation).
+@onready var heart_sprite: AnimatedSprite2D = %HeartSprite
 
 
 func _ready() -> void:
@@ -52,12 +59,31 @@ func fill_to(amount: float, animate := true) -> void:
 	if _tween:
 		_tween.kill()
 	if not animate or _style.fill_seconds <= 0.0:
+		_sliding = false
 		fill = amount
 		_update_heart(false)
 		return
+	if is_equal_approx(amount, fill):
+		_sliding = false
+		_update_heart(true)
+		return
+	_sliding = true
+	if _style.fill_tick_every <= 0.0:
+		# Once per fill: a single tick as it starts moving.
+		ticked.emit(amount, amount > fill)
 	_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_tween.tween_property(self, "fill", amount, _style.fill_seconds)
+	_tween.tween_callback(func() -> void: _sliding = false)
 	_tween.tween_callback(_update_heart.bind(true))
+
+
+# A tick for each Fill Tick Every step the ring passes while it slides.
+func _tick_past(from: float, to: float) -> void:
+	if not _sliding or not _style or _style.fill_tick_every <= 0.0:
+		return
+	var step := _style.fill_tick_every
+	if floori(to / step + 0.0001) != floori(from / step + 0.0001):
+		ticked.emit(to, to > from)
 
 
 func _update_heart(celebrate: bool) -> void:
@@ -67,10 +93,17 @@ func _update_heart(celebrate: bool) -> void:
 	won = full
 	_show_heart(full)
 	if full and celebrate:
-		heart.pivot_offset = heart.size / 2.0
-		heart.scale = Vector2.ONE * _style.heart_pop
-		create_tween().tween_property(heart, "scale", Vector2.ONE, 0.35) \
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		# Pop whichever heart is showing.
+		if heart_sprite.visible:
+			var rest := heart_sprite.scale
+			heart_sprite.scale = rest * _style.heart_pop
+			create_tween().tween_property(heart_sprite, "scale", rest, 0.35) \
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		else:
+			heart.pivot_offset = heart.size / 2.0
+			heart.scale = Vector2.ONE * _style.heart_pop
+			create_tween().tween_property(heart, "scale", Vector2.ONE, 0.35) \
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		heart_won.emit()
 
 
@@ -83,11 +116,34 @@ func _show_heart(full: bool) -> void:
 	var greyed := not full and not _style.empty_heart_image
 	heart.material = _grey if greyed else null
 	heart.modulate.a = _style.empty_heart_alpha if not full else 1.0
+	# Won, with an animated heart: it plays instead of the still picture.
+	var animated := full and _style.heart_animation != null
+	heart.visible = not animated
+	heart_sprite.visible = animated
+	if animated:
+		_play_heart_animation()
+	else:
+		heart_sprite.stop()
+
+
+func _play_heart_animation() -> void:
+	var frames := _style.heart_animation
+	var animation := StringName(_style.heart_animation_name)
+	if animation.is_empty() or not frames.has_animation(animation):
+		animation = frames.get_animation_names()[0]
+	heart_sprite.sprite_frames = frames
+	var picture := frames.get_frame_texture(animation, 0)
+	var side := maxf(picture.get_width(), picture.get_height()) if picture else float(_style.heart_size)
+	heart_sprite.scale = Vector2.ONE * (_style.heart_size / side)
+	heart_sprite.position = size / 2.0
+	heart_sprite.play(animation)
 
 
 func _center_heart() -> void:
 	if heart:
 		heart.position = (size - heart.size) / 2.0
+	if heart_sprite:
+		heart_sprite.position = size / 2.0
 
 
 func _draw() -> void:

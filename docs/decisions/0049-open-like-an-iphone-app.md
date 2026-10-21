@@ -23,3 +23,7 @@ A separate animation per screen; drawing the new screen inside the growing tile 
 ## Revisit when
 
 The phone becomes a device drawn on screen (use the Screen insets and Device Frame), or loading a scene takes long enough to need a real loading screen.
+
+## Note (2026-10-21)
+
+The phone is now drawn on screen ([0058](0058-phone-and-real-life.md)): apps open inside its screen (**Open Into Phone**), and going into a date is phone down rather than an app opening.

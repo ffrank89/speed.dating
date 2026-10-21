@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/Microgames/microgame_host.gd" id="1_host"]
 [ext_resource type="Resource" path="res://data/microgames.tres" id="2_library"]
 [ext_resource type="Resource" path="res://data/microgame_style.tres" id="3_style"]
 [ext_resource type="Resource" path="res://data/apps/microgame.tres" id="4_app"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="5_phone"]
 
 [node name="MicrogameHost" type="CanvasLayer"]
 layer = 10
@@ -12,16 +13,13 @@ library = ExtResource("2_library")
 style = ExtResource("3_style")
 default_app = ExtResource("4_app")
 
-[node name="Dim" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.03, 0.02, 0.06, 0.72)
+[node name="PhoneScreen" parent="." instance=ExtResource("5_phone")]
+unique_name_in_owner = true
+behind = 1
 
-[node name="GameSlot" type="Control" parent="."]
-layout_mode = 3
+[node name="GameSlot" type="Control" parent="PhoneScreen/Phone/Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -29,24 +27,29 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TimerBar" type="Panel" parent="."]
+[node name="TimerBar" type="Panel" parent="PhoneScreen/Phone/Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 400.0
-offset_top = 50.0
-offset_right = -400.0
-offset_bottom = 110.0
+offset_left = 40.0
+offset_top = 10.0
+offset_right = -40.0
+offset_bottom = 60.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Fill" type="Panel" parent="TimerBar"]
+[node name="Fill" type="Panel" parent="PhoneScreen/Phone/Body/Screen/TimerBar"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Banner" type="PanelContainer" parent="."]
+[node name="Banner" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.4
@@ -56,28 +59,31 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Text" type="Label" parent="Banner"]
+[node name="BannerText" type="Label" parent="PhoneScreen/Phone/Body/Screen/Banner"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "GO!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Stamp" type="Control" parent="."]
-layout_mode = 3
+[node name="Stamp" type="Control" parent="PhoneScreen/Phone/Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -700.0
-offset_top = -250.0
-offset_right = 700.0
-offset_bottom = 250.0
+offset_left = -440.0
+offset_top = -200.0
+offset_right = 440.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Image" type="TextureRect" parent="Stamp"]
+[node name="StampImage" type="TextureRect" parent="PhoneScreen/Phone/Body/Screen/Stamp"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,7 +94,8 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Stamp"]
+[node name="StampText" type="Label" parent="PhoneScreen/Phone/Body/Screen/Stamp"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,3 +123,5 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
+
+[editable path="PhoneScreen"]

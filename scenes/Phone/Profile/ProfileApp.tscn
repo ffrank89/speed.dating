@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/Phone/Profile/profile_app.gd" id="1_app"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
+[ext_resource type="Resource" path="res://data/option_styles/default.tres" id="3_icons"]
+
+[node name="ProfileApp" type="CanvasLayer"]
+layer = 19
+script = ExtResource("1_app")
+icons_from = ExtResource("3_icons")
+
+[node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
+unique_name_in_owner = true
+behind = 2
+
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 56
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 56
+theme_override_constants/margin_bottom = 24
+
+[node name="Column" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Profile"
+
+[node name="Subtitle" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Your stats"
+
+[node name="Gap" type="Control" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Stats" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 50
+
+[editable path="PhoneScreen"]

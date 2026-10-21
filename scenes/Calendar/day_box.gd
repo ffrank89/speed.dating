@@ -1,18 +1,19 @@
 class_name DayBox
 extends Control
-## One day on the calendar: a box in the calendar's dialogue-box style with its weekday
-## on a name tab and what's on it.
+## One day in the whole month ("See the whole month"): a small square in the player's
+## style (data/player_style.tres: its border colour says what the day is: today, coming
+## up, the boss, gone, or too far ahead to see) with its weekday on a name tab and what's
+## on it.
 ##
 ## Its parts are nodes in scenes/Calendar/DayBox.tscn: move, resize or reorder them
-## there. To use a different design, make your own day scene with this script (and the
-## same node names) and put it in the calendar's Day Scene slot. The calendar fills the
-## parts in; which ones show, their sizes and the words are data/calendar_style.tres;
-## the box, font and tab colours are the calendar's dialogue-box style.
+## there. To use a different design, make your own scene with this script (and the same
+## node names) and put it in the calendar's Month Day Scene slot. Which parts show, sizes
+## and words are data/calendar_style.tres (Month, Days, What Shows).
 
 enum Look {
 	## Already gone: faded, with what it was spent on.
 	PAST,
-	## Today: bigger, with a highlight.
+	## Today: bigger, in Today Color.
 	TODAY,
 	## Later this chapter (or seen with foresight): what it offers.
 	AHEAD,
@@ -25,7 +26,7 @@ var number := 0
 var look := Look.AHEAD
 
 var _style: CalendarStyle
-var _box_style: DialogueBoxStyle
+var _player: PlayerStyle
 
 ## The tab and the box. It sits in this plain Control, not straight in the calendar's
 ## grid, so it can grow (today) without the grid setting it back.
@@ -34,8 +35,8 @@ var _box_style: DialogueBoxStyle
 @onready var weekday_label: Label = %Weekday
 @onready var box: PanelContainer = %Box
 @onready var number_label: Label = %Number
-## The little pictures of what the day offers.
-@onready var offers: HBoxContainer = %Offers
+## The little pictures of what the day offers (a column in DayBox.tscn; a row works too).
+@onready var offers: BoxContainer = %Offers
 ## What the day was spent on (a past day), or the boss.
 @onready var picture: TextureRect = %Picture
 @onready var boss_label: Label = %BossLabel
@@ -46,40 +47,42 @@ var _box_style: DialogueBoxStyle
 
 func _ready() -> void:
 	inner.minimum_size_changed.connect(_fit_inner)
-	box.draw.connect(_draw_box_extras)
 
 
-## Fills the day in. Call it once it's in the scene. `day` = what's on it; `box_size` =
-## the box's size (Day Size, or Month Day Size when the whole month is open).
-func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look: Look, boss_day: bool, box_size: Vector2) -> void:
+## Fills the day in. Call it once it's in the scene. `day` = what's on it; `font` = the
+## font when the player's style has none (the phone's).
+func setup(style: CalendarStyle, player: PlayerStyle, day_number: int, day: RunCalendar.Day,
+		day_look: Look, boss_day: bool, font: Font = null) -> void:
 	_style = style
-	_box_style = style.box_style if style.box_style else DialogueBoxStyle.new()
+	_player = player
 	number = day_number
 	look = day_look
+	var edge := player.day_color(day_look == Look.TODAY, boss_day, day_look == Look.HIDDEN, day_look == Look.PAST)
 
-	# The weekday on a name tab, like the speaker's name over a dialogue box.
-	tab.add_theme_stylebox_override("panel", _box_style.make_name_plate())
-	tab.visible = style.show_weekdays and _box_style.show_name_plate
+	# The weekday on a name tab in the day's colour.
+	tab.add_theme_stylebox_override("panel", player.make_tab(edge))
+	tab.visible = style.show_weekdays
 	weekday_label.text = style.weekday(day_number)
-	_font(weekday_label, _box_style.name_font if _box_style.name_font else _box_style.text_font(), style.weekday_size, _box_style.name_color)
+	player.style_label(weekday_label, font, style.month_weekday_size)
 
-	box.custom_minimum_size = box_size
-	# Day Image (calendar art) or the box style.
+	box.custom_minimum_size = style.month_day_size
+	# Day Image (calendar art), or the player's card in the day's colour.
 	var panel := style.make_day_box()
 	if not panel:
-		panel = _box_style.make_box()
-		panel.set_content_margin_all(style.day_padding)
+		panel = player.make_card(edge, style.day_padding)
+		(panel as StyleBoxFlat).set_border_width_all(maxi(player.border_width / 2, 2))
+		(panel as StyleBoxFlat).shadow_size = 0
 	box.add_theme_stylebox_override("panel", panel)
-	var ink := style.day_text_color if style.day_image else _box_style.text_color
+	var ink := style.day_text_color if style.day_image else player.text_color
 
 	number_label.text = str(day_number)
 	number_label.visible = style.show_day_numbers
-	_font(number_label, _box_style.text_font(), style.day_number_size, ink)
-	_font(boss_label, _box_style.text_font(), style.weekday_size, ink)
+	player.style_label(number_label, font, style.day_number_size, ink)
+	player.style_label(boss_label, font, style.month_weekday_size, ink)
 	boss_label.text = style.boss_text
-	_font(hidden_text, _box_style.text_font(), style.spent_icon_size, Color(ink, 0.6))
+	player.style_label(hidden_text, font, style.month_spent_icon_size, Color(ink, 0.6))
 	for part: Control in [picture, hidden_mark]:
-		part.custom_minimum_size = Vector2.ONE * style.spent_icon_size
+		part.custom_minimum_size = Vector2.ONE * style.month_spent_icon_size
 
 	for child in offers.get_children():
 		child.queue_free()
@@ -98,7 +101,7 @@ func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look
 			if day.spent_on and day.spent_on.icon:
 				picture.texture = day.spent_on.icon
 				picture.visible = true
-			modulate.a = style.past_alpha
+			modulate.a = player.past_alpha
 		_:
 			if boss_day and not day.options.is_empty():
 				picture.texture = day.options[0].icon
@@ -108,7 +111,7 @@ func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look
 				offers.visible = style.show_offers
 				for action in day.options:
 					if action.icon:
-						offers.add_child(_icon(action.icon, style.offer_icon_size))
+						offers.add_child(_icon(action.icon, style.month_offer_icon_size))
 	tooltip_text = ""
 	if style.show_tooltips and day_look != Look.HIDDEN:
 		tooltip_text = ", ".join(day.options.map(func(action: DayAction) -> String: return action.title))
@@ -116,12 +119,11 @@ func setup(style: CalendarStyle, day_number: int, day: RunCalendar.Day, day_look
 	inner.scale = grown_scale()
 	z_index = 1 if day_look == Look.TODAY else 0
 	_fit_inner()
-	box.queue_redraw()
 
 
-## Today's size: its normal size times Today Scale (1 for other days).
+## Today's size: its normal size times Month Today Scale (1 for other days).
 func grown_scale() -> Vector2:
-	return Vector2.ONE * (_style.today_scale if look == Look.TODAY else 1.0)
+	return Vector2.ONE * (_style.month_today_scale if look == Look.TODAY else 1.0)
 
 
 func _fit_inner() -> void:
@@ -129,23 +131,6 @@ func _fit_inner() -> void:
 	inner.size = needed
 	inner.pivot_offset = needed / 2.0
 	custom_minimum_size = needed
-
-
-# The outline over a picture box (like her dialogue box), and today's highlight.
-func _draw_box_extras() -> void:
-	if not _box_style:
-		return
-	var outline := _box_style.make_outline() if not _style.day_image else null
-	if outline:
-		box.draw_style_box(outline, Rect2(Vector2.ZERO, box.size))
-	if look == Look.TODAY and _style.today_outline_width > 0:
-		var highlight := StyleBoxFlat.new()
-		highlight.draw_center = false
-		highlight.border_color = _style.today_outline_color
-		highlight.set_border_width_all(_style.today_outline_width)
-		highlight.set_corner_radius_all(_box_style.corner_radius)
-		highlight.anti_aliasing = true
-		box.draw_style_box(highlight, Rect2(Vector2.ZERO, box.size).grow(_style.today_outline_width * 0.5))
 
 
 func _icon(texture: Texture2D, side: int) -> TextureRect:
@@ -156,12 +141,3 @@ func _icon(texture: Texture2D, side: int) -> TextureRect:
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return icon
-
-
-func _font(label: Label, font: Font, font_size: int, color: Color) -> void:
-	if font:
-		label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
-	label.add_theme_constant_override("outline_size", _box_style.text_outline_width)
-	label.add_theme_color_override("font_outline_color", _box_style.text_outline_color)

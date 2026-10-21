@@ -1,4 +1,17 @@
 extends Control
+## The dating app, on your phone: one girl's profile at a time (her picture, name, age,
+## bio and interests). Pass ("Ewwwwwww....") swipes her away for the next one; Start
+## Dating! puts the phone down and the date with her begins (phone down: real life).
+## Girls in your Contacts, and girls whose first date failed, aren't shown. When there's
+## no one left, Start goes back to the calendar.
+##
+## The phone (screen, font, your room behind it) is data/phone_style.tres; the app's
+## look, words and sounds are Style (data/dating_app_style.tres); move or resize the
+## parts in this scene (PhoneScreen → Phone → Body → Screen → Margin).
+## Who's in it: Character Classes below. Full guide: docs/guides/dating-app.md
+
+## The app's look, words and sounds (data/dating_app_style.tres).
+@export var style: DatingAppStyle
 
 # Character classes to load profiles from
 var character_classes = [
@@ -7,163 +20,178 @@ var character_classes = [
 ]
 var characters = []  # Will store loaded instances of character classes
 var current_profile_index = 0
+var _busy := false
 
-# References to UI elements
-@onready var icon_panel = $IconPanel
-@onready var info_panel = $InfoPanel
-@onready var start_button = $Start
-@onready var next_button = $NextIcon
+@onready var phone_screen: PhoneScreen = %PhoneScreen
+@onready var title: Label = %Title
+@onready var card: PanelContainer = %Card
+@onready var photo: Panel = %Photo
+@onready var name_label: Label = %NameLabel
+@onready var bio: Label = %Bio
+@onready var interests_title: Label = %InterestsTitle
+@onready var interests: Label = %Interests
+@onready var empty: Label = %Empty
+@onready var pass_button: Button = %Pass
+@onready var start_button: Button = %Start
+@onready var sound: AudioStreamPlayer = %Sound
+
 
 func _ready():
-	# Set up the UI layout
-	setup_layout()
-	
+	if not style:
+		style = DatingAppStyle.new()
 	load_characters()
 	update_display()
-	
-	# Connect button signals
 	start_button.pressed.connect(_on_start_pressed)
-	next_button.pressed.connect(_on_next_pressed)
+	pass_button.pressed.connect(_on_next_pressed)
+	for button: Button in [start_button, pass_button]:
+		button.mouse_entered.connect(_play.bind(style.hover_sound))
+	card.resized.connect(func() -> void: card.pivot_offset = card.size / 2.0)
 
-func setup_layout():
-	# Make sure the root control fills the viewport
-	anchor_right = 1.0
-	anchor_bottom = 1.0
-	
-	# Position and size the icon panel (profile picture)
-	icon_panel.anchor_left = 0.1
-	icon_panel.anchor_top = 0.1
-	icon_panel.anchor_right = 0.45
-	icon_panel.anchor_bottom = 0.7
-	icon_panel.offset_left = 0
-	icon_panel.offset_top = 0
-	icon_panel.offset_right = 0
-	icon_panel.offset_bottom = 0
-	
-	# Position and size the info panel (character info)
-	info_panel.anchor_left = 0.5
-	info_panel.anchor_top = 0.1
-	info_panel.anchor_right = 0.9
-	info_panel.anchor_bottom = 0.7
-	info_panel.offset_left = 0
-	info_panel.offset_top = 0
-	info_panel.offset_right = 0
-	info_panel.offset_bottom = 0
-	
-	# Position the Start button
-	start_button.anchor_left = 0.3
-	start_button.anchor_top = 0.8
-	start_button.anchor_right = 0.5
-	start_button.anchor_bottom = 0.9
-	start_button.offset_left = 0
-	start_button.offset_top = 0
-	start_button.offset_right = 0
-	start_button.offset_bottom = 0
-	
-	# Position the Next button
-	next_button.anchor_left = 0.6
-	next_button.anchor_top = 0.8
-	next_button.anchor_right = 0.8
-	next_button.anchor_bottom = 0.9
-	next_button.offset_left = 0
-	next_button.offset_top = 0
-	next_button.offset_right = 0
-	next_button.offset_bottom = 0
-	
-	# Setup button text and styles
-	if start_button is Button:
-		start_button.text = "Start Dating!"
-		var start_style = StyleBoxFlat.new()
-		start_style.bg_color = Color(0.2, 0.6, 0.3)  # Green
-		start_style.set_corner_radius_all(15)
-		start_style.set_border_width_all(2)
-		start_style.border_color = Color(0.3, 0.7, 0.4)
-		start_button.add_theme_stylebox_override("normal", start_style)
-		start_button.add_theme_font_size_override("font_size", 20)
-	
-	if next_button is Button:
-		next_button.text = "Next Profile"
-		var next_style = StyleBoxFlat.new()
-		next_style.bg_color = Color(0.4, 0.4, 0.6)  # Blue-ish
-		next_style.set_corner_radius_all(15)
-		next_style.set_border_width_all(2)
-		next_style.border_color = Color(0.5, 0.5, 0.7)
-		next_button.add_theme_stylebox_override("normal", next_style)
-		next_button.add_theme_font_size_override("font_size", 20)
-	
+
 func load_characters():
 	# Create instances of each character class
 	for char_class in character_classes:
-		print("load_characters char_class", char_class)
 		var character = char_class.create_default()
 		# A girl whose first date failed is gone for the run; one in your contacts is taken.
 		var player_manager = get_node("/root/PlayerManager")
 		if player_manager.is_gone(character.name) or player_manager.is_in_party(character.name):
 			continue
-		# Add default interests and other fields if they're not set
-		if character.interests.is_empty():
-			set_default_character_data(character)
-			  
 		characters.append(character)
-		
-func set_default_character_data(character):
-	print("NO CHARACTER DATA")
-	
+
+
 func update_display():
+	_apply_style()
 	if characters.is_empty():
 		# Everyone's taken or gone: Start goes back to the calendar instead.
-		info_panel.update_text("[center]No one left to swipe on.[/center]")
-		start_button.text = "Back to the calendar"
-		next_button.disabled = true
+		card.visible = false
+		empty.visible = true
+		pass_button.visible = false
+		start_button.text = style.back_text
 		return
-	var character = self.characters[current_profile_index]
-	
-	# Update the icon
-	var texture_path = get_character_icon(character)
-	icon_panel.update_display(texture_path)
-	
-	# Update info panel text
-	var info_text = "[center][b]%s, %d[/b][/center]\n\n%s\n\n[b]Interests:[/b]\n" % [
-		character.name.capitalize(), 
-		character.age if "age" in character else 10000,
-		character.bio if "bio" in character else "No bio available."
-	]
-	
-	# Add interests
-	for interest in character.interests:
-		info_text += "• " + interest + "\n"
-	
-	info_panel.update_text(info_text)
+	var character = characters[current_profile_index]
+	_apply_card_style(character)
+	photo.update_display(character.icon_path)
+	name_label.text = character.name + style.age_text.format({"age": character.age})
+	bio.text = character.bio
+	bio.visible = not character.bio.is_empty()
+	interests_title.text = style.interests_title
+	interests_title.visible = not character.interests.is_empty()
+	interests.text = "\n".join(character.interests.map(func(interest) -> String: return style.bullet + interest))
+	interests.visible = not character.interests.is_empty()
+	pass_button.disabled = characters.size() < 2
 
-func get_character_icon(character):
-	if character.icon_path:
-		return character.icon_path
-		
-	print("NO ICON IN CHARACTER")
-	# Fallback to default
-	return ""
 
+# The phone's font for the title and the empty message; the buttons from Style.
+func _apply_style() -> void:
+	var ui := phone_screen.style
+	ui.style_label(title, ui.ui_text_color, ui.title_font_size)
+	title.text = style.title
+	ui.style_label(empty, Color(ui.ui_text_color, 0.5))
+	empty.text = style.no_one_text
+	pass_button.text = style.pass_text
+	start_button.text = style.start_text
+	for pair in [[pass_button, style.pass_color], [start_button, style.start_color]]:
+		var button: Button = pair[0]
+		var color: Color = pair[1]
+		button.custom_minimum_size.y = style.button_height
+		button.add_theme_stylebox_override("normal", style.make_button_box(color))
+		button.add_theme_stylebox_override("hover", style.make_button_box(color.lightened(0.15)))
+		button.add_theme_stylebox_override("pressed", style.make_button_box(color.darkened(0.15)))
+		button.add_theme_stylebox_override("disabled", style.make_button_box(Color(color, 0.4)))
+		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		if ui.ui_font:
+			button.add_theme_font_override("font", ui.ui_font)
+		button.add_theme_font_size_override("font_size", style.button_font_size)
+		for state in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+			button.add_theme_color_override(state, style.button_text_color)
+		button.add_theme_color_override("font_disabled_color", Color(style.button_text_color, 0.6))
+
+
+# Her card in her own dialogue style (Use Her Style), or the plain card.
+func _apply_card_style(character) -> void:
+	var box_style: DialogueBoxStyle = null
+	if style.use_her_style:
+		var girl: GirlData = load(character.girl_data_path) if not character.girl_data_path.is_empty() else null
+		box_style = ContactCard.box_style_of(girl)
+	var ui := phone_screen.style
+	var font: Font = box_style.text_font() if box_style else ui.ui_font
+	var ink: Color = box_style.text_color if box_style else style.card_text_color
+	var box: StyleBox
+	if box_style:
+		box = box_style.make_box()
+	else:
+		var flat := StyleBoxFlat.new()
+		flat.bg_color = style.card_color
+		flat.set_corner_radius_all(style.card_corner)
+		flat.set_content_margin_all(28)
+		flat.anti_aliasing = true
+		box = flat
+	card.add_theme_stylebox_override("panel", box)
+
+	var photo_box := StyleBoxFlat.new()
+	photo_box.bg_color = style.photo_background
+	photo_box.set_corner_radius_all(int(style.card_corner * 0.6))
+	photo_box.anti_aliasing = true
+	photo.add_theme_stylebox_override("panel", photo_box)
+	photo.custom_minimum_size.y = style.photo_height
+	photo.fill = style.photo_fill
+
+	# Her "next" arrow colour is made to show up on her box.
+	var accent: Color = box_style.next_arrow_color if box_style else ui.accent_color
+	_font(name_label, box_style.name_font if box_style and box_style.name_font else font, style.name_font_size, ink)
+	_font(bio, font, style.bio_font_size, ink)
+	_font(interests_title, font, style.interests_font_size, accent)
+	_font(interests, font, style.interests_font_size, Color(ink, 0.8))
+
+
+func _font(label: Label, font: Font, font_size: int, color: Color) -> void:
+	if font:
+		label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
+
+
+# Pass: her card swipes off to the left, turning, and the next one comes in.
 func _on_next_pressed():
-	# Animate transition to next profile
-	var tween = create_tween()
-	tween.tween_property(icon_panel, "modulate", Color(1,1,1,0), 0.3)
-	tween.parallel().tween_property(info_panel, "modulate", Color(1,1,1,0), 0.3)
-	tween.tween_callback(func():
-		# Go to next profile
-		self.current_profile_index = (self.current_profile_index + 1) % characters.size()
-		update_display()
-	)
-	
-	tween.tween_property(icon_panel, "modulate", Color(1,1,1,1), 0.3)
-	tween.parallel().tween_property(info_panel, "modulate", Color(1,1,1,1), 0.3)
+	if _busy or characters.size() < 2:
+		return
+	_busy = true
+	_play(style.pass_sound)
+	var away := create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	away.tween_property(card, "position:x", card.position.x - card.size.x * 1.3, style.swipe_seconds)
+	away.tween_property(card, "rotation_degrees", -style.swipe_tilt, style.swipe_seconds)
+	away.tween_property(card, "modulate:a", 0.0, style.swipe_seconds)
+	await away.finished
+	current_profile_index = (current_profile_index + 1) % characters.size()
+	update_display()
+	# Wait a frame so the column has put the card back in place.
+	(card.get_parent() as Container).queue_sort()
+	await get_tree().process_frame
+	card.rotation_degrees = 0.0
+	card.scale = Vector2(0.9, 0.9)
+	var come_in := create_tween().set_parallel().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	come_in.tween_property(card, "scale", Vector2.ONE, style.swipe_seconds)
+	come_in.tween_property(card, "modulate:a", 1.0, style.swipe_seconds)
+	await come_in.finished
+	_busy = false
+
 
 func _on_start_pressed():
+	if _busy or AppLauncher.is_busy():
+		return
 	var player_manager = get_node("/root/PlayerManager")
 	if characters.is_empty():
 		AppLauncher.open_scene("calendar", player_manager.CALENDAR, start_button.get_global_rect())
 		return
-	# Store selected character in PlayerManager
-	player_manager.select_date(characters[self.current_profile_index])
-	
-	# Open the date like an app, growing from the Start button (data/apps/date.tres)
-	AppLauncher.open_scene("date", player_manager.current_date.first_date_path, start_button.get_global_rect())
+	_busy = true
+	_play(style.start_sound)
+	player_manager.select_date(characters[current_profile_index])
+	# Phone down: real life, the date with her.
+	AppLauncher.phone_down(player_manager.current_date.first_date_path)
+
+
+func _play(stream: AudioStream) -> void:
+	if stream:
+		sound.stream = stream
+		sound.volume_db = style.volume_db
+		sound.play()

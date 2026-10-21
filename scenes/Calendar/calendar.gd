@@ -1,57 +1,64 @@
 class_name CalendarScene
 extends Control
-## The run's calendar, in its own dialogue-box style (data/dialogue_styles/calendar.tres).
+## The run's calendar: an app on your phone, laid out like Balatro's blinds.
 ##
-## At the top: this chapter's days, each in a box with its weekday on a name tab. Today
-## is highlighted, days gone are faded, and the boss sits on the last day. "See the
-## whole month" opens up the rest of the calendar; days past this chapter show an X
+## Three day cards, stacked: today's at the top with its 2-3 choices side by side, then
+## the next two days, dimmed and "Upcoming", showing what they'll offer. Each card's
+## border and tab are coloured by what the day is (today, coming up, the boss, too far
+## ahead to see). Click a choice's Pick (or press 1-3) and it does what its action file
+## says (data/day_actions/): changes attributes, plays a line from
+## dialogue/calendar.dialogue in a box on the phone, uses up its days (or ends the
+## chapter), and opens a screen (a date opens the dating app on the phone; a real-life
+## screen, like a boss fight, puts the phone down).
+## "Month" swaps the cards for the whole month, small; days past this chapter show an X
 ## (data/calendar_rules.tres → Foresight Days lets you see further).
-## At the bottom: today's 2-3 choices. Click one (or press 1-3) and it does what its
-## action file says (data/day_actions/): changes attributes, plays a line from
-## dialogue/calendar.dialogue, uses up its days (or ends the chapter), and opens a
-## screen (a date opens the dating app).
-## Press C for your Contacts.
+## Contacts (C) and Profile (P) open your other apps.
 ##
-## Every part is swappable: the layout is this scene, one day is Day Scene
-## (DayBox.tscn), one choice is Choice Scene (DayChoice.tscn); words, sizes, which parts
-## show and sounds are Style; what's offered is Rules. Full guide: docs/guides/the-calendar.md
+## Every part is swappable: the layout is this scene (PhoneScreen → Phone → Body →
+## Screen), a day is Card Scene (DayCard.tscn), a choice is Choice Scene
+## (DayChoice.tscn), a day in the month is Month Day Scene (DayBox.tscn). Words, sizes,
+## what shows and sounds are Style; the colours, font and buttons are Player Style;
+## what's offered is Rules; the phone and your room behind it are data/phone_style.tres.
+## Full guide: docs/guides/the-calendar.md
 
-## The look, words, which parts show, and sounds (data/calendar_style.tres).
+## Words, sizes, which parts show, calendar art and sounds (data/calendar_style.tres).
 @export var style: CalendarStyle
+## The player's look: the cards' colours, font, borders and buttons (data/player_style.tres).
+@export var player_style: PlayerStyle
 ## How the calendar runs and what it offers (data/calendar_rules.tres). Used when the run
 ## starts; after that the run keeps its calendar (PlayerManager.get_calendar()).
 @export var rules: CalendarRules
 ## The lines actions can play (dialogue/calendar.dialogue).
 @export var messages: DialogueResource
-## One day on the calendar. Make your own design from DayBox.tscn and drop it here.
-@export var day_scene: PackedScene = preload("res://scenes/Calendar/DayBox.tscn")
+## One day's card. Make your own design from DayCard.tscn and drop it here.
+@export var card_scene: PackedScene = preload("res://scenes/Calendar/DayCard.tscn")
 ## One of today's choices. Make your own design from DayChoice.tscn and drop it here.
 @export var choice_scene: PackedScene = preload("res://scenes/Calendar/DayChoice.tscn")
+## One day in the whole month. Make your own design from DayBox.tscn and drop it here.
+@export var month_day_scene: PackedScene = preload("res://scenes/Calendar/DayBox.tscn")
 
 var _calendar: RunCalendar
 var _expanded := false
 var _busy := false
 var _choices: Array[DayChoice] = []
-# Top's bottom edge with today's choices showing (the whole calendar takes their room).
-var _top_bottom := 0.0
 
-@onready var background: Control = $Background
-@onready var background_image: TextureRect = %BackgroundImage
-@onready var background_dim: ColorRect = %BackgroundDim
-@onready var top: Control = $Top
-@onready var month_box: PanelContainer = %MonthBox
-@onready var chapter_plate: PanelContainer = %ChapterPlate
+## The phone the calendar is on (its look and your room: data/phone_style.tres).
+@onready var phone_screen: PhoneScreen = %PhoneScreen
+@onready var title: Label = %Title
 @onready var chapter_label: Label = %ChapterLabel
 @onready var days_left: Label = %DaysLeft
-@onready var expand_button: Label = %ExpandButton
+@onready var buttons: HBoxContainer = %Buttons
+@onready var contacts_button: Button = %ContactsButton
+@onready var profile_button: Button = %ProfileButton
+@onready var expand_button: Button = %ExpandButton
+## Today's card and the days coming up.
+@onready var cards: VBoxContainer = %Cards
+## The whole month, when it's open.
+@onready var month_box: PanelContainer = %MonthBox
 @onready var days_grid: GridContainer = %Days
-@onready var today_panel: Control = %TodayPanel
-@onready var today_box: PanelContainer = %TodayBox
-@onready var today_plate: PanelContainer = %TodayPlate
-@onready var today_label: Label = %TodayLabel
-@onready var choices_row: HBoxContainer = %Choices
 @onready var dialogue_box: DialogueBox = %DialogueBox
 @onready var contacts: ContactsApp = %ContactsApp
+@onready var profile: ProfileApp = %ProfileApp
 @onready var sound: AudioStreamPlayer = %Sound
 
 
@@ -60,23 +67,24 @@ func _ready() -> void:
 		style = CalendarStyle.new()
 	if not style.box_style:
 		style.box_style = DialogueBoxStyle.new()
+	if not player_style:
+		player_style = PlayerStyle.new()
 	_calendar = PlayerManager.get_calendar(rules)
 	dialogue_box.default_style = style.box_style
-	_top_bottom = top.offset_bottom
-	expand_button.gui_input.connect(_on_expand_input)
-	for panel: PanelContainer in [month_box, today_box]:
-		panel.draw.connect(_draw_outline.bind(panel))
+	contacts_button.pressed.connect(func() -> void: contacts.open())
+	profile_button.pressed.connect(func() -> void: profile.open())
+	expand_button.pressed.connect(_toggle_expanded)
 	_apply_style()
 	_refresh()
 
 
-## Re-reads Style and rebuilds everything (e.g. after changing the style while playing).
+## Re-reads the styles and rebuilds everything (e.g. after changing a style while playing).
 func refresh_look() -> void:
 	_apply_style()
 	_refresh()
 
 
-## Rebuilds the days and today's choices from the run's calendar.
+## Rebuilds the cards (or the month) and today's choices from the run's calendar.
 func _refresh() -> void:
 	var today_number := _calendar.calendar_today()
 	var blanks := {
@@ -85,30 +93,71 @@ func _refresh() -> void:
 		"weekday": style.weekday(today_number),
 		"day": today_number,
 	}
+	title.text = style.title_text
 	chapter_label.text = style.words(style.chapter_text, blanks)
-	days_left.text = style.boss_today_text if _calendar.is_boss_day() else style.words(style.days_left_text, blanks)
+	chapter_label.visible = style.show_chapter
+	days_left.text = style.words(style.one_day_left_text if _calendar.days_until_boss() == 1 else style.days_left_text, blanks)
+	if _calendar.is_boss_day():
+		days_left.text = style.boss_today_text
 	days_left.visible = style.show_days_left
 	expand_button.text = style.collapse_text if _expanded else style.expand_text
 	expand_button.visible = style.show_expand_button
-	today_label.text = style.words(style.today_text, blanks)
-	_build_days()
-	_build_choices()
+	contacts_button.text = style.contacts_button_text
+	profile_button.text = style.profile_button_text
+	for button: Button in [contacts_button, profile_button]:
+		button.visible = style.show_app_buttons
+	cards.visible = not _expanded
+	month_box.visible = _expanded
+	if _expanded:
+		_build_month()
+	else:
+		_build_cards()
 
 
-func _build_days() -> void:
+# Today's card with its choices, then the days coming up.
+func _build_cards() -> void:
+	for child in cards.get_children():
+		cards.remove_child(child)
+		child.queue_free()
+	_choices.clear()
+	cards.add_theme_constant_override("separation", style.card_gap)
+	var font := phone_screen.style.ui_font
+	var today_number := _calendar.calendar_today()
+	for offset in range(style.upcoming_days + 1):
+		var number := today_number + offset
+		if number > _calendar.calendar_length():
+			break
+		var card := card_scene.instantiate() as DayCard
+		cards.add_child(card)
+		card.setup(style, player_style, number, _calendar.day_at(number), offset == 0,
+			_calendar.is_boss(number), _calendar.is_revealed(number), font)
+		if offset == 0:
+			_build_choices(card)
+
+
+func _build_choices(card: DayCard) -> void:
+	card.choices.add_theme_constant_override("separation", style.choice_gap)
+	var options := _calendar.today_day().options
+	for i in options.size():
+		var choice := choice_scene.instantiate() as DayChoice
+		card.choices.add_child(choice)
+		choice.setup(style, player_style, options[i], i + 1, _calendar.fits(options[i]), phone_screen.style.ui_font)
+		choice.picked.connect(_on_picked)
+		choice.blocked.connect(func(_choice: DayChoice) -> void: _play(style.blocked_sound))
+		_choices.append(choice)
+
+
+# The whole month, small: every day, X'd out past what you can see.
+func _build_month() -> void:
 	for child in days_grid.get_children():
 		days_grid.remove_child(child)
 		child.queue_free()
+	_choices.clear()
 	days_grid.columns = maxi(style.weekdays.size(), 1)
-	days_grid.add_theme_constant_override("h_separation", style.day_gap)
-	days_grid.add_theme_constant_override("v_separation", style.day_gap + 20)
-	var first := _calendar.calendar_day(1)
-	var last := _calendar.calendar_day(_calendar.rules.days_per_chapter)
-	if _expanded:
-		first = 1
-		last = _calendar.calendar_length()
+	days_grid.add_theme_constant_override("h_separation", style.month_gap)
+	days_grid.add_theme_constant_override("v_separation", style.month_gap)
 	var today_number := _calendar.calendar_today()
-	for number in range(first, last + 1):
+	for number in range(1, _calendar.calendar_length() + 1):
 		var look := DayBox.Look.AHEAD
 		if number < today_number:
 			look = DayBox.Look.PAST
@@ -116,25 +165,10 @@ func _build_days() -> void:
 			look = DayBox.Look.TODAY
 		elif not _calendar.is_revealed(number):
 			look = DayBox.Look.HIDDEN
-		var day_box := day_scene.instantiate() as DayBox
+		var day_box := month_day_scene.instantiate() as DayBox
 		days_grid.add_child(day_box)
-		day_box.setup(style, number, _calendar.day_at(number), look, _calendar.is_boss(number),
-			style.month_day_size if _expanded else style.day_size)
-
-
-func _build_choices() -> void:
-	for child in choices_row.get_children():
-		choices_row.remove_child(child)
-		child.queue_free()
-	_choices.clear()
-	var options := _calendar.today_day().options
-	for i in options.size():
-		var choice := choice_scene.instantiate() as DayChoice
-		choices_row.add_child(choice)
-		choice.setup(style, options[i], i + 1, _calendar.fits(options[i]))
-		choice.picked.connect(_on_picked)
-		choice.blocked.connect(func(_choice: DayChoice) -> void: _play(style.blocked_sound))
-		_choices.append(choice)
+		day_box.setup(style, player_style, number, _calendar.day_at(number), look,
+			_calendar.is_boss(number), phone_screen.style.ui_font)
 
 
 func _on_picked(choice: DayChoice) -> void:
@@ -156,16 +190,20 @@ func _on_picked(choice: DayChoice) -> void:
 		_calendar.spend(action)
 	if not action.scene.is_empty():
 		# Its days are already used up; the screen it opens comes back to the calendar.
-		AppLauncher.open_scene(action.app_name if not action.app_name.is_empty() else "calendar", action.scene, choice.get_global_rect())
+		if action.real_life:
+			AppLauncher.phone_down(action.scene)
+		else:
+			AppLauncher.open_scene(action.app_name if not action.app_name.is_empty() else "calendar", action.scene, choice.get_global_rect())
 		return
 	_play(style.day_done_sound)
 	_refresh()
-	await _pop_in_today()
+	await _slide_in_cards()
 	_busy = false
 
 
-# A line from dialogue/calendar.dialogue in the calendar's box, where today's choices
-# were. The lines can use {{action}}, {{changes}}, {{attribute}} and {{amount}}.
+# A line from dialogue/calendar.dialogue in the calendar's box, at the bottom of the
+# phone over the days coming up. The lines can use {{action}}, {{changes}},
+# {{attribute}} and {{amount}}.
 func _say(action: DayAction) -> void:
 	if not messages or action.dialogue_title.is_empty() or not messages.get_titles().has(action.dialogue_title):
 		return
@@ -177,24 +215,30 @@ func _say(action: DayAction) -> void:
 		"attribute": Attr.display_name(first) if first >= 0 else "",
 		"amount": changes[first] if first >= 0 else 0,
 	}
-	today_panel.visible = false
+	# The days coming up make way (keeping their room, so today's card doesn't move).
+	for card: DayCard in cards.get_children():
+		if not card.is_today:
+			card.modulate.a = 0.0
 	dialogue_box.start(messages, action.dialogue_title, [], [details])
 	await dialogue_box.finished
-	today_panel.visible = true
 
 
-# Today's box pops up to its size, and the new choices fade in.
-func _pop_in_today() -> void:
+# A day has passed: the cards come up from below, one after another.
+func _slide_in_cards() -> void:
 	await get_tree().process_frame
-	for day_box: DayBox in days_grid.get_children():
-		if day_box.look == DayBox.Look.TODAY:
-			day_box.inner.scale = Vector2.ONE
-			create_tween().tween_property(day_box.inner, "scale", day_box.grown_scale(), 0.25) \
-				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	choices_row.modulate.a = 0.0
-	var fade := create_tween()
-	fade.tween_property(choices_row, "modulate:a", 1.0, 0.2)
-	await fade.finished
+	var slide: Tween = null
+	var list := cards.get_children()
+	for i in list.size():
+		var card: DayCard = list[i]
+		var target := card.modulate.a
+		card.modulate.a = 0.0
+		var rest := card.position.y
+		card.position.y = rest + 80.0
+		slide = create_tween().set_parallel().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		slide.tween_property(card, "position:y", rest, style.slide_seconds).set_delay(i * 0.07)
+		slide.tween_property(card, "modulate:a", target, style.slide_seconds * 0.6).set_delay(i * 0.07)
+	if slide:
+		await slide.finished
 
 
 func _toggle_expanded() -> void:
@@ -202,11 +246,9 @@ func _toggle_expanded() -> void:
 		return
 	_expanded = not _expanded
 	_play(style.expand_sound)
-	# The whole calendar uses the room today's choices had; they come back when it closes.
-	today_panel.visible = not _expanded
-	top.offset_bottom = -top.offset_top if _expanded else _top_bottom
 	_refresh()
 	if not _expanded:
+		await _slide_in_cards()
 		return
 	# The weeks pop in one after another.
 	var columns := days_grid.columns
@@ -220,13 +262,8 @@ func _toggle_expanded() -> void:
 		pop.tween_property(day_box, "modulate:a", target, 0.15)
 
 
-func _on_expand_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		_toggle_expanded()
-
-
 func _unhandled_input(event: InputEvent) -> void:
-	if _busy or contacts.visible or not (event is InputEventKey) or not event.pressed or event.echo:
+	if _busy or contacts.visible or profile.visible or not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	var key: int = event.keycode if event.keycode != KEY_NONE else event.physical_keycode
 	var index := key - KEY_1
@@ -239,47 +276,38 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _apply_style() -> void:
-	var box := style.box_style
-	# The calendar's page: Page Image (calendar art) or the box style.
+	var ui := phone_screen.style
+	var player := player_style
+	# The app's title and how long to the boss are the phone's words; the buttons are the
+	# player's.
+	ui.style_label(title, ui.ui_text_color, ui.title_font_size)
+	ui.style_label(chapter_label, Color(ui.ui_text_color, 0.5), style.choice_detail_size + 6)
+	ui.style_label(days_left, Color(ui.ui_text_color, 0.6), style.choice_detail_size + 8)
+	_style_button(contacts_button, player.app_button_color)
+	_style_button(profile_button, player.app_button_color)
+	_style_button(expand_button, player.month_button_color)
+	# The page the whole month sits on: Page Image (calendar art) or a player's card.
 	var page := style.make_page_box()
-	month_box.add_theme_stylebox_override("panel", page if page else box.make_box())
-	today_box.add_theme_stylebox_override("panel", box.make_box())
-	for plate: PanelContainer in [chapter_plate, today_plate]:
-		plate.add_theme_stylebox_override("panel", box.make_name_plate())
-		plate.visible = box.show_name_plate
-	chapter_plate.visible = box.show_name_plate and style.show_chapter
-	# A picture behind everything, or the animated pattern.
-	background_image.texture = style.background_image
-	background_image.visible = style.background_image != null
-	background_dim.color = style.background_dim
-	background_dim.visible = style.background_image != null
-	background.visible = style.background_image == null
-	for label: Label in [chapter_label, today_label]:
-		_font(label, box.name_font if box.name_font else box.text_font(), box.name_font_size, box.name_color)
-	# On a page picture, Page Text Color; on the box, the box's text and accent colours
-	# (the "next" arrow's colour is made to show up on the box).
-	_font(days_left, box.text_font(), style.choice_detail_size, style.page_text_color if page else box.text_color)
-	_font(expand_button, box.text_font(), style.choice_detail_size, style.page_text_color if page else box.next_arrow_color)
-	expand_button.mouse_filter = Control.MOUSE_FILTER_STOP
-	expand_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	if not page:
+		page = player.make_card(player.upcoming_color, style.page_box_padding)
+	month_box.add_theme_stylebox_override("panel", page)
 	month_box.queue_redraw()
-	today_box.queue_redraw()
 
 
-# The outline over a picture box, like a dialogue box's (not over calendar art).
-func _draw_outline(panel: PanelContainer) -> void:
-	if panel == month_box and style.page_image:
-		return
-	var outline := style.box_style.make_outline()
-	if outline:
-		panel.draw_style_box(outline, Rect2(Vector2.ZERO, panel.size))
-
-
-func _font(label: Label, font: Font, font_size: int, color: Color) -> void:
+# A chunky button in the player's style.
+func _style_button(button: Button, color: Color) -> void:
+	var player := player_style
+	for state in ["normal", "hover", "pressed", "disabled"]:
+		button.add_theme_stylebox_override(state, player.make_button(color, state))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	var font := player.font_or(phone_screen.style.ui_font)
 	if font:
-		label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
+		button.add_theme_font_override("font", font)
+	button.add_theme_font_size_override("font_size", style.pick_size)
+	for color_name in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		button.add_theme_color_override(color_name, player.app_button_text_color)
+	button.add_theme_constant_override("outline_size", player.text_outline_width)
+	button.add_theme_color_override("font_outline_color", player.text_outline_color)
 
 
 func _play(stream: AudioStream) -> void:

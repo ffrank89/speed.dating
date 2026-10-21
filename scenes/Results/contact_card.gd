@@ -1,6 +1,7 @@
 class_name ContactCard
 extends CanvasLayer
-## The end-of-date result: an iPhone "New Contact" screen.
+## The end-of-date result: an iPhone "New Contact" screen, on the player's phone. The
+## date brings the phone up over itself (phone up) to show it.
 ##   Failed date: she types "not a chance!" as her name and taps Cancel. Nothing else.
 ##   Otherwise: she types her name (in her font); her traits pop into their fields under
 ##   it (boop, boop, boop); she types her number and address and taps Done. Which traits
@@ -8,16 +9,17 @@ extends CanvasLayer
 ##   data/date_rules.tres → Result; below that a field says "you dont know me like that!".
 ##   A heart after her name at Heart Emoji At Hearts (3).
 ## The middle scrolls to follow her, so there's room for any number of traits.
-## When she's done, the card waits for the player to click the ✕ (top right of the card)
-## or press Escape (Style → Closing → Close By Hand).
+## When she's done, the card waits for the player to click Done (it glows green under
+## the mouse) or press Escape (Style → Closing → Close By Hand).
 ##
-## The boxes, her font and text colour come from her dialogue style; everything else is
-## Style (data/contact_card_style.tres). Her name, number, address and traits come from
+## The boxes, her font and text colour come from her dialogue style; the phone, its
+## screen colour and the phone's own font are the phone's style (data/phone_style.tres);
+## everything else is Style (data/contact_card_style.tres). Her name, number, address and traits come from
 ## her girl file (Contact Card); her Number Threshold (Dating) decides a failed date.
 ## Move or resize the rows in this scene. Press F6 to watch it with the Testing settings.
 ##
-## From code: show_card(girl, rules), then var got_number: bool = await play(hearts)
-## (hearts = -1 for a failed date).
+## From code: show_card(girl, rules), await phone_screen.raise(), then
+## var got_number: bool = await play(hearts) (hearts = -1 for a failed date).
 ## Her saved contact in the Contacts app: show_saved(girl, hearts, rules) fills it in at
 ## once, with "‹ Contacts" to go back (back_pressed).
 ## Full guides: docs/guides/result-screen.md, docs/guides/contacts.md
@@ -26,7 +28,7 @@ extends CanvasLayer
 signal finished(got_number: bool)
 ## Her saved contact's "‹ Contacts" was clicked (or Escape pressed).
 signal back_pressed
-## The player closed the finished card (the ✕, or Escape).
+## The player closed the finished card (Done, or Escape).
 signal closed_by_player
 
 const DEFAULT_BOX_STYLE := "res://data/dialogue_styles/default.tres"
@@ -50,11 +52,14 @@ var _hints := {}
 var _time := 0.0
 var _saved := false
 var _waiting_to_close := false
+var _done_pulse: Tween
 # Trait pops get their own player, so their rising pitch doesn't bend the key clicks.
 var _boop := AudioStreamPlayer.new()
 
-@onready var dim: ColorRect = %Dim
-@onready var sheet: Panel = %Sheet
+## The phone the card is on (its look: data/phone_style.tres).
+@onready var phone_screen: PhoneScreen = %PhoneScreen
+## Everything on the card, inside the phone's screen.
+@onready var content: Control = %Margin
 @onready var cancel: Label = %Cancel
 @onready var title: Label = %Title
 @onready var done: Label = %Done
@@ -82,10 +87,6 @@ var _boop := AudioStreamPlayer.new()
 @onready var result: Label = %Result
 @onready var caret: ColorRect = %Caret
 @onready var sound: AudioStreamPlayer = %Sound
-@onready var close_button: Control = %Close
-@onready var close_backing: Panel = %CloseBacking
-@onready var close_image: TextureRect = %CloseImage
-@onready var close_sprite: AnimatedSprite2D = %CloseSprite
 
 
 func _ready() -> void:
@@ -98,7 +99,11 @@ func _ready() -> void:
 	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.draw.connect(_draw_outline.bind(group))
 	cancel.gui_input.connect(_on_cancel_input)
-	close_button.gui_input.connect(_on_close_input)
+	done.gui_input.connect(_on_done_input)
+	done.mouse_entered.connect(_on_done_hover.bind(true))
+	done.mouse_exited.connect(_on_done_hover.bind(false))
+	# Once she's done, the phone's home bar closes the card too, like Done.
+	phone_screen.home_pressed.connect(_close_now)
 	if get_parent() == get_tree().root:
 		_play_alone.call_deferred()
 	else:
@@ -121,8 +126,7 @@ func show_card(girl: GirlData, rules: DateRules = null) -> void:
 	# The result line keeps its space from the start, so the card doesn't jump when it appears.
 	result.text = ""
 	caret.visible = false
-	close_button.visible = false
-	_waiting_to_close = false
+	_set_done_clickable(false)
 	_build_traits()
 	scroll.scroll_vertical = 0
 	visible = true
@@ -177,74 +181,61 @@ func play(hearts: int) -> bool:
 	return gives_number
 
 
-# The ✕ appears on the card; the player closes it (click it, or Escape).
+# Done becomes a button; the player closes the card with it (or Escape).
 func _wait_for_close() -> void:
-	# On the card's top-right corner (a little in from it, so it stays on screen), on a
-	# round button.
-	close_button.size = Vector2.ONE * style.close_size
-	close_button.position = Vector2(sheet.size.x - close_button.size.x * 0.6, -close_button.size.y * 0.35)
-	close_button.pivot_offset = close_button.size / 2.0
-	var backing := StyleBoxFlat.new()
-	backing.bg_color = style.close_backing_color
-	backing.border_color = style.close_backing_outline
-	backing.set_border_width_all(4 if style.close_backing_outline.a > 0.0 else 0)
-	backing.set_corner_radius_all(1000)
-	backing.anti_aliasing = true
-	close_backing.add_theme_stylebox_override("panel", backing)
-	close_backing.visible = style.close_backing_color.a > 0.0
-	# The ✕ sits inside the round button with a little room around it.
-	var inset := style.close_size * (0.2 if close_backing.visible else 0.0)
-	close_image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	close_image.set_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, int(inset))
-	close_image.texture = style.close_image
-	close_sprite.position = close_button.size / 2.0
-	close_sprite.visible = false
-	if style.close_animation:
-		# The ✕ draws itself once, then stays.
-		var frames := style.close_animation.duplicate() as SpriteFrames
-		var animation := StringName(style.close_animation_name)
-		if animation.is_empty() or not frames.has_animation(animation):
-			animation = frames.get_animation_names()[0]
-		frames.set_animation_loop(animation, false)
-		var picture := frames.get_frame_texture(animation, 0)
-		var side := maxf(picture.get_width(), picture.get_height()) if picture else float(style.close_size)
-		close_sprite.sprite_frames = frames
-		close_sprite.scale = Vector2.ONE * ((style.close_size - inset * 2.0) / side)
-		close_sprite.visible = true
-		close_image.visible = false
-		close_sprite.play(animation)
-		close_sprite.animation_finished.connect(_settle_close_icon, CONNECT_ONE_SHOT)
-	else:
-		close_image.visible = true
-	close_button.scale = Vector2.ZERO
-	close_button.visible = true
-	create_tween().tween_property(close_button, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_waiting_to_close = true
+	_set_done_clickable(true)
 	await closed_by_player
-
-
-# After the ✕ has drawn itself: Close Image takes over (or the last frame stays).
-func _settle_close_icon() -> void:
-	close_image.visible = style.close_image != null
-	close_sprite.visible = style.close_image == null
 
 
 func _close_now() -> void:
 	if not _waiting_to_close:
 		return
-	_waiting_to_close = false
+	_set_done_clickable(false)
 	_play(style.close_sound)
+	done.pivot_offset = done.size / 2.0
 	var press := create_tween()
-	press.tween_property(close_button, "scale", Vector2(1.2, 1.2), 0.06)
-	press.tween_property(close_button, "scale", Vector2.ZERO, 0.12)
+	press.tween_property(done, "scale", Vector2(1.25, 1.25), 0.08)
+	press.tween_property(done, "scale", Vector2.ONE, 0.15)
 	await press.finished
-	close_button.visible = false
 	closed_by_player.emit()
 
 
-func _on_close_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		close_button.accept_event()
+# Done as a button (waiting for the player) or as a plain word.
+func _set_done_clickable(on: bool) -> void:
+	_waiting_to_close = on
+	done.mouse_filter = Control.MOUSE_FILTER_STOP if on else Control.MOUSE_FILTER_IGNORE
+	done.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if on else Control.CURSOR_ARROW
+	_on_done_hover(false)
+	if _done_pulse:
+		_done_pulse.kill()
+	done.modulate.a = 1.0
+	if on and style.done_pulse:
+		_done_pulse = create_tween().set_loops()
+		_done_pulse.tween_property(done, "modulate:a", 0.55, 0.6).set_trans(Tween.TRANS_SINE)
+		_done_pulse.tween_property(done, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)
+
+
+# Green with a glow under the mouse (only while it's a button).
+func _on_done_hover(on: bool) -> void:
+	var glowing := on and _waiting_to_close
+	var accent := _box.name_plate_color if _box else Color.BLACK
+	done.add_theme_color_override("font_color", style.done_hover_color if glowing else accent)
+	done.add_theme_constant_override("outline_size", style.done_glow_size if glowing else 0)
+	done.add_theme_color_override("font_outline_color", Color(style.done_hover_color, style.done_glow_strength))
+	done.pivot_offset = done.size / 2.0
+	done.scale = Vector2.ONE * (1.08 if glowing else 1.0)
+	# The pulse rests while the mouse is on it, so the glow shows at full strength.
+	if _done_pulse and _done_pulse.is_valid():
+		if glowing:
+			_done_pulse.pause()
+			done.modulate.a = 1.0
+		elif _waiting_to_close:
+			_done_pulse.play()
+
+
+func _on_done_input(event: InputEvent) -> void:
+	if _waiting_to_close and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		done.accept_event()
 		_close_now()
 
 
@@ -351,7 +342,7 @@ func _build_traits() -> void:
 		var kind := Label.new()
 		kind.text = info.kind
 		kind.custom_minimum_size = Vector2(170, 0)
-		_font(kind, style.ui_font, style.ui_font_size, accent)
+		_font(kind, phone_screen.style.ui_font, phone_screen.style.ui_font_size, accent)
 		row.add_child(kind)
 		var words := VBoxContainer.new()
 		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -540,13 +531,7 @@ func _apply_style() -> void:
 	var accent := _box.name_plate_color
 	var her_font := _her_font()
 
-	dim.color = style.behind_dim
-	var sheet_box := StyleBoxFlat.new()
-	sheet_box.bg_color = style.sheet_color
-	sheet_box.set_corner_radius_all(style.sheet_corner)
-	sheet_box.anti_aliasing = true
-	sheet.add_theme_stylebox_override("panel", sheet_box)
-
+	var ui := phone_screen.style
 	for group: PanelContainer in [name_group, phone_group, address_group, traits_group]:
 		group.add_theme_stylebox_override("panel", _box.make_box())
 		group.queue_redraw()
@@ -560,11 +545,11 @@ func _apply_style() -> void:
 		label.add_theme_constant_override("outline_size", _box.text_outline_width)
 		label.add_theme_color_override("font_outline_color", _box.text_outline_color)
 
-	_font(title, style.ui_font, style.ui_font_size, style.ui_text_color)
-	_font(result, style.ui_font, style.ui_font_size, style.ui_text_color)
-	result.custom_minimum_size.y = style.ui_font_size * 1.6
+	_font(title, ui.ui_font, ui.ui_font_size, ui.ui_text_color)
+	_font(result, ui.ui_font, ui.ui_font_size, ui.ui_text_color)
+	result.custom_minimum_size.y = ui.ui_font_size * 1.6
 	for label: Label in [cancel, done, add_photo, phone_kind, address_kind]:
-		_font(label, style.ui_font, style.ui_font_size, accent)
+		_font(label, ui.ui_font, ui.ui_font_size, accent)
 	title.text = style.title
 	cancel.text = style.cancel_text
 	done.text = style.done_text
@@ -644,6 +629,10 @@ func _play_alone() -> void:
 	if not test_girl:
 		push_warning("ContactCard: set Testing → Test Girl to play it on its own.")
 		return
+	# On its own there's no date behind it: your room instead.
+	phone_screen.behind = PhoneScreen.Behind.ROOM
+	phone_screen.apply_style()
 	show_card(test_girl, DateRules.new())
+	await phone_screen.raise()
 	var got_number := await play(test_hearts)
 	print("ContactCard: %s -> %s" % ["failed date" if test_hearts < 0 else "%d hearts" % test_hearts, "got her number" if got_number else "no number"])

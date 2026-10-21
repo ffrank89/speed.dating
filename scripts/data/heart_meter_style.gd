@@ -22,8 +22,13 @@ extends Resource
 @export_range(0.0, 3.0, 0.05) var fill_seconds: float = 0.6
 
 @export_group("Heart")
-## The heart in the middle of each ring.
+## The heart in the middle of each ring (still, and the grey one before it's won).
 @export var heart_image: Texture2D
+## Optional: an animated heart that plays once its ring is full (now the "heart"
+## reaction in data/reactions.tres). Empty = Heart Image stays still.
+@export var heart_animation: SpriteFrames
+## Which animation in Heart Animation. Empty = its first one.
+@export var heart_animation_name: String = "heart"
 ## The heart before its ring is full. Empty = Heart Image in grey.
 @export var empty_heart_image: Texture2D
 ## Size of the heart, in pixels.
@@ -37,3 +42,17 @@ extends Resource
 ## When a ring fills and you get a heart. Now the same sound as getting her number.
 @export var heart_sound: AudioStream
 @export_range(-30.0, 6.0, 0.5) var volume_db: float = -6.0
+
+@export_subgroup("Filling")
+## Plays as a ring fills up (ticks along with it). Empty = silent.
+@export var fill_sound: AudioStream
+## A tick each time the ring fills this much more (0.1 = every tenth of the ring).
+## 0 = it plays once each time the ring starts filling.
+@export_range(0.0, 1.0, 0.01) var fill_tick_every: float = 0.1
+## The tick's pitch when the ring is empty, and when it's full: it climbs as it fills.
+## Both 1 = the sound as recorded.
+@export_range(0.25, 4.0, 0.05) var fill_pitch_start: float = 0.9
+@export_range(0.25, 4.0, 0.05) var fill_pitch_end: float = 1.7
+@export_range(-30.0, 6.0, 0.5) var fill_volume_db: float = -12.0
+## Optional: plays as a ring empties (a miss). Same ticks and pitch. Empty = silent.
+@export var drain_sound: AudioStream

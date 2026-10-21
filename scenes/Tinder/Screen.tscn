@@ -1,54 +1,125 @@
-[gd_scene load_steps=8 format=3 uid="uid://bebvepqudrn"]
+[gd_scene load_steps=5 format=3 uid="uid://bebvepqudrn"]
 
 [ext_resource type="Script" uid="uid://sygajrejivmv" path="res://scenes/Tinder/screen.gd" id="1_8no1u"]
-[ext_resource type="PackedScene" uid="uid://cjmpuniqx0xn4" path="res://image_scenes/screen/screen.tscn" id="1_gbqgm"]
-[ext_resource type="Script" uid="uid://epfju47nvy8x" path="res://scenes/Tinder/start.gd" id="2_i1xjj"]
-[ext_resource type="Script" uid="uid://ciloniween8o1" path="res://scenes/Tinder/info_panel.gd" id="2_q0w1a"]
-[ext_resource type="Script" uid="uid://b3cn8xorughj5" path="res://scenes/Tinder/next_icon.gd" id="3_3j4u5"]
-[ext_resource type="Script" uid="uid://lx6g8lrwb3gm" path="res://image_scenes/screen/screen.gd" id="3_84w2g"]
-[ext_resource type="Script" uid="uid://b8trp801kymm7" path="res://scenes/Tinder/icon_panel.gd" id="3_ym8ox"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
+[ext_resource type="Resource" path="res://data/dating_app_style.tres" id="3_style"]
+[ext_resource type="Script" uid="uid://b8trp801kymm7" path="res://scenes/Tinder/icon_panel.gd" id="4_photo"]
 
-[node name="Screen" type="Control"]
+[node name="DatingApp" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_8no1u")
+style = ExtResource("3_style")
 
-[node name="BackgroundImage" parent="." instance=ExtResource("1_gbqgm")]
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-grow_horizontal = 1
-grow_vertical = 1
-script = ExtResource("3_84w2g")
+[node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
+unique_name_in_owner = true
+layout_mode = 1
 
-[node name="IconPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 0
-offset_left = 248.0
-offset_top = 18.0
-offset_right = 288.0
-offset_bottom = 58.0
-script = ExtResource("3_ym8ox")
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 24
 
-[node name="InfoPanel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 208.0
-offset_top = 102.0
-offset_right = 248.0
-offset_bottom = 142.0
-script = ExtResource("2_q0w1a")
+[node name="Column" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
 
-[node name="Start" type="Button" parent="."]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-script = ExtResource("2_i1xjj")
+[node name="Title" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Discover"
 
-[node name="NextIcon" type="Button" parent="."]
-layout_mode = 0
-offset_left = 46.0
-offset_top = 134.0
-offset_right = 133.0
-offset_bottom = 170.0
-script = ExtResource("3_3j4u5")
+[node name="Card" type="PanelContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="CardColumn" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Photo" type="Panel" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card/CardColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 460)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_photo")
+
+[node name="Info" type="VBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card/CardColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="NameLabel" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card/CardColumn/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Split Ends, 24"
+
+[node name="Bio" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card/CardColumn/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(pretending to be) reading books lol"
+autowrap_mode = 3
+
+[node name="InterestsTitle" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card/CardColumn/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Interests"
+
+[node name="Interests" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Card/CardColumn/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "• yapping"
+autowrap_mode = 3
+
+[node name="Empty" type="Label" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "No one left to swipe on."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="PhoneScreen/Phone/Body/Screen/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 30
+
+[node name="Pass" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Ewwwwwww...."
+
+[node name="Start" type="Button" parent="PhoneScreen/Phone/Body/Screen/Margin/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Start Dating!"
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+
+[editable path="PhoneScreen"]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scenes/Phone/phone_apps_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
 
 [node name="PhoneAppsTest" type="Control"]
 layout_mode = 3
@@ -9,9 +10,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_test")
 
-[node name="Wallpaper" type="ColorRect" parent="."]
+[node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="Wallpaper" type="ColorRect" parent="PhoneScreen/Phone/Body/Screen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +27,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2, 0.14, 0.3, 1)
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="Center" type="CenterContainer" parent="PhoneScreen/Phone/Body/Screen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,28 +37,31 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Grid" type="GridContainer" parent="Center"]
+[node name="Grid" type="GridContainer" parent="PhoneScreen/Phone/Body/Screen/Center"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 120
-theme_override_constants/v_separation = 80
-columns = 4
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 50
+columns = 3
 
-[node name="Hint" type="Label" parent="."]
+[node name="Hint" type="Label" parent="PhoneScreen/Phone/Body/Screen"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -160.0
-offset_bottom = -80.0
+offset_left = 40.0
+offset_top = -190.0
+offset_right = -40.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 32
 text = "Click an app to open it. Home or Escape closes it. Tune: data/app_transition_style.tres, data/apps/"
 horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="AppScreen" type="ColorRect" parent="."]
+[node name="AppScreen" type="ColorRect" parent="PhoneScreen/Phone/Body/Screen"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -62,7 +71,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="AppTitle" type="Label" parent="AppScreen"]
+[node name="AppTitle" type="Label" parent="PhoneScreen/Phone/Body/Screen/AppScreen"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -70,11 +79,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
-[node name="HomeButton" type="Button" parent="AppScreen"]
+[node name="HomeButton" type="Button" parent="PhoneScreen/Phone/Body/Screen/AppScreen"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -83,10 +93,12 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -200.0
+offset_top = -180.0
 offset_right = 200.0
-offset_bottom = -80.0
+offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 50
 text = "Home"
+
+[editable path="PhoneScreen"]

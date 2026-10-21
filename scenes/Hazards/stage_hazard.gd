@@ -12,7 +12,8 @@ extends Control
 ## try it on its own, over and over. Full guide: docs/guides/stage-hazards.md
 ##
 ## Making a new one: extend StageHazard, start it up in begin(), and call clear() when
-## the player deals with it (or leave() when it goes away by itself).
+## the player deals with it (or leave() when it goes away by itself). If it Needs Action
+## Cursor, check can_act() before letting the player deal with it.
 
 ## Sent when the player deals with it (e.g. shoos the fly off screen).
 signal cleared(hazard: StageHazard)
@@ -30,6 +31,11 @@ signal left(hazard: StageHazard)
 @export_range(0.0, 1.0, 0.05) var chance: float = 1.0
 ## It goes away on its own after this many seconds (no reward). 0 = it stays until dealt with.
 @export_range(0.0, 120.0, 0.5) var leaves_after_seconds: float = 0.0
+
+@export_group("Dealing With It")
+## The player has to switch to the action cursor (S) before they can deal with it.
+## Off = the normal cursor works too.
+@export var needs_action_cursor: bool = true
 
 @export_group("Reward")
 ## Points added to the date score when the player deals with it.
@@ -54,6 +60,12 @@ var _appearance := 0
 ## Override: set it up and start it. Called each time it turns up.
 func begin() -> void:
 	pass
+
+
+## Whether the player can deal with it right now: always, or with Needs Action Cursor
+## only while the action cursor is on (S).
+func can_act() -> bool:
+	return not needs_action_cursor or PlayerCursor.action_mode
 
 
 ## Override (optional): called when Leaves After Seconds runs out. Default: leave() at once.
@@ -125,6 +137,8 @@ func _play_alone() -> void:
 	var guide := get_node_or_null("DrawingGuide") as CanvasItem
 	if guide:
 		guide.visible = true
+	# Played alone, S switches to the action cursor here too.
+	PlayerCursor.action_allowed = true
 	cleared.connect(func(_h: StageHazard) -> void: _test_result("CLEARED (+%s points, reaction: %s)" % [points, reaction]))
 	left.connect(func(_h: StageHazard) -> void: _test_result("LEFT on its own"))
 	appear()

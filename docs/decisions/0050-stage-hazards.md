@@ -1,6 +1,6 @@
 # 0050: Stage hazards (starting with a fly)
 
-- **Status:** Accepted
+- **Status:** Accepted (the fly now needs the action cursor: [0057](0057-action-cursor.md))
 - **Date:** 2026-10-20
 - **Affects:** [dates.md](../design/dates.md), [plans/first-date.md](../plans/first-date.md)
 

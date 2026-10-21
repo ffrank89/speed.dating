@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="ContactCardStyle" load_steps=14 format=3]
+[gd_resource type="Resource" script_class="ContactCardStyle" load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/contact_card_style.gd" id="1_style"]
-[ext_resource type="FontFile" path="res://assets/fonts/nunito/Nunito-SemiBold.ttf" id="2_font"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/click_002.wav" id="3_key"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/click_005.wav" id="4_space"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/switch_002.wav" id="6_next"]
@@ -10,13 +9,10 @@
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/drop_003.wav" id="9_trait"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/select_001.wav" id="10_open"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/back_001.wav" id="11_back"]
-[ext_resource type="Texture2D" path="res://assets/x1/x1_7.png" id="12_x"]
-[ext_resource type="SpriteFrames" uid="uid://b1xc7pf43jane" path="res://icons/x/x.tres" id="13_x_anim"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/kenney_interface_sounds/close_002.wav" id="14_close"]
 
 [resource]
 script = ExtResource("1_style")
-ui_font = ExtResource("2_font")
 key_sound = ExtResource("3_key")
 space_sound = ExtResource("4_space")
 next_field_sound = ExtResource("6_next")
@@ -25,6 +21,4 @@ cancel_sound = ExtResource("8_cancel")
 trait_sound = ExtResource("9_trait")
 open_contact_sound = ExtResource("10_open")
 back_sound = ExtResource("11_back")
-close_image = ExtResource("12_x")
-close_animation = ExtResource("13_x_anim")
 close_sound = ExtResource("14_close")

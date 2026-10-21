@@ -10,19 +10,27 @@ happens. Each hazard is its own scene in `scenes/Hazards/`, and a date lists
 the ones it can have.
 
 The first one is the **fly** (`scenes/Hazards/Fly/Fly.tscn`). It flies in from
-the edge of the screen and buzzes along a path you drew. **Wave the mouse at
-it** to shoo it. Shoo it **off the screen**, and she reacts and the date gets
+the edge of the screen and buzzes along a path you drew. Press **S** to
+switch to the **action cursor**, then **wave it at the fly** to shoo it
+([the cursor guide](cursor.md)). Shoo it **off the screen**, and she reacts and the date gets
 a point. If you stop, it flies back to its path.
 
 ## Try it
 
 - **On its own:** open `Fly.tscn` and press **F6**. It flies over a faded
   picture of her room and her, so you can see your paths against the date.
-  Shoo it off and it comes back a second later. The Output panel prints
-  `CLEARED`.
+  Press **S**, shoo it off, and it comes back a second later. The Output
+  panel prints `CLEARED`.
 - **In the date:** press **F5** and answer one question. A second later the
-  fly turns up. Shoo it off: the score goes up by 1 and she shows a heart.
+  fly turns up. Press **S** and shoo it off: the score goes up by 1 and she
+  shows a heart.
   The debug panel's **Stage hazards now** button brings it on at once.
+
+## Needing the action cursor
+
+Each hazard's top node → **Dealing With It → Needs Action Cursor**: on (the
+fly) = the player has to press **S** first; off = the normal cursor works.
+A new hazard checks `can_act()` before letting the player deal with it.
 
 ## When it turns up
 

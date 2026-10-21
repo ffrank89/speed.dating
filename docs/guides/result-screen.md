@@ -2,9 +2,9 @@
 
 For writers, artists and designers. **No code needed.**
 
-When a date ends, the player's phone opens **Contacts** (with the same
-iPhone-style "open app" animation as everything else) on a **New Contact**
-screen, and she fills it in:
+When a date ends, the player takes their phone out (**phone up**: it comes
+up from the bottom over the date, which dims) on a **New Contact** screen,
+and she fills it in:
 
 | How the date went | What she does |
 |---|---|
@@ -15,11 +15,12 @@ screen, and she fills it in:
 
 Abilities don't show yet: they're not listed in **Trait Hearts** (below).
 
-**Then it waits for you.** When she's done, your **✕** (the X art, drawing
-itself in) appears at the card's top-right corner. Click it, or press
-**Escape**, to close the app and go back to the calendar. (Contact card
-style → **Closing → Close By Hand** off = it closes by itself after **End
-Hold Seconds**, like before.)
+**Then it waits for you.** When she's done, **Done** (top right of the card)
+becomes a button: it pulses gently, and glows green under the mouse. Click
+it, press **Escape**, or click the phone's home bar, and the calendar opens
+on the phone.
+(Contact card style → **Closing → Close By Hand** off = it closes by itself
+after **End Hold Seconds**, like before.)
 
 During the date, the [heart meter](heart-meter.md) in the top right shows
 the hearts she'd give you so far.
@@ -71,20 +72,22 @@ Dating, now 3 / 6 / 9 points) the date score reached.
 
 ## The card's look, typing and sounds
 
+The phone itself (its screen colour and corners, the dim over the date, the
+font, size and colour for the iPhone's own words, how it comes up) is
+`data/phone_style.tres` ([the-phone.md](the-phone.md)). The rest is
 `data/contact_card_style.tres`:
 
 | Section | What's in it |
 |---|---|
-| Sheet | The phone screen's colour (iPhone grey) and corners, the dim behind it, and the font, size and colour for the iPhone's own words |
 | Words | "New Contact", "Cancel", "Done", "Add Photo", the grey hints ("First name"…), "mobile", "home", and the two endings' messages |
 | Fields | The size of what she types, and how faint the grey hints are |
 | Typing | How fast she types (a random wait per key, between Min and Max), the pause between boxes, the heart (below), and **Failed Name Text** (*"not a chance!"*), what she types on a failed date |
-| Closing | **Close By Hand** (on: wait for the player's ✕ or Escape), **Close Image** (`assets/x1/x1_7.png`), **Close Animation** (`icons/x/x.tres`, the X drawing itself; plays once), **Close Size**, **Close Sound** (Kenney `close_002` for now) |
+| Closing | **Close By Hand** (on: wait for the player to click Done or press Escape), **Done Hover Color** (green), **Done Glow Size** / **Done Glow Strength**, **Done Pulse** (on: it pulses while waiting), **Close Sound** (Kenney `close_002` for now) |
 | Traits | Show them or not; pop in (boop, boop, boop) or have her **type** them; the wait between pops (0.2 s); how much higher each boop is (**Trait Pitch Step**); **Secret Text** (*"you dont know me like that!"*); description and icon sizes |
 | Sounds | Key, space, delete, next box, Done and Cancel |
 
 **Where things sit on the card:** open `ContactCard.tscn`. Drag the rows in
-**Sheet → Margin → Column**, or resize **Sheet**.
+**PhoneScreen → Phone → Body → Screen → Margin → Column**.
 
 **The heart** after her name can be one of three things. The first one
 that's set wins:
@@ -121,8 +124,8 @@ Keep any new sound's licence next to it, and add a line to `CREDITS.md`.
 
 ## The Contacts app
 
-The card opens and closes like an app: `data/apps/contacts.tres`, with the
-Godot logo as a placeholder icon. See [phone apps](phone-apps.md). Your party is
+The card is on the player's phone ([the-phone.md](the-phone.md)): it comes
+up over the date, and the calendar opens on it afterwards. Your party is
 saved in your Contacts (press C on the calendar): [contacts.md](contacts.md).
 
 ## Something's wrong
@@ -136,7 +139,8 @@ saved in your Contacts (press C on the calendar): [contacts.md](contacts.md).
 
 ## For programmers
 
-`ContactCard` (`scenes/Results/contact_card.gd`, a CanvasLayer on layer 20):
+`ContactCard` (`scenes/Results/contact_card.gd`, a CanvasLayer on layer 20,
+on a `PhoneScreen`: `phone_screen`, Behind = Dim; `content` is its Margin):
 
 - `show_card(girl, rules)`
 - `show_saved(girl, hearts, rules)`: her saved contact, filled in at once, with "‹ Contacts" (`back_pressed`). Used by the Contacts app.
@@ -146,7 +150,8 @@ The boxes use `DialogueBoxStyle.make_box()` and `make_outline()` (drawn on
 each group's `draw` signal). `DateScorer.hearts()` counts reached thresholds.
 The date scene's `_end_date()` (`scenes/Dates/Date/date_scene.gd`) runs, in order:
 
-1. `AppLauncher.open("contacts", show_card)`
+1. `show_card()`, then `await contact_card.phone_screen.raise()` (phone up)
 2. `play()`
 3. `PlayerManager.add_party_member()` or `mark_gone()`
-4. `AppLauncher.close`
+4. `AppLauncher.open_scene("calendar", ...)` (with **Go To Calendar**;
+   otherwise `phone_screen.lower()`)
