@@ -33,7 +33,9 @@ like the blinds in Balatro: **three days at a time**, stacked.
   The box under the mouse lights up; click it to pick it (the **1**, **2**
   and **3** keys work too, left to right):
   - **Date** (2 days): opens the dating app on the phone. After the date
-    you're back here, two days later.
+    you're back here, two days later. If there's no one left to swipe on,
+    **Back to the calendar** gives the 2 days back
+    ([dating-app.md](dating-app.md)).
   - **Train** (1 day): raises a stat by 1 (stats go from 1 to
     9), with a line in the calendar's box at the bottom of the phone ("You
     spend the day on your Culture. Culture +1.").
@@ -223,7 +225,9 @@ yet).
 
 - `RunCalendar` (`scripts/calendar/run_calendar.gd`), kept on
   `PlayerManager.get_calendar()`: `chapter`, `today`, `days()`,
-  `today_day()`, `fits(action)`, `spend(action)`, `next_chapter()`;
+  `today_day()`, `fits(action)`, `spend(action)`, `give_back()` (undoes
+  the last `spend()`'s days, once, if nothing else happened since; the
+  dating app calls it when no one's left), `next_chapter()`;
   calendar-day numbers for the whole view: `calendar_day()`,
   `calendar_today()`, `day_at(number)`, `is_revealed(number)`,
   `is_boss(number)`. Each chapter's days are planned the first time

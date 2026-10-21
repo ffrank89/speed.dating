@@ -72,3 +72,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0066](0066-fly-annoys-her.md) | A hazard sitting on her for a second annoys her: the date stops, she gets angry and says ".....ew", the date loses points | Accepted, amended by 0067 |
 | [0067](0067-annoyances-are-files.md) | How she reacts when annoyed is its own file (`data/annoyances/`); a hazard points at one; not in dialogue yet | Accepted |
 | [0068](0068-one-key-for-apps.md) | One key, W, flips through the phone's apps (Contacts, Profile, back to the calendar) instead of C and P | Accepted |
+| [0069](0069-no-one-left-gives-days-back.md) | With no one left on the dating app, Back to the calendar gives the date's 2 days back | Accepted |
