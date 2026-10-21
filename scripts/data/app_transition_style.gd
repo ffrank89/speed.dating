@@ -59,8 +59,9 @@ extends Resource
 
 @export_group("Switching Apps")
 ## On = Contacts and Profile open over the calendar like moving between open apps on an
-## iPhone (the app switcher): the screen shrinks to a card, the next app's card slides
-## in beside it and grows to fill the phone. Closing goes back the same way.
+## iPhone (the app switcher): the screen shrinks to a card, the row of open apps (most
+## recent on the right) slides to the next app's card, and it grows to fill the phone.
+## Back (Escape, the home bar) goes to the app you were on before.
 ## Off = they open like any app (Contacts: its Open As App setting).
 @export var switch_between_apps: bool = true
 ## How small the cards get, as a share of the phone's screen.

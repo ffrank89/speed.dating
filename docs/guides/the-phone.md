@@ -110,11 +110,32 @@ On the calendar, two more apps are a key away:
 | **Profile** | **P** | Your stats: Culture, Intellect, Seduction and Heart, each with a bar |
 
 The phone switches to them **like moving between open apps on an iPhone**:
-the calendar shrinks to a card, the app's card (its icon and name above it)
-slides in beside it and grows to fill the phone. The key again, **Escape**
-or the phone's home bar switches back. Press the other key while one is
-open to switch straight to the other. A **debug note** in the top left of
-the calendar screen lists the keys (it doesn't show in a finished build).
+the app you're on shrinks to a card, the row of open apps slides to the
+app's card (its icon and name above it), and it grows to fill the phone.
+Press the other key while one is open to switch straight to the other. A
+**debug note** in the top left of the calendar screen lists the keys (it
+doesn't show in a finished build).
+
+**It remembers the order you used them in**, like an iPhone:
+
+- The cards are your open apps, the most recent on the right and older
+  ones to its left, each a little under the newer one. A new app comes in
+  on the right.
+- Switching with a key makes the app you were on the most recent.
+- **Back** (the key again, **Escape** or the home bar) goes to the app you
+  were on before, like swiping back along an iPhone's home bar: the app
+  slides off to the right and the one before comes in from the left.
+
+| You press | You land on | Recent apps, newest first |
+|---|---|---|
+| C (on the calendar) | Contacts | Contacts, Calendar |
+| P | Profile | Profile, Contacts, Calendar |
+| Escape | Contacts | (no change) |
+| Escape | the calendar | (no change) |
+| P | Profile (its card comes in from the left: it's older) | Profile, Calendar, Contacts |
+
+Each screen keeps its own list (the calendar's starts again after a
+date).
 
 **The switch's feel:** `data/app_transition_style.tres` → **Switching
 Apps**: on or off (**Switch Between Apps**; off = they open like any app),
@@ -171,8 +192,9 @@ To bring it up over real life, a programmer calls `await phone.raise()`
 - `PhoneScreen` (`scenes/Phone/phone_screen.gd`): `style`, `behind`,
   `room_image`, `wallpaper`, `app_name`; `apply_style()`, `await raise()`,
   `await lower()`, `show_up()`, `app_rect()`, `screen_rect()`,
-  `await switch_in(picture, previous_app, this_app)` /
-  `await switch_out(...)` (the app switcher); signals
+  `await switch_apps(cards, live, from, to)` (the app switcher: a row of
+  cards, newest first, each `{"picture", "app"}`; `live` is this screen's
+  own card); signals
   `home_pressed`, `raised`, `lowered`. Nodes: `room`, `dim`, `phone`,
   `body`, `screen` (put an app's nodes here), `home_bar`, `frame`.
 - `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`): the base of
@@ -180,7 +202,12 @@ To bring it up over real life, a programmer calls `await phone.raise()`
   `close()`; override `_show_now()`, `_hide_now()`, `_before_close()`,
   `_escape_closes()`. Keys are read in `_input` (a tooltip would swallow
   Escape otherwise). `AppLauncher.capture_rect(rect)` takes the picture of
-  the screen underneath.
+  the app you're leaving.
+- `RecentApps` (`scenes/Phone/recent_apps.gd`): the open apps on a screen,
+  most recently used first (`RecentApps.of(node)`, kept on the scene):
+  `entries` (each `overlay`, null = the screen underneath; `app`;
+  `picture`), `current`, `settle()`, `bring_to_front(i)`, `back_from(i)`,
+  `cards()`.
 - `AppLauncher.phone_down(scene_path)`: phone down into a real-life scene.
   Apps open into `AppTransitionStyle.phone.screen_rect()` when **Open Into
   Phone** is on; `AppLauncher.home_rect()` is the bottom of the phone's

@@ -3,7 +3,8 @@ extends PhoneOverlayApp
 ## Your Profile, an app on your phone: your four attributes (Culture, Intellect,
 ## Seduction, Heart) with a bar each. Press P (the open_profile action) on the calendar
 ## and the phone switches to it, like moving between open apps on an iPhone (the same
-## way as Contacts); P again, Escape or the phone's home bar switches back.
+## way as Contacts); P again, Escape or the phone's home bar goes back to the app you
+## were on before.
 ##
 ## A light first version: just your attributes. The phone (screen, font, accent colour)
 ## is data/phone_style.tres; the words and sizes are the settings below; the attribute

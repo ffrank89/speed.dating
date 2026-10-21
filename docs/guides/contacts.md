@@ -132,7 +132,7 @@ synergy report.
 - `ContactsApp` (`scenes/Phone/Contacts/contacts_app.gd`, a CanvasLayer on
   layer 19) is a `PhoneOverlayApp` (`scenes/Phone/phone_overlay_app.gd`):
   `open_action` (`open_contacts`), `open()` / `close()` (the app switcher,
-  `phone_screen.switch_in/out`; or `AppLauncher.open/close`, or
+  `phone_screen.switch_apps()`, in the order of `RecentApps`; or `AppLauncher.open/close`, or
   `phone_screen.raise()` / `lower()`). Its phone is `phone_screen`
   (`PhoneScreen`, Behind = Nothing; its `home_pressed` closes it),
   `show_list(members)` / `hide_list()` show it at once; signals

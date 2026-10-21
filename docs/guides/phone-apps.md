@@ -17,8 +17,10 @@ It's one shared animation (`AppLauncher`), used by:
 | Your **Contacts** and **Profile** (**C** / **P** on the calendar), only when **Switching Apps** is off (below) | `data/apps/contacts.tres`, `data/apps/profile.tres` | Default Origin (a key press has no click), and closes back into it ([contacts.md](contacts.md)) |
 
 **Switching between open apps** (Contacts and Profile over the calendar,
-with C and P) looks like the iPhone's app switcher instead: the screen
-shrinks to a card and the next app's card slides in and grows
+with C and P) looks like the iPhone's app switcher instead, and remembers
+the order you used them in: the screen shrinks to a card, the row of open
+apps slides to the next app's card and it grows; back goes to the app you
+were on before
 ([the-phone.md](the-phone.md) → Your apps; settings: **Switching Apps**
 below).
 

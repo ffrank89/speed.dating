@@ -6,7 +6,8 @@ extends PhoneOverlayApp
 ## Apps; its icon and name: data/apps/contacts.tres).
 ## Click a girl to open her contact (her card as she filled it in on the date: what your
 ## hearts unlocked, her number and address); "‹ Contacts" goes back. C again, Escape or
-## the phone's home bar switches back.
+## the phone's home bar goes back to the app you were on before (the calendar, or
+## Profile if you came from there).
 ##
 ## C works on any screen that has this scene in it. For now that's only the calendar.
 ##
