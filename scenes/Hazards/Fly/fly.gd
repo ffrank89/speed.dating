@@ -3,11 +3,14 @@ extends StageHazard
 ## (S), then wave the mouse at it to shoo it; shoo it off the screen and she reacts and
 ## the date earns a point. (Dealing With It → Needs Action Cursor off = no S needed.)
 ##
-## Paths: every Path2D under Paths is one path. Draw them right here in this scene with
-## the Path2D tool, over the DrawingGuide (her room and her). Saved paths (Curve2D files)
-## dropped into Extra Paths count too. Each time it turns up it picks one at random,
-## flies in from the nearest edge of the screen to the path's first point, then follows
-## the path back and forth (or round and round, if the last point sits on the first).
+## Paths: every Path2D in this scene is one path (keep them under Paths to stay tidy).
+## Draw them right here with the Path2D tool, over the DrawingGuide (her room and her).
+## Each path's handle sits in its middle, so you can move, turn or stretch a whole path.
+## Saved paths (Curve2D files) dropped into Extra Paths count too. Each time it turns up
+## it picks one at random, flies in from the nearest edge of the screen to the path's
+## first point, then follows the path back and forth (or round and round, if the last
+## point sits on the first). A path that's off the screen or squashed tiny is skipped,
+## with a warning in the Output panel.
 ##
 ## Slow Motion (set on this scene's top node): with the player's Perception above 5 it
 ## flies, jitters, flaps and buzzes at half speed (the buzz an octave lower), and stays
@@ -69,7 +72,6 @@ var _last_position := Vector2.ZERO
 var _time := 0.0
 
 @onready var body: Node2D = $Body
-@onready var paths: Node2D = $Paths
 @onready var buzz_player: AudioStreamPlayer = $Buzz
 
 
@@ -81,7 +83,7 @@ func _ready() -> void:
 func begin() -> void:
 	var choices := _all_paths()
 	if choices.is_empty():
-		push_warning("Fly: no paths. Draw a Path2D under Paths, or add one to Extra Paths.")
+		push_warning("Fly: no paths it can use. Draw a Path2D under Paths (on the screen), or add one to Extra Paths.")
 		leave()
 		return
 	_curve = choices.pick_random()
@@ -215,17 +217,33 @@ func _outside_near(point: Vector2) -> Vector2:
 	return Vector2(point.x, size.y + out)
 
 
-# Every path it can take, in screen pixels: the Path2D drawings, then Extra Paths.
+# Every path it can take, in screen pixels: the Path2D drawings (anywhere in this scene,
+# moved, turned or stretched as they are), then Extra Paths. Skips, with a warning, a
+# path that's off the screen or squashed too small to see.
 func _all_paths() -> Array[Curve2D]:
 	var found: Array[Curve2D] = []
-	for child in paths.get_children():
-		var drawn := child as Path2D
-		if drawn and drawn.curve and drawn.curve.point_count > 1:
-			found.append(_on_screen(drawn.curve, paths.transform * drawn.transform))
+	var to_here := get_global_transform().affine_inverse()
+	for node in find_children("*", "Path2D", true, false):
+		var drawn := node as Path2D
+		if drawn.curve and drawn.curve.point_count > 1:
+			_add_if_usable(found, _on_screen(drawn.curve, to_here * drawn.get_global_transform()), drawn.name)
 	for curve in extra_paths:
 		if curve and curve.point_count > 1:
-			found.append(curve)
+			_add_if_usable(found, curve, curve.resource_path.get_file())
 	return found
+
+
+func _add_if_usable(found: Array[Curve2D], curve: Curve2D, path_name: String) -> void:
+	var length := curve.get_baked_length()
+	if length < 50.0:
+		push_warning("Fly: path %s is too small (%d pixels long), so it's skipped. Was it scaled down?" % [path_name, length])
+		return
+	var screen := Rect2(Vector2.ZERO, size)
+	for point in curve.get_baked_points():
+		if screen.has_point(point):
+			found.append(curve)
+			return
+	push_warning("Fly: path %s is off the screen, so it's skipped. Was it moved or turned too far?" % path_name)
 
 
 # A copy of `curve` moved by `place`, so a Path2D that was dragged around still lines up.

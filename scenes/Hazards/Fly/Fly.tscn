@@ -9,19 +9,19 @@
 
 [sub_resource type="Curve2D" id="Curve2D_head"]
 _data = {
-"points": PackedVector2Array(0, 170, 0, -170, 1120, 600, -200, 0, 200, 0, 1480, 300, 0, -170, 0, 170, 1840, 600, 200, 0, -200, 0, 1480, 900, 0, 170, 0, -170, 1120, 600)
+"points": PackedVector2Array(0, 170, 0, -170, -360, 0, -200, 0, 200, 0, 0, -300, 0, -170, 0, 170, 360, 0, 200, 0, -200, 0, 0, 300, 0, 170, 0, -170, -360, 0)
 }
 point_count = 5
 
 [sub_resource type="Curve2D" id="Curve2D_swoop"]
 _data = {
-"points": PackedVector2Array(0, 0, 300, -400, 450, 950, -450, 0, 450, 0, 1500, 320, -300, -400, 0, 0, 2550, 900)
+"points": PackedVector2Array(0, 0, 300, -400, -1050, 315, -450, 0, 450, 0, 0, -315, -300, -400, 0, 0, 1050, 265)
 }
 point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_zigzag"]
 _data = {
-"points": PackedVector2Array(0, 0, 150, 150, 600, 260, -150, 0, 150, 0, 1050, 650, -150, 0, 150, 0, 1500, 260, -150, 0, 150, 0, 1950, 650, -150, 150, 0, 0, 2400, 260)
+"points": PackedVector2Array(0, 0, 150, 150, -900, -195, -150, 0, 150, 0, -450, 195, -150, 0, 150, 0, 0, -195, -150, 0, 150, 0, 450, 195, -150, 150, 0, 0, 900, -195)
 }
 point_count = 5
 
@@ -82,15 +82,19 @@ stretch_mode = 5
 [node name="Paths" type="Node2D" parent="."]
 
 [node name="AroundHerHead" type="Path2D" parent="Paths"]
+position = Vector2(1480, 600)
 curve = SubResource("Curve2D_head")
 
 [node name="Swoop" type="Path2D" parent="Paths"]
+position = Vector2(1500, 635)
 curve = SubResource("Curve2D_swoop")
 
 [node name="Zigzag" type="Path2D" parent="Paths"]
+position = Vector2(1500, 455)
 curve = SubResource("Curve2D_zigzag")
 
 [node name="Body" type="Node2D" parent="."]
+position = Vector2(1120, 600)
 
 [node name="Sprite" type="Sprite2D" parent="Body"]
 scale = Vector2(0.7, 0.7)

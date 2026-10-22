@@ -74,3 +74,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0068](0068-one-key-for-apps.md) | One key, W, flips through the phone's apps (Contacts, Profile, back to the calendar) instead of C and P | Accepted |
 | [0069](0069-no-one-left-gives-days-back.md) | With no one left on the dating app, Back to the calendar gives the date's 2 days back | Accepted |
 | [0070](0070-stats-hub.md) | A stats hub beside the phone; training flies the stat's picture into it, the hub swallows it and the number goes up | Accepted |
+| [0071](0071-fly-paths-safe-to-edit.md) | The fly's paths are safe to move, stretch and turn: handles in their middle, any Path2D in the scene counts, unusable paths skipped with a warning | Accepted |
