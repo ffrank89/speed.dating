@@ -36,6 +36,7 @@ thing. **No code needed.**
 | **Your room** (behind the phone) | `assets/bedroom2.png` | `data/phone_style.tres` → **Your Room → Room Image** | Behind the phone on the intro, dating app and calendar |
 | **Phone up / down sounds** | Kenney stand-ins (`maximize_008`, `minimize_008`) | `data/phone_style.tres` → **Phone Up / Down → Up Sound / Down Sound** | Taking the phone out and putting it away |
 | **Dating app sounds** | Kenney stand-ins (`switch_005`, `confirmation_002`, `click_003`) | `data/dating_app_style.tres` → **Sounds** | Passing on a profile, Start Dating!, a button under the mouse |
+| **Synergy stream sprites** | Smoker: the cigarette packs in `assets/cig_gif/`; every other tag: `assets/placeholders/godot_logo.svg` (one frame) | `data/synergy.tres` → **Each Tag's Sprites → Tag Sprites** (one per tag), or **Stream → Sprite Frames** (any tag without its own) | The sprites flowing between two girls who share a tag in Contacts |
 | **Stats hub swallow sound** | Kenney stand-in (`drop_004`) | `scenes/Stats/StatHub.tscn` → **Boost Animation → Swallow Sound** | The stats hub swallowing a trained stat's picture |
 | **App switch sound** | Kenney stand-in (`switch_006`) | `data/app_transition_style.tres` → **Switching Apps → Switch Sound** | Switching to Contacts or Profile and back |
 | **Contacts and Profile app icons** | `assets/placeholders/godot_logo.svg` | `data/apps/contacts.tres`, `data/apps/profile.tres` → **Icon** | The tiles Contacts and Profile (W) open from; Contacts' is also the app her card opens on at the end of a date |

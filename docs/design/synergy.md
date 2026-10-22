@@ -14,6 +14,12 @@
   your build**. That choice is the roguelike decision.
 - It's **a calculation with no scene**, the easiest module to test alone.
 
+**Built so far:** the Contacts list shows girl–girl synergy as a stream
+of sprites between two girls who share tags, stronger with more shared tags
+(`data/synergy.tres`, [contacts.md](../guides/contacts.md) → Synergy). For
+now the score is just the number of shared tags; thresholds, the report
+and battle bonuses are still to come.
+
 ## Code needed
 
 ### Shared functions it uses

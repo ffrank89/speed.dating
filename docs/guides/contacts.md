@@ -126,14 +126,69 @@ That's all.
 | W never reaches Contacts | You're not on the calendar (only screens with `ContactsApp.tscn` in them), ContactsApp's **Switch Action** is empty, or `switch_apps` is missing from the Input Map (Godot prints a warning). |
 | Her row looks like the dark default box | She has no **Dialogue Style** in her girl file. |
 
+## Synergy: streams between girls who share tags
+
+**Two girls who share tags have synergy**, and the Contacts list shows it:
+a **stream of little sprites flows between their photos**, bowing out to
+the right. The more tags they share, the **stronger** the stream: more
+sprites, bigger, faster and more solid, bowing out further. Half flow each
+way.
+
+**Each tag has its own sprites**, so the stream shows what kind of synergy
+it is: two Smokers stream **cigarette packs** (`assets/cig_gif/`). Girls who
+share two tags get a mix of both tags' sprites. A tag with no sprites of its
+own uses its trait's **Icon** (her girl file → **Traits**), or else the
+Godot logo (Punk, for now).
+
+**The score, for now:** one point for each tag they both have. A tag is a
+trait whose **Kind** is `tag` in her girl file (**Contact Card →
+Traits**); the **Title** has to match ("Smoker" and "smoker" do). Split
+Ends' tags are Punk and Smoker. Smokey has a placeholder **Smoker** tag, so
+she and Split Ends have 1 point.
+
+**Try it:** press **F6** on `scenes/Phone/Contacts/ContactsApp.tscn`. Its
+**Test Contacts** are Split Ends and Smokey, so there's one stream. In the
+game you'd need two girls in your party who share a tag (Smokey can't be
+dated yet).
+
+**Change it:** `data/synergy.tres` (the ContactsApp node's **Synergy**;
+empty = no streams):
+
+| Setting | Now | What it does |
+|---|---|---|
+| **Score → Counted Kinds** | tag | Which kinds of trait count. Add `type` to count shared types too |
+| **Each Tag's Sprites → Tag Sprites** | Smoker: the cigarette packs | Each tag's own sprites. **Add Key/Value Pair**: type the tag's title on the left (capitals don't matter), drop a SpriteFrames on the right (click it to add frames and set their speed) |
+| **Stream → Sprite Frames** | the Godot logo (placeholder) | The sprites for a tag with none of its own (and no trait Icon) |
+| **Animation Name** | (empty) | Which animation plays in any tag's sprites that have one by this name. Empty = the first |
+| **Sprites Per Point** | 6 | How many flow for each point (each shared tag adds this many of its own) |
+| **Max Points** | 4 | Points past this don't make it look any stronger |
+| **Sprite Size** / **Size Per Point** | 56 / 18 | Their size at 1 point, and how much bigger per extra point |
+| **Speed** / **Speed Per Point** | 180 / 80 | How fast they flow at 1 point, and how much faster per extra point |
+| **Opacity** / **Opacity Per Point** | 0.75 / 0.1 | How solid they are at 1 point, and how much more per extra point |
+| **Arc Bulge** | 280 | How far the stream bows out to the right (more for girls further apart on the list) |
+| **Wobble** | 16 | How much the sprites wiggle off the line |
+| **Both Ways** | on | Half flow each way. Off = from the girl higher on the list |
+
 ## Not built yet
 
 These are planned for the party: breaking up with someone (your party will
 hold 3), picking who comes to the boss fight and in what order, and the
-synergy report.
+synergy report (what the synergy does in the boss fight).
 
 ## For programmers
 
+- `SynergyStyle` (`scripts/data/synergy_style.gd`, `data/synergy.tres`):
+  `score(a, b)` (shared titles of traits whose `kind` is in
+  `counted_kinds`, ignoring case), `shared(a, b)`, `frames_for(tag, a, b)`
+  (`tag_sprites`, else the trait's `icon` as a one-frame SpriteFrames, else
+  `sprite_frames`), and the stream settings.
+  `SynergyStreams` (`scenes/Phone/Contacts/synergy_streams.gd`, a `Node2D`):
+  `ContactsApp._build_rows()` adds one as the list's last child (so it
+  draws over the rows, scrolls and clips with them) and calls
+  `setup(synergy, photos, girls)`. Each frame it moves each stream's
+  `AnimatedSprite2D`s along a quadratic Bézier between the two photos'
+  centres, sized by each frame's drawn part (`Image.get_used_rect()`), so
+  art with see-through edges still comes out **Sprite Size**.
 - `PartyMember` (`scripts/data/party_member.gd`): `girl: GirlData`,
   `affection` (0–3 hearts).
 - `PlayerManager.party: Array[PartyMember]`;
