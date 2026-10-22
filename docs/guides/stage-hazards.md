@@ -48,7 +48,8 @@ Open `Fly.tscn`, click the top node (**Fly**), and look under **When**:
 
 ## Drawing its paths
 
-Every **Path2D** under **Paths** in `Fly.tscn` is one path. Each time the fly
+Every **Path2D** in `Fly.tscn` is one path (keep them under **Paths** to
+stay tidy, but a path dragged out of it still counts). Each time the fly
 turns up, it **picks one at random**. It flies in from the nearest edge of the
 screen to the path's first point, then follows the path **back and forth**. If
 the path's last point sits on its first, it goes **round and round** instead.
@@ -73,6 +74,13 @@ the view:
 - **Add Point:** click to add points to the end.
 - **Delete Point:** click a point to remove it.
 - **Close Curve:** joins the end to the start, making a loop.
+
+**Move, stretch or turn a whole path:** each path's handle (the cross you
+drag, with the normal Select tool) sits **in the middle of the path**.
+Drag it to move the whole path. Use **Scale Mode** (S) or **Rotate Mode**
+(E) to stretch or turn it around its middle. A path that ends up **off the
+screen**, or squashed **too small** (under 50 pixels long), is skipped, and
+the Output panel says which one and why.
 
 **Add a path:** click **Swoop** and press **Ctrl+D** to duplicate it. Rename
 the copy and reshape it. Or right-click **Paths** → **Add Child Node** →
@@ -217,7 +225,8 @@ script, so nothing else is needed.
 | It annoys her too easily | Raise **Annoy Seconds**. |
 | It's in slow motion when it shouldn't be (or isn't when it should) | The player's **Slow Stat** (Perception) has to be *above* **Slow Above**: 6 or more for 5. On the test bench it's the slider. |
 | It flies somewhere odd | Check the path in `Fly.tscn`. It flies in from the screen edge nearest the path's **first** point. |
-| "no paths" warning | There's no Path2D under **Paths** and nothing in **Extra Paths**. |
+| "no paths it can use" warning | There's no Path2D in `Fly.tscn` and nothing in **Extra Paths**, or every path is off the screen or squashed too small (the Output panel names each one). |
+| It never shows up, or buzzes in one spot | Look in the Output panel for "Fly: path ... is too small" or "... is off the screen": a path was scaled down or moved too far. Undo (Ctrl+Z), or click it and set **Scale** back to 1 and **Rotation** to 0 in the Inspector. |
 | No reaction | The **Reaction** name must match an animation in `data/reactions.tres` exactly. |
 
 ## For programmers
@@ -256,7 +265,10 @@ script, so nothing else is needed.
   reward (`DateScorer.add_bonus`, `ReactionIcon.show_reaction`, the pose).
 - The fly (`scenes/Hazards/Fly/fly.gd`) moves through these states:
   - ENTERING: flies in from the nearest edge
-  - FOLLOWING: Path2D curves, moved into screen space, plus `extra_paths`
+  - FOLLOWING: every Path2D in the scene (`find_children`), moved into the
+    fly's space with its global transform, plus `extra_paths`; paths off the
+    screen or under 50 px long are skipped with a warning (`_add_if_usable`).
+    Each Path2D's origin is the middle of its curve, so its handle sits on it
   - PUSHED: velocity from the mouse's motion, slowed by drag; off screen = `clear()`
   - RETURNING, then LEAVING
   - Its `_process` runs on `delta × time_scale` (the mouse on real time);
