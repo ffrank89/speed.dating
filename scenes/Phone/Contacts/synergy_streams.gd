@@ -2,8 +2,10 @@ class_name SynergyStreams
 extends Node2D
 ## The synergy streams on the Contacts list: for each two girls who share tags, a stream of
 ## sprites flows between their photos, bowing out to the right, stronger (more, bigger,
-## faster, more solid sprites) the more tags they share. The look and the score are a
-## SynergyStyle (data/synergy.tres). The Contacts app puts one of these over its list.
+## faster, more solid sprites) the more tags they share. Each shared tag flows its own
+## sprites (SynergyStyle.frames_for()), so two Smokers stream cigarette packs. The look and
+## the score are a SynergyStyle (data/synergy.tres). The Contacts app puts one of these
+## over its list.
 
 ## One stream between two girls' photos.
 class Stream:
@@ -21,6 +23,8 @@ class Stream:
 var style: SynergyStyle
 var _streams: Array[Stream] = []
 var _time := 0.0
+# Picture → the size of its drawn part (without the see-through edges around it).
+var _drawn_sizes := {}
 
 
 ## Makes a stream for each two of `photos` (one per girl, in list order) whose `girls`
@@ -34,31 +38,38 @@ func setup(synergy: SynergyStyle, photos: Array[Control], girls: Array[GirlData]
 		return
 	for i in girls.size():
 		for j in range(i + 1, girls.size()):
-			var points := style.score(girls[i], girls[j])
-			if points > 0:
-				_add_stream(photos[i], photos[j], points, j - i)
+			var tags := style.shared(girls[i], girls[j])
+			if not tags.is_empty():
+				var each_tag: Array[SpriteFrames] = []
+				for tag in tags.slice(0, style.max_points):
+					each_tag.append(style.frames_for(tag, girls[i], girls[j]))
+				_add_stream(photos[i], photos[j], each_tag, j - i)
 
 
-func _add_stream(from: Control, to: Control, points: int, apart: int) -> void:
+# One stream: Sprites Per Point sprites for each shared tag (`each_tag`: its sprites),
+# mixed along the stream.
+func _add_stream(from: Control, to: Control, each_tag: Array[SpriteFrames], apart: int) -> void:
 	var stream := Stream.new()
 	stream.from = from
 	stream.to = to
-	stream.points = mini(points, style.max_points)
+	stream.points = each_tag.size()
 	stream.apart = apart
 	var count := style.sprites_per_point * stream.points
-	var animation := style.animation_name
-	if style.sprite_frames and (animation.is_empty() or not style.sprite_frames.has_animation(animation)):
-		animation = style.sprite_frames.get_animation_names()[0]
 	for i in count:
+		var frames := each_tag[i % each_tag.size()]
 		var sprite := AnimatedSprite2D.new()
-		if style.sprite_frames:
-			sprite.sprite_frames = style.sprite_frames
+		if frames and not frames.get_animation_names().is_empty():
+			var animation := style.animation_name
+			if animation.is_empty() or not frames.has_animation(animation):
+				animation = frames.get_animation_names()[0]
+			sprite.sprite_frames = frames
 			sprite.play(animation)
-			sprite.frame = i % maxi(style.sprite_frames.get_frame_count(animation), 1)
+			sprite.frame = i % maxi(frames.get_frame_count(animation), 1)
 		add_child(sprite)
 		stream.sprites.append(sprite)
 		stream.places.append(float(i) / count)
-		stream.backwards.append(style.both_ways and i % 2 == 1)
+		# Every tag gets sprites going each way.
+		stream.backwards.append(style.both_ways and i % (each_tag.size() * 2) >= each_tag.size())
 	_streams.append(stream)
 
 
@@ -90,7 +101,23 @@ func _process(delta: float) -> void:
 			if sprite.sprite_frames:
 				var picture := sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
 				if picture:
-					frame_size = picture.get_size()
+					frame_size = _drawn_size(picture)
 			sprite.scale = Vector2.ONE * size / maxf(frame_size.x, frame_size.y)
 			# They fade in leaving one photo and out reaching the other.
 			sprite.modulate.a = opacity * sin(PI * stream.places[i])
+
+
+# How big the drawn part of `picture` is, so art with lots of empty space around it
+# still comes out Sprite Size.
+func _drawn_size(picture: Texture2D) -> Vector2:
+	if not _drawn_sizes.has(picture):
+		var drawn := picture.get_size()
+		var image := picture.get_image()
+		if image and not image.is_empty():
+			if image.is_compressed():
+				image.decompress()
+			var used := image.get_used_rect()
+			if used.has_area():
+				drawn = Vector2(used.size) * picture.get_size() / Vector2(image.get_size())
+		_drawn_sizes[picture] = drawn
+	return _drawn_sizes[picture]

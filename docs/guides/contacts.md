@@ -134,6 +134,12 @@ the right. The more tags they share, the **stronger** the stream: more
 sprites, bigger, faster and more solid, bowing out further. Half flow each
 way.
 
+**Each tag has its own sprites**, so the stream shows what kind of synergy
+it is: two Smokers stream **cigarette packs** (`assets/cig_gif/`). Girls who
+share two tags get a mix of both tags' sprites. A tag with no sprites of its
+own uses its trait's **Icon** (her girl file → **Traits**), or else the
+Godot logo (Punk, for now).
+
 **The score, for now:** one point for each tag they both have. A tag is a
 trait whose **Kind** is `tag` in her girl file (**Contact Card →
 Traits**); the **Title** has to match ("Smoker" and "smoker" do). Split
@@ -151,9 +157,10 @@ empty = no streams):
 | Setting | Now | What it does |
 |---|---|---|
 | **Score → Counted Kinds** | tag | Which kinds of trait count. Add `type` to count shared types too |
-| **Stream → Sprite Frames** | the Godot logo (placeholder) | The sprites that flow. Any SpriteFrames: make one with your frames, or drag in an existing one |
-| **Animation Name** | (empty) | Which animation plays. Empty = the first |
-| **Sprites Per Point** | 6 | How many flow for each point |
+| **Each Tag's Sprites → Tag Sprites** | Smoker: the cigarette packs | Each tag's own sprites. **Add Key/Value Pair**: type the tag's title on the left (capitals don't matter), drop a SpriteFrames on the right (click it to add frames and set their speed) |
+| **Stream → Sprite Frames** | the Godot logo (placeholder) | The sprites for a tag with none of its own (and no trait Icon) |
+| **Animation Name** | (empty) | Which animation plays in any tag's sprites that have one by this name. Empty = the first |
+| **Sprites Per Point** | 6 | How many flow for each point (each shared tag adds this many of its own) |
 | **Max Points** | 4 | Points past this don't make it look any stronger |
 | **Sprite Size** / **Size Per Point** | 56 / 18 | Their size at 1 point, and how much bigger per extra point |
 | **Speed** / **Speed Per Point** | 180 / 80 | How fast they flow at 1 point, and how much faster per extra point |
@@ -172,13 +179,16 @@ synergy report (what the synergy does in the boss fight).
 
 - `SynergyStyle` (`scripts/data/synergy_style.gd`, `data/synergy.tres`):
   `score(a, b)` (shared titles of traits whose `kind` is in
-  `counted_kinds`, ignoring case), `shared(a, b)`, and the stream settings.
+  `counted_kinds`, ignoring case), `shared(a, b)`, `frames_for(tag, a, b)`
+  (`tag_sprites`, else the trait's `icon` as a one-frame SpriteFrames, else
+  `sprite_frames`), and the stream settings.
   `SynergyStreams` (`scenes/Phone/Contacts/synergy_streams.gd`, a `Node2D`):
   `ContactsApp._build_rows()` adds one as the list's last child (so it
   draws over the rows, scrolls and clips with them) and calls
   `setup(synergy, photos, girls)`. Each frame it moves each stream's
   `AnimatedSprite2D`s along a quadratic Bézier between the two photos'
-  centres.
+  centres, sized by each frame's drawn part (`Image.get_used_rect()`), so
+  art with see-through edges still comes out **Sprite Size**.
 - `PartyMember` (`scripts/data/party_member.gd`): `girl: GirlData`,
   `affection` (0–3 hearts).
 - `PlayerManager.party: Array[PartyMember]`;

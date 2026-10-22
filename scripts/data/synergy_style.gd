@@ -2,19 +2,29 @@ class_name SynergyStyle
 extends Resource
 ## Synergy between the girls in your party, and how the Contacts app shows it: for each
 ## two girls who share tags, a stream of little sprites flows between their photos on the
-## list, stronger the more they share. data/synergy.tres; full guide: docs/guides/contacts.md
+## list, stronger the more they share. Each tag flows its own sprites (Smoker: cigarette
+## packs), so the stream shows what kind of synergy it is.
+## data/synergy.tres; full guide: docs/guides/contacts.md
 
 @export_group("Score")
 ## What counts: traits of these kinds (her girl file → Contact Card → Traits → Kind) with
 ## the same title on both girls ("Smoker" and "smoker" match). One point per match.
 @export var counted_kinds: Array[String] = ["tag"]
 
+@export_group("Each Tag's Sprites")
+## Each tag's own sprites: Add Key/Value Pair, type the tag's title on the left
+## ("Smoker"; capitals don't matter) and drop its SpriteFrames on the right. Two girls
+## sharing that tag get a stream of these. A tag not listed here uses its trait's Icon
+## (her girl file → Traits), or else Sprite Frames below.
+@export var tag_sprites: Dictionary[String, SpriteFrames] = {}
+
 @export_group("Stream")
-## The sprites that flow between them: any SpriteFrames (the Godot logo for now).
+## The sprites for a tag with none of its own (the Godot logo for now).
 @export var sprite_frames: SpriteFrames
-## Which animation in Sprite Frames plays. Empty = the first one.
+## Which animation plays, in any tag's sprites that have one by this name. Empty (or not
+## there) = the first one.
 @export var animation_name: StringName = &""
-## How many sprites flow for each point of synergy.
+## How many sprites flow for each point of synergy (each shared tag's own sprites).
 @export_range(1, 20) var sprites_per_point: int = 6
 ## At most this many points count towards how strong it looks.
 @export_range(1, 20) var max_points: int = 4
@@ -52,6 +62,21 @@ func shared(a: GirlData, b: GirlData) -> Array[String]:
 		if mine.has(title) and not both.has(title):
 			both.append(title)
 	return both
+
+
+## The sprites for a shared tag (a title from shared()): its own in Tag Sprites, else the
+## Icon on either girl's trait, else Sprite Frames.
+func frames_for(tag: String, a: GirlData, b: GirlData) -> SpriteFrames:
+	for key in tag_sprites:
+		if key.strip_edges().to_lower() == tag and tag_sprites[key]:
+			return tag_sprites[key]
+	for girl in [a, b]:
+		for item: GirlTrait in girl.traits if girl else []:
+			if item and item.icon and item.title.strip_edges().to_lower() == tag:
+				var frames := SpriteFrames.new()
+				frames.add_frame(&"default", item.icon)
+				return frames
+	return sprite_frames
 
 
 func _titles(girl: GirlData) -> Array[String]:

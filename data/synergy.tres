@@ -1,7 +1,23 @@
-[gd_resource type="Resource" script_class="SynergyStyle" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="SynergyStyle" load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/synergy_style.gd" id="1_synergy"]
 [ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
+[ext_resource type="Texture2D" path="res://assets/cig_gif/cig1.png" id="3_cig1"]
+[ext_resource type="Texture2D" path="res://assets/cig_gif/cig2.png" id="4_cig2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_smoker"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_cig1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_cig2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_stream"]
 animations = [{
@@ -16,4 +32,7 @@ animations = [{
 
 [resource]
 script = ExtResource("1_synergy")
+tag_sprites = Dictionary[String, SpriteFrames]({
+"Smoker": SubResource("SpriteFrames_smoker")
+})
 sprite_frames = SubResource("SpriteFrames_stream")
