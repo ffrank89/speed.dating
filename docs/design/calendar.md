@@ -32,9 +32,9 @@
   (`data/player_style.tres`). Your stats are their own app, **Profile**.
 - On the calendar, **press W** to flip through your apps: your **Contacts** (the party screen,
   [0054](../decisions/0054-party-is-your-contacts.md)): every girl who gave
-  you her number, and her saved card. **Built:** the list and her card.
-  Still to come there: the synergy report, breaking up with someone, and
-  picking the 3 for the boss.
+  you her number, and her saved card. **Built:** the list, her card, and
+  synergy streams between girls who share tags. Still to come there: the
+  synergy report, breaking up with someone, and picking the 3 for the boss.
 
 ## Code needed
 

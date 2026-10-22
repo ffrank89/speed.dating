@@ -7,6 +7,7 @@ extends PanelContainer
 ## When training raises a stat, show_changes() plays it: the stat's picture flies from the
 ## phone (the choice you picked) to the hub, the hub's picture of that stat swallows it,
 ## and the number next to it goes up. A stat that goes down just changes its number.
+## Rest the mouse on a stat and its name shows above it.
 ##
 ## Its look (panel colour, font, text colours) is the player's style
 ## (data/player_style.tres); its layout and the animation's timing are the settings
@@ -36,6 +37,12 @@ extends PanelContainer
 ## Space inside the panel's edge, in pixels.
 @export_range(0, 200) var padding: int = 32
 
+@export_group("Names")
+## Rest the mouse on a stat and its name shows above it, in a little tag.
+@export var name_on_hover: bool = true
+## Size of the name.
+@export_range(8, 200) var name_size: int = 44
+
 @export_group("Boost Animation")
 ## Seconds the stat's picture takes to fly from the phone to the hub.
 @export_range(0.05, 3.0, 0.05) var fly_seconds: float = 0.7
@@ -62,6 +69,9 @@ var _rows := {}
 var _grid := GridContainer.new()
 var _heading := Label.new()
 var _sound := AudioStreamPlayer.new()
+# The name of the stat under the mouse, in a little tag above it.
+var _name_tag := PanelContainer.new()
+var _name_label := Label.new()
 
 
 func _ready() -> void:
@@ -75,6 +85,13 @@ func _ready() -> void:
 	_grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(_grid)
 	add_child(_sound)
+	_name_tag.top_level = true
+	_name_tag.z_index = 110
+	_name_tag.visible = false
+	_name_tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_name_tag.add_child(_name_label)
+	add_child(_name_tag)
 	refresh()
 
 
@@ -86,6 +103,9 @@ func refresh() -> void:
 	_heading.text = heading_text
 	_heading.visible = not heading_text.is_empty()
 	look.style_label(_heading, font, heading_size, look.faint_text_color)
+	_name_tag.add_theme_stylebox_override("panel", look.make_panel(maxi(padding / 3, 6), true))
+	look.style_label(_name_label, font, name_size)
+	_name_tag.visible = false
 	for child in _grid.get_children():
 		_grid.remove_child(child)
 		child.queue_free()
@@ -97,7 +117,6 @@ func refresh() -> void:
 	for stat in _stats():
 		var row := HBoxContainer.new()
 		row.mouse_filter = Control.MOUSE_FILTER_PASS
-		row.tooltip_text = stat.display_name
 		row.add_theme_constant_override("separation", gap)
 		var icon := TextureRect.new()
 		icon.texture = stat.icon
@@ -114,6 +133,8 @@ func refresh() -> void:
 		row.add_child(number)
 		_grid.add_child(row)
 		_rows[stat.id] = {"icon": icon, "number": number}
+		row.mouse_entered.connect(_show_name.bind(stat, icon))
+		row.mouse_exited.connect(func() -> void: _name_tag.visible = false)
 	visible = not _rows.is_empty()
 
 
@@ -198,6 +219,17 @@ func _show_number(stat: PlayerStat, flash: Color) -> void:
 	pop.tween_property(number, "scale", Vector2.ONE, swallow_seconds).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	pop.tween_method(func(c: Color) -> void: number.add_theme_color_override("font_color", c),
 		flash, look.text_color, swallow_seconds * 2.0)
+
+
+# The stat's name in a tag, centred above its picture.
+func _show_name(stat: PlayerStat, icon: TextureRect) -> void:
+	if not name_on_hover:
+		return
+	_name_label.text = stat.display_name
+	_name_tag.reset_size()
+	var spot := icon.get_global_rect()
+	_name_tag.position = Vector2(spot.get_center().x - _name_tag.size.x / 2.0, spot.position.y - _name_tag.size.y - 12.0)
+	_name_tag.visible = true
 
 
 # The stats to show: Only These, or every stat in data/stats.tres; only the ones that are on.

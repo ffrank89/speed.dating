@@ -21,6 +21,7 @@ Hover over any setting to see what it does.
 | `microgames.tres` | Every microgame by the name writers use: `[#microgame=light_cigarette]`. Add one like a pose: Add Key/Value Pair. |
 | `microgame_style.tres` | How the frame around every microgame looks and sounds (on the phone): dim over the date, banner, timer bar, NICE/OOPS stamp. |
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |
+| `synergy.tres` | **Synergy** between girls in your party (for now: one point per shared tag) and how the Contacts list shows it: the stream of sprites between two girls' photos (its sprites, size, speed and how it grows with each point). |
 | `annoyances/` | How she reacts when something annoys her on a date (the date stops, she turns around, says a line in a bubble, the date loses points, her dialogue box grays out). `ew.tres` is the fly's ".....ew". A stage hazard points at one; hazards can share one. |
 | `heart_meter_style.tres` | The heart meter on dates (top right): ring size, thickness and colours, the heart picture, the heart sound. Each girl's fill colour is her dialogue style's **Meter Color**. |
 | `calendar_rules.tres` | How the calendar runs: days per chapter, the boss day, what each day can offer and how many choices, how much of the whole calendar shows, and how far ahead you can see. |

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scenes/Phone/Contacts/contacts_app.gd" id="1_app"]
 [ext_resource type="Resource" path="res://data/contact_card_style.tres" id="2_style"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" path="res://scenes/Results/ContactCard.tscn" id="5_card"]
 [ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="6_girl_data"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="7_phone"]
+[ext_resource type="Resource" path="res://data/synergy.tres" id="8_synergy"]
+[ext_resource type="Resource" path="res://data/girls/smokey.tres" id="9_smokey"]
 
 [node name="ContactsApp" type="CanvasLayer"]
 layer = 19
@@ -14,7 +16,8 @@ script = ExtResource("1_app")
 app_name = "contacts"
 style = ExtResource("2_style")
 rules = ExtResource("3_rules")
-test_contacts = Array[ExtResource("6_girl_data")]([ExtResource("4_girl")])
+synergy = ExtResource("8_synergy")
+test_contacts = Array[ExtResource("6_girl_data")]([ExtResource("4_girl"), ExtResource("9_smokey")])
 test_hearts = 3
 
 [node name="PhoneScreen" parent="." instance=ExtResource("7_phone")]

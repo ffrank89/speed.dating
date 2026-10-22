@@ -12,6 +12,9 @@ extends PhoneOverlayApp
 ##
 ## W works on any screen that has this scene in it. For now that's only the calendar.
 ##
+## Synergy: two girls who share tags get a stream of sprites flowing between their photos
+## on the list, stronger the more tags they share (Synergy: data/synergy.tres).
+##
 ## The phone (its screen colour, font, status bar) is data/phone_style.tres; the list's
 ## words, sizes and sounds are data/contact_card_style.tres → Contacts App; each row and
 ## her card use her dialogue style. Move or resize the list in this scene (PhoneScreen →
@@ -26,6 +29,9 @@ signal contact_opened(member: PartyMember)
 @export var style: ContactCardStyle
 ## Which hearts unlock what on her card (data/date_rules.tres → Result).
 @export var rules: DateRules
+## Synergy between the girls on the list: two who share tags get a stream of sprites
+## flowing between their photos (data/synergy.tres). Empty = no streams.
+@export var synergy: SynergyStyle
 
 @export_group("Testing (F6)")
 ## Played on its own, the list shows these girls instead of your party.
@@ -34,6 +40,8 @@ signal contact_opened(member: PartyMember)
 @export_range(0, 3) var test_hearts: int = 1
 
 var _members: Array[PartyMember] = []
+# Each girl's photo on the list, in list order (for the synergy streams).
+var _photos: Array[Control] = []
 # Played on its own (F6): the test contacts, shown instead of your party.
 var _test_members: Array[PartyMember] = []
 
@@ -128,6 +136,7 @@ func _build_rows() -> void:
 	for child in list.get_children():
 		list.remove_child(child)
 		child.queue_free()
+	_photos.clear()
 	var sorted := _members.duplicate()
 	sorted.sort_custom(func(a: PartyMember, b: PartyMember) -> bool:
 		return a.display_name().naturalnocasecmp_to(b.display_name()) < 0)
@@ -142,6 +151,13 @@ func _build_rows() -> void:
 			header.text = letter
 			list.add_child(header)
 		list.add_child(_make_row(member))
+	# Over the rows (and scrolling with them): synergy streams between girls who share tags.
+	var streams := SynergyStreams.new()
+	list.add_child(streams)
+	var girls: Array[GirlData] = []
+	for member: PartyMember in sorted:
+		girls.append(member.girl)
+	streams.setup(synergy, _photos, girls)
 	empty.visible = _members.is_empty()
 	scroll.visible = not _members.is_empty()
 	count.visible = not _members.is_empty()
@@ -182,6 +198,7 @@ func _make_row(member: PartyMember) -> Control:
 	round_box.anti_aliasing = true
 	circle.add_theme_stylebox_override("panel", round_box)
 	line.add_child(circle)
+	_photos.append(circle)
 	if member.girl.contact_photo:
 		var photo := TextureRect.new()
 		photo.texture = member.girl.contact_photo

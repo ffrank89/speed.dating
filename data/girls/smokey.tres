@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GirlData" load_steps=23 format=3]
+[gd_resource type="Resource" script_class="GirlData" load_steps=25 format=3]
 
 [ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://dviwladmgecna" path="res://scripts/data/girl_pose.gd" id="2_pose"]
@@ -18,6 +18,13 @@
 [ext_resource type="Resource" path="res://data/stats/intellect.tres" id="91_intellect"]
 [ext_resource type="Resource" path="res://data/stats/seduction.tres" id="92_seduction"]
 [ext_resource type="Resource" path="res://data/stats/heart.tres" id="93_heart"]
+[ext_resource type="Script" path="res://scripts/data/girl_trait.gd" id="94_trait"]
+
+[sub_resource type="Resource" id="Trait_smoker"]
+script = ExtResource("94_trait")
+kind = "tag"
+title = "Smoker"
+description = "Placeholder tag: shared with Split Ends, so they have synergy."
 
 [sub_resource type="Resource" id="Pose_normal"]
 script = ExtResource("2_pose")
@@ -67,6 +74,7 @@ id = &"smokey"
 display_name = "Smokey"
 age = 24
 bio = "friends made me get on here but im indaa not opposed rn!"
+traits = Array[ExtResource("94_trait")]([SubResource("Trait_smoker")])
 interests = Array[String](["weed", "and", "smoken it ", "frogs in the park"])
 profile_picture = SubResource("SpriteFrames_profile")
 poses = Dictionary[String, ExtResource("2_pose")]({

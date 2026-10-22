@@ -80,7 +80,8 @@ its number. **When you train**, the stat's picture flies from the choice
 you picked to the hub, the hub's picture of that stat **swallows** it (it
 gulps, squashes and settles), and the number next to it **goes up** with a
 green flash. A stat that goes down just changes its number, with a red
-flash. Rest the mouse on a stat for its name.
+flash. **Rest the mouse on a stat** and its name shows in a little tag
+above it.
 
 Click **StatHub** in `scenes/Calendar/calendar.tscn`:
 
@@ -90,6 +91,7 @@ Click **StatHub** in `scenes/Calendar/calendar.tscn`:
 | **Only These** | (empty) | Only these stats, in this order. Empty = every stat that's on |
 | **Player Style** / **Phone Style** | `data/player_style.tres` / `data/phone_style.tres` | The panel's colour and corners and the text colours (the player's style); the font (the player's style's, or the phone's) |
 | **Layout** | 2 columns, 90 px pictures, size 60 numbers | **Columns**, **Icon Size**, **Font Size**, **Heading Size**, **Gap**, **Padding** |
+| **Names → Name On Hover** / **Name Size** | on / 44 | The stat's name in a tag above it when the mouse rests on it. Off = no tag |
 | **Boost Animation → Fly Seconds** | 0.7 | How long the picture takes to fly from the phone to the hub |
 | **Arc Height** | 260 | How high its path arcs up. 0 = straight |
 | **Swallow Seconds** / **Swallow Scale** | 0.45 / 1.4 | How long the gulp takes, and how big the hub's picture gets |
@@ -142,4 +144,6 @@ scene.
   from_rect)` (call after the stats have changed; awaitable). Raised stats
   fly in (`_fly_in`: a `top_level` TextureRect along a quadratic Bézier,
   then `_swallow`); a number shows the player's value only once its picture
-  lands, so the hub never refreshes itself mid-animation.
+  lands, so the hub never refreshes itself mid-animation. Hover: each row's
+  `mouse_entered` shows `_name_tag` (a `top_level` PanelContainer in the
+  player's style) centred above the row's picture.
