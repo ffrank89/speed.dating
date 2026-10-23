@@ -55,11 +55,11 @@ like the blinds in Balatro: **three days at a time**, stacked.
 - **Month ▾** swaps the cards for the whole month, small, four weeks of it
   (gone days faded, every day past this chapter an X). Escape or **Days ▴**
   closes it.
-- **W** flips through your apps: your [Contacts](contacts.md), then your
-  Profile (your stats), then back to the calendar, like moving between open
-  apps on an iPhone ([the-phone.md](the-phone.md) → Your apps). A **debug
-  note** in the top left of the screen says so (it doesn't show in a
-  finished build).
+- **C** switches to your [Contacts](contacts.md) and **P** to your Profile
+  (your stats); **W** flips through them all (Contacts, Profile, back to
+  the calendar), like moving between open apps on an iPhone
+  ([the-phone.md](the-phone.md) → Your apps). A **debug note** in the top
+  left of the screen lists the keys (it doesn't show in a finished build).
 
 The run starts here: after the intro ("Your Profile"), the calendar opens on
 the phone.

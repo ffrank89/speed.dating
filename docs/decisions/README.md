@@ -71,9 +71,10 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0065](0065-stat-slow-motion.md) | A stat can slow a stage hazard down: the fly moves (and buzzes) in slow motion with Perception above 5 | Accepted |
 | [0066](0066-fly-annoys-her.md) | A hazard sitting on her for a second annoys her: the date stops, she gets angry and says ".....ew", the date loses points | Accepted, amended by 0067 |
 | [0067](0067-annoyances-are-files.md) | How she reacts when annoyed is its own file (`data/annoyances/`); a hazard points at one; not in dialogue yet | Accepted |
-| [0068](0068-one-key-for-apps.md) | One key, W, flips through the phone's apps (Contacts, Profile, back to the calendar) instead of C and P | Accepted |
+| [0068](0068-one-key-for-apps.md) | One key, W, flips through the phone's apps (Contacts, Profile, back to the calendar) instead of C and P | Accepted, amended by 0074 |
 | [0069](0069-no-one-left-gives-days-back.md) | With no one left on the dating app, Back to the calendar gives the date's 2 days back | Accepted |
 | [0070](0070-stats-hub.md) | A stats hub beside the phone; training flies the stat's picture into it, the hub swallows it and the number goes up | Accepted |
 | [0071](0071-fly-paths-safe-to-edit.md) | The fly's paths are safe to move, stretch and turn: handles in their middle, any Path2D in the scene counts, unusable paths skipped with a warning | Accepted |
 | [0072](0072-synergy-streams-and-hub-names.md) | Synergy (for now: shared tags) shown in Contacts as a stream of sprites between two girls, stronger with more; the stats hub shows a stat's name on hover | Accepted |
 | [0073](0073-start-at-for-all-stats.md) | One setting (Start At) starts every stat at Lowest, Highest or a number, or each at its own Starting Value | Accepted |
+| [0074](0074-c-and-p-back.md) | C for Contacts and P for Profile are back, alongside W | Accepted |

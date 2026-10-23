@@ -127,7 +127,7 @@ Keep any new sound's licence next to it, and add a line to `CREDITS.md`.
 
 The card is on the player's phone ([the-phone.md](the-phone.md)): it comes
 up over the date, and the calendar opens on it afterwards. Your party is
-saved in your Contacts (press W on the calendar): [contacts.md](contacts.md).
+saved in your Contacts (press C on the calendar): [contacts.md](contacts.md).
 
 ## Something's wrong
 

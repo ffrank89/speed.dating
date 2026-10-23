@@ -1,10 +1,10 @@
 class_name ProfileApp
 extends PhoneOverlayApp
 ## Your Profile, an app on your phone: your stats (every one that's on in
-## data/stats.tres), each 1-9 with a bar. Press W (the switch_apps action) on the
-## calendar to flip through your apps (Contacts, then Profile, then back to the
-## calendar), like moving between open apps on an iPhone; Escape or the phone's home bar
-## goes back to the app you were on before.
+## data/stats.tres), each 1-9 with a bar. Press P (the open_profile action) on the
+## calendar and the phone switches to it, like moving between open apps on an iPhone (W
+## flips through all your apps); P again, Escape or the phone's home bar goes back to
+## the app you were on before.
 ##
 ## The list is Stat Bars (scenes/Stats/StatBars.tscn): click StatBars in this scene
 ## (PhoneScreen → Phone → Body → Screen → Margin → Column → Scroll → Stats) to change its
