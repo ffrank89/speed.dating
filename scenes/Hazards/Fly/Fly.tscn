@@ -1,27 +1,27 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=10 format=3 uid="uid://dk5n3skkquepn"]
 
-[ext_resource type="Script" path="res://scenes/Hazards/Fly/fly.gd" id="1_fly"]
-[ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
-[ext_resource type="Texture2D" path="res://assets/bedroom1.png" id="3_room"]
-[ext_resource type="Texture2D" path="res://assets/splitends/splitends_reach_update.png" id="4_her"]
+[ext_resource type="Script" uid="uid://bp10terbndrv4" path="res://scenes/Hazards/Fly/fly.gd" id="1_fly"]
+[ext_resource type="Texture2D" uid="uid://bkmrtqmpbs54s" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
+[ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="3_room"]
+[ext_resource type="Texture2D" uid="uid://vdrxxjegvc2r" path="res://assets/splitends/splitends_reach_update.png" id="4_her"]
 [ext_resource type="Resource" path="res://data/stats/perception.tres" id="5_perception"]
 [ext_resource type="Resource" path="res://data/annoyances/ew.tres" id="6_ew"]
 
 [sub_resource type="Curve2D" id="Curve2D_head"]
 _data = {
-"points": PackedVector2Array(0, 170, 0, -170, -360, 0, -200, 0, 200, 0, 0, -300, 0, -170, 0, 170, 360, 0, 200, 0, -200, 0, 0, 300, 0, 170, 0, -170, -360, 0)
+"points": PackedVector2Array(0, 170, 0, -170, -360, 0, -200, 0, 200, 0, 0, -300, 0, -170, 0, 170, 360, 0, 200, 0, -200, 0, 0, 300, 0, 0, 0, 0, -1705.64, 137.383, 0, 170, 0, -170, -360, 0)
 }
-point_count = 5
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_swoop"]
 _data = {
-"points": PackedVector2Array(0, 0, 300, -400, -1050, 315, -450, 0, 450, 0, 0, -315, -300, -400, 0, 0, 1050, 265)
+"points": PackedVector2Array(0, 0, 300, -400, -1050, 315, 0, 0, 0, 0, -90, 139, -450, 0, 450, 0, 0, -315, 0, 0, 0, 0, 14, 49, -300, -400, 0, 0, 1050, 265)
 }
-point_count = 3
+point_count = 5
 
 [sub_resource type="Curve2D" id="Curve2D_zigzag"]
 _data = {
-"points": PackedVector2Array(0, 0, 150, 150, -900, -195, -150, 0, 150, 0, -450, 195, -150, 0, 150, 0, 0, -195, -150, 0, 150, 0, 450, 195, -150, 150, 0, 0, 900, -195)
+"points": PackedVector2Array(0, 0, 150, 150, -942, 136, -150, 0, 150, 0, -450, 195, -150, 0, 150, 0, 0, -195, -150, 0, 150, 0, 450, 195, -150, 150, 0, 0, 900, -195)
 }
 point_count = 5
 
@@ -35,8 +35,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fly")
 slow_stat = ExtResource("5_perception")
-slow_above = 5
-slow_speed = 0.5
 annoyance = ExtResource("6_ew")
 annoy_seconds = 1.0
 
@@ -82,7 +80,8 @@ stretch_mode = 5
 [node name="Paths" type="Node2D" parent="."]
 
 [node name="AroundHerHead" type="Path2D" parent="Paths"]
-position = Vector2(1480, 600)
+position = Vector2(1442.5, 739.5)
+scale = Vector2(0.4875, 0.535)
 curve = SubResource("Curve2D_head")
 
 [node name="Swoop" type="Path2D" parent="Paths"]
@@ -90,13 +89,14 @@ position = Vector2(1500, 635)
 curve = SubResource("Curve2D_swoop")
 
 [node name="Zigzag" type="Path2D" parent="Paths"]
-position = Vector2(1500, 455)
+position = Vector2(1569, 632)
 curve = SubResource("Curve2D_zigzag")
 
 [node name="Body" type="Node2D" parent="."]
 position = Vector2(1120, 600)
 
 [node name="Sprite" type="Sprite2D" parent="Body"]
+position = Vector2(-471, 183)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_logo")
 

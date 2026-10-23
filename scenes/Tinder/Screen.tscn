@@ -1,13 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://bebvepqudrn"]
+[gd_scene load_steps=9 format=3 uid="uid://bebvepqudrn"]
 
 [ext_resource type="Script" uid="uid://sygajrejivmv" path="res://scenes/Tinder/screen.gd" id="1_8no1u"]
-[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
+[ext_resource type="PackedScene" uid="uid://cy0um73kfey5d" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
 [ext_resource type="Resource" path="res://data/dating_app_style.tres" id="3_style"]
 [ext_resource type="Script" uid="uid://b8trp801kymm7" path="res://scenes/Tinder/icon_panel.gd" id="4_photo"]
-[ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 [ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="5_split_ends"]
-[ext_resource type="Resource" path="res://data/girls/smokey.tres" id="6_smokey"]
+[ext_resource type="Resource" uid="uid://dr4umdler3bj5" path="res://data/girls/smokey.tres" id="6_smokey"]
 [ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="7_girl_data"]
+[ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 
 [node name="DatingApp" type="Control"]
 layout_mode = 3
@@ -26,7 +26,7 @@ unique_name_in_owner = true
 layout_mode = 1
 app_name = "dating_app"
 
-[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

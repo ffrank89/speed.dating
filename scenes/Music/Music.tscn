@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://01fxl4q5mx6f"]
 
-[ext_resource type="Script" path="res://scenes/Music/music.gd" id="1_music"]
-[ext_resource type="Resource" path="res://data/music.tres" id="2_library"]
+[ext_resource type="Script" uid="uid://4pcou53o6u1f" path="res://scenes/Music/music.gd" id="1_music"]
+[ext_resource type="Resource" uid="uid://dw0f5uy51qken" path="res://data/music.tres" id="2_library"]
 
 [node name="Music" type="Node"]
 script = ExtResource("1_music")

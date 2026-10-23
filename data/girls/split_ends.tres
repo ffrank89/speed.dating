@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GirlData" load_steps=37 format=3 uid="uid://dglthbg00jke5"]
 
 [ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="1_wf6us"]
-[ext_resource type="Resource" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
+[ext_resource type="Resource" uid="uid://ir75gkb3ey03" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
 [ext_resource type="Script" uid="uid://dviwladmgecna" path="res://scripts/data/girl_pose.gd" id="3_hgqhe"]
 [ext_resource type="Texture2D" uid="uid://8hvuoa5c0qm6" path="res://assets/splitends/splitends_backshot_updated.png" id="4_riqjt"]
 [ext_resource type="Texture2D" uid="uid://cv0ik7jnib2xd" path="res://assets/splitends/splitends_cig_updated.png" id="5_2uhp7"]
@@ -12,13 +12,13 @@
 [ext_resource type="Texture2D" uid="uid://vdrxxjegvc2r" path="res://assets/splitends/splitends_reach_update.png" id="10_l7u0l"]
 [ext_resource type="Script" uid="uid://djvlb4gympg42" path="res://scripts/data/girl_data.gd" id="11_v70mn"]
 [ext_resource type="Script" uid="uid://yvy4bgbrod73" path="res://scripts/data/girl_voice.gd" id="12_13src"]
-[ext_resource type="Script" path="res://scripts/data/girl_trait.gd" id="13_trait"]
-[ext_resource type="Resource" path="res://dialogue/split_ends/first_date.dialogue" id="14_first_date"]
+[ext_resource type="Script" uid="uid://clsoid5vgssak" path="res://scripts/data/girl_trait.gd" id="13_trait"]
+[ext_resource type="Resource" uid="uid://6ngbo558gxas" path="res://dialogue/split_ends/first_date.dialogue" id="14_first_date"]
 [ext_resource type="Texture2D" uid="uid://diydmun1v6c7e" path="res://assets/spitEndsGif2/sprite1.png" id="15_pic1"]
 [ext_resource type="Texture2D" uid="uid://b6sulnifbnexx" path="res://assets/spitEndsGif2/sprite2.png" id="16_pic2"]
 [ext_resource type="Texture2D" uid="uid://dwtixb03eft71" path="res://assets/spitEndsGif2/sprite3.png" id="17_pic3"]
 [ext_resource type="Texture2D" uid="uid://cjl6tnrtv8pjc" path="res://assets/spitEndsGif2/sprite4.png" id="18_pic4"]
-[ext_resource type="Script" path="res://scripts/data/player_stat.gd" id="89_stat_script"]
+[ext_resource type="Script" uid="uid://bb2shfu56y14x" path="res://scripts/data/player_stat.gd" id="89_stat_script"]
 [ext_resource type="Resource" path="res://data/stats/culture.tres" id="90_culture"]
 [ext_resource type="Resource" path="res://data/stats/intellect.tres" id="91_intellect"]
 [ext_resource type="Resource" path="res://data/stats/seduction.tres" id="92_seduction"]
@@ -73,14 +73,25 @@ scale = 1.0
 offset = Vector2(0, 0)
 flip = false
 
-[sub_resource type="Resource" id="Resource_s0o2p"]
-script = ExtResource("12_13src")
-letter_sounds_folder = "res://assets/audio/voice/default"
-pitch = 1.25
-pitch_variance = 0.12
-seconds_per_letter = 0.035
-letters_per_sound = 2
-volume_db = -6.0
+[sub_resource type="SpriteFrames" id="SpriteFrames_profile"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_pic1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_pic2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_pic3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_pic4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="Resource" id="Trait_type"]
 script = ExtResource("13_trait")
@@ -106,37 +117,26 @@ kind = "ability"
 title = "Coming later"
 description = "Abilities aren't in the first build."
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_profile"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("15_pic1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("16_pic2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("17_pic3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("18_pic4")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[sub_resource type="Resource" id="Resource_s0o2p"]
+script = ExtResource("12_13src")
+letter_sounds_folder = "res://assets/audio/voice/default"
+pitch = 1.25
+pitch_variance = 0.12
+seconds_per_letter = 0.035
+letters_per_sound = 2
+volume_db = -6.0
 
 [resource]
 script = ExtResource("11_v70mn")
 id = &"split_ends"
 display_name = "Split Ends"
 age = 24
-phone_number = "(310) 555-0147"
-address = "Flat 2B, 14 Safety Pin Lane"
-traits = Array[ExtResource("13_trait")]([SubResource("Trait_type"), SubResource("Trait_punk"), SubResource("Trait_smoker"), SubResource("Trait_ability")])
 bio = "(pretending to be) reading books lol"
 interests = Array[String](["yapping", "birds are NOT real!!!", "Vintage shopping", "fixing up my dads boat ;P"])
 profile_picture = SubResource("SpriteFrames_profile")
+phone_number = "(310) 555-0147"
+address = "Flat 2B, 14 Safety Pin Lane"
+traits = Array[ExtResource("13_trait")]([SubResource("Trait_type"), SubResource("Trait_punk"), SubResource("Trait_smoker"), SubResource("Trait_ability")])
 poses = Dictionary[String, ExtResource("3_hgqhe")]({
 "backshot": SubResource("Resource_qbi5r"),
 "cig": SubResource("Resource_xjjpa"),
@@ -152,6 +152,7 @@ dialogue_style = ExtResource("2_mpoun")
 voice = SubResource("Resource_s0o2p")
 first_date_dialogue = ExtResource("14_first_date")
 microgames = Array[PackedScene]([])
+number_threshold = 0
 affection_thresholds = Array[int]([3, 6, 9])
 likes = Dictionary[ExtResource("89_stat_script"), float]({
 ExtResource("90_culture"): 0.2,

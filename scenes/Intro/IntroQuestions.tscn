@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://efp3ydwobkem"]
 
 [ext_resource type="Script" uid="uid://c0osn8ak6ofih" path="res://scenes/Intro/intro_questions.gd" id="1_72tvp"]
-[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
+[ext_resource type="PackedScene" uid="uid://cy0um73kfey5d" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
 [ext_resource type="PackedScene" path="res://scenes/Music/MusicCue.tscn" id="90_music"]
 
 [node name="IntroQuestions" type="Control"]
@@ -18,7 +18,7 @@ script = ExtResource("1_72tvp")
 unique_name_in_owner = true
 layout_mode = 1
 
-[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

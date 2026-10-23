@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="DialogueBoxStyle" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="DialogueBoxStyle" load_steps=3 format=3 uid="uid://ir75gkb3ey03"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/patrick_hand/PatrickHand-Regular.ttf" id="1_0fr20"]
-[ext_resource type="Script" path="res://scripts/data/dialogue_box_style.gd" id="2_dob8y"]
+[ext_resource type="FontFile" uid="uid://bj0bsupumyyh6" path="res://assets/fonts/patrick_hand/PatrickHand-Regular.ttf" id="1_0fr20"]
+[ext_resource type="Script" uid="uid://cq2gkdsppl8ae" path="res://scripts/data/dialogue_box_style.gd" id="2_dob8y"]
 
 [resource]
 script = ExtResource("2_dob8y")
 background_color = Color(0.945098, 0.960784, 0.823529, 0.960784)
 image_corner_size = 32
+keep_outline_with_image = false
 outline_color = Color(0.847059, 0.207843, 0.168627, 1)
 outline_width = 6
 corner_radius = 40
@@ -21,5 +22,5 @@ name_plate_color = Color(0.847059, 0.207843, 0.168627, 1)
 name_plate_outline_color = Color(0.945098, 0.960784, 0.823529, 1)
 name_color = Color(1, 0.964706, 0.917647, 1)
 name_font_size = 48
-next_arrow_color = Color(0.847059, 0.207843, 0.168627, 1)
 meter_color = Color(0.847059, 0.207843, 0.168627, 1)
+next_arrow_color = Color(0.847059, 0.207843, 0.168627, 1)

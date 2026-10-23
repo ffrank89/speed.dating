@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://cy0um73kfey5d"]
 
-[ext_resource type="Script" path="res://scenes/Phone/phone_screen.gd" id="1_phone"]
+[ext_resource type="Script" uid="uid://cca4xbeuw6gq5" path="res://scenes/Phone/phone_screen.gd" id="1_phone"]
 [ext_resource type="Resource" path="res://data/phone_style.tres" id="2_style"]
 
 [node name="PhoneScreen" type="Control"]
