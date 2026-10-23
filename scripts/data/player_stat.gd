@@ -21,5 +21,6 @@ extends Resource
 @export_multiline var description: String
 ## Its picture: in Profile, and on option bubbles that check it.
 @export var icon: Texture2D
-## What it is at the start of a run (the intro's sliders start here too).
+## What it is at the start of a run (the intro's sliders start here too), when
+## data/stats.tres → Start At is Each Stat's Own. Otherwise that setting decides.
 @export_range(0, 100) var starting_value: int = 5

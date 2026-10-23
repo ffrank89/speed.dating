@@ -246,7 +246,7 @@ func _player_stats() -> Dictionary:
 	var player: PlayerCharacter = PlayerManager.player
 	for stat in StatList.get_default().stats:
 		if stat:
-			values[stat.id] = player.get_stat(stat) if player else stat.starting_value
+			values[stat.id] = player.get_stat(stat) if player else StatList.get_default().starting_value_of(stat)
 	return values
 
 

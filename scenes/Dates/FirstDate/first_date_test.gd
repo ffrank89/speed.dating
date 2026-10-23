@@ -31,7 +31,7 @@ static var stats := {}
 func _ready() -> void:
 	for stat in StatList.get_default().active():
 		if not stats.has(stat.id):
-			stats[stat.id] = stat.starting_value
+			stats[stat.id] = StatList.get_default().starting_value_of(stat)
 	_build_sliders()
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	date.status_changed.connect(func(text: String) -> void: status_label.text = text)
