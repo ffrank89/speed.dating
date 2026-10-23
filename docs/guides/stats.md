@@ -64,7 +64,7 @@ and a dialogue check on it warns in Godot's Output panel and has no roll.
 
 | Where | How |
 |---|---|
-| **Profile** (W on the calendar, twice) | Lists every stat that's on, with a bar. It scrolls. |
+| **Profile** (P on the calendar) | Lists every stat that's on, with a bar. It scrolls. |
 | **The intro** | A slider for each stat that's on. It scrolls. |
 | **Training** (calendar actions) | `data/day_actions/<action>.tres` → **Stats** → **Add Key/Value Pair**: drag a stat file on the left, type the amount on the right (Train Culture is Culture 1). The stat's picture flies into the stats hub (below). |
 | **The stats hub** (beside the phone on the calendar) | Every stat that's on: its picture and number (below). |

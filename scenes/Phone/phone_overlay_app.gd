@@ -1,7 +1,9 @@
 class_name PhoneOverlayApp
 extends CanvasLayer
 ## An app that opens on the phone over another phone screen: Contacts and Profile over
-## the calendar. One key (W, the switch_apps action) flips through them all: each press
+## the calendar. Each can have a key of its own (Open Action: C for Contacts, P for
+## Profile) that opens it, or goes back if it's open. One key (W, the switch_apps action)
+## also flips through them all: each press
 ## goes to the next app, from the screen underneath (the calendar) to each of these in
 ## the order they sit in the scene (top to bottom in the Scene panel), then back round to
 ## the calendar. It opens like moving between open apps on an iPhone (the app switcher:
@@ -25,8 +27,8 @@ signal closed
 ## → Input Map. Every app with the same key is in the round, in scene order. Empty = the
 ## key skips this app.
 @export var switch_action: StringName = &"switch_apps"
-## Optional: a key of its own that opens and closes just this app (an action in Project
-## Settings → Input Map). Empty = none.
+## Its own key, opening it (or going back, if it's open): an action in Project Settings
+## → Input Map (open_contacts: C, open_profile: P). Empty = none.
 @export var open_action: StringName = &""
 ## The app it is (its icon, name and launch screen): a file name in data/apps/.
 @export var app_name: String = ""

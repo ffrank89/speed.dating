@@ -1,6 +1,6 @@
 # 0068: One key, W, flips through the phone's apps (instead of C and P)
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0074](0074-c-and-p-back.md) (C and P are back alongside W)
 - **Date:** 2026-10-21
 - **Affects:** [0054](0054-party-is-your-contacts.md), [0060](0060-switching-apps.md), [0062](0062-recent-apps-order.md), [the-phone.md](../guides/the-phone.md), [contacts.md](../guides/contacts.md)
 

@@ -12,7 +12,8 @@ extends Control
 ## screen, like a boss fight, puts the phone down).
 ## "Month" swaps the cards for the whole month, small; days past this chapter show an X
 ## (data/calendar_rules.tres → Foresight Days lets you see further).
-## W flips through your other apps, Contacts and Profile (a debug note says so).
+## C and P switch to your other apps, Contacts and Profile, and W flips through them all
+## (a debug note says so).
 ## Beside the phone, the stats hub (scenes/Stats/StatHub.tscn) shows your stats; training
 ## flies the stat's picture from the choice into it.
 ##

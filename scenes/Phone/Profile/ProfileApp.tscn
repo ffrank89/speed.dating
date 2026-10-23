@@ -8,6 +8,7 @@
 layer = 19
 script = ExtResource("1_app")
 app_name = "profile"
+open_action = &"open_profile"
 
 [node name="PhoneScreen" parent="." instance=ExtResource("2_phone")]
 unique_name_in_owner = true
