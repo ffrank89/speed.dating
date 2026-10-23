@@ -17,12 +17,12 @@ func _init(char_name: String) -> void:
 	stats = {}
 	for stat in StatList.get_default().stats:
 		if stat:
-			stats[stat.id] = stat.starting_value
+			stats[stat.id] = StatList.get_default().starting_value_of(stat)
 
 
 ## A stat's value. One the player hasn't got yet is at its Starting Value.
 func get_stat(stat: PlayerStat) -> int:
-	return stats.get(stat.id, stat.starting_value)
+	return stats.get(stat.id, StatList.get_default().starting_value_of(stat))
 
 
 # Training raises it (or lowers it), never past the list's Lowest or Highest.

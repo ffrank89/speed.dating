@@ -18,6 +18,14 @@ static var _default: StatList
 ## them up or down to reorder.
 @export var stats: Array[PlayerStat] = []
 
+@export_group("Starting Values")
+## Where the stats start a run (and where the intro's sliders start): each stat's own
+## Starting Value (in its file), or all the same: Lowest, Highest, or Starting Number.
+@export_enum("Each Stat's Own", "Lowest", "Highest", "Starting Number") var start_at: int = 0
+## With Start At = Starting Number: what every stat starts at (kept between Lowest and
+## Highest).
+@export_range(0, 100) var starting_number: int = 5
+
 
 ## The game's stats (data/stats.tres).
 static func get_default() -> StatList:
@@ -47,6 +55,18 @@ func find(stat_id: String) -> PlayerStat:
 ## True if this stat is in the game now (in the list, and Enabled).
 func is_active(stat: PlayerStat) -> bool:
 	return stat != null and stat.enabled and stat in stats
+
+
+## Where `stat` starts a run (Start At), kept between Lowest and Highest.
+func starting_value_of(stat: PlayerStat) -> int:
+	match start_at:
+		1:
+			return lowest
+		2:
+			return highest
+		3:
+			return clamp_value(starting_number)
+	return clamp_value(stat.starting_value)
 
 
 ## `value` kept between Lowest and Highest.

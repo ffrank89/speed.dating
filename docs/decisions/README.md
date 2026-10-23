@@ -76,3 +76,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0070](0070-stats-hub.md) | A stats hub beside the phone; training flies the stat's picture into it, the hub swallows it and the number goes up | Accepted |
 | [0071](0071-fly-paths-safe-to-edit.md) | The fly's paths are safe to move, stretch and turn: handles in their middle, any Path2D in the scene counts, unusable paths skipped with a warning | Accepted |
 | [0072](0072-synergy-streams-and-hub-names.md) | Synergy (for now: shared tags) shown in Contacts as a stream of sprites between two girls, stronger with more; the stats hub shows a stat's name on hover | Accepted |
+| [0073](0073-start-at-for-all-stats.md) | One setting (Start At) starts every stat at Lowest, Highest or a number, or each at its own Starting Value | Accepted |

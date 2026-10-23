@@ -33,7 +33,7 @@ var stat_sliders = {}
 
 func _ready():
 	for stat in StatList.get_default().active():
-		player_stats[stat] = stat.starting_value
+		player_stats[stat] = StatList.get_default().starting_value_of(stat)
 	style_ui_elements()
 	setup_stats_interface()
 	randomize_button.pressed.connect(_on_randomize_pressed)

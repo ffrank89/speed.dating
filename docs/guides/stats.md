@@ -29,6 +29,8 @@ All of them are **on** now. They go from **1 to 9** and start at **5**.
 |---|---|
 | **Lowest** / **Highest** | The scale: 1 to 9. The intro's sliders, training, Profile's bars, the test bench and dialogue checks all use it |
 | **Stats** | Every stat, in order. Profile, the intro and the test bench list them in this order. Drag one up or down to move it; remove one to take it out of the game (its file stays in `data/stats/`) |
+| **Starting Values → Start At** | Where the stats start a run, and where the intro's sliders start. **Each Stat's Own** (now) uses each stat file's **Starting Value**. **Lowest**, **Highest** or **Starting Number** start them all at the same value, whatever their files say |
+| **Starting Values → Starting Number** | With Start At = Starting Number: what every stat starts at (kept between Lowest and Highest) |
 
 ## Each stat: `data/stats/`
 
@@ -41,12 +43,13 @@ One file each. Click it to change:
 | **Enabled** | On or off (below) |
 | **Description** | What it's for. Shows when the mouse rests on it in Profile |
 | **Icon** | Its picture: in Profile, and on option bubbles that check it. Culture's statue and Heart's winged heart are real; the rest are the Godot logo for now |
-| **Starting Value** | What it is at the start of a run, and where the intro's slider starts (5) |
+| **Starting Value** | What it is at the start of a run, and where the intro's slider starts (5). Only used while `data/stats.tres` → **Start At** is **Each Stat's Own** |
 
 ## Try different stats
 
 | I want to... | Do this |
 |---|---|
+| Start **every** stat at the lowest (or highest, or one number) | `data/stats.tres` → **Starting Values → Start At**: **Lowest** (or **Highest**, or **Starting Number** and type it in). No need to change each stat. |
 | Turn a stat **off** | Click its file in `data/stats/` (e.g. `luck.tres`) → untick **Enabled**. |
 | Try just SPECIAL | Untick **Enabled** on Culture, Intellect, Seduction and Heart. (Split Ends' dialogue checks those four, so her options would lose their rolls; Godot warns which.) |
 | Try just the first four | Untick **Enabled** on the seven SPECIAL stats. |
@@ -129,7 +132,10 @@ scene.
   `enabled`, `description`, `icon`, `starting_value`.
 - `StatList` (`scripts/data/stat_list.gd`, `data/stats.tres`):
   `StatList.get_default()`, `lowest`, `highest`, `stats`, `active()`,
-  `find(id)`, `is_active(stat)`, `clamp_value(value)`.
+  `find(id)`, `is_active(stat)`, `clamp_value(value)`, `start_at` /
+  `starting_number`, `starting_value_of(stat)` (everything that needs a
+  stat's starting value asks this: the player, the intro, the date and its
+  test bench).
 - `PlayerCharacter.stats` (stat id → value, every stat in the list);
   `get_stat(stat)`, `raise_stat(stat, amount)` (kept to the scale).
 - `DayAction.stats: Dictionary[PlayerStat, int]`, `stat_changes()` (only
