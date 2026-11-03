@@ -1,16 +1,16 @@
 class_name ContactsApp
 extends PhoneOverlayApp
 ## Your party, as the Contacts on your phone: every girl who gave you her number is
-## saved here. Press W (the switch_apps action) to flip through your apps (calendar,
-## Contacts, Profile, then round again); the phone switches like moving between open
-## apps on an iPhone (data/app_transition_style.tres → Switching Apps; its icon and
-## name: data/apps/contacts.tres).
+## saved here. Press C (the open_contacts action) and the phone switches to it, like
+## moving between open apps on an iPhone (W flips through all your apps;
+## data/app_transition_style.tres → Switching Apps; its icon and name:
+## data/apps/contacts.tres).
 ## Click a girl to open her contact (her card as she filled it in on the date: what your
-## hearts unlocked, her number and address); "‹ Contacts" goes back. Escape or the
-## phone's home bar goes back to the app you were on before (the calendar, or Profile if
-## you came from there).
+## hearts unlocked, her number and address); "‹ Contacts" goes back. C again, Escape or
+## the phone's home bar goes back to the app you were on before (the calendar, or Profile
+## if you came from there).
 ##
-## W works on any screen that has this scene in it. For now that's only the calendar.
+## C and W work on any screen that has this scene in it. For now that's only the calendar.
 ##
 ## Synergy: two girls who share tags get a stream of sprites flowing between their photos
 ## on the list, stronger the more tags they share (Synergy: data/synergy.tres).
@@ -305,7 +305,7 @@ func _play(stream: AudioStream) -> void:
 		sound.play()
 
 
-# F6: the test contacts open; press W to put them away and bring them back.
+# F6: the test contacts open; press C (or W) to put them away and bring them back.
 func _play_alone() -> void:
 	# On its own there's no phone screen behind it: your room instead.
 	phone_screen.behind = PhoneScreen.Behind.ROOM

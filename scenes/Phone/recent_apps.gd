@@ -4,7 +4,7 @@ extends RefCounted
 ## the screen underneath (e.g. the calendar) and the apps opened over it (Contacts,
 ## Profile).
 ##
-## Switching to an app (W) makes the app you were on the most recent, and the switcher's
+## Switching to an app (C, P or W) makes the app you were on the most recent, and the switcher's
 ## cards are in this order: newest on the right, older ones to its left. Going back
 ## (Escape, the home bar) steps to the app before without changing the order, like
 ## swiping back along an iPhone's home bar: calendar → W → W (Contacts, then Profile),

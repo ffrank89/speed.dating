@@ -10,28 +10,29 @@ happens. Each hazard is its own scene in `scenes/Hazards/`, and a date lists
 the ones it can have.
 
 The first one is the **fly** (`scenes/Hazards/Fly/Fly.tscn`). It flies in from
-the edge of the screen and buzzes along a path you drew. Press **S** to
-switch to the **action cursor**, then **wave it at the fly** to shoo it
-([the cursor guide](cursor.md)). Shoo it **off the screen**, and she reacts and the date gets
-a point. If you stop, it flies back to its path. If it sits on her for a
+the edge of the screen and buzzes along a path you drew. **Wave the mouse
+at the fly** to shoo it (the normal cursor works; it doesn't need the action
+cursor for now, below). Shoo it **off the screen**, and she reacts and the
+date gets a point. If you stop, it flies back to its path. If it sits on her for a
 second, she says ".....ew" and the date loses a point (below).
 
 ## Try it
 
 - **On its own:** open `Fly.tscn` and press **F6**. It flies over a faded
   picture of her room and her, so you can see your paths against the date.
-  Press **S**, shoo it off, and it comes back a second later. The Output
-  panel prints `CLEARED`.
+  Shoo it off, and it comes back a second later. The Output panel prints
+  `CLEARED`.
 - **In the date:** press **F6** on the date test bench
   (`scenes/Dates/FirstDate/FirstDateTest.tscn`) and answer one question. A second later the
-  fly turns up. Press **S** and shoo it off: the score goes up by 1 and she
-  shows a heart.
+  fly turns up. Shoo it off: the score goes up by 1 and she shows a heart.
   The debug panel's **Stage hazards now** button brings it on at once.
 
 ## Needing the action cursor
 
-Each hazard's top node → **Dealing With It → Needs Action Cursor**: on (the
-fly) = the player has to press **S** first; off = the normal cursor works.
+Each hazard's top node → **Dealing With It → Needs Action Cursor**: on =
+the player has to press **S** for the action cursor first; off = the normal
+cursor works. **The fly has it off for now.** Tick it in `Fly.tscn` to bring
+the S step back.
 A new hazard checks `can_act()` before letting the player deal with it.
 
 ## When it turns up
