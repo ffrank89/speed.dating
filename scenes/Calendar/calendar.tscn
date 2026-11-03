@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://bgn2jmt66pr2e"]
 
 [ext_resource type="Script" uid="uid://gefctj02osbb" path="res://scenes/Calendar/calendar.gd" id="1_calendar"]
-[ext_resource type="PackedScene" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
+[ext_resource type="PackedScene" uid="uid://cy0um73kfey5d" path="res://scenes/Phone/PhoneScreen.tscn" id="2_phone"]
 [ext_resource type="Resource" path="res://data/calendar_style.tres" id="3_style"]
-[ext_resource type="Resource" path="res://dialogue/calendar.dialogue" id="4_lines"]
-[ext_resource type="PackedScene" path="res://scenes/Dialogue/DialogueBox.tscn" id="5_box"]
+[ext_resource type="Resource" uid="uid://5rto715w85vx" path="res://dialogue/calendar.dialogue" id="4_lines"]
+[ext_resource type="PackedScene" uid="uid://bxxakwtl1ma0l" path="res://scenes/Dialogue/DialogueBox.tscn" id="5_box"]
 [ext_resource type="PackedScene" path="res://scenes/Phone/Contacts/ContactsApp.tscn" id="6_contacts"]
 [ext_resource type="Resource" path="res://data/calendar_rules.tres" id="7_rules"]
 [ext_resource type="Resource" path="res://data/player_style.tres" id="8_player"]
@@ -33,7 +33,7 @@ unique_name_in_owner = true
 layout_mode = 1
 app_name = "calendar"
 
-[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen"]
+[node name="Margin" type="MarginContainer" parent="PhoneScreen/Phone/Body/Screen" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -109,7 +109,7 @@ size_flags_vertical = 0
 mouse_filter = 2
 columns = 7
 
-[node name="DialogueBox" parent="PhoneScreen/Phone/Body/Screen" instance=ExtResource("5_box")]
+[node name="DialogueBox" parent="PhoneScreen/Phone/Body/Screen" index="1" instance=ExtResource("5_box")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 24.0
@@ -139,8 +139,6 @@ unique_name_in_owner = true
 
 [node name="DebugNote" parent="." instance=ExtResource("10_note")]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
 offset_right = 760.0
 offset_bottom = 230.0
 text = "DEBUG

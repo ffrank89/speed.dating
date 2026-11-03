@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=3 uid="uid://dk5n3skkquepn"]
 
 [ext_resource type="Script" uid="uid://bp10terbndrv4" path="res://scenes/Hazards/Fly/fly.gd" id="1_fly"]
-[ext_resource type="Texture2D" uid="uid://bkmrtqmpbs54s" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
 [ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="3_room"]
 [ext_resource type="Texture2D" uid="uid://vdrxxjegvc2r" path="res://assets/splitends/splitends_reach_update.png" id="4_her"]
 [ext_resource type="Resource" path="res://data/stats/perception.tres" id="5_perception"]
+[ext_resource type="SpriteFrames" uid="uid://dulcyw4w2hiw4" path="res://assets/fly gif/flyframes.tres" id="6_42vhr"]
 [ext_resource type="Resource" path="res://data/annoyances/ew.tres" id="6_ew"]
 
 [sub_resource type="Curve2D" id="Curve2D_head"]
@@ -96,8 +96,8 @@ curve = SubResource("Curve2D_zigzag")
 [node name="Body" type="Node2D" parent="."]
 position = Vector2(1120, 600)
 
-[node name="Sprite" type="Sprite2D" parent="Body"]
+[node name="Sprite" type="AnimatedSprite2D" parent="Body"]
 scale = Vector2(0.7, 0.7)
-texture = ExtResource("2_logo")
+sprite_frames = ExtResource("6_42vhr")
 
 [node name="Buzz" type="AudioStreamPlayer" parent="."]

@@ -13,11 +13,22 @@ extends Control
 ## The scoring and flow numbers (data/date_rules.tres).
 @export var rules: DateRules
 
+@export_group("Debug Panel")
+## The key that shows and hides the debug panel.
+@export var toggle_key: Key = KEY_F1
+## Start with the debug panel hidden (until you press Toggle Key).
+@export var start_hidden: bool = false
+
 # Static so the sliders keep their values when the date restarts. Stat id → value; each
 # starts at its stat's Starting Value (data/stats/).
 static var stats := {}
 
+# (Start Hidden decides).
+static var _panel_shown: Variant = null
+
 @onready var date: DateScene = $Date
+@onready var panel: PanelContainer = $DebugPanel
+@onready var title: Label = $DebugPanel/Margin/VBox/Title
 @onready var girl_label: Label = %GirlLabel
 @onready var status_label: Label = %StatusLabel
 @onready var score_label: Label = %ScoreLabel
@@ -33,6 +44,12 @@ func _ready() -> void:
 		if not stats.has(stat.id):
 			stats[stat.id] = StatList.get_default().starting_value_of(stat)
 	_build_sliders()
+	
+	if _panel_shown == null:
+		_panel_shown = not start_hidden
+	panel.visible = _panel_shown
+	title.text = "FIRST DATE TEST   (%s hides this)" % OS.get_keycode_string(toggle_key)
+	
 	restart_button.pressed.connect(get_tree().reload_current_scene)
 	date.status_changed.connect(func(text: String) -> void: status_label.text = text)
 	date.score_changed.connect(func(text: String) -> void: score_label.text = text)
@@ -84,3 +101,9 @@ func _build_sliders() -> void:
 
 func _slider_text(stat: PlayerStat) -> String:
 	return "%s  %d" % [stat.display_name, stats[stat.id]]
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == toggle_key:
+		_panel_shown = not panel.visible
+		panel.visible = _panel_shown
+		get_viewport().set_input_as_handled()
