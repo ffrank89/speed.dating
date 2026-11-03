@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bmj2168xc1mnx" path="res://scenes/Dates/FirstDate/first_date_test.gd" id="1_test"]
 [ext_resource type="Resource" uid="uid://dglthbg00jke5" path="res://data/girls/split_ends.tres" id="2_girl"]
 [ext_resource type="Resource" path="res://data/date_rules.tres" id="6_rules"]
-[ext_resource type="PackedScene" path="res://scenes/Dates/Date/Date.tscn" id="14_date"]
+[ext_resource type="PackedScene" uid="uid://bgdj014f3fdjs" path="res://scenes/Dates/Date/Date.tscn" id="14_date"]
 
 [sub_resource type="Theme" id="Theme_debug"]
 default_font_size = 32

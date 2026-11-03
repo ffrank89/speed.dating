@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://70bg3ufovuqv"]
 
-[ext_resource type="Script" path="res://scenes/Microgames/_template/template_microgame.gd" id="1_game"]
-[ext_resource type="Texture2D" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
+[ext_resource type="Script" uid="uid://c4s2hgh5myi04" path="res://scenes/Microgames/_template/template_microgame.gd" id="1_game"]
+[ext_resource type="Texture2D" uid="uid://bkmrtqmpbs54s" path="res://assets/placeholders/godot_logo.svg" id="2_logo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_window"]
 bg_color = Color(0.94, 0.96, 0.88, 1)

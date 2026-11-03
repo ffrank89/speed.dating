@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GirlData" load_steps=37 format=3 uid="uid://dglthbg00jke5"]
 
-[ext_resource type="Texture2D" uid="uid://bf77w2h1g7hq8" path="res://assets/bedroom1.png" id="1_wf6us"]
+[ext_resource type="Texture2D" uid="uid://bh2r0jdyauihp" path="res://assets/livingroom_1.png" id="1_13src"]
 [ext_resource type="Resource" uid="uid://ir75gkb3ey03" path="res://data/dialogue_styles/split_ends.tres" id="2_mpoun"]
 [ext_resource type="Script" uid="uid://dviwladmgecna" path="res://scripts/data/girl_pose.gd" id="3_hgqhe"]
 [ext_resource type="Texture2D" uid="uid://8hvuoa5c0qm6" path="res://assets/splitends/splitends_backshot_updated.png" id="4_riqjt"]
@@ -147,7 +147,7 @@ poses = Dictionary[String, ExtResource("3_hgqhe")]({
 "reach": SubResource("Resource_k07i7")
 })
 default_pose = "reach"
-date_background = ExtResource("1_wf6us")
+date_background = ExtResource("1_13src")
 dialogue_style = ExtResource("2_mpoun")
 voice = SubResource("Resource_s0o2p")
 first_date_dialogue = ExtResource("14_first_date")
