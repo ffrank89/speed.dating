@@ -1,7 +1,7 @@
 extends StageHazard
-## A fly that buzzes around the date along one of its paths. Switch to the action cursor
-## (S), then wave the mouse at it to shoo it; shoo it off the screen and she reacts and
-## the date earns a point. (Dealing With It → Needs Action Cursor off = no S needed.)
+## A fly that buzzes around the date along one of its paths. Wave the mouse at it to shoo
+## it; shoo it off the screen and she reacts and the date earns a point. (Dealing With It
+## → Needs Action Cursor is off for now; on = press S for the action cursor first.)
 ##
 ## Paths: every Path2D in this scene is one path (keep them under Paths to stay tidy).
 ## Draw them right here with the Path2D tool, over the DrawingGuide (her room and her).

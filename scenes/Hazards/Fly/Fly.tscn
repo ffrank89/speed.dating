@@ -34,6 +34,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fly")
+needs_action_cursor = false
 slow_stat = ExtResource("5_perception")
 annoyance = ExtResource("6_ew")
 annoy_seconds = 1.0
@@ -96,7 +97,6 @@ curve = SubResource("Curve2D_zigzag")
 position = Vector2(1120, 600)
 
 [node name="Sprite" type="Sprite2D" parent="Body"]
-position = Vector2(-471, 183)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_logo")
 

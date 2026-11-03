@@ -78,3 +78,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0072](0072-synergy-streams-and-hub-names.md) | Synergy (for now: shared tags) shown in Contacts as a stream of sprites between two girls, stronger with more; the stats hub shows a stat's name on hover | Accepted |
 | [0073](0073-start-at-for-all-stats.md) | One setting (Start At) starts every stat at Lowest, Highest or a number, or each at its own Starting Value | Accepted |
 | [0074](0074-c-and-p-back.md) | C for Contacts and P for Profile are back, alongside W | Accepted |
+| [0075](0075-fly-no-action-cursor.md) | The fly no longer needs the action cursor (for now); its picture is back on it | Accepted |

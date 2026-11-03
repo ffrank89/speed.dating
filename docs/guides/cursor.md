@@ -39,17 +39,17 @@ Hotspot is used for all of them.
 ## The action cursor (stage hazard cursor)
 
 During a date, press **S** to switch to the **action cursor**, and **S**
-again to switch back. Stage hazards like the fly can only be dealt with while
-it's on: wave the action cursor at the fly to shoo it. It switches off by
-itself when a microgame starts (S moves you down there) and when the date
-ends.
+again to switch back. A stage hazard with **Needs Action Cursor** ticked can
+only be dealt with while it's on. **The fly has it off for now**, so you can
+shoo it with the normal cursor too. The action cursor switches off by itself
+when a microgame starts (S moves you down there) and when the date ends.
 
 | What | Where |
 |---|---|
 | Its look | `data/cursors/action.tres`: the same settings as any cursor. Now the Godot logo, bigger and tinted orange. |
 | Which cursor is the action one | `scenes/Cursor/PlayerCursor.tscn` → **Action Style** |
 | The key | **Project → Project Settings → Input Map** → `action_cursor` (S now). PlayerCursor's **Action Key** names which action it listens for. |
-| Which hazards need it | Each hazard's top node → **Dealing With It → Needs Action Cursor** (on for the fly). Off = the normal cursor works too. |
+| Which hazards need it | Each hazard's top node → **Dealing With It → Needs Action Cursor**. Off for the fly for now, so the normal cursor works; tick it to need S again. |
 
 ## More than one cursor
 
@@ -71,7 +71,7 @@ Make another file: right-click `default.tres` → **Duplicate…**, e.g.
 | The cursor lags a little | That's **Drawn In Game**. Turn it off for the computer's own, lag-free cursor. |
 | No hover picture on a button | Hover shows over things whose **Mouse → Default Cursor Shape** is **Pointing Hand**. Set that on the button in the Inspector. |
 | S does nothing | It only works on a date (where there are stage hazards), not during a microgame, and not after the date ends. |
-| I can't shoo the fly | Press **S** first: the fly needs the action cursor. |
+| I can't shoo the fly | Wave faster (above its **Min Wave Speed**) and closer (inside its **Shoo Radius**). If its **Needs Action Cursor** is ticked, press **S** first. |
 
 ## For programmers
 
