@@ -23,6 +23,7 @@ Hover over any setting to see what it does.
 | `reactions.tres` | The reaction animations (`[#react=heart]`). Double-click to edit. |
 | `synergy.tres` | **Synergy** between girls in your party (for now: one point per shared tag) and how the Contacts list shows it: the stream of sprites between two girls' photos (each tag's own sprites, their size, speed and how it grows with each point). |
 | `annoyances/` | How she reacts when something annoys her on a date (the date stops, she turns around, says a line in a bubble, the date loses points, her dialogue box grays out). `ew.tres` is the fly's ".....ew". A stage hazard points at one; hazards can share one. |
+| `sounds/` | Looping sounds with their own pitch, wobble and loudness, like a girl's voice. `fly_buzz.tres` is the fly's buzz (add the recording to its **Stream**). |
 | `heart_meter_style.tres` | The heart meter on dates (top right): ring size, thickness and colours, the heart picture, the heart sound. Each girl's fill colour is her dialogue style's **Meter Color**. |
 | `calendar_rules.tres` | How the calendar runs: days per chapter, the boss day, what each day can offer and how many choices, how much of the whole calendar shows, and how far ahead you can see. |
 | `day_actions/` | One file per thing you can spend a day on (date, training, rest, boss): its name, picture, how many days it takes, how often it's offered, and what it does. |

@@ -88,7 +88,7 @@ the timer).
 | Affection meter | `HeartMeter` | Built ([heart-meter.md](../guides/heart-meter.md)); uses the love react heart |
 | Microgame frame: banner, timer bar, NICE/OOPS stamps (optional pictures; words and flat colours until then) | `MicrogameHost` via `data/microgame_style.tres` | Not made. Works without art. |
 | Microgame art, per microgame | Each microgame scene | TBD. Cig + lighter art exist (`cig_gif`, `loghter.png`). |
-| Stage hazard art: the fly (and wing-flap frames), a buzz loop | `Fly.tscn` → Body/Sprite, Sounds → Buzz Sound | Not made. Godot logo placeholder. |
+| Stage hazard art: the fly (and wing-flap frames), a buzz loop | `Fly.tscn` → Body/Sprite; `data/sounds/fly_buzz.tres` → Stream | Fly frames done (the artist's). Buzz: being recorded. |
 | ~~Date-end summary card~~ Her contact card ([0052](../decisions/0052-result-is-her-contact-card.md)): optional contact photo per girl, optional heart image | `ContactCard` | Works without art. Gains and perks: TBD |
 
 ## Systems it's part of

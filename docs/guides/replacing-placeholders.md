@@ -31,7 +31,7 @@ thing. **No code needed.**
 | **Calendar lines** | Placeholder writing | `dialogue/calendar.dialogue` | What the calendar says when you train, rest or reach the boss |
 | **The cursor** | `assets/placeholders/godot_logo.svg` | `data/cursors/default.tres` → **Pointer → Image** (set **Hotspot** to the clicking pixel) | The player's mouse cursor everywhere. See [the cursor guide](cursor.md). |
 | **The fly** (stage hazard) | `assets/placeholders/godot_logo.svg` | `scenes/Hazards/Fly/Fly.tscn` → **Body → Sprite** → Texture (or swap for an AnimatedSprite2D) | The fly that buzzes around her. Draw it facing right. |
-| **Fly buzz** | none (silent) | `Fly.tscn` → top node → **Sounds → Buzz Sound** | A looping buzz while it's on screen |
+| **Fly buzz** | none (silent) | `data/sounds/fly_buzz.tres` → **Stream** (its pitch, wobble and volume are there too) | A looping buzz while it's on screen |
 | **The phone** | none (a plain dark rim, iPhone-grey screen) | `data/phone_style.tres` → **Phone → Phone Art → Frame Image** (and **Wallpaper**) | The player's phone on every phone screen. See [the phone](the-phone.md). |
 | **Your room** (behind the phone) | `assets/bedroom2.png` | `data/phone_style.tres` → **Your Room → Room Image** | Behind the phone on the intro, dating app and calendar |
 | **Phone up / down sounds** | Kenney stand-ins (`maximize_008`, `minimize_008`) | `data/phone_style.tres` → **Phone Up / Down → Up Sound / Down Sound** | Taking the phone out and putting it away |
