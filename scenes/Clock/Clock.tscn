@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bogql37yioul6"]
+
+[ext_resource type="Script" uid="uid://cm7fs6tlb1v1a" path="res://scenes/Clock/clock.gd" id="1_c3n2b"]
+[ext_resource type="Texture2D" uid="uid://dhi01im2htwn5" path="res://assets/clock/clockface.png" id="1_y3vvt"]
+[ext_resource type="Texture2D" uid="uid://cvvtvb315j36y" path="res://assets/clock/littlehand.png" id="2_c3n2b"]
+[ext_resource type="Texture2D" uid="uid://blrwci4gecx5t" path="res://assets/clock/bighand.png" id="3_nn0vg"]
+
+[node name="Clock" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c3n2b")
+
+[node name="Face" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_y3vvt")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LittleHand" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_c3n2b")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BigHand" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_nn0vg")
+expand_mode = 1
+stretch_mode = 5
