@@ -99,5 +99,6 @@ position = Vector2(1120, 600)
 [node name="Sprite" type="AnimatedSprite2D" parent="Body"]
 scale = Vector2(0.7, 0.7)
 sprite_frames = ExtResource("6_42vhr")
+autoplay = "default"
 
 [node name="Buzz" type="AudioStreamPlayer" parent="."]

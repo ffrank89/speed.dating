@@ -120,10 +120,10 @@ description = "Abilities aren't in the first build."
 [sub_resource type="Resource" id="Resource_s0o2p"]
 script = ExtResource("12_13src")
 letter_sounds_folder = "res://assets/audio/voice/default"
-pitch = 1.25
-pitch_variance = 0.12
-seconds_per_letter = 0.035
-letters_per_sound = 2
+pitch = 2.01
+pitch_variance = 0.29
+seconds_per_letter = 0.04
+letters_per_sound = 4
 volume_db = -6.0
 
 [resource]
