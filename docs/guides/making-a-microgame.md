@@ -62,126 +62,126 @@ The player's stat against the option's `#check` sets the
    to it: open `FirstDateTest.tscn`, click the top node and set **Start
    Title** to `microgame_catch`.
 
-## Make your own: Light Her Cigarette
+## The lighter: "LIGHT IT!"
+
+`scenes/Microgames/lighter/LightCigarette.tscn`, named `light_cigarette` in
+`data/microgames.tres`, so **"Light it for her."** on Split Ends' first
+date plays it. **Click (or press Space) to flick the lighter.** Each flick
+has a chance to catch. When it catches, the flame burns for a moment and you
+pass. If time runs out first, you fail.
+
+Click its top node (**LightCigarette**):
+
+| Setting | Now | What it does |
+|---|---|---|
+| **Easiest Chance** | 0.3 | The chance each flick catches at difficulty 0 (30%) |
+| **Hardest Chance** | 0.1 | ...and at difficulty 1 (10%). In between, it's a mix of the two |
+| **Flame Seconds** | 0.6 | How long the flame burns before the pass counts |
+| **Frame → Banner Text** | LIGHT IT! | The word at the start |
+| **Frame → Seconds** | 5 | How long the player has |
+| **Frame → Pass When Time Runs Out** | off | Running out of time is a fail |
+
+**Its parts** (move, resize or re-time them in the scene):
+
+| Node | What it is |
+|---|---|
+| **Hand** | The flick: an AnimatedSprite2D whose animation `flick` is `assets/lighter gif/Rhand1–8.png`, 24 frames a second, not looping. Every click plays it from the start |
+| **Hand → Flame** | The flame: animation `burn`, `assets/flame/fire1–4.png`, 10 a second, looping. Hidden until the lighter catches. It's inside Hand, so it moves with the lighter |
+| **Window** | The frame the game sits in |
+
+`assets/lighter gif/Lhand.png` (the other hand) isn't used yet.
+
+**Difficulty:** "Light it for her." checks Seduction 5. At Seduction 5 or
+more the difficulty is 0.2 (`data/date_rules.tres` → **Min Difficulty**), so
+the chance is a little under Easiest Chance. Each point below 5 moves it
+towards Hardest Chance.
+
+**Try it:** press **F6** on `LightCigarette.tscn` and change **Testing (F6)
+→ Test Difficulty**. In a date: on the date test bench, set **Start Title**
+to `microgame_light_it`, and use the **Seduction** slider for the difficulty.
+
+## Make your own
 
 ### 1. Copy the template
 
 1. In the FileSystem panel, right-click `scenes/Microgames` → **Create New →
-   Folder** → `light_cigarette`.
-2. Right-click `_template/TemplateMicrogame.tscn` → **Duplicate…** → name it
-   `light_cigarette/LightCigarette.tscn`.
-3. Right-click `_template/template_microgame.gd` → **Duplicate…** → name it
-   `light_cigarette/light_cigarette.gd`.
-4. Open `LightCigarette.tscn`, click the top node, and drag
-   `light_cigarette.gd` onto its **Script** slot (bottom of the Inspector).
-   Rename the top node `LightCigarette`.
+   Folder**, e.g. `my_game`.
+2. Right-click `_template/TemplateMicrogame.tscn` → **Duplicate…** into it,
+   e.g. `my_game/MyGame.tscn`.
+3. Right-click `_template/template_microgame.gd` → **Duplicate…** into it,
+   e.g. `my_game/my_game.gd`.
+4. Open the new scene, click the top node, and drag the new script onto its
+   **Script** slot. Rename the top node.
 
-> Duplicate the two files one at a time like this. A duplicated scene would
-> otherwise still point at the template's script, and editing it would
+> Duplicate the two files one at a time like this. A duplicated scene still
+> points at the template's script until you swap it, and editing that would
 > change the example.
 
 ### 2. Set the frame
 
-Click the top node. Under **Frame**:
-
-| Setting | Set it to |
-|---|---|
-| **Banner Text** | `LIGHT IT!` |
-| **Seconds** | `5` |
-| **Pass When Time Runs Out** | off (the player has to *do* something in time) |
-| **App** | optional: its own app file (icon and launch screen for the open animation). Duplicate `data/apps/microgame.tres`, set the lighter as its icon, and drag it here. |
+Click the top node. Under **Frame**: **Banner Text** (1–3 words), **Seconds**,
+**Pass When Time Runs Out** (off = the player has to *do* something in time;
+on = they have to *survive* until it runs out), and optionally **App** (its
+own icon and launch screen: duplicate `data/apps/microgame.tres`).
 
 ### 3. Put it on the list
 
-Click `data/microgames.tres` → **Games** → **Add Key/Value Pair** → type
-`light_cigarette` on the left → drag `LightCigarette.tscn` onto the right.
-
-That's the name her first date already uses, so **"Light it for her."**
-plays your microgame from now on (until now it rolled, with a warning in the
-Output panel).
+`data/microgames.tres` → **Games** → **Add Key/Value Pair**: its name on the
+left (the one dialogue uses, `[#microgame=my_game]`), the scene on the right.
 
 ### 4. Add the art
 
-Delete the template's **Target** (the Godot logo). Keep **Window** (the
-frame the game sits in) and **PlayArea**, or replace them. Drag in what you
-need from the FileSystem panel:
-
-| Art | File |
-|---|---|
-| Lighter | `assets/loghter.png` |
-| Cigarette | `assets/cig_gif/cig1.png`, `cig2.png` |
-| Her holding it | `assets/splitends/splitends_cig_updated.png` (crop or scale it into the window) |
-| Flame, ember | not made yet: use `assets/placeholders/godot_logo.svg` for now |
-
+Delete the template's **PlayArea** (the bouncing logo); keep **Window**.
 Use **TextureRect** for still pictures and **AnimatedSprite2D** for
-animations (flame flicker). Your game fills the phone's screen, **964 ×
-1414**, portrait: the template's **Window** and **PlayArea** fill it with a
-margin (and leave room at the top for the timer bar). Lay things out with
-anchors (e.g. **Full Rect**, **Center**) so the game still fits if the phone
-changes size.
-
-> **Light Her Cigarette:** if you started it on the old full screen (3000 ×
-> 1700, wide), it now plays on the phone's tall screen. Move its parts to
-> fit 964 × 1414: e.g. her hand with the cigarette at the top, the lighter
-> at the bottom.
+animations. The game fills the phone's screen, **964 × 1414**, portrait,
+with room at the top for the timer bar.
 
 ### 5. Write the game
 
-Open `light_cigarette.gd`. Keep `extends Microgame` at the top and replace
-the template's code. The shape is always the same:
+Keep `extends Microgame` at the top. The shape is always the same (the
+lighter's script, `scenes/Microgames/lighter/light_cigarette.gd`, is a short
+real example):
 
 ```gdscript
 extends Microgame
 
 # Numbers to tune in the Inspector: the easiest and hardest version of each.
-@export var easiest_sway := ...
-@export var hardest_sway := ...
+@export var easiest_... := ...
+@export var hardest_... := ...
 
 func start(p_difficulty: float, _p_modifiers: Dictionary) -> void:
 	# Runs once, before the banner. Turn difficulty into numbers:
-	#   lerpf(easiest_sway, hardest_sway, p_difficulty)
+	#   lerpf(easiest_..., hardest_..., p_difficulty)
 	# and put everything in its starting place.
 	pass
 
 func _process(delta: float) -> void:
 	# The game. Only runs while the timer runs.
-	# Call win() when they've done it. Running out of time is a fail.
+	# Call win() or lose() when it's decided.
 	pass
 ```
 
-What the plan says it should feel like: **flick the lighter until it
-catches, then hold the flame on the cigarette tip while she sways; fill a
-meter before time runs out.** Pieces you'll want:
-
 | To do this | Use |
 |---|---|
-| Flick the lighter (click **or** Space) | `Input.is_action_just_pressed("microgame_press")` |
+| A press (click **or** Space / Enter) | `Input.is_action_just_pressed("microgame_press")` |
 | Hold something down | `Input.is_action_pressed("microgame_press")` |
-| Is the flame on the tip? | `is_pointing_at($PlayArea/Tip)` (true when the mouse, or the keyboard pointer, is over that node) |
+| Is the player aiming at a node? | `is_pointing_at($Node)` (mouse, or the arrow keys / WASD pointer) |
 | Where the player is aiming | `pointer` (in the microgame's own space) or `pointer_on_screen()` |
-| Move the flame with the player | set the flame node's `global_position` from `pointer_on_screen()` |
-| Her swaying | change the cigarette's `position` with `sin(...)` over time; sway more at higher `difficulty` |
-| A fill meter | a **ProgressBar** node; add to its `value` while the flame is on the tip |
 | Time left | `time_left` (seconds) |
 | End it | `win()` or `lose()` |
 
-**Decisions that are yours** (they change how it plays, not how it's wired):
-1. Does the lighter catch after a **fixed** number of flicks, or is each
-   flick a **random** chance? Should difficulty change that?
-2. When the flame leaves the tip, does the meter **drain** or just **pause**?
-3. How much does she sway at difficulty 0, and at 1?
+> **Everything freezes the moment it ends** (for the NICE / OOPS stamp). An
+> animation that should play out, like the lighter's flame, has to play
+> *before* `win()`: the lighter waits Flame Seconds, then calls it.
 
 ### 6. Test
 
-- **F6** on `LightCigarette.tscn`: plays it over and over. Try **Test
-  Difficulty** 0, 0.5 and 1. Check it's readable within half a second and
-  fair at 1.
-- Try it with **only the keyboard** (arrows/WASD + Space) and with **only
-  the mouse**.
-- **F6** on the date test bench: pick **"Light it for her."** when she asks for a light (or set
-  the test bench's **Start Title** to `microgame_light_it`). Drag the **Seduction**
-  slider (top left) to change the difficulty: at 5 or more the player meets
-  the requirement and gets the easiest version.
+- **F6** on its scene: plays it over and over. Try **Test Difficulty** 0,
+  0.5 and 1. It should be readable within half a second, and beatable on the
+  second or third try.
+- Try it with **only the keyboard** and with **only the mouse**.
+- In a date: tag an option with `#microgame=my_game` in a `~ microgame_...`
+  title, and set the test bench's **Start Title** to that title.
 
 ## Mouse and keyboard
 

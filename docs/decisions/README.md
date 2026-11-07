@@ -80,3 +80,5 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0074](0074-c-and-p-back.md) | C for Contacts and P for Profile are back, alongside W | Accepted |
 | [0075](0075-fly-no-action-cursor.md) | The fly no longer needs the action cursor (for now); its picture is back on it | Accepted |
 | [0076](0076-fly-buzz-settings.md) | The fly's buzz is a settings file (`data/sounds/fly_buzz.tres`) with pitch, wobble and volume, like a voice | Accepted |
+| [0077](0077-fly-darts-and-buzz-restart.md) | The fly darts about near its path (Jerking settings), and its buzz starts again if the recording doesn't loop | Accepted |
+| [0078](0078-lighter-microgame.md) | The lighter microgame, "LIGHT IT!": each click flicks, each flick has a chance to catch (lower when harder), the flame burns, you win | Accepted |

@@ -1,0 +1,116 @@
+[gd_scene load_steps=17 format=3 uid="uid://dv8a0443su0d8"]
+
+[ext_resource type="Script" uid="uid://ltbjvcfsvbqp" path="res://scenes/Microgames/lighter/light_cigarette.gd" id="1_game"]
+[ext_resource type="Texture2D" uid="uid://bu4p30hxtc6pc" path="res://assets/lighter gif/Rhand1.png" id="h1"]
+[ext_resource type="Texture2D" uid="uid://b2c3ivpf65skv" path="res://assets/lighter gif/Rhand2.png" id="h2"]
+[ext_resource type="Texture2D" uid="uid://bqvb54ot1o660" path="res://assets/lighter gif/Rhand3.png" id="h3"]
+[ext_resource type="Texture2D" uid="uid://brbeipa6cn8tv" path="res://assets/lighter gif/Rhand4.png" id="h4"]
+[ext_resource type="Texture2D" uid="uid://4drpui7smrfk" path="res://assets/lighter gif/Rhand5.png" id="h5"]
+[ext_resource type="Texture2D" uid="uid://dckm2jtgrskkc" path="res://assets/lighter gif/Rhand6.png" id="h6"]
+[ext_resource type="Texture2D" uid="uid://cqwr25bsk6ctp" path="res://assets/lighter gif/Rhand7.png" id="h7"]
+[ext_resource type="Texture2D" uid="uid://cr55jakrsyj3u" path="res://assets/lighter gif/Rhand8.png" id="h8"]
+[ext_resource type="Texture2D" uid="uid://dq7qpe1g7nyb3" path="res://assets/flame/fire1.png" id="f1"]
+[ext_resource type="Texture2D" uid="uid://duwfyr4kmut8u" path="res://assets/flame/fire2.png" id="f2"]
+[ext_resource type="Texture2D" uid="uid://0nt5cemuuwjf" path="res://assets/flame/fire3.png" id="f3"]
+[ext_resource type="Texture2D" uid="uid://brrmscoqbp28t" path="res://assets/flame/fire4.png" id="f4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_window"]
+bg_color = Color(0.94, 0.96, 0.88, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.85, 0.21, 0.17, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hand"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("h1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("h8")
+}],
+"loop": false,
+"name": &"flick",
+"speed": 24.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_flame"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("f3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("f4")
+}],
+"loop": true,
+"name": &"burn",
+"speed": 10.0
+}]
+
+[node name="LightCigarette" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_game")
+banner_text = "LIGHT IT!"
+
+[node name="Window" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 80.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_window")
+
+[node name="Hand" type="AnimatedSprite2D" parent="."]
+position = Vector2(482, 860)
+scale = Vector2(0.8, 0.8)
+sprite_frames = SubResource("SpriteFrames_hand")
+animation = &"flick"
+
+[node name="Flame" type="AnimatedSprite2D" parent="Hand"]
+visible = false
+position = Vector2(-5, -330)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_flame")
+animation = &"burn"
