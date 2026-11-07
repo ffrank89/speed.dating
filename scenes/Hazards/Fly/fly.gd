@@ -12,9 +12,12 @@ extends StageHazard
 ## point sits on the first). A path that's off the screen or squashed tiny is skipped,
 ## with a warning in the Output panel.
 ##
+## Jerking: every so often it darts suddenly to a spot near its path, on top of its smooth
+## wobble (Flying → Buzz Amount / Speed), like a real fly.
+##
 ## Slow Motion (set on this scene's top node): with the player's Perception above 5 it
-## flies, jitters, flaps and buzzes at half speed (the buzz an octave lower), and stays
-## twice as long. Waving at it still reads the mouse at full speed.
+## flies, jitters, darts, flaps and buzzes at half speed (the buzz an octave lower), and
+## stays twice as long. Waving at it still reads the mouse at full speed.
 ##
 ## Annoying Her (also on the top node): if it stays on her (her drawn pixels) for a
 ## second, the date plays its Annoyance (data/annoyances/ew.tres): the date stops for a
@@ -34,6 +37,15 @@ enum State { ENTERING, FOLLOWING, PUSHED, RETURNING, LEAVING }
 @export_range(0.0, 200.0, 1.0) var buzz_amount: float = 22.0
 ## How fast it jitters.
 @export_range(0.0, 40.0, 0.5) var buzz_speed: float = 11.0
+
+@export_group("Jerking")
+## Every so often it darts suddenly to a new spot near its path, like a real fly. How far
+## it darts, in pixels. 0 = no darts (just the smooth wobble above).
+@export_range(0.0, 400.0, 1.0) var jerk_distance: float = 70.0
+## How many darts a second, on average (they come at uneven times).
+@export_range(0.0, 10.0, 0.1) var jerks_per_second: float = 2.0
+## How long each dart takes, in seconds. Lower = snappier.
+@export_range(0.01, 1.0, 0.01) var jerk_seconds: float = 0.06
 
 @export_group("Shooing")
 ## How close the mouse has to come to push it, in pixels.
@@ -71,6 +83,11 @@ var _exit := Vector2.ZERO
 var _last_mouse := Vector2.ZERO
 var _last_position := Vector2.ZERO
 var _time := 0.0
+# Jerking: where it has darted to (off its path), where it's darting to, and the time
+# until the next dart.
+var _jerk := Vector2.ZERO
+var _jerk_target := Vector2.ZERO
+var _next_jerk := 0.0
 
 @onready var body: Node2D = $Body
 @onready var buzz_player: AudioStreamPlayer = $Buzz
@@ -79,6 +96,11 @@ var _time := 0.0
 func _ready() -> void:
 	# The guide only shows in the editor and when playing this scene on its own (F6).
 	$DrawingGuide.visible = false
+	# A recording that isn't set to loop on import would stop after one go: start it
+	# again while the fly is still here.
+	buzz_player.finished.connect(func() -> void:
+		if is_active and _state != State.LEAVING:
+			buzz_player.play())
 
 
 func begin() -> void:
@@ -99,6 +121,9 @@ func begin() -> void:
 	_state = State.ENTERING
 	_last_mouse = get_local_mouse_position()
 	body.position = _position
+	_jerk = Vector2.ZERO
+	_jerk_target = Vector2.ZERO
+	_next_jerk = 0.0
 	# Slow Motion: its animations and buzz run at its own speed (lower and slower).
 	for node in body.find_children("*", "", true, false):
 		if node is AnimatedSprite2D or node is AnimationPlayer:
@@ -152,6 +177,7 @@ func _process(real_delta: float) -> void:
 				leave()
 				return
 
+	_jerk_about(delta)
 	_draw_body()
 	# Sitting on her too long annoys her (counted in real seconds).
 	track_annoying(body.global_position, real_delta)
@@ -193,9 +219,23 @@ func _fly_towards(target: Vector2, fly_speed: float, delta: float) -> bool:
 	return _position.distance_to(target) < 4.0
 
 
+# Jerking: now and then (Jerks Per Second, at uneven times) it picks a new spot up to
+# Jerk Distance from its path and darts there in Jerk Seconds.
+func _jerk_about(delta: float) -> void:
+	if jerk_distance <= 0.0 or jerks_per_second <= 0.0:
+		_jerk = Vector2.ZERO
+		return
+	_next_jerk -= delta
+	if _next_jerk <= 0.0:
+		_jerk_target = Vector2.from_angle(randf() * TAU) * randf_range(0.4, 1.0) * jerk_distance
+		_next_jerk = randf_range(0.4, 1.6) / jerks_per_second
+	var dart_speed := jerk_distance / maxf(jerk_seconds, 0.01)
+	_jerk = _jerk.move_toward(_jerk_target, dart_speed * delta)
+
+
 func _draw_body() -> void:
 	var jitter := Vector2(sin(_time * buzz_speed * 1.37), cos(_time * buzz_speed)) * buzz_amount
-	body.position = _position + jitter
+	body.position = _position + jitter + _jerk
 	# Face the way it's flying (not the jitter), and tilt a little into the turn.
 	var moved := _position - _last_position
 	_last_position = _position

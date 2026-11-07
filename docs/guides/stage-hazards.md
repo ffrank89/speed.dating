@@ -103,6 +103,9 @@ Click **Fly** (the top node):
 |---|---|---|
 | **Flying → Speed** | 420 | How fast it flies along its path (pixels per second) |
 | **Flying → Buzz Amount / Buzz Speed** | 22 / 11 | How much and how fast it jitters off the path |
+| **Jerking → Jerk Distance** | 70 | Every so often it darts suddenly to a spot near its path, like a real fly. How far it darts, in pixels. 0 = no darts, just the smooth jitter |
+| **Jerking → Jerks Per Second** | 2 | How many darts a second, on average. They come at uneven times, so it doesn't look like a beat |
+| **Jerking → Jerk Seconds** | 0.06 | How long each dart takes. Lower = snappier, higher = more of a glide |
 | **Shooing → Shoo Radius** | 260 | How close the mouse must come to push it |
 | **Shooing → Min Wave Speed** | 500 | The mouse must be moving at least this fast (a wave, not a hover) |
 | **Shooing → Shoo Strength** | 1.4 | How hard a wave pushes it. **Higher = easier.** |
@@ -113,7 +116,7 @@ Click **Fly** (the top node):
 ## Slow motion: Perception
 
 **With Perception above 5, the fly moves in slow motion.** It flies,
-jitters, flaps and buzzes at half speed (the buzz an octave lower), and
+jitters, darts, flaps and buzzes at half speed (the buzz an octave lower), and
 stays twice as long before it gives up. Waving at it still reads the mouse
 at full speed, so it's easier to catch.
 
@@ -222,6 +225,22 @@ It starts when the fly flies in, pauses while a microgame plays, and stops
 when the fly is shooed or leaves. In slow motion it plays at half speed (an
 octave lower), wobble included.
 
+**If the buzz stops after a while,** its recording isn't set to loop (a
+GarageBand .wav comes in as "Detect From WAV", which usually means no loop).
+The fly starts it again by itself when it ends, but you'll hear a tiny gap
+each time. To loop it properly:
+
+1. Click the recording (the .wav) in the **FileSystem** panel, bottom left.
+2. Click the **Import** tab: top left, next to **Scene**. (No Import tab?
+   **Editor → Editor Layout → Default** brings it back.)
+3. For a .wav: **Edit → Loop Mode → Forward**. For an .ogg or .mp3: tick
+   **Loop**.
+4. Click **Reimport** at the bottom of the Import tab.
+
+If the Import tab shows no loop setting at all, the file isn't a sound Godot
+can read (GarageBand can also export .aif or .m4a): export it again as
+**WAVE**.
+
 **Recording one** (e.g. in GarageBand): 1–2 seconds of steady buzz with no
 fade at either end, so it repeats without a gap. Export as **WAVE** (Share →
 Export Song to Disk) into e.g. `assets/audio/fly/`. If you hear a click each
@@ -304,4 +323,12 @@ script, so nothing else is needed.
     `scripts/data/loop_sound.gd`: `stream`, `pitch`, `pitch_wobble`,
     `wobble_speed`, `volume_db`). Each frame its `pitch_scale` is
     `buzz.pitch_at(_time) × time_scale` (two sine waves, so the drift isn't
-    regular).
+    regular). The buzz player's `finished` signal plays it again while the
+    fly is active and not LEAVING, so a stream that doesn't loop keeps going
+  - Darts: `_jerk_about(delta)` each frame picks a new `_jerk_target` (a
+    random direction, 40–100% of `jerk_distance`) every
+    0.4–1.6 / `jerks_per_second` seconds, and moves `_jerk` towards it at
+    `jerk_distance / jerk_seconds` px/s. `_draw_body()` puts Body at
+    `_position + jitter + _jerk`. `begin()` resets it. Shooing measures the
+    mouse against `_position` (the point on the path, without jitter or
+    darts); annoying her checks Body's drawn spot (`body.global_position`)
