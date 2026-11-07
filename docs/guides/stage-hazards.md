@@ -128,7 +128,7 @@ Every hazard has this, on its top node → **Slow Motion**:
 It checks the stat each time it turns up, from the date's stats: on the
 test bench, drag the **Perception** slider to 6 or more and press **Stage
 hazards now**. If the stat is switched off ([stats.md](stats.md)), it's never
-slowed. The fly has no buzz sound yet; once one is set, it slows down too.
+slowed. Its buzz slows down too (below).
 
 ## Annoying her: the fly sitting on her
 
@@ -202,8 +202,34 @@ Under **Reward**:
 
 | What | Now | Where to change it |
 |---|---|---|
-| The fly | The **Godot logo** (placeholder) | `Fly.tscn` → **Body → Sprite** → **Texture**. Swap Sprite for an **AnimatedSprite2D** for wing flaps. Draw it facing right; it flips itself. |
-| Buzz loop | none | **Fly → Sounds → Buzz Sound** (set the file to loop when you import it) |
+| The fly | Your artist's three frames (`assets/fly gif/flyframes.tres`) | `Fly.tscn` → **Body → Sprite** (an AnimatedSprite2D): **Sprite Frames**, and **Autoplay** = default so it flaps. Draw it facing right; it flips itself. Leave Sprite's **Position** at 0, 0. |
+| Buzz loop | No recording yet (silent) | `data/sounds/fly_buzz.tres` → **Stream** (below) |
+
+### The buzz: `data/sounds/fly_buzz.tres`
+
+The fly's **Sounds → Buzz** points at a buzz file, the way a girl points at
+her voice. Click `data/sounds/fly_buzz.tres`:
+
+| Setting | Now | What it does |
+|---|---|---|
+| **Stream** | (empty) | The recording. Make it loop: click the file in FileSystem → **Import** tab → **Loop Mode: Forward** (.wav) or **Loop** on (.ogg / .mp3) → **Reimport** |
+| **Pitch** | 1.0 | 1.0 = as recorded. Higher = higher and faster, lower = deeper and slower |
+| **Pitch Wobble** | 0.08 | How much the pitch drifts up and down while it plays, so it sounds alive. 0 = steady, 0.1 = up to 10% either way |
+| **Wobble Speed** | 3 | How fast it drifts, in wobbles per second |
+| **Volume dB** | -6 | Loudness. 0 = as recorded, negative = quieter |
+
+It starts when the fly flies in, pauses while a microgame plays, and stops
+when the fly is shooed or leaves. In slow motion it plays at half speed (an
+octave lower), wobble included.
+
+**Recording one** (e.g. in GarageBand): 1–2 seconds of steady buzz with no
+fade at either end, so it repeats without a gap. Export as **WAVE** (Share →
+Export Song to Disk) into e.g. `assets/audio/fly/`. If you hear a click each
+time it repeats, trim the ends and export again.
+
+**Another sound like this** (another hazard's hum): duplicate
+`fly_buzz.tres` (Ctrl+D in FileSystem), change it, and point that hazard at
+it.
 
 ## Putting hazards in a date
 
@@ -273,5 +299,9 @@ script, so nothing else is needed.
   - PUSHED: velocity from the mouse's motion, slowed by drag; off screen = `clear()`
   - RETURNING, then LEAVING
   - Its `_process` runs on `delta × time_scale` (the mouse on real time);
-    `begin()` sets the buzz's `pitch_scale` and any AnimatedSprite2D /
-    AnimationPlayer `speed_scale` under Body to `time_scale`.
+    `begin()` sets any AnimatedSprite2D / AnimationPlayer `speed_scale`
+    under Body to `time_scale`, and starts the buzz (`buzz: LoopSound`,
+    `scripts/data/loop_sound.gd`: `stream`, `pitch`, `pitch_wobble`,
+    `wobble_speed`, `volume_db`). Each frame its `pitch_scale` is
+    `buzz.pitch_at(_time) × time_scale` (two sine waves, so the drift isn't
+    regular).

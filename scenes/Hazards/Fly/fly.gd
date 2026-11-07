@@ -53,8 +53,9 @@ enum State { ENTERING, FOLLOWING, PUSHED, RETURNING, LEAVING }
 @export_range(0.0, 500.0, 5.0) var off_screen_margin: float = 60.0
 
 @export_group("Sounds")
-## Optional: a looping buzz while it's on screen.
-@export var buzz_sound: AudioStream
+## Optional: the buzz while it's on screen: a file from data/sounds/ (fly_buzz.tres)
+## with the recording, its pitch, wobble and loudness.
+@export var buzz: LoopSound
 
 var _state := State.ENTERING
 var _curve: Curve2D
@@ -102,9 +103,10 @@ func begin() -> void:
 	for node in body.find_children("*", "", true, false):
 		if node is AnimatedSprite2D or node is AnimationPlayer:
 			node.speed_scale = time_scale
-	buzz_player.pitch_scale = time_scale
-	if buzz_sound:
-		buzz_player.stream = buzz_sound
+	if buzz and buzz.stream:
+		buzz_player.stream = buzz.stream
+		buzz_player.volume_db = buzz.volume_db
+		buzz_player.pitch_scale = buzz.pitch_at(0.0) * time_scale
 		buzz_player.play()
 
 
@@ -121,6 +123,9 @@ func _process(real_delta: float) -> void:
 	_try_shoo(mouse, mouse_velocity)
 	var delta := real_delta * time_scale
 	_time += delta
+	# The buzz drifts in pitch (its Pitch Wobble), lower in Slow Motion.
+	if buzz and buzz_player.playing:
+		buzz_player.pitch_scale = buzz.pitch_at(_time) * time_scale
 
 	match _state:
 		State.ENTERING:

@@ -79,3 +79,4 @@ Each record: what we chose, why, what we didn't pick, and when to revisit. Never
 | [0073](0073-start-at-for-all-stats.md) | One setting (Start At) starts every stat at Lowest, Highest or a number, or each at its own Starting Value | Accepted |
 | [0074](0074-c-and-p-back.md) | C for Contacts and P for Profile are back, alongside W | Accepted |
 | [0075](0075-fly-no-action-cursor.md) | The fly no longer needs the action cursor (for now); its picture is back on it | Accepted |
+| [0076](0076-fly-buzz-settings.md) | The fly's buzz is a settings file (`data/sounds/fly_buzz.tres`) with pitch, wobble and volume, like a voice | Accepted |
