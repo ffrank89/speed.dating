@@ -1,6 +1,12 @@
-[gd_resource type="Resource" script_class="LoopSound" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="LoopSound" load_steps=3 format=3 uid="uid://b3ga4rq7a7pr6"]
 
-[ext_resource type="Script" path="res://scripts/data/loop_sound.gd" id="1_loop"]
+[ext_resource type="Script" uid="uid://dpighahiejfs8" path="res://scripts/data/loop_sound.gd" id="1_loop"]
+[ext_resource type="AudioStream" uid="uid://t1u4w3gpn4bx" path="res://assets/audio/fly/buzz1.wav" id="2_t07y5"]
 
 [resource]
 script = ExtResource("1_loop")
+stream = ExtResource("2_t07y5")
+pitch = 1.33
+pitch_wobble = 0.11
+wobble_speed = 12.1
+volume_db = -19.0

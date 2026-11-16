@@ -8,33 +8,44 @@
 [node name="Clock" type="Control"]
 texture_filter = 1
 layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 600.0
+script = ExtResource("1_c3n2b")
+
+[node name="Face" type="TextureRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_c3n2b")
-
-[node name="Face" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 texture = ExtResource("1_y3vvt")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="LittleHand" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.15708
+pivot_offset = Vector2(300, 300)
 texture = ExtResource("2_c3n2b")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="BigHand" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.14159
+pivot_offset = Vector2(300, 300)
 texture = ExtResource("3_nn0vg")
 expand_mode = 1
 stretch_mode = 5

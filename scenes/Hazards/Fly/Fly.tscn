@@ -6,7 +6,7 @@
 [ext_resource type="Resource" path="res://data/stats/perception.tres" id="5_perception"]
 [ext_resource type="SpriteFrames" uid="uid://dulcyw4w2hiw4" path="res://assets/fly gif/flyframes.tres" id="6_42vhr"]
 [ext_resource type="Resource" path="res://data/annoyances/ew.tres" id="6_ew"]
-[ext_resource type="Resource" path="res://data/sounds/fly_buzz.tres" id="7_buzz"]
+[ext_resource type="Resource" uid="uid://b3ga4rq7a7pr6" path="res://data/sounds/fly_buzz.tres" id="7_buzz"]
 
 [sub_resource type="Curve2D" id="Curve2D_head"]
 _data = {
@@ -35,11 +35,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fly")
+buzz = ExtResource("7_buzz")
 needs_action_cursor = false
 slow_stat = ExtResource("5_perception")
 annoyance = ExtResource("6_ew")
 annoy_seconds = 1.0
-buzz = ExtResource("7_buzz")
 
 [node name="DrawingGuide" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.6)
