@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/split ends spin/splitends_spin1.png" id="1_spin1"]
+[ext_resource type="Texture2D" path="res://assets/split ends spin/splitends_spin2.png" id="2_spin2"]
+[ext_resource type="Texture2D" path="res://assets/split ends spin/splitends_spin3.png" id="3_spin3"]
+[ext_resource type="Texture2D" path="res://assets/split ends spin/splitends_spin4.png" id="4_spin4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_spin1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_spin2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_spin3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_spin4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
