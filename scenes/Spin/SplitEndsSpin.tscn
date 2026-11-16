@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/Spin/girl_spin.gd" id="1_spin"]
+[ext_resource type="Resource" uid="uid://ir75gkb3ey03" path="res://data/dialogue_styles/split_ends.tres" id="2_style"]
+[ext_resource type="SpriteFrames" path="res://assets/split ends spin/splitends_spin.tres" id="3_frames"]
+
+[node name="SplitEndsSpin" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_spin")
+style = ExtResource("2_style")
+
+[node name="Girl" type="AnimatedSprite2D" parent="."]
+position = Vector2(1050, 850)
+scale = Vector2(0.6, 0.6)
+sprite_frames = ExtResource("3_frames")
+autoplay = "default"
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1800.0
+offset_top = 600.0
+offset_right = 2900.0
+offset_bottom = 1100.0
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Speed" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Direction" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
